@@ -137,10 +137,10 @@ public static class SpawnData
 public class MonsterSpawnData
 {
     public string m_name = "";
-    public bool m_enabled = true;
+    public bool m_enabled = false;
     public bool m_devDisabled;
-    public string m_prefab;
-    public string m_biome;
+    public string m_prefab = null!;
+    public string m_biome = null!;
     public string m_biomeArea = "Everything";
     public int m_maxSpawned = 1;
     public float m_spawnInterval = 4f;

@@ -48,7 +48,7 @@ public static class ServerSync
 
             foreach (var data in m_serverData.Values)
             {
-                MonsterManager.ResetMonster(data.Character.PrefabName);
+                MonsterManager.ResetMonster(data.PrefabName);
             }
             
             m_serverData = deserializer.Deserialize<Dictionary<string, MonsterData>>(ServerMonsterDB.Value);
@@ -57,7 +57,7 @@ public static class ServerSync
 
             foreach (var data in m_serverData.Values.Where(x => x.isClone))
             {
-                MonsterManager.CloneMonster(data.OriginalMonster, data.Character.PrefabName, false);
+                MonsterManager.Command_CloneMonster(data.OriginalMonster, data.PrefabName, false);
             }
             
             foreach (var data in m_serverData.Values)
@@ -79,6 +79,7 @@ public static class ServerSync
             var data = deserializer.Deserialize<Dictionary<string, MonsterSpawnData>>(ServerSpawnSystem.Value);
             SpawnData.AddSpawnData(data);
             SpawnData.UpdateSpawnList();
+            MonsterDBPlugin.MonsterDBLogger.LogInfo("Client: Received " + data.Count + " MonsterDB Spawn files from server");
         };
     }
     

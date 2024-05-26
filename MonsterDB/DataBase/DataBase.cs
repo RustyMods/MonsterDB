@@ -16,6 +16,8 @@ public static class DataBase
     {
         private static void Postfix() => CacheResources();
     }
+
+    public static List<GameObject> GetCachedItems() => m_items.Values.ToList();
     
     private static void CacheResources()
     {
@@ -26,9 +28,8 @@ public static class DataBase
         }
 
         List<Texture2D> allTextures = Resources.FindObjectsOfTypeAll<Texture2D>().ToList();
-        foreach (var texture in allTextures)
+        foreach (Texture2D texture in allTextures.Where(texture => !texture.name.IsNullOrWhiteSpace()))
         {
-            if (texture.name.IsNullOrWhiteSpace()) continue;
             m_textures[texture.name] = texture;
         }
         
@@ -54,22 +55,8 @@ public static class DataBase
     private static ItemDrop? TryGetItemDrop(string itemName)
     {
         if (!ZNetScene.instance || !ObjectDB.instance) return null;
-        GameObject prefab = ZNetScene.instance.GetPrefab(itemName);
-        if (prefab != null)
-        {
-            if (prefab.TryGetComponent(out ItemDrop itemDrop)) return itemDrop;
-        }
-        prefab = ObjectDB.instance.GetItemPrefab(itemName);
-        if (prefab != null)
-        {
-            if (prefab.TryGetComponent(out ItemDrop itemDrop)) return itemDrop;
-        }
-
-        if (m_items.TryGetValue(itemName, out GameObject item))
-        {
-            if (item.TryGetComponent(out ItemDrop itemDrop)) return itemDrop;
-        }
-
-        return null;
+        GameObject? prefab = TryGetGameObject(itemName);
+        if (prefab == null) return null;
+        return prefab.TryGetComponent(out ItemDrop itemDrop) ? itemDrop : null;
     }
 }

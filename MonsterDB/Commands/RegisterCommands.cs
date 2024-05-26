@@ -58,7 +58,7 @@ public static class RegisterCommands
                         case "clone":
                             if (args.Length < 4) return false;
                             string cloneName = args[3].Replace(" ", "_");
-                            if (MonsterManager.CloneMonster(args[2], cloneName))
+                            if (MonsterManager.Command_CloneMonster(args[2], cloneName))
                             {
                                 MonsterDBPlugin.MonsterDBLogger.LogInfo("Successfully cloned " + args[2] + " as " + cloneName);
                             }
@@ -80,10 +80,16 @@ public static class RegisterCommands
                             break;
                         case "item":
                             if (args.Length < 3) return false;
-                            GameObject? gameObject = DataBase.DataBase.TryGetGameObject(args[2]);
-                            if (gameObject != null)
+                            int count = 0;
+                            foreach (GameObject item in DataBase.DataBase.GetCachedItems().Where(item => item.name.StartsWith(args[2]) || item.name.Contains(args[2]) || item.name.EndsWith(args[2])))
                             {
-                                MonsterDBPlugin.MonsterDBLogger.LogInfo("Found item: " + gameObject.name);
+                                MonsterDBPlugin.MonsterDBLogger.LogInfo(item.name);
+                                ++count;
+                            }
+
+                            if (count == 0)
+                            {
+                                MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find any items matching " + args[2]);
                             }
                             break;
                         case "search":

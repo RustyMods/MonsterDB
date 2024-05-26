@@ -7,6 +7,7 @@ using HarmonyLib;
 using MonsterDB.Behaviors;
 using UnityEngine;
 using YamlDotNet.Serialization;
+using Object = UnityEngine.Object;
 
 namespace MonsterDB.DataBase;
 
@@ -14,6 +15,7 @@ public static class MonsterManager
 {
     private static readonly Dictionary<string, MonsterData> m_defaultMonsterData = new();
     private static readonly List<string> m_newTames = new();
+    private static readonly Dictionary<string, GameObject> m_clonedItems = new();
 
     private static readonly int Hue = Shader.PropertyToID("_Hue");
     private static readonly int Saturation = Shader.PropertyToID("_Saturation");
@@ -35,11 +37,14 @@ public static class MonsterManager
     private static readonly int AddRain = Shader.PropertyToID("_AddRain");
     private static readonly int MetallicGlossMap = Shader.PropertyToID("_MetallicGlossMap");
 
-    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPatch(typeof(ObjectDB), nameof(ObjectDB.Awake))]
     private static class Initiate_MonsterDB
     {
         private static void Postfix()
         {
+            if (!ZNetScene.instance) return;
+            MonsterDBPlugin.MonsterDBLogger.LogDebug("Registering MONSTER DB Files");
             RegisterMonsterTweaks();
         }
     }
@@ -50,42 +55,48 @@ public static class MonsterManager
         Paths.CreateDirectories();
         string[] monsterFiles = Directory.GetFiles(Paths.MonsterPath);
         var deserializer = new DeserializerBuilder().Build();
+
+        List<MonsterData> deserialized = new();
         foreach (var file in monsterFiles)
         {
             try
             {
                 var serial = File.ReadAllText(file);
                 var data = deserializer.Deserialize<MonsterData>(serial);
-
-                if (data.isClone)
-                {
-                    if (CloneMonster(data.OriginalMonster, data.Character.PrefabName, false))
-                    {
-                        MonsterDBPlugin.MonsterDBLogger.LogInfo("Successfully created " + data.Character.PrefabName);
-                    }
-                }
-                else
-                {
-                    if (!GetMonsterData(data.Character.PrefabName, out MonsterData monsterData))
-                    {
-                        MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to get default data for " +
-                                                                data.Character.PrefabName);
-                        continue;
-                    }
-
-                    if (UpdateMonsterData(data))
-                    {
-                        MonsterDBPlugin.MonsterDBLogger.LogInfo("Updated " + data.Character.PrefabName);
-                    }
-                }
-
-                ServerSync.m_serverData[data.Character.PrefabName] = data;
+                deserialized.Add(data);
             }
             catch
             {
                 MonsterDBPlugin.MonsterDBLogger.LogWarning("Failed to deserialize " + file);
             }
         }
+
+        foreach (var data in deserialized.Where(x => x.isClone))
+        {
+            if (CloneMonster(data))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogDebug("Successfully created " + data.PrefabName);
+                ServerSync.m_serverData[data.PrefabName] = data;
+            }
+        }
+
+        foreach (var data in deserialized.Where(x => !x.isClone))
+        {
+            if (!GetMonsterData(data.PrefabName, out MonsterData monsterData))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to get default data for " + data.PrefabName);
+                continue;
+            }
+
+            if (UpdateMonsterData(data))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogInfo("Updated " + data.PrefabName);
+            }
+
+            ServerSync.m_serverData[data.PrefabName] = data;
+
+        }
+
         ServerSync.UpdateServerMonsterDB();
     }
 
@@ -280,29 +291,62 @@ public static class MonsterManager
         if (!RegisterToZNetScene(human)) return;
     }
 
-    public static bool CloneMonster(string creatureName, string cloneName, bool writeToDisk = true)
+    private static GameObject? CreateClone(string originalMonster, string name)
     {
-        if (!ZNetScene.instance) return false;
-        GameObject critter = ZNetScene.instance.GetPrefab(creatureName);
+        GameObject critter = ZNetScene.instance.GetPrefab(originalMonster);
         if (!critter)
         {
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find " + creatureName);
-            return false;
+            MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find " + originalMonster);
+            return null;
         }
         GameObject clone = UnityEngine.Object.Instantiate(critter, MonsterDBPlugin._Root.transform, false);
-        clone.name = cloneName;
-        SkinnedMeshRenderer renderer = clone.GetComponentInChildren<SkinnedMeshRenderer>();
-        List<Material> newMaterials = new();
-        for (var index = 0; index < renderer.sharedMaterials.Length; index++)
-        {
-            var material = renderer.sharedMaterials[index];
-            Material cloneMat = new Material(material);
-            cloneMat.name = cloneName + "_mat_" + index;
-            newMaterials.Add(cloneMat);
-        }
-        renderer.sharedMaterials = newMaterials.ToArray();
-        renderer.materials = newMaterials.ToArray();
+        clone.name = name;
 
+        if (clone.TryGetComponent(out Humanoid humanoid))
+        {
+            CloneRagdoll(humanoid.m_deathEffects.m_effectPrefabs, clone);
+        }
+        else if (clone.TryGetComponent(out Character character))
+        {
+            CloneRagdoll(character.m_deathEffects.m_effectPrefabs, clone);
+        }
+        
+        return clone;
+    }
+
+    private static void CloneRagdoll(EffectList.EffectData[] deathEffects, GameObject clone)
+    {
+        foreach (var effect in deathEffects)
+        {
+            if (!effect.m_prefab.GetComponent<Ragdoll>()) continue;
+            var clonedRagdoll = Object.Instantiate(effect.m_prefab, MonsterDBPlugin._Root.transform, false);
+            clonedRagdoll.name = clone.name + "_ragdoll";
+            RegisterToZNetScene(clonedRagdoll);
+            effect.m_prefab = clonedRagdoll;
+        }
+    }
+    private static bool CloneMonster(MonsterData data)
+    {
+        if (!ZNetScene.instance) return false;
+
+        GameObject? clone = CreateClone(data.OriginalMonster, data.PrefabName);
+        if (clone == null) return false;
+        if (!RegisterToZNetScene(clone))
+        {
+            MonsterDBPlugin.MonsterDBLogger.LogDebug($"Failed to register {clone.name} to ZNetScene");
+            return false;
+        }
+        
+        UpdateMonsterData(data);
+        return true;
+    }
+    public static bool Command_CloneMonster(string creatureName, string cloneName, bool writeToDisk = true)
+    {
+        if (!ZNetScene.instance) return false;
+
+        GameObject? clone = CreateClone(creatureName, cloneName);
+
+        if (clone == null) return false;
         if (!RegisterToZNetScene(clone))
         {
             MonsterDBPlugin.MonsterDBLogger.LogDebug($"Failed to register {clone.name} to ZNetScene");
@@ -310,10 +354,10 @@ public static class MonsterManager
         }
         if (!GetMonsterData(cloneName, out MonsterData data)) return false;
         data.OriginalMonster = creatureName;
-        data.Character.PrefabName = cloneName;
-        data.Character.Name = cloneName;
+        data.PrefabName = cloneName;
+        data.DisplayName = cloneName;
         data.isClone = true;
-        data.Character.Enabled = true;
+        data.ENABLED = true;
         if (writeToDisk) WriteDataToDisk(cloneName, data);
         Command_UpdateMonster(cloneName);
         if (ZNet.instance.IsServer()) ServerSync.m_serverData[cloneName] = data;
@@ -378,7 +422,7 @@ public static class MonsterManager
 
             if (UpdateMonsterData(data))
             {
-                ServerSync.m_serverData[data.Character.PrefabName] = data;
+                ServerSync.m_serverData[data.PrefabName] = data;
                 return true;
             }
 
@@ -400,14 +444,14 @@ public static class MonsterManager
 
     private static void UpdateMonsterScale(MonsterData data, GameObject critter, bool reset)
     {
-        if (!data.Character.ChangeScale && !reset) return;
+        if (!data.CHANGE_SCALE && !reset) return;
         critter.transform.localScale =
-            new Vector3(data.Character.Scale.x, data.Character.Scale.y, data.Character.Scale.z);
+            new Vector3(data.Scale.x, data.Scale.y, data.Scale.z);
             
         if (critter.TryGetComponent(out CapsuleCollider collider))
         {
-            collider.height = data.Character.ColliderHeight;
-            collider.center = new Vector3(data.Character.ColliderCenter.x, data.Character.ColliderCenter.y, data.Character.ColliderCenter.z);
+            collider.height = data.ColliderHeight;
+            collider.center = new Vector3(data.ColliderCenter.x, data.ColliderCenter.y, data.ColliderCenter.z);
         }
 
         if (critter.TryGetComponent(out Humanoid humanoid))
@@ -416,7 +460,7 @@ public static class MonsterManager
             {
                 if (effect.m_prefab.GetComponent<Ragdoll>())
                 {
-                    effect.m_prefab.transform.localScale = new Vector3(data.Character.Scale.x, data.Character.Scale.y, data.Character.Scale.z);
+                    effect.m_prefab.transform.localScale = new Vector3(data.Scale.x, data.Scale.y, data.Scale.z);
                 }
             }
         }
@@ -426,7 +470,7 @@ public static class MonsterManager
             {
                 if (effect.m_prefab.GetComponent<Ragdoll>())
                 {
-                    effect.m_prefab.transform.localScale = new Vector3(data.Character.Scale.x, data.Character.Scale.y, data.Character.Scale.z);
+                    effect.m_prefab.transform.localScale = new Vector3(data.Scale.x, data.Scale.y, data.Scale.z);
                 }
             }
         }
@@ -434,315 +478,315 @@ public static class MonsterManager
 
     private static void UpdateMonsterHumanoid(MonsterData data, Humanoid humanoid, bool reset)
     {
-        humanoid.m_name = data.Character.Name;
-        humanoid.m_group = data.Character.Group;
-        if (GetFaction(data.Character.Faction, out Character.Faction faction)) humanoid.m_faction = faction;
-        else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update faction for " + data.Character.PrefabName);
-        humanoid.m_boss = data.Character.Boss;
-        humanoid.m_dontHideBossHud = data.Character.DoNotHideBossHUD;
-        humanoid.m_bossEvent = data.Character.BossEvent;
-        humanoid.m_defeatSetGlobalKey = data.Character.DefeatSetGlobalKey;
+        humanoid.m_name = data.DisplayName;
+        humanoid.m_group = data.Group;
+        if (GetFaction(data.Faction, out Character.Faction faction)) humanoid.m_faction = faction;
+        else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update faction for " + data.PrefabName);
+        humanoid.m_boss = data.Boss;
+        humanoid.m_dontHideBossHud = data.DoNotHideBossHUD;
+        humanoid.m_bossEvent = data.BossEvent;
+        humanoid.m_defeatSetGlobalKey = data.DefeatSetGlobalKey;
 
-        if (data.Character.ChangeMovement || reset)
+        if (data.CHANGE_MOVEMENT || reset)
         {
-            humanoid.m_crouchSpeed = data.Character.CrouchSpeed;
-            humanoid.m_walkSpeed = data.Character.WalkSpeed;
-            humanoid.m_speed = data.Character.Speed;
-            humanoid.m_turnSpeed = data.Character.TurnSpeed;
-            humanoid.m_runSpeed = data.Character.RunSpeed;
-            humanoid.m_runTurnSpeed = data.Character.RunTurnSpeed;
-            humanoid.m_flySlowSpeed = data.Character.FlySlowSpeed;
-            humanoid.m_flyFastSpeed = data.Character.FlyFastSpeed;
-            humanoid.m_flyTurnSpeed = data.Character.FlyTurnSpeed;
-            humanoid.m_acceleration = data.Character.Acceleration;
-            humanoid.m_jumpForce = data.Character.JumpForce;
-            humanoid.m_jumpForceForward = data.Character.JumpForceForward;
-            humanoid.m_jumpForceTiredFactor = data.Character.JumpForceTiredFactor;
-            humanoid.m_airControl = data.Character.AirControl;
-            humanoid.m_canSwim = data.Character.CanSwim;
-            humanoid.m_swimDepth = data.Character.SwimDepth;
-            humanoid.m_swimSpeed = data.Character.SwimSpeed;
-            humanoid.m_swimTurnSpeed = data.Character.SwimTurnSpeed;
-            humanoid.m_swimAcceleration = data.Character.SwimAcceleration;
-            if (GetGroundTilt(data.Character.GroundTilt, out Character.GroundTiltType type)) humanoid.m_groundTilt = type;
-            else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update ground tilt type for " + data.Character.PrefabName);
-            humanoid.m_groundTiltSpeed = data.Character.GroundTiltSpeed;
-            humanoid.m_flying = data.Character.Flying;
-            humanoid.m_jumpStaminaUsage = data.Character.JumpStaminaUsage;
-            humanoid.m_disableWhileSleeping = data.Character.DisableWhileSleeping;
+            humanoid.m_crouchSpeed = data.CrouchSpeed;
+            humanoid.m_walkSpeed = data.WalkSpeed;
+            humanoid.m_speed = data.Speed;
+            humanoid.m_turnSpeed = data.TurnSpeed;
+            humanoid.m_runSpeed = data.RunSpeed;
+            humanoid.m_runTurnSpeed = data.RunTurnSpeed;
+            humanoid.m_flySlowSpeed = data.FlySlowSpeed;
+            humanoid.m_flyFastSpeed = data.FlyFastSpeed;
+            humanoid.m_flyTurnSpeed = data.FlyTurnSpeed;
+            humanoid.m_acceleration = data.Acceleration;
+            humanoid.m_jumpForce = data.JumpForce;
+            humanoid.m_jumpForceForward = data.JumpForceForward;
+            humanoid.m_jumpForceTiredFactor = data.JumpForceTiredFactor;
+            humanoid.m_airControl = data.AirControl;
+            humanoid.m_canSwim = data.CanSwim;
+            humanoid.m_swimDepth = data.SwimDepth;
+            humanoid.m_swimSpeed = data.SwimSpeed;
+            humanoid.m_swimTurnSpeed = data.SwimTurnSpeed;
+            humanoid.m_swimAcceleration = data.SwimAcceleration;
+            if (GetGroundTilt(data.GroundTilt, out Character.GroundTiltType type)) humanoid.m_groundTilt = type;
+            else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update ground tilt type for " + data.PrefabName);
+            humanoid.m_groundTiltSpeed = data.GroundTiltSpeed;
+            humanoid.m_flying = data.Flying;
+            humanoid.m_jumpStaminaUsage = data.JumpStaminaUsage;
+            humanoid.m_disableWhileSleeping = data.DisableWhileSleeping;
         }
         // Effects
-        if (data.Character.ChangeEffects || reset)
+        if (data.CHANGE_CHARACTER_EFFECTS || reset)
         {
-            if (GetEffects(data.Character.HitEffects, out EffectList HitEffects)) humanoid.m_hitEffects = HitEffects;
-            if (GetEffects(data.Character.CriticalHitEffects, out EffectList CriticalHitEffects)) humanoid.m_critHitEffects = CriticalHitEffects;
-            if (GetEffects(data.Character.BackStabHitEffects, out EffectList BackStabHitEffects)) humanoid.m_backstabHitEffects = BackStabHitEffects;
-            if (GetEffects(data.Character.DeathEffects, out EffectList DeathEffects)) humanoid.m_deathEffects = DeathEffects;
-            if (GetEffects(data.Character.WaterEffects, out EffectList WaterEffects)) humanoid.m_waterEffects = WaterEffects;
-            if (GetEffects(data.Character.TarEffects, out EffectList TarEffects)) humanoid.m_tarEffects = TarEffects;
-            if (GetEffects(data.Character.SlideEffects, out EffectList SlideEffects)) humanoid.m_slideEffects = SlideEffects;
-            if (GetEffects(data.Character.JumpEffects, out EffectList JumpEffects)) humanoid.m_jumpEffects = JumpEffects;
-            if (GetEffects(data.Character.FlyingContinuousEffects, out EffectList FlyingContinuousEffects)) humanoid.m_flyingContinuousEffect = FlyingContinuousEffects;
-            if (GetEffects(data.Character.PickUpEffects, out EffectList PickUpEffects)) humanoid.m_pickupEffects = PickUpEffects;
-            if (GetEffects(data.Character.DropEffects, out EffectList DropEffects)) humanoid.m_pickupEffects = DropEffects;
-            if (GetEffects(data.Character.ConsumeItemEffects, out EffectList ConsumeItemEffects)) humanoid.m_pickupEffects = ConsumeItemEffects;
-            if (GetEffects(data.Character.EquipEffects, out EffectList EquipEffects)) humanoid.m_pickupEffects = EquipEffects;
-            if (GetEffects(data.Character.PerfectBlockEffect, out EffectList PerfectBlockEffect)) humanoid.m_pickupEffects = PerfectBlockEffect;
+            if (GetEffects(data.HitEffects, out EffectList HitEffects)) humanoid.m_hitEffects = HitEffects;
+            if (GetEffects(data.CriticalHitEffects, out EffectList CriticalHitEffects)) humanoid.m_critHitEffects = CriticalHitEffects;
+            if (GetEffects(data.BackStabHitEffects, out EffectList BackStabHitEffects)) humanoid.m_backstabHitEffects = BackStabHitEffects;
+            if (GetEffects(data.DeathEffects, out EffectList DeathEffects)) humanoid.m_deathEffects = DeathEffects;
+            if (GetEffects(data.WaterEffects, out EffectList WaterEffects)) humanoid.m_waterEffects = WaterEffects;
+            if (GetEffects(data.TarEffects, out EffectList TarEffects)) humanoid.m_tarEffects = TarEffects;
+            if (GetEffects(data.SlideEffects, out EffectList SlideEffects)) humanoid.m_slideEffects = SlideEffects;
+            if (GetEffects(data.JumpEffects, out EffectList JumpEffects)) humanoid.m_jumpEffects = JumpEffects;
+            if (GetEffects(data.FlyingContinuousEffects, out EffectList FlyingContinuousEffects)) humanoid.m_flyingContinuousEffect = FlyingContinuousEffects;
+            if (GetEffects(data.PickUpEffects, out EffectList PickUpEffects)) humanoid.m_pickupEffects = PickUpEffects;
+            if (GetEffects(data.DropEffects, out EffectList DropEffects)) humanoid.m_pickupEffects = DropEffects;
+            if (GetEffects(data.ConsumeItemEffects, out EffectList ConsumeItemEffects)) humanoid.m_pickupEffects = ConsumeItemEffects;
+            if (GetEffects(data.EquipEffects, out EffectList EquipEffects)) humanoid.m_pickupEffects = EquipEffects;
+            if (GetEffects(data.PerfectBlockEffect, out EffectList PerfectBlockEffect)) humanoid.m_pickupEffects = PerfectBlockEffect;
         }
         // Health & Damage
-        if (data.Character.ChangeHealthDamage || reset)
+        if (data.CHANGE_HEALTH_DAMAGES || reset)
         {
-            humanoid.m_tolerateWater = data.Character.TolerateWater;
-            humanoid.m_tolerateFire = data.Character.TolerateFire;
-            humanoid.m_tolerateSmoke = data.Character.TolerateSmoke;
-            humanoid.m_tolerateTar = data.Character.TolerateTar;
-            humanoid.m_health = data.Character.Health;
-            if (GetDamageMods(data.Character.DamageModifiers, out HitData.DamageModifiers damageModifiers)) humanoid.m_damageModifiers = damageModifiers;
-            humanoid.m_staggerWhenBlocked = data.Character.StaggerWhenBlocked;
-            humanoid.m_staggerDamageFactor = data.Character.StaggerDamageFactor;
+            humanoid.m_tolerateWater = data.TolerateWater;
+            humanoid.m_tolerateFire = data.TolerateFire;
+            humanoid.m_tolerateSmoke = data.TolerateSmoke;
+            humanoid.m_tolerateTar = data.TolerateTar;
+            humanoid.m_health = data.Health;
+            if (GetDamageMods(data.DamageModifiers, out HitData.DamageModifiers damageModifiers)) humanoid.m_damageModifiers = damageModifiers;
+            humanoid.m_staggerWhenBlocked = data.StaggerWhenBlocked;
+            humanoid.m_staggerDamageFactor = data.StaggerDamageFactor;
         }
 
-        if (data.Character.ChangeItems || reset)
+        if (data.CHANGE_ATTACKS || reset)
         {
-            if (GetItems(data.Character.DefaultItems, out List<GameObject> DefaultItems)) humanoid.m_defaultItems = DefaultItems.ToArray();
-            if (GetItems(data.Character.RandomWeapons, out List<GameObject> RandomWeapons)) humanoid.m_randomWeapon = RandomWeapons.ToArray();
-            if (GetItems(data.Character.RandomArmors, out List<GameObject> RandomArmors)) humanoid.m_randomArmor = RandomArmors.ToArray();
-            if (GetItems(data.Character.RandomShields, out List<GameObject> RandomShields)) humanoid.m_randomShield = RandomShields.ToArray();
-            if (GetRandomSets(data.Character.RandomSets, out List<Humanoid.ItemSet> RandomSets)) humanoid.m_randomSets = RandomSets.ToArray();
-            if (DataBase.TryGetItemDrop(data.Character.UnarmedWeapon, out ItemDrop? UnarmedWeapon)) humanoid.m_unarmedWeapon = UnarmedWeapon;
-            humanoid.m_beardItem = data.Character.BeardItem;
-            humanoid.m_hairItem = data.Character.HairItem;
+            if (GetItems(data.DefaultItems, reset, out List<GameObject> DefaultItems)) humanoid.m_defaultItems = DefaultItems.ToArray();
+            if (GetItems(data.RandomWeapons, reset, out List<GameObject> RandomWeapons)) humanoid.m_randomWeapon = RandomWeapons.ToArray();
+            if (GetItems(data.RandomArmors, reset, out List<GameObject> RandomArmors)) humanoid.m_randomArmor = RandomArmors.ToArray();
+            if (GetItems(data.RandomShields, reset, out List<GameObject> RandomShields)) humanoid.m_randomShield = RandomShields.ToArray();
+            if (GetRandomSets(data.RandomSets, reset, out List<Humanoid.ItemSet> RandomSets)) humanoid.m_randomSets = RandomSets.ToArray();
+            if (DataBase.TryGetItemDrop(data.UnarmedWeapon, out ItemDrop? UnarmedWeapon)) humanoid.m_unarmedWeapon = UnarmedWeapon;
+            humanoid.m_beardItem = data.BeardItem;
+            humanoid.m_hairItem = data.HairItem;
         }
     }
 
     private static void UpdateMonsterCharacter(MonsterData data, Character character, bool reset)
     {
-        character.m_name = data.Character.Name;
-        character.m_group = data.Character.Group;
-        if (GetFaction(data.Character.Faction, out Character.Faction faction)) character.m_faction = faction;
-        else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update faction for " + data.Character.PrefabName);
-        character.m_boss = data.Character.Boss;
-        character.m_dontHideBossHud = data.Character.DoNotHideBossHUD;
-        character.m_bossEvent = data.Character.BossEvent;
-        character.m_defeatSetGlobalKey = data.Character.DefeatSetGlobalKey;
+        character.m_name = data.DisplayName;
+        character.m_group = data.Group;
+        if (GetFaction(data.Faction, out Character.Faction faction)) character.m_faction = faction;
+        else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update faction for " + data.PrefabName);
+        character.m_boss = data.Boss;
+        character.m_dontHideBossHud = data.DoNotHideBossHUD;
+        character.m_bossEvent = data.BossEvent;
+        character.m_defeatSetGlobalKey = data.DefeatSetGlobalKey;
 
-        if (data.Character.ChangeMovement || reset)
+        if (data.CHANGE_MOVEMENT || reset)
         {
-            character.m_crouchSpeed = data.Character.CrouchSpeed;
-            character.m_walkSpeed = data.Character.WalkSpeed;
-            character.m_speed = data.Character.Speed;
-            character.m_turnSpeed = data.Character.TurnSpeed;
-            character.m_runSpeed = data.Character.RunSpeed;
-            character.m_runTurnSpeed = data.Character.RunTurnSpeed;
-            character.m_flySlowSpeed = data.Character.FlySlowSpeed;
-            character.m_flyFastSpeed = data.Character.FlyFastSpeed;
-            character.m_flyTurnSpeed = data.Character.FlyTurnSpeed;
-            character.m_acceleration = data.Character.Acceleration;
-            character.m_jumpForce = data.Character.JumpForce;
-            character.m_jumpForceForward = data.Character.JumpForceForward;
-            character.m_jumpForceTiredFactor = data.Character.JumpForceTiredFactor;
-            character.m_airControl = data.Character.AirControl;
-            character.m_canSwim = data.Character.CanSwim;
-            character.m_swimDepth = data.Character.SwimDepth;
-            character.m_swimSpeed = data.Character.SwimSpeed;
-            character.m_swimTurnSpeed = data.Character.SwimTurnSpeed;
-            character.m_swimAcceleration = data.Character.SwimAcceleration;
-            if (GetGroundTilt(data.Character.GroundTilt, out Character.GroundTiltType type)) character.m_groundTilt = type;
-            character.m_groundTiltSpeed = data.Character.GroundTiltSpeed;
-            character.m_flying = data.Character.Flying;
-            character.m_jumpStaminaUsage = data.Character.JumpStaminaUsage;
-            character.m_disableWhileSleeping = data.Character.DisableWhileSleeping;
+            character.m_crouchSpeed = data.CrouchSpeed;
+            character.m_walkSpeed = data.WalkSpeed;
+            character.m_speed = data.Speed;
+            character.m_turnSpeed = data.TurnSpeed;
+            character.m_runSpeed = data.RunSpeed;
+            character.m_runTurnSpeed = data.RunTurnSpeed;
+            character.m_flySlowSpeed = data.FlySlowSpeed;
+            character.m_flyFastSpeed = data.FlyFastSpeed;
+            character.m_flyTurnSpeed = data.FlyTurnSpeed;
+            character.m_acceleration = data.Acceleration;
+            character.m_jumpForce = data.JumpForce;
+            character.m_jumpForceForward = data.JumpForceForward;
+            character.m_jumpForceTiredFactor = data.JumpForceTiredFactor;
+            character.m_airControl = data.AirControl;
+            character.m_canSwim = data.CanSwim;
+            character.m_swimDepth = data.SwimDepth;
+            character.m_swimSpeed = data.SwimSpeed;
+            character.m_swimTurnSpeed = data.SwimTurnSpeed;
+            character.m_swimAcceleration = data.SwimAcceleration;
+            if (GetGroundTilt(data.GroundTilt, out Character.GroundTiltType type)) character.m_groundTilt = type;
+            character.m_groundTiltSpeed = data.GroundTiltSpeed;
+            character.m_flying = data.Flying;
+            character.m_jumpStaminaUsage = data.JumpStaminaUsage;
+            character.m_disableWhileSleeping = data.DisableWhileSleeping;
         }
         // Effects
-        if (data.Character.ChangeEffects || reset)
+        if (data.CHANGE_CHARACTER_EFFECTS || reset)
         {
-            if (GetEffects(data.Character.HitEffects, out EffectList HitEffects)) character.m_hitEffects = HitEffects;
-            if (GetEffects(data.Character.CriticalHitEffects, out EffectList CriticalHitEffects)) character.m_hitEffects = CriticalHitEffects;
-            if (GetEffects(data.Character.BackStabHitEffects, out EffectList BackStabHitEffects)) character.m_hitEffects = BackStabHitEffects;
-            if (GetEffects(data.Character.DeathEffects, out EffectList DeathEffects)) character.m_hitEffects = DeathEffects;
-            if (GetEffects(data.Character.WaterEffects, out EffectList WaterEffects)) character.m_hitEffects = WaterEffects;
-            if (GetEffects(data.Character.TarEffects, out EffectList TarEffects)) character.m_hitEffects = TarEffects;
-            if (GetEffects(data.Character.SlideEffects, out EffectList SlideEffects)) character.m_hitEffects = SlideEffects;
-            if (GetEffects(data.Character.JumpEffects, out EffectList JumpEffects)) character.m_hitEffects = JumpEffects;
-            if (GetEffects(data.Character.FlyingContinuousEffects, out EffectList FlyingContinuousEffects)) character.m_hitEffects = FlyingContinuousEffects;
+            if (GetEffects(data.HitEffects, out EffectList HitEffects)) character.m_hitEffects = HitEffects;
+            if (GetEffects(data.CriticalHitEffects, out EffectList CriticalHitEffects)) character.m_hitEffects = CriticalHitEffects;
+            if (GetEffects(data.BackStabHitEffects, out EffectList BackStabHitEffects)) character.m_hitEffects = BackStabHitEffects;
+            if (GetEffects(data.DeathEffects, out EffectList DeathEffects)) character.m_hitEffects = DeathEffects;
+            if (GetEffects(data.WaterEffects, out EffectList WaterEffects)) character.m_hitEffects = WaterEffects;
+            if (GetEffects(data.TarEffects, out EffectList TarEffects)) character.m_hitEffects = TarEffects;
+            if (GetEffects(data.SlideEffects, out EffectList SlideEffects)) character.m_hitEffects = SlideEffects;
+            if (GetEffects(data.JumpEffects, out EffectList JumpEffects)) character.m_hitEffects = JumpEffects;
+            if (GetEffects(data.FlyingContinuousEffects, out EffectList FlyingContinuousEffects)) character.m_hitEffects = FlyingContinuousEffects;
         }
         // Health & Damage
-        if (data.Character.ChangeHealthDamage || reset)
+        if (data.CHANGE_HEALTH_DAMAGES || reset)
         {
-            character.m_tolerateWater = data.Character.TolerateWater;
-            character.m_tolerateFire = data.Character.TolerateFire;
-            character.m_tolerateSmoke = data.Character.TolerateSmoke;
-            character.m_tolerateTar = data.Character.TolerateTar;
-            character.m_health = data.Character.Health;
-            if (GetDamageMods(data.Character.DamageModifiers, out HitData.DamageModifiers damageModifiers)) character.m_damageModifiers = damageModifiers;
-            character.m_staggerWhenBlocked = data.Character.StaggerWhenBlocked;
-            character.m_staggerDamageFactor = data.Character.StaggerDamageFactor;
+            character.m_tolerateWater = data.TolerateWater;
+            character.m_tolerateFire = data.TolerateFire;
+            character.m_tolerateSmoke = data.TolerateSmoke;
+            character.m_tolerateTar = data.TolerateTar;
+            character.m_health = data.Health;
+            if (GetDamageMods(data.DamageModifiers, out HitData.DamageModifiers damageModifiers)) character.m_damageModifiers = damageModifiers;
+            character.m_staggerWhenBlocked = data.StaggerWhenBlocked;
+            character.m_staggerDamageFactor = data.StaggerDamageFactor;
         }
     }
 
     private static void UpdateMonsterAI(MonsterData data, MonsterAI monsterAI, bool reset)
     {
-        monsterAI.m_viewRange = data.MonsterAI.ViewRange;
-        monsterAI.m_viewAngle = data.MonsterAI.ViewAngle;
-        monsterAI.m_hearRange = data.MonsterAI.HearRange;
-        monsterAI.m_mistVision = data.MonsterAI.MistVision;
-        if (data.MonsterAI.ChangeEffects || reset)
+        monsterAI.m_viewRange = data.ViewRange;
+        monsterAI.m_viewAngle = data.ViewAngle;
+        monsterAI.m_hearRange = data.HearRange;
+        monsterAI.m_mistVision = data.MistVision;
+        if (data.CHANGE_MONSTER_EFFECTS || reset)
         {
-            if (GetEffects(data.MonsterAI.AlertedEffects, out EffectList AlertedEffects))
+            if (GetEffects(data.AlertedEffects, out EffectList AlertedEffects))
                 monsterAI.m_alertedEffects = AlertedEffects;
-            if (GetEffects(data.MonsterAI.IdleSound, out EffectList IdleSounds))
+            if (GetEffects(data.IdleSound, out EffectList IdleSounds))
                 monsterAI.m_idleSound = IdleSounds;
-            if (GetEffects(data.MonsterAI.WakeUpEffects, out EffectList WakeUpEffects))
+            if (GetEffects(data.WakeUpEffects, out EffectList WakeUpEffects))
                 monsterAI.m_wakeupEffects = WakeUpEffects;
         }
-        monsterAI.m_idleSoundInterval = data.MonsterAI.IdleSoundInterval;
-        monsterAI.m_idleSoundChance = data.MonsterAI.IdleSoundChance;
-        if (GetPathType(data.MonsterAI.PathAgentType, out Pathfinding.AgentType PathAgentType))
+        monsterAI.m_idleSoundInterval = data.IdleSoundInterval;
+        monsterAI.m_idleSoundChance = data.IdleSoundChance;
+        if (GetPathType(data.PathAgentType, out Pathfinding.AgentType PathAgentType))
             monsterAI.m_pathAgentType = PathAgentType;
-        monsterAI.m_moveMinAngle = data.MonsterAI.MoveMinimumAngle;
-        monsterAI.m_smoothMovement = data.MonsterAI.smoothMovement;
-        monsterAI.m_serpentMovement = data.MonsterAI.SerpentMovement;
-        monsterAI.m_serpentTurnRadius = data.MonsterAI.SerpentTurnRadius;
-        monsterAI.m_jumpInterval = data.MonsterAI.JumpInterval;
+        monsterAI.m_moveMinAngle = data.MoveMinimumAngle;
+        monsterAI.m_smoothMovement = data.smoothMovement;
+        monsterAI.m_serpentMovement = data.SerpentMovement;
+        monsterAI.m_serpentTurnRadius = data.SerpentTurnRadius;
+        monsterAI.m_jumpInterval = data.JumpInterval;
         // Random Circle
-        monsterAI.m_randomCircleInterval = data.MonsterAI.RandomCircleInterval;
+        monsterAI.m_randomCircleInterval = data.RandomCircleInterval;
         // Random Movement
-        monsterAI.m_randomMoveInterval = data.MonsterAI.RandomMoveInterval;
-        monsterAI.m_randomMoveRange = data.MonsterAI.RandomMoveRange;
+        monsterAI.m_randomMoveInterval = data.RandomMoveInterval;
+        monsterAI.m_randomMoveRange = data.RandomMoveRange;
         // Fly Behavior
-        monsterAI.m_randomFly = data.MonsterAI.RandomFly;
-        monsterAI.m_chanceToTakeoff = data.MonsterAI.ChanceToTakeOff;
-        monsterAI.m_chanceToLand = data.MonsterAI.ChanceToLand;
-        monsterAI.m_groundDuration = data.MonsterAI.GroundDuration;
-        monsterAI.m_airDuration = data.MonsterAI.AirDuration;
-        monsterAI.m_maxLandAltitude = data.MonsterAI.MaxLandAltitude;
-        monsterAI.m_takeoffTime = data.MonsterAI.TakeOffTime;
-        monsterAI.m_flyAltitudeMin = data.MonsterAI.FlyAltitudeMinimum;
-        monsterAI.m_flyAltitudeMax = data.MonsterAI.FlyAltitudeMaximum;
-        monsterAI.m_flyAbsMinAltitude = data.MonsterAI.FlyAbsoluteMinimumAltitude;
+        monsterAI.m_randomFly = data.RandomFly;
+        monsterAI.m_chanceToTakeoff = data.ChanceToTakeOff;
+        monsterAI.m_chanceToLand = data.ChanceToLand;
+        monsterAI.m_groundDuration = data.GroundDuration;
+        monsterAI.m_airDuration = data.AirDuration;
+        monsterAI.m_maxLandAltitude = data.MaxLandAltitude;
+        monsterAI.m_takeoffTime = data.TakeOffTime;
+        monsterAI.m_flyAltitudeMin = data.FlyAltitudeMinimum;
+        monsterAI.m_flyAltitudeMax = data.FlyAltitudeMaximum;
+        monsterAI.m_flyAbsMinAltitude = data.FlyAbsoluteMinimumAltitude;
         // Other
-        monsterAI.m_avoidFire = data.MonsterAI.AvoidFire;
-        monsterAI.m_afraidOfFire = data.MonsterAI.AfraidOfFire;
-        monsterAI.m_avoidWater = data.MonsterAI.AvoidWater;
-        monsterAI.m_aggravatable = data.MonsterAI.Aggravatable;
-        monsterAI.m_passiveAggresive = data.MonsterAI.PassiveAggressive;
-        monsterAI.m_spawnMessage = data.MonsterAI.SpawnMessage;
-        monsterAI.m_deathMessage = data.MonsterAI.DeathMessage;
-        monsterAI.m_alertedMessage = data.MonsterAI.AlertedMessage;
+        monsterAI.m_avoidFire = data.AvoidFire;
+        monsterAI.m_afraidOfFire = data.AfraidOfFire;
+        monsterAI.m_avoidWater = data.AvoidWater;
+        monsterAI.m_aggravatable = data.Aggravatable;
+        monsterAI.m_passiveAggresive = data.PassiveAggressive;
+        monsterAI.m_spawnMessage = data.SpawnMessage;
+        monsterAI.m_deathMessage = data.DeathMessage;
+        monsterAI.m_alertedMessage = data.AlertedMessage;
         // Monster AI
-        monsterAI.m_alertRange = data.MonsterAI.AlertRange;
-        monsterAI.m_fleeIfHurtWhenTargetCantBeReached = data.MonsterAI.FleeIfHurtWhenTargetCannotBeReached;
-        monsterAI.m_fleeIfNotAlerted = data.MonsterAI.FleeIfNotAlerted;
-        monsterAI.m_fleeIfLowHealth = data.MonsterAI.FleeIfLowHealth;
-        monsterAI.m_circulateWhileCharging = data.MonsterAI.CirculateWhileCharging;
-        monsterAI.m_circulateWhileChargingFlying = data.MonsterAI.CirculateWhileChargingFlying;
-        monsterAI.m_enableHuntPlayer = data.MonsterAI.EnableHuntPlayer;
-        monsterAI.m_attackPlayerObjects = data.MonsterAI.AttackPlayerObjects;
-        monsterAI.m_privateAreaTriggerTreshold = data.MonsterAI.PrivateAreaTriggerThreshold;
-        monsterAI.m_interceptTimeMax = data.MonsterAI.InterceptTimeMaximum;
-        monsterAI.m_interceptTimeMin = data.MonsterAI.InterceptTimeMinimum;
-        monsterAI.m_maxChaseDistance = data.MonsterAI.MaximumChaseDistance;
-        monsterAI.m_minAttackInterval = data.MonsterAI.MinimumAttackInterval;
+        monsterAI.m_alertRange = data.AlertRange;
+        monsterAI.m_fleeIfHurtWhenTargetCantBeReached = data.FleeIfHurtWhenTargetCannotBeReached;
+        monsterAI.m_fleeIfNotAlerted = data.FleeIfNotAlerted;
+        monsterAI.m_fleeIfLowHealth = data.FleeIfLowHealth;
+        monsterAI.m_circulateWhileCharging = data.CirculateWhileCharging;
+        monsterAI.m_circulateWhileChargingFlying = data.CirculateWhileChargingFlying;
+        monsterAI.m_enableHuntPlayer = data.EnableHuntPlayer;
+        monsterAI.m_attackPlayerObjects = data.AttackPlayerObjects;
+        monsterAI.m_privateAreaTriggerTreshold = data.PrivateAreaTriggerThreshold;
+        monsterAI.m_interceptTimeMax = data.InterceptTimeMaximum;
+        monsterAI.m_interceptTimeMin = data.InterceptTimeMinimum;
+        monsterAI.m_maxChaseDistance = data.MaximumChaseDistance;
+        monsterAI.m_minAttackInterval = data.MinimumAttackInterval;
         // Circle Target
-        monsterAI.m_circleTargetInterval = data.MonsterAI.CircleTargetInterval;
-        monsterAI.m_circleTargetDuration = data.MonsterAI.CircleTargetDuration;
-        monsterAI.m_circleTargetDistance = data.MonsterAI.CircleTargetDistance;
+        monsterAI.m_circleTargetInterval = data.CircleTargetInterval;
+        monsterAI.m_circleTargetDuration = data.CircleTargetDuration;
+        monsterAI.m_circleTargetDistance = data.CircleTargetDistance;
         // Sleep
-        monsterAI.m_sleeping = data.MonsterAI.Sleeping;
-        monsterAI.m_wakeupRange = data.MonsterAI.WakeUpRange;
-        monsterAI.m_noiseWakeup = data.MonsterAI.NoiseWakeUp;
-        monsterAI.m_maxNoiseWakeupRange = data.MonsterAI.MaximumNoiseWakeUpRange;
+        monsterAI.m_sleeping = data.Sleeping;
+        monsterAI.m_wakeupRange = data.WakeUpRange;
+        monsterAI.m_noiseWakeup = data.NoiseWakeUp;
+        monsterAI.m_maxNoiseWakeupRange = data.MaximumNoiseWakeUpRange;
 
-        monsterAI.m_wakeUpDelayMin = data.MonsterAI.WakeUpDelayMinimum;
-        monsterAI.m_wakeUpDelayMax = data.MonsterAI.WakeUpDelayMaximum;
+        monsterAI.m_wakeUpDelayMin = data.WakeUpDelayMinimum;
+        monsterAI.m_wakeUpDelayMax = data.WakeUpDelayMaximum;
         // Other
-        monsterAI.m_avoidLand = data.MonsterAI.AvoidLand;
+        monsterAI.m_avoidLand = data.AvoidLand;
         // Consume Items 
-        if (data.MonsterAI.ChangeConsume || reset)
+        if (data.CHANGE_MONSTER_CONSUME || reset)
         {
-            if (GetItemDrops(data.MonsterAI.ConsumeItems, out List<ItemDrop> ConsumeItems)) monsterAI.m_consumeItems = ConsumeItems;
-            monsterAI.m_consumeRange = data.MonsterAI.ConsumeRange;
-            monsterAI.m_consumeSearchRange = data.MonsterAI.ConsumeSearchRange;
-            monsterAI.m_consumeSearchInterval = data.MonsterAI.ConsumeSearchInterval;
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Updated " + data.Character.PrefabName + " consume items");
+            if (GetItemDrops(data.ConsumeItems, out List<ItemDrop> ConsumeItems)) monsterAI.m_consumeItems = ConsumeItems;
+            monsterAI.m_consumeRange = data.ConsumeRange;
+            monsterAI.m_consumeSearchRange = data.ConsumeSearchRange;
+            monsterAI.m_consumeSearchInterval = data.ConsumeSearchInterval;
+            MonsterDBPlugin.MonsterDBLogger.LogInfo("Updated " + data.PrefabName + " consume items");
         }
     }
 
     private static void UpdateAnimalAI(MonsterData data, AnimalAI animalAI, bool reset)
     {
-        animalAI.m_viewRange = data.MonsterAI.ViewRange;
-        animalAI.m_viewAngle = data.MonsterAI.ViewAngle;
-        animalAI.m_hearRange = data.MonsterAI.HearRange;
-        animalAI.m_mistVision = data.MonsterAI.MistVision;
-        if (data.MonsterAI.ChangeEffects || reset)
+        animalAI.m_viewRange = data.ViewRange;
+        animalAI.m_viewAngle = data.ViewAngle;
+        animalAI.m_hearRange = data.HearRange;
+        animalAI.m_mistVision = data.MistVision;
+        if (data.CHANGE_MONSTER_EFFECTS || reset)
         {
-            if (GetEffects(data.MonsterAI.AlertedEffects, out EffectList AlertedEffects))
+            if (GetEffects(data.AlertedEffects, out EffectList AlertedEffects))
                 animalAI.m_alertedEffects = AlertedEffects;
-            if (GetEffects(data.MonsterAI.IdleSound, out EffectList IdleSounds))
+            if (GetEffects(data.IdleSound, out EffectList IdleSounds))
                 animalAI.m_idleSound = IdleSounds;
         }
-        animalAI.m_idleSoundInterval = data.MonsterAI.IdleSoundInterval;
-        animalAI.m_idleSoundChance = data.MonsterAI.IdleSoundChance;
-        if (GetPathType(data.MonsterAI.PathAgentType, out Pathfinding.AgentType PathAgentType))
+        animalAI.m_idleSoundInterval = data.IdleSoundInterval;
+        animalAI.m_idleSoundChance = data.IdleSoundChance;
+        if (GetPathType(data.PathAgentType, out Pathfinding.AgentType PathAgentType))
             animalAI.m_pathAgentType = PathAgentType;
-        else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update path type of " + data.Character.PrefabName);
-        animalAI.m_moveMinAngle = data.MonsterAI.MoveMinimumAngle;
-        animalAI.m_smoothMovement = data.MonsterAI.smoothMovement;
-        animalAI.m_serpentMovement = data.MonsterAI.SerpentMovement;
-        animalAI.m_serpentTurnRadius = data.MonsterAI.SerpentTurnRadius;
-        animalAI.m_jumpInterval = data.MonsterAI.JumpInterval;
+        else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to update path type of " + data.PrefabName);
+        animalAI.m_moveMinAngle = data.MoveMinimumAngle;
+        animalAI.m_smoothMovement = data.smoothMovement;
+        animalAI.m_serpentMovement = data.SerpentMovement;
+        animalAI.m_serpentTurnRadius = data.SerpentTurnRadius;
+        animalAI.m_jumpInterval = data.JumpInterval;
         // Random Circle
-        animalAI.m_randomCircleInterval = data.MonsterAI.RandomCircleInterval;
+        animalAI.m_randomCircleInterval = data.RandomCircleInterval;
         // Random Movement
-        animalAI.m_randomMoveInterval = data.MonsterAI.RandomMoveInterval;
-        animalAI.m_randomMoveRange = data.MonsterAI.RandomMoveRange;
+        animalAI.m_randomMoveInterval = data.RandomMoveInterval;
+        animalAI.m_randomMoveRange = data.RandomMoveRange;
         // Fly Behavior
-        animalAI.m_randomFly = data.MonsterAI.RandomFly;
-        animalAI.m_chanceToTakeoff = data.MonsterAI.ChanceToTakeOff;
-        animalAI.m_chanceToLand = data.MonsterAI.ChanceToLand;
-        animalAI.m_groundDuration = data.MonsterAI.GroundDuration;
-        animalAI.m_airDuration = data.MonsterAI.AirDuration;
-        animalAI.m_maxLandAltitude = data.MonsterAI.MaxLandAltitude;
-        animalAI.m_takeoffTime = data.MonsterAI.TakeOffTime;
-        animalAI.m_flyAltitudeMin = data.MonsterAI.FlyAltitudeMinimum;
-        animalAI.m_flyAltitudeMax = data.MonsterAI.FlyAltitudeMaximum;
-        animalAI.m_flyAbsMinAltitude = data.MonsterAI.FlyAbsoluteMinimumAltitude;
+        animalAI.m_randomFly = data.RandomFly;
+        animalAI.m_chanceToTakeoff = data.ChanceToTakeOff;
+        animalAI.m_chanceToLand = data.ChanceToLand;
+        animalAI.m_groundDuration = data.GroundDuration;
+        animalAI.m_airDuration = data.AirDuration;
+        animalAI.m_maxLandAltitude = data.MaxLandAltitude;
+        animalAI.m_takeoffTime = data.TakeOffTime;
+        animalAI.m_flyAltitudeMin = data.FlyAltitudeMinimum;
+        animalAI.m_flyAltitudeMax = data.FlyAltitudeMaximum;
+        animalAI.m_flyAbsMinAltitude = data.FlyAbsoluteMinimumAltitude;
         // Other
-        animalAI.m_avoidFire = data.MonsterAI.AvoidFire;
-        animalAI.m_afraidOfFire = data.MonsterAI.AfraidOfFire;
-        animalAI.m_avoidWater = data.MonsterAI.AvoidWater;
-        animalAI.m_aggravatable = data.MonsterAI.Aggravatable;
-        animalAI.m_passiveAggresive = data.MonsterAI.PassiveAggressive;
-        animalAI.m_spawnMessage = data.MonsterAI.SpawnMessage;
-        animalAI.m_deathMessage = data.MonsterAI.DeathMessage;
-        animalAI.m_alertedMessage = data.MonsterAI.AlertedMessage;
-        animalAI.m_timeToSafe = data.MonsterAI.TimeToSafe;
+        animalAI.m_avoidFire = data.AvoidFire;
+        animalAI.m_afraidOfFire = data.AfraidOfFire;
+        animalAI.m_avoidWater = data.AvoidWater;
+        animalAI.m_aggravatable = data.Aggravatable;
+        animalAI.m_passiveAggresive = data.PassiveAggressive;
+        animalAI.m_spawnMessage = data.SpawnMessage;
+        animalAI.m_deathMessage = data.DeathMessage;
+        animalAI.m_alertedMessage = data.AlertedMessage;
+        animalAI.m_timeToSafe = data.TimeToSafe;
     }
 
     private static void UpdateMonsterProcreation(MonsterData data, GameObject critter, bool reset)
     {
-        if (critter.TryGetComponent(out Procreation procreation) && (data.Procreation.Enabled || reset))
+        if (critter.TryGetComponent(out Procreation procreation) && (data.CHANGE_PROCREATION || reset))
         {
-            procreation.m_updateInterval = data.Procreation.UpdateInterval;
-            procreation.m_totalCheckRange = data.Procreation.TotalCheckRange;
-            procreation.m_maxCreatures = data.Procreation.MaxCreatures;
-            procreation.m_partnerCheckRange = data.Procreation.PartnerCheckRange;
-            procreation.m_pregnancyChance = data.Procreation.PregnancyChance;
-            procreation.m_pregnancyDuration = data.Procreation.PregnancyDuration;
-            procreation.m_requiredLovePoints = data.Procreation.RequiredLovePoints;
-            if (data.Procreation.ChangeOffSpring)
+            procreation.m_updateInterval = data.UpdateInterval;
+            procreation.m_totalCheckRange = data.TotalCheckRange;
+            procreation.m_maxCreatures = data.MaxCreatures;
+            procreation.m_partnerCheckRange = data.PartnerCheckRange;
+            procreation.m_pregnancyChance = data.PregnancyChance;
+            procreation.m_pregnancyDuration = data.PregnancyDuration;
+            procreation.m_requiredLovePoints = data.RequiredLovePoints;
+            if (data.ChangeOffSpring)
             {
-                if (GetOffspring(data.Procreation.OffSpring, out GameObject Offspring)) procreation.m_offspring = Offspring;
+                if (GetOffspring(data.OffSpring, out GameObject Offspring)) procreation.m_offspring = Offspring;
                 else MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to change offspring of " + critter.name);
             }
-            procreation.m_minOffspringLevel = data.Procreation.MinimumOffspringLevel;
-            procreation.m_spawnOffset = data.Procreation.SpawnOffset;
+            procreation.m_minOffspringLevel = data.MinimumOffspringLevel;
+            procreation.m_spawnOffset = data.SpawnOffset;
 
-            if (data.Procreation.ChangeEffects)
+            if (data.ChangeEffects)
             {
-                if (GetEffects(data.Procreation.BirthEffects, out EffectList BirthEffects))
+                if (GetEffects(data.BirthEffects, out EffectList BirthEffects))
                     procreation.m_birthEffects = BirthEffects;
-                if (GetEffects(data.Procreation.LoveEffects, out EffectList LoveEffects))
+                if (GetEffects(data.LoveEffects, out EffectList LoveEffects))
                     procreation.m_loveEffects = LoveEffects;
             }
         }
@@ -752,165 +796,166 @@ public static class MonsterManager
     {
         if (reset)
         {
-            if (m_newTames.Contains(data.Character.PrefabName))
+            if (m_newTames.Contains(data.PrefabName))
             {
                 if (critter.TryGetComponent(out Tameable tameable))
                 {
                     UnityEngine.Object.Destroy(tameable);
-                    m_newTames.Remove(data.Character.PrefabName);
+                    m_newTames.Remove(data.PrefabName);
                 }
             }
         }
-        else if (data.Tameable.Enabled || reset)
+        else if (data.CHANGE_TAMEABLE || reset)
         {
             if (!critter.TryGetComponent(out Tameable tameable))
             {
-                if (data.Tameable.MakeTameable)
+                if (data.MAKE_TAMEABLE)
                 {
                     tameable = critter.AddComponent<Tameable>();
-                    m_newTames.Add(data.Character.PrefabName);
+                    m_newTames.Add(data.PrefabName);
                 }
             }
 
             if (tameable != null)
             {
-                tameable.m_fedDuration = data.Tameable.FedDuration;
-                tameable.m_tamingTime = data.Tameable.TamingTime;
-                tameable.m_startsTamed = data.Tameable.StartsTamed;
+                tameable.m_fedDuration = data.FedDuration;
+                tameable.m_tamingTime = data.TamingTime;
+                tameable.m_startsTamed = data.StartsTamed;
 
-                if (data.Tameable.ChangeEffects)
+                if (data.CHANGE_TAME_EFFECTS)
                 {
-                    if (GetEffects(data.Tameable.TamedEffects, out EffectList TameEffects))
+                    if (GetEffects(data.TamedEffects, out EffectList TameEffects))
                         tameable.m_tamedEffect = TameEffects;
-                    if (GetEffects(data.Tameable.SootheEffects, out EffectList SoothEffects))
+                    if (GetEffects(data.SootheEffects, out EffectList SoothEffects))
                         tameable.m_sootheEffect = SoothEffects;
-                    if (GetEffects(data.Tameable.PetEffects, out EffectList PetEffects)) tameable.m_petEffect = PetEffects;
-                    if (GetEffects(data.Tameable.UnSummonEffects, out EffectList UnSummonEffects))
+                    if (GetEffects(data.PetEffects, out EffectList PetEffects)) tameable.m_petEffect = PetEffects;
+                    if (GetEffects(data.UnSummonEffects, out EffectList UnSummonEffects))
                         tameable.m_unSummonEffect = UnSummonEffects;
                 }
-                tameable.m_commandable = data.Tameable.Commandable;
-                tameable.m_unsummonDistance = data.Tameable.UnSummonDistance;
-                tameable.m_unsummonOnOwnerLogoutSeconds = data.Tameable.UnSummonOnOwnerLogoutSeconds;
-                if (GetSkill(data.Tameable.LevelUpOwnerSkill, out Skills.SkillType skillType))
+                tameable.m_commandable = data.Commandable;
+                tameable.m_unsummonDistance = data.UnSummonDistance;
+                tameable.m_unsummonOnOwnerLogoutSeconds = data.UnSummonOnOwnerLogoutSeconds;
+                if (GetSkill(data.LevelUpOwnerSkill, out Skills.SkillType skillType))
                     tameable.m_levelUpOwnerSkill = skillType;
-                tameable.m_levelUpFactor = data.Tameable.LevelUpFactor;
-                if (GetSaddle(data.Tameable.SaddleItem, out ItemDrop Saddle)) tameable.m_saddleItem = Saddle;
-                tameable.m_dropSaddleOnDeath = data.Tameable.DropSaddleOnDeath;
-                tameable.m_dropItemVel = data.Tameable.DropItemVelocity;
-                tameable.m_randomStartingName = data.Tameable.RandomStartingName;
+                tameable.m_levelUpFactor = data.LevelUpFactor;
+                if (GetSaddle(data.SaddleItem, out ItemDrop Saddle)) tameable.m_saddleItem = Saddle;
+                tameable.m_dropSaddleOnDeath = data.DropSaddleOnDeath;
+                tameable.m_dropItemVel = data.DropItemVelocity;
+                tameable.m_randomStartingName = data.RandomStartingName;
             }
         }
     }
 
-    private static void ManipulateMaterial(MaterialData materialData, Material material)
+    private static Material CreateMaterial(MaterialData materialData, Material material)
     {
+        var newMat = new Material(material)
+        {
+            name = material.name
+        };
         if (GetTexture2D(materialData.MainTexture, out Texture2D? MainTexture))
         {
-            material.mainTexture = MainTexture;
+            newMat.mainTexture = MainTexture;
         }
-        material.color = new Color(materialData.MainColor.Red, materialData.MainColor.Green, materialData.MainColor.Blue, materialData.MainColor.Alpha);
-        if (material.HasFloat(Hue)) material.SetFloat(Hue, materialData.Hue);
-        if (material.HasFloat(Saturation)) material.SetFloat(Saturation, materialData.Saturation);
-        if (material.HasFloat(Value)) material.SetFloat(Value, materialData.Value);
-        if (material.HasFloat(Cutoff)) material.SetFloat(Cutoff, materialData.AlphaCutoff);
-        if (material.HasFloat(Smoothness)) material.SetFloat(Smoothness, materialData.Smoothness);
-        if (material.HasFloat(UseGlossMap)) material.SetFloat(UseGlossMap, materialData.UseGlossMap ? 1f : 0f);
-        if (material.HasFloat(Metallic)) material.SetFloat(Metallic, materialData.Metallic);
-        if (material.HasTexture(MetallicGlossMap))
+        newMat.color = new Color(materialData.MainColor.Red, materialData.MainColor.Green, materialData.MainColor.Blue, materialData.MainColor.Alpha);
+        if (newMat.HasFloat(Hue)) newMat.SetFloat(Hue, materialData.Hue);
+        if (newMat.HasFloat(Saturation)) newMat.SetFloat(Saturation, materialData.Saturation);
+        if (newMat.HasFloat(Value)) newMat.SetFloat(Value, materialData.Value);
+        if (newMat.HasFloat(Cutoff)) newMat.SetFloat(Cutoff, materialData.AlphaCutoff);
+        if (newMat.HasFloat(Smoothness)) newMat.SetFloat(Smoothness, materialData.Smoothness);
+        if (newMat.HasFloat(UseGlossMap)) newMat.SetFloat(UseGlossMap, materialData.UseGlossMap ? 1f : 0f);
+        if (newMat.HasFloat(Metallic)) newMat.SetFloat(Metallic, materialData.Metallic);
+        if (newMat.HasTexture(MetallicGlossMap))
         {
             if (GetTexture2D(materialData.GlossTexture, out Texture2D? GlossTexture))
             {
-                material.SetTexture(MetallicGlossMap, GlossTexture);
+                newMat.SetTexture(MetallicGlossMap, GlossTexture);
             }
         }
-        if (material.HasFloat(Metallic)) material.SetFloat(Metallic, materialData.Metallic);
-        if (material.HasFloat(MetalGloss)) material.SetFloat(MetalGloss, materialData.MetalGloss);
-        if (material.HasColor(MetalColor)) material.SetColor(MetalColor, new Color(materialData.MetalColor.Red, materialData.MetalColor.Green, materialData.MetalColor.Blue, materialData.MetalColor.Alpha));
-        if (material.HasTexture(EmissionMap))
+        if (newMat.HasFloat(Metallic)) newMat.SetFloat(Metallic, materialData.Metallic);
+        if (newMat.HasFloat(MetalGloss)) newMat.SetFloat(MetalGloss, materialData.MetalGloss);
+        if (newMat.HasColor(MetalColor)) newMat.SetColor(MetalColor, new Color(materialData.MetalColor.Red, materialData.MetalColor.Green, materialData.MetalColor.Blue, materialData.MetalColor.Alpha));
+        if (newMat.HasTexture(EmissionMap))
         {
             if (GetTexture2D(materialData.EmissionTexture, out Texture2D? EmissionTexture))
             {
-                material.SetTexture(EmissionMap, EmissionTexture);
+                newMat.SetTexture(EmissionMap, EmissionTexture);
             }
         }
-        if (material.HasColor(EmissionColor)) material.SetColor(EmissionColor, new Color(materialData.EmissionColor.Red, materialData.EmissionColor.Green, materialData.EmissionColor.Blue, materialData.EmissionColor.Alpha));
-        if (material.HasFloat(NormalStrength)) material.SetFloat(NormalStrength, materialData.BumpStrength);
+        if (newMat.HasColor(EmissionColor)) newMat.SetColor(EmissionColor, new Color(materialData.EmissionColor.Red, materialData.EmissionColor.Green, materialData.EmissionColor.Blue, materialData.EmissionColor.Alpha));
+        if (newMat.HasFloat(NormalStrength)) newMat.SetFloat(NormalStrength, materialData.BumpStrength);
 
-        if (material.HasTexture(BumpMap))
+        if (newMat.HasTexture(BumpMap))
         {
             if (GetTexture2D(materialData.BumpTexture, out Texture2D? BumpTexture))
             {
-                material.SetTexture(BumpMap, BumpTexture);
+                newMat.SetTexture(BumpMap, BumpTexture);
             }
         }
-        if (material.HasFloat(TwoSidedNormals)) material.SetFloat(TwoSidedNormals, materialData.TwoSidedNormals ? 1f : 0f);
-        if (material.HasFloat(UseStyles)) material.SetFloat(UseStyles, materialData.UseStyles ? 1f: 0f);
-        if (material.HasFloat(Style)) material.SetFloat(Style, materialData.Style);
-        if (material.HasTexture(StyleTex))
+        if (newMat.HasFloat(TwoSidedNormals)) newMat.SetFloat(TwoSidedNormals, materialData.TwoSidedNormals ? 1f : 0f);
+        if (newMat.HasFloat(UseStyles)) newMat.SetFloat(UseStyles, materialData.UseStyles ? 1f: 0f);
+        if (newMat.HasFloat(Style)) newMat.SetFloat(Style, materialData.Style);
+        if (newMat.HasTexture(StyleTex))
         {
             if (GetTexture2D(materialData.StyleTexture, out Texture2D? StyleTexture))
             {
-                material.SetTexture(StyleTex, StyleTexture);
+                newMat.SetTexture(StyleTex, StyleTexture);
 
             }
         }
-        if (material.HasFloat(AddRain)) material.SetFloat(AddRain, materialData.AddRain ? 1f: 0f); 
+        if (newMat.HasFloat(AddRain)) newMat.SetFloat(AddRain, materialData.AddRain ? 1f: 0f);
+        return newMat;
     }
 
     private static void UpdateMonsterMaterial(MonsterData data, GameObject critter, bool reset)
     {
+        if (data.Materials.TrueForAll(x => !x.Enabled) && !reset) return;
         SkinnedMeshRenderer renderer = critter.GetComponentInChildren<SkinnedMeshRenderer>();
-
+        if (renderer == null) return;
+        
+        List<Material> newMaterials = new();
         foreach (var materialData in data.Materials)
         {
-            if (!materialData.Enabled && !reset) continue;
-            if (!renderer) continue;
-            Material material = renderer.materials.ToList().Find(x => x.name.Replace("(Instance)",string.Empty).TrimEnd() == materialData.MaterialName);
-            if (material != null)
+            Material material = renderer.materials.ToList().Find(x =>
+                x.name.Replace("(Instance)", string.Empty).TrimEnd() == materialData.MaterialName);
+            if (material == null) return;
+            if (!materialData.Enabled && !reset)
             {
-                ManipulateMaterial(materialData, material);
+                newMaterials.Add(material);
+            }
+            else
+            {
+                newMaterials.Add(CreateMaterial(materialData, material));
             }
         }
+
+        if (newMaterials.Count == 0) return;
+
+        renderer.materials = newMaterials.ToArray();
+        renderer.sharedMaterials = newMaterials.ToArray();
 
         if (critter.TryGetComponent(out Humanoid humanoid))
         {
-            foreach (var effect in humanoid.m_deathEffects.m_effectPrefabs)
-            {
-                if (!effect.m_prefab.TryGetComponent(out Ragdoll ragdoll)) continue;
-                foreach (var materialData in data.Materials)
-                {
-                    if (!materialData.Enabled && !reset) continue;
-                    Material material = ragdoll.m_mainModel.materials.ToList().Find(x =>
-                        x.name.Replace("(Instance)", string.Empty).TrimEnd() == materialData.MaterialName);
-                    if (material != null)
-                    {
-                        ManipulateMaterial(materialData, material);
-                    }
-                }
-            }
+            UpdateRagDollMaterials(humanoid.m_deathEffects.m_effectPrefabs, newMaterials);
         }
         else if (critter.TryGetComponent(out Character character))
         {
-            foreach (var effect in character.m_deathEffects.m_effectPrefabs)
-            {
-                if (!effect.m_prefab.TryGetComponent(out Ragdoll ragdoll)) continue;
-                foreach (var materialData in data.Materials)
-                {
-                    if (!materialData.Enabled && !reset) continue;
-                    Material material = ragdoll.m_mainModel.materials.ToList().Find(x =>
-                        x.name.Replace("(Instance)", string.Empty).TrimEnd() == materialData.MaterialName);
-                    if (material != null)
-                    {
-                        ManipulateMaterial(materialData, material);
-                    }
-                }
-            }
+            UpdateRagDollMaterials(character.m_deathEffects.m_effectPrefabs, newMaterials);
+        }
+    }
+
+    private static void UpdateRagDollMaterials(EffectList.EffectData[] deathEffects, List<Material> newMaterials)
+    {
+        foreach (var effect in deathEffects)
+        {
+            if (!effect.m_prefab.TryGetComponent(out Ragdoll ragdoll)) continue;
+            ragdoll.m_mainModel.materials = newMaterials.ToArray();
+            ragdoll.m_mainModel.sharedMaterials = newMaterials.ToArray();
         }
     }
 
     private static void UpdateMonsterModel(MonsterData data, GameObject critter, bool reset)
     {
-        if (data.Character.FemaleModel)
+        if (data.FemaleModel)
         {
             if (critter.TryGetComponent(out VisEquipment visEquipment))
             {
@@ -922,36 +967,36 @@ public static class MonsterManager
     private static bool UpdateMonsterData(MonsterData data, bool reset = false)
     {
         if (!ZNetScene.instance) return false;
-        GameObject critter = ZNetScene.instance.GetPrefab(data.Character.PrefabName);
+        GameObject critter = ZNetScene.instance.GetPrefab(data.PrefabName);
         if (!critter)
         {
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find " + data.Character.PrefabName);
+            MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find " + data.PrefabName);
             return false;
         }
         
         UpdateMonsterScale(data, critter, reset);
 
-        if (critter.TryGetComponent(out Humanoid humanoid) && (data.Character.Enabled || reset))
+        if (critter.TryGetComponent(out Humanoid humanoid) && (data.ENABLED || reset))
         {
             UpdateMonsterHumanoid(data, humanoid, reset);
         } 
-        else if (critter.TryGetComponent(out Character character) && (data.Character.Enabled || reset))
+        else if (critter.TryGetComponent(out Character character) && (data.ENABLED || reset))
         {
             UpdateMonsterCharacter(data, character, reset);
         }
 
-        if (critter.TryGetComponent(out MonsterAI monsterAI) && (data.MonsterAI.Enabled || reset))
+        if (critter.TryGetComponent(out MonsterAI monsterAI) && (data.CHANGE_AI || reset))
         {
             UpdateMonsterAI(data, monsterAI, reset);
         } 
-        else if (critter.TryGetComponent(out AnimalAI animalAI) && (data.MonsterAI.Enabled || reset))
+        else if (critter.TryGetComponent(out AnimalAI animalAI) && (data.CHANGE_AI || reset))
         {
             UpdateAnimalAI(data, animalAI, reset);
         }
 
-        if (critter.TryGetComponent(out CharacterDrop characterDrop) && (data.CharacterDrop.Enabled || reset))
+        if (critter.TryGetComponent(out CharacterDrop characterDrop) && (data.CHANGE_DROP_TABLE || reset))
         {
-            if (GetDrops(data.CharacterDrop.Drops, out List<CharacterDrop.Drop> Drops)) characterDrop.m_drops = Drops;
+            if (GetDrops(data.Drops, out List<CharacterDrop.Drop> Drops)) characterDrop.m_drops = Drops;
         }
 
         UpdateMonsterProcreation(data, critter, reset);
@@ -1043,7 +1088,7 @@ public static class MonsterManager
         return output != null;
     }
 
-    private static bool GetRandomSets(List<RandomSet> input, out List<Humanoid.ItemSet> output)
+    private static bool GetRandomSets(List<RandomSet> input, bool reset, out List<Humanoid.ItemSet> output)
     {
         output = new();
         foreach (RandomSet data in input)
@@ -1052,14 +1097,14 @@ public static class MonsterManager
             {
                 m_name = data.Name
             };
-            if (GetItems(data.Items, out List<GameObject> items))
+            if (GetItems(data.Items, reset, out List<GameObject> items))
             {
                 set.m_items = items.ToArray();
             }
             output.Add(set);
         }
 
-        return output.Count > 0;
+        return true;
     }
 
     private static bool GetItemDrops(List<string> input, out List<ItemDrop> output)
@@ -1084,19 +1129,22 @@ public static class MonsterManager
         return output.Count > 0;
     }
 
-    private static bool GetItems(List<CreatureItem> input, out List<GameObject> output)
+    private static bool GetItems(List<CreatureItem> input, bool reset, out List<GameObject> output)
     {
         output = new();
         foreach (var item in input)
         {
+            if (!item.ENABLE_ITEM) continue;
             GameObject? prefab = DataBase.TryGetGameObject(item.Name);
             if (prefab == null) continue;
+            if (!prefab.GetComponent<ItemDrop>()) continue;
+            if (reset || !item.CHANGE_ITEM_DATA) return prefab;
             var clone = UnityEngine.Object.Instantiate(prefab, MonsterDBPlugin._Root.transform, false);
+            clone.name = item.Name;
             if (!clone.TryGetComponent(out ItemDrop component)) continue;
 
             if (!item.AttackAnimation.IsNullOrWhiteSpace())
             {
-                MonsterDBPlugin.MonsterDBLogger.LogDebug("Attack animation is null or empty, using default animation for " + prefab.name + " animation: " + component.m_itemData.m_shared.m_attack.m_attackAnimation);
                 component.m_itemData.m_shared.m_attack.m_attackAnimation = item.AttackAnimation;
             }
             
@@ -1114,13 +1162,92 @@ public static class MonsterManager
             component.m_itemData.m_shared.m_blockable = item.Blockable;
             component.m_itemData.m_shared.m_spawnOnHit = DataBase.TryGetGameObject(item.SpawnOnHit);
             component.m_itemData.m_shared.m_spawnOnHitTerrain = DataBase.TryGetGameObject(item.SpawnOnHitTerrain);
-
+            
             if (!item.AttackStatusEffect.IsNullOrWhiteSpace())
             {
                 var effect = ObjectDB.instance.GetStatusEffect(item.AttackStatusEffect.GetStableHashCode());
                 if (effect)
                 {
                     component.m_itemData.m_shared.m_attackStatusEffect = effect;
+                }
+            }
+
+            component.m_itemData.m_shared.m_attack.m_hitThroughWalls = item.HitThroughWalls;
+
+            if (item.CHANGE_ITEM_EFFECTS)
+            {
+                if (GetEffects(item.HitEffects, out EffectList hitEffects))
+                    component.m_itemData.m_shared.m_attack.m_hitEffect = hitEffects;
+                if (GetEffects(item.HitTerrainEffects, out EffectList hitTerrainEffects)) component.m_itemData
+                    .m_shared.m_attack.m_hitTerrainEffect = hitTerrainEffects;
+                if (GetEffects(item.StartEffects, out EffectList startEffects))
+                    component.m_itemData.m_shared.m_attack.m_startEffect = startEffects;
+                if (GetEffects(item.TriggerEffects, out EffectList triggerEffects))
+                    component.m_itemData.m_shared.m_attack.m_triggerEffect = triggerEffects;
+                if (GetEffects(item.TrailStartEffects, out EffectList trailStartEffects))
+                    component.m_itemData.m_shared.m_attack.m_trailStartEffect = trailStartEffects;
+                if (GetEffects(item.BurstEffects, out EffectList burstEffects))
+                    component.m_itemData.m_shared.m_attack.m_burstEffect = burstEffects;
+            }
+
+            if (item.CHANGE_PROJECTILE)
+            {
+                GameObject? projectilePrefab = DataBase.TryGetGameObject(item.Projectile_PrefabName);
+                if (projectilePrefab != null && !item.Projectile_Clone_ID.IsNullOrWhiteSpace())
+                {
+                    var cloneProjectile = DataBase.TryGetGameObject(item.Projectile_Clone_ID);
+                    if (!cloneProjectile)
+                    {
+                        cloneProjectile = Object.Instantiate(projectilePrefab, MonsterDBPlugin._Root.transform, false);
+                        cloneProjectile.name = item.Projectile_Clone_ID;
+                    }
+                    if (cloneProjectile != null && item.CHANGE_PROJECTILE_DATA && cloneProjectile.TryGetComponent(out Projectile projectile))
+                    {
+                        projectile.m_damage = GetDamages(item.Projectile_Damages);
+                        projectile.m_aoe = item.Projectile_AOE;
+                        projectile.m_dodgeable = item.Projectile_Dodgeable;
+                        projectile.m_blockable = item.Projectile_Blockable;
+                        projectile.m_attackForce = item.Projectile_AttackForce;
+                        if (!item.Projectile_StatusEffect.IsNullOrWhiteSpace())
+                        {
+                            if (ObjectDB.instance.GetStatusEffect(item.Projectile_StatusEffect.GetStableHashCode()))
+                            {
+                                projectile.m_statusEffect = item.Projectile_StatusEffect;
+                            }
+                        }
+
+                        projectile.m_canHitWater = item.Projectile_CanHitWater;
+                        if (!item.Projectile_SpawnOnHit.IsNullOrWhiteSpace())
+                        {
+                            GameObject? spawnOnHit = DataBase.TryGetGameObject(item.Projectile_SpawnOnHit);
+                            if (spawnOnHit != null)
+                            {
+                                projectile.m_spawnOnHit = spawnOnHit;
+                            }
+                        }
+
+                        projectile.m_spawnOnHitChance = item.Projectile_SpawnChance;
+                        projectile.m_randomSpawnOnHit = item.Projectile_RandomSpawnOnHit.Select(DataBase.TryGetGameObject).Where(random => random != null).ToList();
+                        projectile.m_staticHitOnly = item.Projectile_StaticHitOnly;
+                        projectile.m_groundHitOnly = item.Projectile_GroundHitOnly;
+
+                        if (item.PROJECTILE_CHANGE_EFFECTS)
+                        {
+                            if (GetEffects(item.Projectile_HitEffects, out EffectList projectileHitEffects))
+                                projectile.m_hitEffects = projectileHitEffects;
+                            if (GetEffects(item.Projectile_HitWaterEffects, out EffectList projectileHitWaterEffects))
+                                projectile.m_hitWaterEffects = projectileHitWaterEffects;
+                            if (GetEffects(item.Projectile_SpawnOnHitEffects, out EffectList projectileSpawnOnHitEffects))
+                                projectile.m_spawnOnHitEffects = projectileSpawnOnHitEffects;
+                        }
+                    }
+
+                    if (cloneProjectile != null)
+                    {
+                        RegisterToZNetScene(cloneProjectile);
+                        component.m_itemData.m_shared.m_attack.m_attackProjectile = cloneProjectile;
+                    }
+                    
                 }
             }
             
@@ -1220,284 +1347,284 @@ public static class MonsterManager
 
     private static void SaveHumanoidData(ref MonsterData data, Humanoid humanoid)
     {
-        data.Character.Name = humanoid.m_name;
-        data.Character.Group = humanoid.m_group;
-        data.Character.Faction = humanoid.m_faction.ToString();
-        data.Character.Boss = humanoid.m_boss;
-        data.Character.DoNotHideBossHUD = humanoid.m_dontHideBossHud;
-        data.Character.BossEvent = humanoid.m_bossEvent;
-        data.Character.DefeatSetGlobalKey = humanoid.m_defeatSetGlobalKey;
+        data.DisplayName = humanoid.m_name;
+        data.Group = humanoid.m_group;
+        data.Faction = humanoid.m_faction.ToString();
+        data.Boss = humanoid.m_boss;
+        data.DoNotHideBossHUD = humanoid.m_dontHideBossHud;
+        data.BossEvent = humanoid.m_bossEvent;
+        data.DefeatSetGlobalKey = humanoid.m_defeatSetGlobalKey;
         // Movement & Physics
-        data.Character.CrouchSpeed = humanoid.m_crouchSpeed;
-        data.Character.WalkSpeed = humanoid.m_walkSpeed;
-        data.Character.Speed = humanoid.m_speed;
-        data.Character.TurnSpeed = humanoid.m_turnSpeed;
-        data.Character.RunSpeed = humanoid.m_runSpeed;
-        data.Character.RunTurnSpeed = humanoid.m_runTurnSpeed;
-        data.Character.FlySlowSpeed = humanoid.m_flySlowSpeed;
-        data.Character.FlyFastSpeed = humanoid.m_flyFastSpeed;
-        data.Character.FlyTurnSpeed = humanoid.m_flyTurnSpeed;
-        data.Character.Acceleration = humanoid.m_acceleration;
-        data.Character.JumpForce = humanoid.m_jumpForce;
-        data.Character.JumpForceForward = humanoid.m_jumpForceForward;
-        data.Character.JumpForceTiredFactor = humanoid.m_jumpForceTiredFactor;
-        data.Character.AirControl = humanoid.m_airControl;
-        data.Character.CanSwim = humanoid.m_canSwim;
-        data.Character.SwimDepth = humanoid.m_swimDepth;
-        data.Character.SwimSpeed = humanoid.m_swimSpeed;
-        data.Character.SwimTurnSpeed = humanoid.m_swimTurnSpeed;
-        data.Character.SwimAcceleration = humanoid.m_swimAcceleration;
-        data.Character.GroundTilt = humanoid.m_groundTilt.ToString();
-        data.Character.GroundTiltSpeed = humanoid.m_groundTiltSpeed;
-        data.Character.Flying = humanoid.m_flying;
-        data.Character.JumpStaminaUsage = humanoid.m_jumpStaminaUsage;
-        data.Character.DisableWhileSleeping = humanoid.m_disableWhileSleeping;
+        data.CrouchSpeed = humanoid.m_crouchSpeed;
+        data.WalkSpeed = humanoid.m_walkSpeed;
+        data.Speed = humanoid.m_speed;
+        data.TurnSpeed = humanoid.m_turnSpeed;
+        data.RunSpeed = humanoid.m_runSpeed;
+        data.RunTurnSpeed = humanoid.m_runTurnSpeed;
+        data.FlySlowSpeed = humanoid.m_flySlowSpeed;
+        data.FlyFastSpeed = humanoid.m_flyFastSpeed;
+        data.FlyTurnSpeed = humanoid.m_flyTurnSpeed;
+        data.Acceleration = humanoid.m_acceleration;
+        data.JumpForce = humanoid.m_jumpForce;
+        data.JumpForceForward = humanoid.m_jumpForceForward;
+        data.JumpForceTiredFactor = humanoid.m_jumpForceTiredFactor;
+        data.AirControl = humanoid.m_airControl;
+        data.CanSwim = humanoid.m_canSwim;
+        data.SwimDepth = humanoid.m_swimDepth;
+        data.SwimSpeed = humanoid.m_swimSpeed;
+        data.SwimTurnSpeed = humanoid.m_swimTurnSpeed;
+        data.SwimAcceleration = humanoid.m_swimAcceleration;
+        data.GroundTilt = humanoid.m_groundTilt.ToString();
+        data.GroundTiltSpeed = humanoid.m_groundTiltSpeed;
+        data.Flying = humanoid.m_flying;
+        data.JumpStaminaUsage = humanoid.m_jumpStaminaUsage;
+        data.DisableWhileSleeping = humanoid.m_disableWhileSleeping;
         // Effects
-        data.Character.HitEffects = FormatEffectData(humanoid.m_hitEffects);
-        data.Character.CriticalHitEffects = FormatEffectData(humanoid.m_critHitEffects);
-        data.Character.BackStabHitEffects = FormatEffectData(humanoid.m_backstabHitEffects);
-        data.Character.DeathEffects = FormatEffectData(humanoid.m_deathEffects);
-        data.Character.WaterEffects = FormatEffectData(humanoid.m_waterEffects);
-        data.Character.TarEffects = FormatEffectData(humanoid.m_tarEffects);
-        data.Character.SlideEffects = FormatEffectData(humanoid.m_slideEffects);
-        data.Character.JumpEffects = FormatEffectData(humanoid.m_jumpEffects);
-        data.Character.FlyingContinuousEffects = FormatEffectData(humanoid.m_flyingContinuousEffect);
+        data.HitEffects = FormatEffectData(humanoid.m_hitEffects);
+        data.CriticalHitEffects = FormatEffectData(humanoid.m_critHitEffects);
+        data.BackStabHitEffects = FormatEffectData(humanoid.m_backstabHitEffects);
+        data.DeathEffects = FormatEffectData(humanoid.m_deathEffects);
+        data.WaterEffects = FormatEffectData(humanoid.m_waterEffects);
+        data.TarEffects = FormatEffectData(humanoid.m_tarEffects);
+        data.SlideEffects = FormatEffectData(humanoid.m_slideEffects);
+        data.JumpEffects = FormatEffectData(humanoid.m_jumpEffects);
+        data.FlyingContinuousEffects = FormatEffectData(humanoid.m_flyingContinuousEffect);
         // Health & Damages
-        data.Character.TolerateWater = humanoid.m_tolerateWater;
-        data.Character.TolerateFire = humanoid.m_tolerateFire;
-        data.Character.TolerateSmoke = humanoid.m_tolerateSmoke;
-        data.Character.TolerateTar = humanoid.m_tolerateTar;
-        data.Character.Health = humanoid.m_health;
-        data.Character.DamageModifiers = FormatDamageModifiers(humanoid.m_damageModifiers);
-        data.Character.StaggerWhenBlocked = humanoid.m_staggerWhenBlocked;
-        data.Character.StaggerDamageFactor = humanoid.m_staggerDamageFactor;
-        data.Character.DefaultItems = FormatItemList(humanoid.m_defaultItems);
-        data.Character.RandomWeapons = FormatItemList(humanoid.m_randomWeapon);
-        data.Character.RandomArmors = FormatItemList(humanoid.m_randomArmor);
-        data.Character.RandomShields = FormatItemList(humanoid.m_randomShield);
-        data.Character.RandomSets = FormatRandomSets(humanoid.m_randomSets);
-        data.Character.UnarmedWeapon = humanoid.m_unarmedWeapon ? humanoid.m_unarmedWeapon.name : "";
-        data.Character.BeardItem = humanoid.m_beardItem;
-        data.Character.HairItem = humanoid.m_hairItem;
+        data.TolerateWater = humanoid.m_tolerateWater;
+        data.TolerateFire = humanoid.m_tolerateFire;
+        data.TolerateSmoke = humanoid.m_tolerateSmoke;
+        data.TolerateTar = humanoid.m_tolerateTar;
+        data.Health = humanoid.m_health;
+        data.DamageModifiers = FormatDamageModifiers(humanoid.m_damageModifiers);
+        data.StaggerWhenBlocked = humanoid.m_staggerWhenBlocked;
+        data.StaggerDamageFactor = humanoid.m_staggerDamageFactor;
+        data.DefaultItems = FormatItemList(humanoid.m_defaultItems);
+        data.RandomWeapons = FormatItemList(humanoid.m_randomWeapon);
+        data.RandomArmors = FormatItemList(humanoid.m_randomArmor);
+        data.RandomShields = FormatItemList(humanoid.m_randomShield);
+        data.RandomSets = FormatRandomSets(humanoid.m_randomSets);
+        data.UnarmedWeapon = humanoid.m_unarmedWeapon ? humanoid.m_unarmedWeapon.name : "";
+        data.BeardItem = humanoid.m_beardItem;
+        data.HairItem = humanoid.m_hairItem;
         // Effects
-        data.Character.PickUpEffects = FormatEffectData(humanoid.m_pickupEffects);
-        data.Character.DropEffects = FormatEffectData(humanoid.m_dropEffects);
-        data.Character.ConsumeItemEffects = FormatEffectData(humanoid.m_consumeItemEffects);
-        data.Character.EquipEffects = FormatEffectData(humanoid.m_equipEffects);
-        data.Character.PerfectBlockEffect = FormatEffectData(humanoid.m_perfectBlockEffect);
+        data.PickUpEffects = FormatEffectData(humanoid.m_pickupEffects);
+        data.DropEffects = FormatEffectData(humanoid.m_dropEffects);
+        data.ConsumeItemEffects = FormatEffectData(humanoid.m_consumeItemEffects);
+        data.EquipEffects = FormatEffectData(humanoid.m_equipEffects);
+        data.PerfectBlockEffect = FormatEffectData(humanoid.m_perfectBlockEffect);
         
     }
 
     private static void SaveCharacterData(ref MonsterData data, Character character)
     {
-        data.Character.Name = character.m_name;
-        data.Character.Group = character.m_group;
-        data.Character.Faction = character.m_faction.ToString();
-        data.Character.Boss = character.m_boss;
-        data.Character.DoNotHideBossHUD = character.m_dontHideBossHud;
-        data.Character.BossEvent = character.m_bossEvent;
-        data.Character.DefeatSetGlobalKey = character.m_defeatSetGlobalKey;
+        data.DisplayName = character.m_name;
+        data.Group = character.m_group;
+        data.Faction = character.m_faction.ToString();
+        data.Boss = character.m_boss;
+        data.DoNotHideBossHUD = character.m_dontHideBossHud;
+        data.BossEvent = character.m_bossEvent;
+        data.DefeatSetGlobalKey = character.m_defeatSetGlobalKey;
         // Movement & Physics
-        data.Character.CrouchSpeed = character.m_crouchSpeed;
-        data.Character.WalkSpeed = character.m_walkSpeed;
-        data.Character.Speed = character.m_speed;
-        data.Character.TurnSpeed = character.m_turnSpeed;
-        data.Character.RunSpeed = character.m_runSpeed;
-        data.Character.RunTurnSpeed = character.m_runTurnSpeed;
-        data.Character.FlySlowSpeed = character.m_flySlowSpeed;
-        data.Character.FlyFastSpeed = character.m_flyFastSpeed;
-        data.Character.FlyTurnSpeed = character.m_flyTurnSpeed;
-        data.Character.Acceleration = character.m_acceleration;
-        data.Character.JumpForce = character.m_jumpForce;
-        data.Character.JumpForceForward = character.m_jumpForceForward;
-        data.Character.JumpForceTiredFactor = character.m_jumpForceTiredFactor;
-        data.Character.AirControl = character.m_airControl;
-        data.Character.CanSwim = character.m_canSwim;
-        data.Character.SwimDepth = character.m_swimDepth;
-        data.Character.SwimSpeed = character.m_swimSpeed;
-        data.Character.SwimTurnSpeed = character.m_swimTurnSpeed;
-        data.Character.SwimAcceleration = character.m_swimAcceleration;
-        data.Character.GroundTilt = character.m_groundTilt.ToString();
-        data.Character.GroundTiltSpeed = character.m_groundTiltSpeed;
-        data.Character.Flying = character.m_flying;
-        data.Character.JumpStaminaUsage = character.m_jumpStaminaUsage;
-        data.Character.DisableWhileSleeping = character.m_disableWhileSleeping;
+        data.CrouchSpeed = character.m_crouchSpeed;
+        data.WalkSpeed = character.m_walkSpeed;
+        data.Speed = character.m_speed;
+        data.TurnSpeed = character.m_turnSpeed;
+        data.RunSpeed = character.m_runSpeed;
+        data.RunTurnSpeed = character.m_runTurnSpeed;
+        data.FlySlowSpeed = character.m_flySlowSpeed;
+        data.FlyFastSpeed = character.m_flyFastSpeed;
+        data.FlyTurnSpeed = character.m_flyTurnSpeed;
+        data.Acceleration = character.m_acceleration;
+        data.JumpForce = character.m_jumpForce;
+        data.JumpForceForward = character.m_jumpForceForward;
+        data.JumpForceTiredFactor = character.m_jumpForceTiredFactor;
+        data.AirControl = character.m_airControl;
+        data.CanSwim = character.m_canSwim;
+        data.SwimDepth = character.m_swimDepth;
+        data.SwimSpeed = character.m_swimSpeed;
+        data.SwimTurnSpeed = character.m_swimTurnSpeed;
+        data.SwimAcceleration = character.m_swimAcceleration;
+        data.GroundTilt = character.m_groundTilt.ToString();
+        data.GroundTiltSpeed = character.m_groundTiltSpeed;
+        data.Flying = character.m_flying;
+        data.JumpStaminaUsage = character.m_jumpStaminaUsage;
+        data.DisableWhileSleeping = character.m_disableWhileSleeping;
         // Effects
-        data.Character.HitEffects = FormatEffectData(character.m_hitEffects);
-        data.Character.CriticalHitEffects = FormatEffectData(character.m_critHitEffects);
-        data.Character.BackStabHitEffects = FormatEffectData(character.m_backstabHitEffects);
-        data.Character.DeathEffects = FormatEffectData(character.m_deathEffects);
-        data.Character.WaterEffects = FormatEffectData(character.m_waterEffects);
-        data.Character.TarEffects = FormatEffectData(character.m_tarEffects);
-        data.Character.SlideEffects = FormatEffectData(character.m_slideEffects);
-        data.Character.JumpEffects = FormatEffectData(character.m_jumpEffects);
-        data.Character.FlyingContinuousEffects = FormatEffectData(character.m_flyingContinuousEffect);
+        data.HitEffects = FormatEffectData(character.m_hitEffects);
+        data.CriticalHitEffects = FormatEffectData(character.m_critHitEffects);
+        data.BackStabHitEffects = FormatEffectData(character.m_backstabHitEffects);
+        data.DeathEffects = FormatEffectData(character.m_deathEffects);
+        data.WaterEffects = FormatEffectData(character.m_waterEffects);
+        data.TarEffects = FormatEffectData(character.m_tarEffects);
+        data.SlideEffects = FormatEffectData(character.m_slideEffects);
+        data.JumpEffects = FormatEffectData(character.m_jumpEffects);
+        data.FlyingContinuousEffects = FormatEffectData(character.m_flyingContinuousEffect);
         // Health & Damages
-        data.Character.TolerateWater = character.m_tolerateWater;
-        data.Character.TolerateFire = character.m_tolerateFire;
-        data.Character.TolerateSmoke = character.m_tolerateSmoke;
-        data.Character.TolerateTar = character.m_tolerateTar;
-        data.Character.Health = character.m_health;
-        data.Character.DamageModifiers = FormatDamageModifiers(character.m_damageModifiers);
-        data.Character.StaggerWhenBlocked = character.m_staggerWhenBlocked;
-        data.Character.StaggerDamageFactor = character.m_staggerDamageFactor;
+        data.TolerateWater = character.m_tolerateWater;
+        data.TolerateFire = character.m_tolerateFire;
+        data.TolerateSmoke = character.m_tolerateSmoke;
+        data.TolerateTar = character.m_tolerateTar;
+        data.Health = character.m_health;
+        data.DamageModifiers = FormatDamageModifiers(character.m_damageModifiers);
+        data.StaggerWhenBlocked = character.m_staggerWhenBlocked;
+        data.StaggerDamageFactor = character.m_staggerDamageFactor;
     }
 
     private static void SaveMonsterAIData(ref MonsterData data, MonsterAI monsterAI)
     {
-        data.MonsterAI.ViewRange = monsterAI.m_viewRange;
-        data.MonsterAI.ViewAngle = monsterAI.m_viewAngle;
-        data.MonsterAI.HearRange = monsterAI.m_hearRange;
-        data.MonsterAI.MistVision = monsterAI.m_mistVision;
-        data.MonsterAI.AlertedEffects = FormatEffectData(monsterAI.m_alertedEffects);
-        data.MonsterAI.IdleSound = FormatEffectData(monsterAI.m_idleSound);
-        data.MonsterAI.IdleSoundInterval = monsterAI.m_idleSoundInterval;
-        data.MonsterAI.IdleSoundChance = monsterAI.m_idleSoundChance;
-        data.MonsterAI.PathAgentType = monsterAI.m_pathAgentType.ToString();
-        data.MonsterAI.MoveMinimumAngle = monsterAI.m_moveMinAngle;
-        data.MonsterAI.smoothMovement = monsterAI.m_smoothMovement;
-        data.MonsterAI.SerpentMovement = monsterAI.m_serpentMovement;
-        data.MonsterAI.SerpentTurnRadius = monsterAI.m_serpentTurnRadius;
-        data.MonsterAI.JumpInterval = monsterAI.m_jumpInterval;
+        data.ViewRange = monsterAI.m_viewRange;
+        data.ViewAngle = monsterAI.m_viewAngle;
+        data.HearRange = monsterAI.m_hearRange;
+        data.MistVision = monsterAI.m_mistVision;
+        data.AlertedEffects = FormatEffectData(monsterAI.m_alertedEffects);
+        data.IdleSound = FormatEffectData(monsterAI.m_idleSound);
+        data.IdleSoundInterval = monsterAI.m_idleSoundInterval;
+        data.IdleSoundChance = monsterAI.m_idleSoundChance;
+        data.PathAgentType = monsterAI.m_pathAgentType.ToString();
+        data.MoveMinimumAngle = monsterAI.m_moveMinAngle;
+        data.smoothMovement = monsterAI.m_smoothMovement;
+        data.SerpentMovement = monsterAI.m_serpentMovement;
+        data.SerpentTurnRadius = monsterAI.m_serpentTurnRadius;
+        data.JumpInterval = monsterAI.m_jumpInterval;
         // Random Circle
-        data.MonsterAI.RandomCircleInterval = monsterAI.m_randomCircleInterval;
+        data.RandomCircleInterval = monsterAI.m_randomCircleInterval;
         // Random Movement
-        data.MonsterAI.RandomMoveInterval = monsterAI.m_randomMoveInterval;
-        data.MonsterAI.RandomMoveRange = monsterAI.m_randomMoveRange;
+        data.RandomMoveInterval = monsterAI.m_randomMoveInterval;
+        data.RandomMoveRange = monsterAI.m_randomMoveRange;
         // Fly Behavior
-        data.MonsterAI.RandomFly = monsterAI.m_randomFly;
-        data.MonsterAI.ChanceToTakeOff = monsterAI.m_chanceToTakeoff;
-        data.MonsterAI.ChanceToLand = monsterAI.m_chanceToLand;
-        data.MonsterAI.GroundDuration = monsterAI.m_groundDuration;
-        data.MonsterAI.AirDuration = monsterAI.m_airDuration;
-        data.MonsterAI.MaxLandAltitude = monsterAI.m_maxLandAltitude;
-        data.MonsterAI.TakeOffTime = monsterAI.m_takeoffTime;
-        data.MonsterAI.FlyAltitudeMinimum = monsterAI.m_flyAltitudeMin;
-        data.MonsterAI.FlyAltitudeMaximum = monsterAI.m_flyAltitudeMax;
-        data.MonsterAI.FlyAbsoluteMinimumAltitude = monsterAI.m_flyAbsMinAltitude;
+        data.RandomFly = monsterAI.m_randomFly;
+        data.ChanceToTakeOff = monsterAI.m_chanceToTakeoff;
+        data.ChanceToLand = monsterAI.m_chanceToLand;
+        data.GroundDuration = monsterAI.m_groundDuration;
+        data.AirDuration = monsterAI.m_airDuration;
+        data.MaxLandAltitude = monsterAI.m_maxLandAltitude;
+        data.TakeOffTime = monsterAI.m_takeoffTime;
+        data.FlyAltitudeMinimum = monsterAI.m_flyAltitudeMin;
+        data.FlyAltitudeMaximum = monsterAI.m_flyAltitudeMax;
+        data.FlyAbsoluteMinimumAltitude = monsterAI.m_flyAbsMinAltitude;
         // Other
-        data.MonsterAI.AvoidFire = monsterAI.m_avoidFire;
-        data.MonsterAI.AfraidOfFire = monsterAI.m_afraidOfFire;
-        data.MonsterAI.AvoidWater = monsterAI.m_avoidWater;
-        data.MonsterAI.Aggravatable = monsterAI.m_aggravatable;
-        data.MonsterAI.PassiveAggressive = monsterAI.m_passiveAggresive;
-        data.MonsterAI.SpawnMessage = monsterAI.m_spawnMessage;
-        data.MonsterAI.DeathMessage = monsterAI.m_deathMessage;
-        data.MonsterAI.AlertedMessage = monsterAI.m_alertedMessage;
+        data.AvoidFire = monsterAI.m_avoidFire;
+        data.AfraidOfFire = monsterAI.m_afraidOfFire;
+        data.AvoidWater = monsterAI.m_avoidWater;
+        data.Aggravatable = monsterAI.m_aggravatable;
+        data.PassiveAggressive = monsterAI.m_passiveAggresive;
+        data.SpawnMessage = monsterAI.m_spawnMessage;
+        data.DeathMessage = monsterAI.m_deathMessage;
+        data.AlertedMessage = monsterAI.m_alertedMessage;
         // Monster AI
-        data.MonsterAI.AlertRange = monsterAI.m_alertRange;
-        data.MonsterAI.FleeIfHurtWhenTargetCannotBeReached = monsterAI.m_fleeIfHurtWhenTargetCantBeReached;
-        data.MonsterAI.FleeIfNotAlerted = monsterAI.m_fleeIfNotAlerted;
-        data.MonsterAI.FleeIfLowHealth = monsterAI.m_fleeIfLowHealth;
-        data.MonsterAI.CirculateWhileCharging = monsterAI.m_circulateWhileCharging;
-        data.MonsterAI.CirculateWhileChargingFlying = monsterAI.m_circulateWhileChargingFlying;
-        data.MonsterAI.EnableHuntPlayer = monsterAI.m_enableHuntPlayer;
-        data.MonsterAI.AttackPlayerObjects = monsterAI.m_attackPlayerObjects;
-        data.MonsterAI.PrivateAreaTriggerThreshold = monsterAI.m_privateAreaTriggerTreshold;
-        data.MonsterAI.InterceptTimeMaximum = monsterAI.m_interceptTimeMax;
-        data.MonsterAI.InterceptTimeMinimum = monsterAI.m_interceptTimeMin;
-        data.MonsterAI.MaximumChaseDistance = monsterAI.m_maxChaseDistance;
-        data.MonsterAI.MinimumAttackInterval = monsterAI.m_minAttackInterval;
+        data.AlertRange = monsterAI.m_alertRange;
+        data.FleeIfHurtWhenTargetCannotBeReached = monsterAI.m_fleeIfHurtWhenTargetCantBeReached;
+        data.FleeIfNotAlerted = monsterAI.m_fleeIfNotAlerted;
+        data.FleeIfLowHealth = monsterAI.m_fleeIfLowHealth;
+        data.CirculateWhileCharging = monsterAI.m_circulateWhileCharging;
+        data.CirculateWhileChargingFlying = monsterAI.m_circulateWhileChargingFlying;
+        data.EnableHuntPlayer = monsterAI.m_enableHuntPlayer;
+        data.AttackPlayerObjects = monsterAI.m_attackPlayerObjects;
+        data.PrivateAreaTriggerThreshold = monsterAI.m_privateAreaTriggerTreshold;
+        data.InterceptTimeMaximum = monsterAI.m_interceptTimeMax;
+        data.InterceptTimeMinimum = monsterAI.m_interceptTimeMin;
+        data.MaximumChaseDistance = monsterAI.m_maxChaseDistance;
+        data.MinimumAttackInterval = monsterAI.m_minAttackInterval;
         // Circle Target
-        data.MonsterAI.CircleTargetInterval = monsterAI.m_circleTargetInterval;
-        data.MonsterAI.CircleTargetDuration = monsterAI.m_circleTargetDuration;
-        data.MonsterAI.CircleTargetDistance = monsterAI.m_circleTargetDistance;
+        data.CircleTargetInterval = monsterAI.m_circleTargetInterval;
+        data.CircleTargetDuration = monsterAI.m_circleTargetDuration;
+        data.CircleTargetDistance = monsterAI.m_circleTargetDistance;
         // Sleep
-        data.MonsterAI.Sleeping = monsterAI.m_sleeping;
-        data.MonsterAI.WakeUpRange = monsterAI.m_wakeupRange;
-        data.MonsterAI.NoiseWakeUp = monsterAI.m_noiseWakeup;
-        data.MonsterAI.MaximumNoiseWakeUpRange = monsterAI.m_maxNoiseWakeupRange;
-        data.MonsterAI.WakeUpEffects = FormatEffectData(monsterAI.m_wakeupEffects);
-        data.MonsterAI.WakeUpDelayMinimum = monsterAI.m_wakeUpDelayMin;
-        data.MonsterAI.WakeUpDelayMaximum = monsterAI.m_wakeUpDelayMax;
+        data.Sleeping = monsterAI.m_sleeping;
+        data.WakeUpRange = monsterAI.m_wakeupRange;
+        data.NoiseWakeUp = monsterAI.m_noiseWakeup;
+        data.MaximumNoiseWakeUpRange = monsterAI.m_maxNoiseWakeupRange;
+        data.WakeUpEffects = FormatEffectData(monsterAI.m_wakeupEffects);
+        data.WakeUpDelayMinimum = monsterAI.m_wakeUpDelayMin;
+        data.WakeUpDelayMaximum = monsterAI.m_wakeUpDelayMax;
         // Other
-        data.MonsterAI.AvoidLand = monsterAI.m_avoidLand;
+        data.AvoidLand = monsterAI.m_avoidLand;
         // Consume Items
-        data.MonsterAI.ConsumeItems = FormatItemList(monsterAI.m_consumeItems);
-        data.MonsterAI.ConsumeRange = monsterAI.m_consumeRange;
-        data.MonsterAI.ConsumeSearchRange = monsterAI.m_consumeSearchRange;
-        data.MonsterAI.ConsumeSearchInterval = monsterAI.m_consumeSearchInterval;
+        data.ConsumeItems = FormatItemList(monsterAI.m_consumeItems);
+        data.ConsumeRange = monsterAI.m_consumeRange;
+        data.ConsumeSearchRange = monsterAI.m_consumeSearchRange;
+        data.ConsumeSearchInterval = monsterAI.m_consumeSearchInterval;
     }
 
     private static void SaveAnimalAIData(ref MonsterData data, AnimalAI animalAI)
     {
-        data.MonsterAI.ViewRange = animalAI.m_viewRange;
-        data.MonsterAI.ViewAngle = animalAI.m_viewAngle;
-        data.MonsterAI.HearRange = animalAI.m_hearRange;
-        data.MonsterAI.MistVision = animalAI.m_mistVision;
-        data.MonsterAI.AlertedEffects = FormatEffectData(animalAI.m_alertedEffects);
-        data.MonsterAI.IdleSound = FormatEffectData(animalAI.m_idleSound);
-        data.MonsterAI.IdleSoundInterval = animalAI.m_idleSoundInterval;
-        data.MonsterAI.IdleSoundChance = animalAI.m_idleSoundChance;
-        data.MonsterAI.PathAgentType = animalAI.m_pathAgentType.ToString();
-        data.MonsterAI.MoveMinimumAngle = animalAI.m_moveMinAngle;
-        data.MonsterAI.smoothMovement = animalAI.m_smoothMovement;
-        data.MonsterAI.SerpentMovement = animalAI.m_serpentMovement;
-        data.MonsterAI.SerpentTurnRadius = animalAI.m_serpentTurnRadius;
-        data.MonsterAI.JumpInterval = animalAI.m_jumpInterval;
+        data.ViewRange = animalAI.m_viewRange;
+        data.ViewAngle = animalAI.m_viewAngle;
+        data.HearRange = animalAI.m_hearRange;
+        data.MistVision = animalAI.m_mistVision;
+        data.AlertedEffects = FormatEffectData(animalAI.m_alertedEffects);
+        data.IdleSound = FormatEffectData(animalAI.m_idleSound);
+        data.IdleSoundInterval = animalAI.m_idleSoundInterval;
+        data.IdleSoundChance = animalAI.m_idleSoundChance;
+        data.PathAgentType = animalAI.m_pathAgentType.ToString();
+        data.MoveMinimumAngle = animalAI.m_moveMinAngle;
+        data.smoothMovement = animalAI.m_smoothMovement;
+        data.SerpentMovement = animalAI.m_serpentMovement;
+        data.SerpentTurnRadius = animalAI.m_serpentTurnRadius;
+        data.JumpInterval = animalAI.m_jumpInterval;
         // Random Circle
-        data.MonsterAI.RandomCircleInterval = animalAI.m_randomCircleInterval;
+        data.RandomCircleInterval = animalAI.m_randomCircleInterval;
         // Random Movement
-        data.MonsterAI.RandomMoveInterval = animalAI.m_randomMoveInterval;
-        data.MonsterAI.RandomMoveRange = animalAI.m_randomMoveRange;
+        data.RandomMoveInterval = animalAI.m_randomMoveInterval;
+        data.RandomMoveRange = animalAI.m_randomMoveRange;
         // Fly Behavior
-        data.MonsterAI.RandomFly = animalAI.m_randomFly;
-        data.MonsterAI.ChanceToTakeOff = animalAI.m_chanceToTakeoff;
-        data.MonsterAI.ChanceToLand = animalAI.m_chanceToLand;
-        data.MonsterAI.GroundDuration = animalAI.m_groundDuration;
-        data.MonsterAI.AirDuration = animalAI.m_airDuration;
-        data.MonsterAI.MaxLandAltitude = animalAI.m_maxLandAltitude;
-        data.MonsterAI.TakeOffTime = animalAI.m_takeoffTime;
-        data.MonsterAI.FlyAltitudeMinimum = animalAI.m_flyAltitudeMin;
-        data.MonsterAI.FlyAltitudeMaximum = animalAI.m_flyAltitudeMax;
-        data.MonsterAI.FlyAbsoluteMinimumAltitude = animalAI.m_flyAbsMinAltitude;
+        data.RandomFly = animalAI.m_randomFly;
+        data.ChanceToTakeOff = animalAI.m_chanceToTakeoff;
+        data.ChanceToLand = animalAI.m_chanceToLand;
+        data.GroundDuration = animalAI.m_groundDuration;
+        data.AirDuration = animalAI.m_airDuration;
+        data.MaxLandAltitude = animalAI.m_maxLandAltitude;
+        data.TakeOffTime = animalAI.m_takeoffTime;
+        data.FlyAltitudeMinimum = animalAI.m_flyAltitudeMin;
+        data.FlyAltitudeMaximum = animalAI.m_flyAltitudeMax;
+        data.FlyAbsoluteMinimumAltitude = animalAI.m_flyAbsMinAltitude;
         // Other
-        data.MonsterAI.AvoidFire = animalAI.m_avoidFire;
-        data.MonsterAI.AfraidOfFire = animalAI.m_afraidOfFire;
-        data.MonsterAI.AvoidWater = animalAI.m_avoidWater;
-        data.MonsterAI.Aggravatable = animalAI.m_aggravatable;
-        data.MonsterAI.PassiveAggressive = animalAI.m_passiveAggresive;
-        data.MonsterAI.SpawnMessage = animalAI.m_spawnMessage;
-        data.MonsterAI.DeathMessage = animalAI.m_deathMessage;
-        data.MonsterAI.AlertedMessage = animalAI.m_alertedMessage;
+        data.AvoidFire = animalAI.m_avoidFire;
+        data.AfraidOfFire = animalAI.m_afraidOfFire;
+        data.AvoidWater = animalAI.m_avoidWater;
+        data.Aggravatable = animalAI.m_aggravatable;
+        data.PassiveAggressive = animalAI.m_passiveAggresive;
+        data.SpawnMessage = animalAI.m_spawnMessage;
+        data.DeathMessage = animalAI.m_deathMessage;
+        data.AlertedMessage = animalAI.m_alertedMessage;
     }
 
     private static void SaveProcreationData(ref MonsterData data, Procreation procreation)
     {
-        data.Procreation.Enabled = true;
-        data.Procreation.UpdateInterval = procreation.m_updateInterval;
-        data.Procreation.TotalCheckRange = procreation.m_totalCheckRange;
-        data.Procreation.MaxCreatures = procreation.m_maxCreatures;
-        data.Procreation.PartnerCheckRange = procreation.m_partnerCheckRange;
-        data.Procreation.PregnancyChance = procreation.m_pregnancyChance;
-        data.Procreation.PregnancyDuration = procreation.m_pregnancyDuration;
-        data.Procreation.RequiredLovePoints = procreation.m_requiredLovePoints;
-        data.Procreation.OffSpring = procreation.m_offspring ? procreation.m_offspring.name : "";
-        data.Procreation.MinimumOffspringLevel = procreation.m_minOffspringLevel;
-        data.Procreation.SpawnOffset = procreation.m_spawnOffset;
-        data.Procreation.BirthEffects = FormatEffectData(procreation.m_birthEffects);
-        data.Procreation.LoveEffects = FormatEffectData(procreation.m_loveEffects);
+        data.CHANGE_PROCREATION = true;
+        data.UpdateInterval = procreation.m_updateInterval;
+        data.TotalCheckRange = procreation.m_totalCheckRange;
+        data.MaxCreatures = procreation.m_maxCreatures;
+        data.PartnerCheckRange = procreation.m_partnerCheckRange;
+        data.PregnancyChance = procreation.m_pregnancyChance;
+        data.PregnancyDuration = procreation.m_pregnancyDuration;
+        data.RequiredLovePoints = procreation.m_requiredLovePoints;
+        data.OffSpring = procreation.m_offspring ? procreation.m_offspring.name : "";
+        data.MinimumOffspringLevel = procreation.m_minOffspringLevel;
+        data.SpawnOffset = procreation.m_spawnOffset;
+        data.BirthEffects = FormatEffectData(procreation.m_birthEffects);
+        data.LoveEffects = FormatEffectData(procreation.m_loveEffects);
     }
 
     private static void SaveTameData(ref MonsterData data, Tameable tameable)
     {
-        data.Tameable.Enabled = true;
-        data.Tameable.FedDuration = tameable.m_fedDuration;
-        data.Tameable.TamingTime = tameable.m_tamingTime;
-        data.Tameable.StartsTamed = tameable.m_startsTamed;
-        data.Tameable.TamedEffects = FormatEffectData(tameable.m_tamedEffect);
-        data.Tameable.SootheEffects = FormatEffectData(tameable.m_sootheEffect);
-        data.Tameable.PetEffects = FormatEffectData(tameable.m_petEffect);
-        data.Tameable.Commandable = tameable.m_commandable;
-        data.Tameable.UnSummonDistance = tameable.m_unsummonDistance;
-        data.Tameable.UnSummonOnOwnerLogoutSeconds = tameable.m_unsummonOnOwnerLogoutSeconds;
-        data.Tameable.UnSummonEffects = FormatEffectData(tameable.m_unSummonEffect);
-        data.Tameable.LevelUpOwnerSkill = tameable.m_levelUpOwnerSkill.ToString();
-        data.Tameable.LevelUpFactor = tameable.m_levelUpFactor;
-        data.Tameable.SaddleItem = tameable.m_saddleItem ? tameable.m_saddleItem.name : "";
-        data.Tameable.DropSaddleOnDeath = tameable.m_dropSaddleOnDeath;
-        data.Tameable.DropItemVelocity = tameable.m_dropItemVel;
-        data.Tameable.RandomStartingName = tameable.m_randomStartingName;
+        data.CHANGE_TAMEABLE = true;
+        data.FedDuration = tameable.m_fedDuration;
+        data.TamingTime = tameable.m_tamingTime;
+        data.StartsTamed = tameable.m_startsTamed;
+        data.TamedEffects = FormatEffectData(tameable.m_tamedEffect);
+        data.SootheEffects = FormatEffectData(tameable.m_sootheEffect);
+        data.PetEffects = FormatEffectData(tameable.m_petEffect);
+        data.Commandable = tameable.m_commandable;
+        data.UnSummonDistance = tameable.m_unsummonDistance;
+        data.UnSummonOnOwnerLogoutSeconds = tameable.m_unsummonOnOwnerLogoutSeconds;
+        data.UnSummonEffects = FormatEffectData(tameable.m_unSummonEffect);
+        data.LevelUpOwnerSkill = tameable.m_levelUpOwnerSkill.ToString();
+        data.LevelUpFactor = tameable.m_levelUpFactor;
+        data.SaddleItem = tameable.m_saddleItem ? tameable.m_saddleItem.name : "";
+        data.DropSaddleOnDeath = tameable.m_dropSaddleOnDeath;
+        data.DropItemVelocity = tameable.m_dropItemVel;
+        data.RandomStartingName = tameable.m_randomStartingName;
     }
 
     private static void SaveMaterialData(ref MonsterData data, GameObject critter)
@@ -1562,26 +1689,18 @@ public static class MonsterManager
             MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find " + creatureName);
             return false;
         }
-        // var visual = Utils.FindChild(critter.transform, "Visual");
-        // if (!visual)
-        // {
-        //     MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find Visual of " + creatureName);
-        //     return false;
-        // }
-
-        // var localScale = visual.localScale;
         var localScale = critter.transform.localScale;
-        data.Character.Scale = new Scale(){x = localScale.x, y = localScale.y, z = localScale.z};
+        data.Scale = new Scale(){x = localScale.x, y = localScale.y, z = localScale.z};
 
         if (critter.TryGetComponent(out CapsuleCollider collider))
         {
-            data.Character.ColliderHeight = collider.height;
+            data.ColliderHeight = collider.height;
             var center = collider.center;
-            data.Character.ColliderCenter = new Scale()
+            data.ColliderCenter = new Scale()
                 { x = center.x, y = center.y, z = center.z };
         }
         
-        data.Character.PrefabName = creatureName;
+        data.PrefabName = creatureName;
         if (critter.TryGetComponent(out Humanoid humanoid)) SaveHumanoidData(ref data, humanoid);
         else if (critter.TryGetComponent(out Character character)) SaveCharacterData(ref data, character);
         else return false;
@@ -1590,7 +1709,7 @@ public static class MonsterManager
         else return false;
         if (critter.TryGetComponent(out CharacterDrop characterDrop))
         {
-            data.CharacterDrop.Drops = FormatDropData(characterDrop.m_drops);
+            data.Drops = FormatDropData(characterDrop.m_drops);
         }
         if (critter.TryGetComponent(out Procreation procreation)) SaveProcreationData(ref data, procreation);
         if (critter.TryGetComponent(out Tameable tameable)) SaveTameData(ref data, tameable);
@@ -1600,7 +1719,7 @@ public static class MonsterManager
         if (!m_defaultMonsterData.ContainsKey(creatureName))
         {
             m_defaultMonsterData[creatureName] = data;
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Saved default data for " + data.Character.PrefabName);
+            MonsterDBPlugin.MonsterDBLogger.LogInfo("Saved default data for " + data.PrefabName);
         }
 
         return true;
@@ -1668,7 +1787,14 @@ public static class MonsterManager
                 ToolTier = component.m_itemData.m_shared.m_toolTier,
                 AttackForce = component.m_itemData.m_shared.m_attackForce,
                 Dodgeable = component.m_itemData.m_shared.m_dodgeable,
-                Blockable = component.m_itemData.m_shared.m_blockable
+                Blockable = component.m_itemData.m_shared.m_blockable,
+                HitThroughWalls = component.m_itemData.m_shared.m_attack.m_hitThroughWalls,
+                HitEffects = FormatEffectData(attack.m_hitEffect),
+                HitTerrainEffects = FormatEffectData(attack.m_hitTerrainEffect),
+                StartEffects = FormatEffectData(attack.m_startEffect),
+                TriggerEffects = FormatEffectData(attack.m_triggerEffect),
+                TrailStartEffects = FormatEffectData(attack.m_trailStartEffect),
+                BurstEffects = FormatEffectData(attack.m_burstEffect)
             };
             if (component.m_itemData.m_shared.m_spawnOnHit)
             {
@@ -1683,6 +1809,30 @@ public static class MonsterManager
             if (component.m_itemData.m_shared.m_attackStatusEffect)
             {
                 itemData.AttackStatusEffect = component.m_itemData.m_shared.m_attackStatusEffect.name;
+            }
+
+            if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
+            {
+                var projectilePrefab = component.m_itemData.m_shared.m_attack.m_attackProjectile;
+                if (projectilePrefab.TryGetComponent(out Projectile projectile))
+                {
+                    itemData.Projectile_PrefabName = projectile.name;
+                    itemData.Projectile_Damages = FormatDamages(projectile.m_damage);
+                    itemData.Projectile_AOE = projectile.m_aoe;
+                    itemData.Projectile_Dodgeable = projectile.m_dodgeable;
+                    itemData.Projectile_Blockable = projectile.m_blockable;
+                    itemData.Projectile_AttackForce = projectile.m_attackForce;
+                    itemData.Projectile_StatusEffect = projectile.m_statusEffect;
+                    itemData.Projectile_CanHitWater = projectile.m_canHitWater;
+                    itemData.Projectile_SpawnOnHit = projectile.m_spawnOnHit == null ? "" : projectile.m_spawnOnHit.name;
+                    itemData.Projectile_SpawnChance = projectile.m_spawnOnHitChance;
+                    itemData.Projectile_RandomSpawnOnHit = projectile.m_randomSpawnOnHit.Where(x => x != null).Select(x => x.name).ToList();
+                    itemData.Projectile_StaticHitOnly = projectile.m_staticHitOnly;
+                    itemData.Projectile_GroundHitOnly = projectile.m_groundHitOnly;
+                    itemData.Projectile_HitEffects = FormatEffectData(projectile.m_hitEffects);
+                    itemData.Projectile_HitWaterEffects = FormatEffectData(projectile.m_hitWaterEffects);
+                    itemData.Projectile_SpawnOnHitEffects = FormatEffectData(projectile.m_spawnOnHitEffects);
+                }
             }
             output.Add(itemData);
         }
