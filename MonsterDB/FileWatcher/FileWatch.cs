@@ -52,9 +52,10 @@ public static class FileWatch
                 break;
             case WatcherChangeTypes.Deleted:
                 MonsterDBPlugin.MonsterDBLogger.LogInfo("File deleted: " + fileName);
+                SpawnData.ClearSpawnData();
+                SpawnData.ReadSpawnFiles();
                 break;
         }
-        
     }
 
     private static void OnCreatureDelete(object sender, FileSystemEventArgs e)
@@ -66,9 +67,12 @@ public static class FileWatch
         if (MonsterManager.ResetMonster(fileName.Replace(".yml", string.Empty)))
         {
             MonsterDBPlugin.MonsterDBLogger.LogInfo("Server: Successfully reset creature after deleting file");
+            DataBase.ServerSync.UpdateServerMonsterDB();
         }
-        
-        DataBase.ServerSync.UpdateServerMonsterDB();
+        else
+        {
+            MonsterDBPlugin.MonsterDBLogger.LogInfo("Server: Failed to reset creature after deleting file");
+        }
     }
 
     private static void OnCreatureChange(object sender, FileSystemEventArgs e)
@@ -80,12 +84,11 @@ public static class FileWatch
         if (MonsterManager.FileWatch_UpdateMonster(e.FullPath, fileName))
         {
             MonsterDBPlugin.MonsterDBLogger.LogInfo("Server: Successfully updated " + fileName);
+            DataBase.ServerSync.UpdateServerMonsterDB();
         }
         else
         {
             MonsterDBPlugin.MonsterDBLogger.LogInfo("Server: Failed to update " + fileName);
         }
-        
-        DataBase.ServerSync.UpdateServerMonsterDB();
     }
 }

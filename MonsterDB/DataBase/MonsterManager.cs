@@ -15,7 +15,6 @@ public static class MonsterManager
 {
     private static readonly Dictionary<string, MonsterData> m_defaultMonsterData = new();
     private static readonly List<string> m_newTames = new();
-    private static readonly Dictionary<string, GameObject> m_clonedItems = new();
 
     private static readonly int Hue = Shader.PropertyToID("_Hue");
     private static readonly int Saturation = Shader.PropertyToID("_Saturation");
@@ -44,7 +43,7 @@ public static class MonsterManager
         private static void Postfix()
         {
             if (!ZNetScene.instance) return;
-            MonsterDBPlugin.MonsterDBLogger.LogDebug("Registering MONSTER DB Files");
+            MonsterDBPlugin.MonsterDBLogger.LogDebug("ObjectDB Awake: Initializing MONSTER DB Files");
             RegisterMonsterTweaks();
         }
     }
@@ -53,10 +52,56 @@ public static class MonsterManager
     {
         if (!ZNet.instance.IsServer()) return;
         Paths.CreateDirectories();
-        string[] monsterFiles = Directory.GetFiles(Paths.MonsterPath);
-        var deserializer = new DeserializerBuilder().Build();
+        
+        ServerSync.UpdateServerTextures();
+        
+        List<MonsterData> deserialized = DeserializeMonsterFiles();
 
+        RegisterClones(deserialized);
+
+        RegisterMonsterTweaks(deserialized);
+
+        ServerSync.UpdateServerMonsterDB();
+    }
+
+    private static void RegisterMonsterTweaks(List<MonsterData> list)
+    {
+        foreach (MonsterData data in list.Where(x => !x.isClone))
+        {
+            if (!GetMonsterData(data.PrefabName, out MonsterData monsterData))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to get default data for " + data.PrefabName);
+                continue;
+            }
+
+            if (UpdateMonsterData(data))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogDebug("Updated " + data.PrefabName);
+            }
+
+            ServerSync.m_serverData[data.PrefabName] = data;
+        }
+    }
+
+    private static void RegisterClones(List<MonsterData> list)
+    {
+        foreach (var data in list.Where(x => x.isClone))
+        {
+            if (CloneMonster(data))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogDebug("Successfully created " + data.PrefabName);
+                ServerSync.m_serverData[data.PrefabName] = data;
+            }
+        }
+    }
+
+    private static List<MonsterData> DeserializeMonsterFiles()
+    {
         List<MonsterData> deserialized = new();
+        Paths.CreateDirectories();
+        string[] monsterFiles = Directory.GetFiles(Paths.MonsterPath);
+        IDeserializer deserializer = new DeserializerBuilder().Build();
+        
         foreach (var file in monsterFiles)
         {
             try
@@ -71,33 +116,7 @@ public static class MonsterManager
             }
         }
 
-        foreach (var data in deserialized.Where(x => x.isClone))
-        {
-            if (CloneMonster(data))
-            {
-                MonsterDBPlugin.MonsterDBLogger.LogDebug("Successfully created " + data.PrefabName);
-                ServerSync.m_serverData[data.PrefabName] = data;
-            }
-        }
-
-        foreach (var data in deserialized.Where(x => !x.isClone))
-        {
-            if (!GetMonsterData(data.PrefabName, out MonsterData monsterData))
-            {
-                MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to get default data for " + data.PrefabName);
-                continue;
-            }
-
-            if (UpdateMonsterData(data))
-            {
-                MonsterDBPlugin.MonsterDBLogger.LogInfo("Updated " + data.PrefabName);
-            }
-
-            ServerSync.m_serverData[data.PrefabName] = data;
-
-        }
-
-        ServerSync.UpdateServerMonsterDB();
+        return deserialized;
     }
 
     public static void CreateBaseHuman()
@@ -304,37 +323,42 @@ public static class MonsterManager
 
         if (clone.TryGetComponent(out Humanoid humanoid))
         {
-            CloneRagdoll(humanoid.m_deathEffects.m_effectPrefabs, clone);
+            CloneRagDoll(humanoid.m_deathEffects.m_effectPrefabs, clone);
         }
         else if (clone.TryGetComponent(out Character character))
         {
-            CloneRagdoll(character.m_deathEffects.m_effectPrefabs, clone);
+            CloneRagDoll(character.m_deathEffects.m_effectPrefabs, clone);
         }
         
         return clone;
     }
 
-    private static void CloneRagdoll(EffectList.EffectData[] deathEffects, GameObject clone)
+    private static void CloneRagDoll(EffectList.EffectData[] deathEffects, GameObject clone)
     {
-        foreach (var effect in deathEffects)
+        foreach (EffectList.EffectData effect in deathEffects)
         {
             if (!effect.m_prefab.GetComponent<Ragdoll>()) continue;
-            var clonedRagdoll = Object.Instantiate(effect.m_prefab, MonsterDBPlugin._Root.transform, false);
+            GameObject clonedRagdoll = Object.Instantiate(effect.m_prefab, MonsterDBPlugin._Root.transform, false);
             clonedRagdoll.name = clone.name + "_ragdoll";
             RegisterToZNetScene(clonedRagdoll);
             effect.m_prefab = clonedRagdoll;
         }
     }
+
+    public static bool Server_CloneMonster(MonsterData data) => CloneMonster(data);
     private static bool CloneMonster(MonsterData data)
     {
         if (!ZNetScene.instance) return false;
-
-        GameObject? clone = CreateClone(data.OriginalMonster, data.PrefabName);
-        if (clone == null) return false;
-        if (!RegisterToZNetScene(clone))
+        GameObject? match = ZNetScene.instance.GetPrefab(data.PrefabName);
+        if (!match)
         {
-            MonsterDBPlugin.MonsterDBLogger.LogDebug($"Failed to register {clone.name} to ZNetScene");
-            return false;
+            GameObject? clone = CreateClone(data.OriginalMonster, data.PrefabName);
+            if (clone == null) return false;
+            if (!RegisterToZNetScene(clone))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogDebug($"Failed to register {clone.name} to ZNetScene");
+                return false;
+            }
         }
         
         UpdateMonsterData(data);
@@ -344,13 +368,22 @@ public static class MonsterManager
     {
         if (!ZNetScene.instance) return false;
 
-        GameObject? clone = CreateClone(creatureName, cloneName);
+        bool exists = true;
+        GameObject? clone = ZNetScene.instance.GetPrefab(cloneName);
+        if (!clone)
+        {
+            clone = CreateClone(creatureName, cloneName);
+            exists = false;
+        }
 
         if (clone == null) return false;
-        if (!RegisterToZNetScene(clone))
+        if (!exists)
         {
-            MonsterDBPlugin.MonsterDBLogger.LogDebug($"Failed to register {clone.name} to ZNetScene");
-            return false;
+            if (!RegisterToZNetScene(clone))
+            {
+                MonsterDBPlugin.MonsterDBLogger.LogDebug($"Failed to register {clone.name} to ZNetScene");
+                return false;
+            }
         }
         if (!GetMonsterData(cloneName, out MonsterData data)) return false;
         data.OriginalMonster = creatureName;
@@ -386,9 +419,9 @@ public static class MonsterManager
 
         try
         {
-            var deserializer = new DeserializerBuilder().Build();
-            var serial = File.ReadAllText(filePath);
-            var data = deserializer.Deserialize<MonsterData>(serial);
+            IDeserializer deserializer = new DeserializerBuilder().Build();
+            string serial = File.ReadAllText(filePath);
+            MonsterData data = deserializer.Deserialize<MonsterData>(serial);
 
             return UpdateMonsterData(data);
         }
@@ -437,9 +470,7 @@ public static class MonsterManager
 
     public static bool ResetMonster(string creatureName)
     {
-        if (m_defaultMonsterData.TryGetValue(creatureName, out MonsterData data)) return UpdateMonsterData(data, true);
-        MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find default data for " + creatureName);
-        return false;
+        return m_defaultMonsterData.TryGetValue(creatureName, out MonsterData data) && UpdateMonsterData(data, true);
     }
 
     private static void UpdateMonsterScale(MonsterData data, GameObject critter, bool reset)
@@ -553,7 +584,7 @@ public static class MonsterManager
             if (GetItems(data.RandomArmors, reset, out List<GameObject> RandomArmors)) humanoid.m_randomArmor = RandomArmors.ToArray();
             if (GetItems(data.RandomShields, reset, out List<GameObject> RandomShields)) humanoid.m_randomShield = RandomShields.ToArray();
             if (GetRandomSets(data.RandomSets, reset, out List<Humanoid.ItemSet> RandomSets)) humanoid.m_randomSets = RandomSets.ToArray();
-            if (DataBase.TryGetItemDrop(data.UnarmedWeapon, out ItemDrop? UnarmedWeapon)) humanoid.m_unarmedWeapon = UnarmedWeapon;
+            if (MonsterDB.TryGetItemDrop(data.UnarmedWeapon, out ItemDrop? UnarmedWeapon)) humanoid.m_unarmedWeapon = UnarmedWeapon;
             humanoid.m_beardItem = data.BeardItem;
             humanoid.m_hairItem = data.HairItem;
         }
@@ -848,7 +879,7 @@ public static class MonsterManager
 
     private static Material CreateMaterial(MaterialData materialData, Material material)
     {
-        var newMat = new Material(material)
+        Material newMat = new Material(material)
         {
             name = material.name
         };
@@ -955,12 +986,9 @@ public static class MonsterManager
 
     private static void UpdateMonsterModel(MonsterData data, GameObject critter, bool reset)
     {
-        if (data.FemaleModel)
+        if (critter.TryGetComponent(out VisEquipment visEquipment))
         {
-            if (critter.TryGetComponent(out VisEquipment visEquipment))
-            {
-                visEquipment.SetModel(1);
-            }
+            visEquipment.SetModel(data.FemaleModel ? 1 : 0);
         }
     }
 
@@ -1019,7 +1047,7 @@ public static class MonsterManager
             return true;
         }
 
-        if (DataBase.m_textures.TryGetValue(input, out Texture2D texture))
+        if (MonsterDB.m_textures.TryGetValue(input, out Texture2D texture))
         {
             output = texture;
             return true;
@@ -1030,7 +1058,7 @@ public static class MonsterManager
     private static bool GetSaddle(string input, out ItemDrop output)
     {
         output = null!;
-        GameObject? saddle = DataBase.TryGetGameObject(input);
+        GameObject? saddle = MonsterDB.TryGetGameObject(input);
         if (saddle == null) return false;
         if (saddle.TryGetComponent(out ItemDrop component))
         {
@@ -1065,7 +1093,7 @@ public static class MonsterManager
         output = new();
         foreach (var data in input)
         {
-            GameObject? prefab = DataBase.TryGetGameObject(data.Prefab);
+            GameObject? prefab = MonsterDB.TryGetGameObject(data.Prefab);
             if (prefab == null) continue;
             output.Add(new()
             {
@@ -1084,7 +1112,7 @@ public static class MonsterManager
 
     private static bool GetOffspring(string input, out GameObject output)
     {
-        output = DataBase.TryGetGameObject(input)!;
+        output = MonsterDB.TryGetGameObject(input)!;
         return output != null;
     }
 
@@ -1109,10 +1137,10 @@ public static class MonsterManager
 
     private static bool GetItemDrops(List<string> input, out List<ItemDrop> output)
     {
-        output = new();
-        foreach (var itemName in input)
+        output = new List<ItemDrop>();
+        foreach (string itemName in input)
         {
-            GameObject? item = DataBase.TryGetGameObject(itemName);
+            GameObject? item = MonsterDB.TryGetGameObject(itemName);
             if (item == null)
             {
                 MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find item " + itemName);
@@ -1131,11 +1159,11 @@ public static class MonsterManager
 
     private static bool GetItems(List<CreatureItem> input, bool reset, out List<GameObject> output)
     {
-        output = new();
+        output = new List<GameObject>();
         foreach (var item in input)
         {
             if (!item.ENABLE_ITEM) continue;
-            GameObject? prefab = DataBase.TryGetGameObject(item.Name);
+            GameObject? prefab = MonsterDB.TryGetGameObject(item.Name);
             if (prefab == null) continue;
             if (!prefab.GetComponent<ItemDrop>()) continue;
             if (reset || !item.CHANGE_ITEM_DATA) return prefab;
@@ -1160,8 +1188,8 @@ public static class MonsterManager
             component.m_itemData.m_shared.m_attackForce = item.AttackForce;
             component.m_itemData.m_shared.m_dodgeable = item.Dodgeable;
             component.m_itemData.m_shared.m_blockable = item.Blockable;
-            component.m_itemData.m_shared.m_spawnOnHit = DataBase.TryGetGameObject(item.SpawnOnHit);
-            component.m_itemData.m_shared.m_spawnOnHitTerrain = DataBase.TryGetGameObject(item.SpawnOnHitTerrain);
+            component.m_itemData.m_shared.m_spawnOnHit = MonsterDB.TryGetGameObject(item.SpawnOnHit);
+            component.m_itemData.m_shared.m_spawnOnHitTerrain = MonsterDB.TryGetGameObject(item.SpawnOnHitTerrain);
             
             if (!item.AttackStatusEffect.IsNullOrWhiteSpace())
             {
@@ -1192,10 +1220,10 @@ public static class MonsterManager
 
             if (item.CHANGE_PROJECTILE)
             {
-                GameObject? projectilePrefab = DataBase.TryGetGameObject(item.Projectile_PrefabName);
+                GameObject? projectilePrefab = MonsterDB.TryGetGameObject(item.Projectile_PrefabName);
                 if (projectilePrefab != null && !item.Projectile_Clone_ID.IsNullOrWhiteSpace())
                 {
-                    var cloneProjectile = DataBase.TryGetGameObject(item.Projectile_Clone_ID);
+                    var cloneProjectile = MonsterDB.TryGetGameObject(item.Projectile_Clone_ID);
                     if (!cloneProjectile)
                     {
                         cloneProjectile = Object.Instantiate(projectilePrefab, MonsterDBPlugin._Root.transform, false);
@@ -1219,7 +1247,7 @@ public static class MonsterManager
                         projectile.m_canHitWater = item.Projectile_CanHitWater;
                         if (!item.Projectile_SpawnOnHit.IsNullOrWhiteSpace())
                         {
-                            GameObject? spawnOnHit = DataBase.TryGetGameObject(item.Projectile_SpawnOnHit);
+                            GameObject? spawnOnHit = MonsterDB.TryGetGameObject(item.Projectile_SpawnOnHit);
                             if (spawnOnHit != null)
                             {
                                 projectile.m_spawnOnHit = spawnOnHit;
@@ -1227,7 +1255,7 @@ public static class MonsterManager
                         }
 
                         projectile.m_spawnOnHitChance = item.Projectile_SpawnChance;
-                        projectile.m_randomSpawnOnHit = item.Projectile_RandomSpawnOnHit.Select(DataBase.TryGetGameObject).Where(random => random != null).ToList();
+                        projectile.m_randomSpawnOnHit = item.Projectile_RandomSpawnOnHit.Select(MonsterDB.TryGetGameObject).Where(random => random != null).ToList();
                         projectile.m_staticHitOnly = item.Projectile_StaticHitOnly;
                         projectile.m_groundHitOnly = item.Projectile_GroundHitOnly;
 
@@ -1289,9 +1317,9 @@ public static class MonsterManager
         output = new();
         if (!ZNetScene.instance) return false;
         List<EffectList.EffectData> effectData = new();
-        foreach (var data in input)
+        foreach (EffectPrefab data in input)
         {
-            GameObject? effect = DataBase.TryGetGameObject(data.Prefab);
+            GameObject? effect = MonsterDB.TryGetGameObject(data.Prefab);
             if (effect == null)
             {
                 MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find effect " + data.Prefab);
@@ -1331,18 +1359,6 @@ public static class MonsterManager
         if (!Enum.TryParse(input, out Character.GroundTiltType type)) return false;
         output = type;
         return true;
-    }
-    
-    private static void SaveMonsterTexture(GameObject critter)
-    {
-        SkinnedMeshRenderer renderer = critter.GetComponentInChildren<SkinnedMeshRenderer>();
-        if (!renderer) return;
-        foreach (var material in renderer.materials)
-        {
-            Texture2D? tex = material.mainTexture as Texture2D;
-            if (tex == null) continue;
-            TextureManager.SaveTextureToPNG(tex, critter.name);
-        }
     }
 
     private static void SaveHumanoidData(ref MonsterData data, Humanoid humanoid)
@@ -1630,58 +1646,56 @@ public static class MonsterManager
     private static void SaveMaterialData(ref MonsterData data, GameObject critter)
     {
         SkinnedMeshRenderer renderer = critter.GetComponentInChildren<SkinnedMeshRenderer>();
-        if (renderer)
+        if (!renderer) return;
+        foreach (var material in renderer.materials)
         {
-            foreach (var material in renderer.materials)
+            MaterialData materialData = new MaterialData
             {
-                var materialData = new MaterialData
-                {
-                    Shader = material.shader.name,
-                    MaterialName = material.name.Replace("(Instance)",string.Empty).TrimEnd(),
-                };
-                if (material.mainTexture)
-                {
-                    materialData.MainTexture = material.mainTexture.name;
-                }
-                if (material.HasColor("_Color")) materialData.MainColor = new()
-                    { Red = material.color.r, Green = material.color.g, Blue = material.color.b, Alpha = material.color.a };
-                if (material.HasFloat(Hue)) materialData.Hue = material.GetFloat(Hue);
-                if (material.HasFloat(Saturation)) materialData.Saturation = material.GetFloat(Saturation);
-                if (material.HasFloat(Value)) materialData.Value = material.GetFloat(Value);
-                if (material.HasFloat(Cutoff)) materialData.AlphaCutoff = material.GetFloat(Cutoff);
-                if (material.HasFloat(Smoothness)) materialData.Smoothness = material.GetFloat(Smoothness);
-                if (material.HasFloat(UseGlossMap)) materialData.UseGlossMap = material.GetFloat(UseGlossMap) > 0f;
-                if (material.HasTexture(MetallicGlossMap)) materialData.GlossTexture = material.GetTexture(MetallicGlossMap) ? material.GetTexture(MetallicGlossMap).name : "";
-                if (material.HasFloat(Metallic)) materialData.Metallic = material.GetFloat(Metallic);
-                if (material.HasFloat(MetalGloss)) materialData.MetalGloss = material.GetFloat(MetalGloss);
-                if (material.HasColor(MetalColor))
-                {
-                    Color metalColor = material.GetColor(MetalColor);
-                    materialData.MetalColor = new()
-                        { Red = metalColor.r, Green = metalColor.g, Blue = metalColor.b, Alpha = metalColor.a };
-                }
-                if (material.HasTexture(EmissionMap)) materialData.EmissionTexture = material.GetTexture(EmissionMap) ? material.GetTexture(EmissionMap).name : "";
-                if (material.HasColor(EmissionColor))
-                {
-                    Color emissionColor = material.GetColor(EmissionColor);
-                    materialData.EmissionColor = new ColorData() 
-                        {Red = emissionColor.r, Green = emissionColor.g, Blue = emissionColor.b, Alpha = emissionColor.a};
-                }
-                if (material.HasFloat(NormalStrength)) materialData.BumpStrength = material.GetFloat(NormalStrength);
-                if (material.HasTexture(BumpMap)) materialData.BumpTexture = material.GetTexture(BumpMap) ? material.GetTexture(BumpMap).name : "";
-                if (material.HasFloat(TwoSidedNormals)) materialData.TwoSidedNormals = material.GetFloat(TwoSidedNormals) > 0f;
-                if (material.HasFloat(UseStyles)) materialData.UseStyles = material.GetFloat(UseStyles) > 0f;
-                if (material.HasFloat(Style)) materialData.Style = material.GetFloat(Style);
-                if (material.HasTexture(StyleTex)) materialData.StyleTexture = material.GetTexture(StyleTex) ? material.GetTexture(StyleTex).name : "";
-                if (material.HasFloat(AddRain)) materialData.AddRain = material.GetFloat(AddRain) > 0f;
-                data.Materials.Add(materialData);
+                Shader = material.shader.name,
+                MaterialName = material.name.Replace("(Instance)",string.Empty).TrimEnd(),
+            };
+            if (material.mainTexture)
+            {
+                materialData.MainTexture = material.mainTexture.name;
             }
+            if (material.HasColor("_Color")) materialData.MainColor = new()
+                { Red = material.color.r, Green = material.color.g, Blue = material.color.b, Alpha = material.color.a };
+            if (material.HasFloat(Hue)) materialData.Hue = material.GetFloat(Hue);
+            if (material.HasFloat(Saturation)) materialData.Saturation = material.GetFloat(Saturation);
+            if (material.HasFloat(Value)) materialData.Value = material.GetFloat(Value);
+            if (material.HasFloat(Cutoff)) materialData.AlphaCutoff = material.GetFloat(Cutoff);
+            if (material.HasFloat(Smoothness)) materialData.Smoothness = material.GetFloat(Smoothness);
+            if (material.HasFloat(UseGlossMap)) materialData.UseGlossMap = material.GetFloat(UseGlossMap) > 0f;
+            if (material.HasTexture(MetallicGlossMap)) materialData.GlossTexture = material.GetTexture(MetallicGlossMap) ? material.GetTexture(MetallicGlossMap).name : "";
+            if (material.HasFloat(Metallic)) materialData.Metallic = material.GetFloat(Metallic);
+            if (material.HasFloat(MetalGloss)) materialData.MetalGloss = material.GetFloat(MetalGloss);
+            if (material.HasColor(MetalColor))
+            {
+                Color metalColor = material.GetColor(MetalColor);
+                materialData.MetalColor = new()
+                    { Red = metalColor.r, Green = metalColor.g, Blue = metalColor.b, Alpha = metalColor.a };
+            }
+            if (material.HasTexture(EmissionMap)) materialData.EmissionTexture = material.GetTexture(EmissionMap) ? material.GetTexture(EmissionMap).name : "";
+            if (material.HasColor(EmissionColor))
+            {
+                Color emissionColor = material.GetColor(EmissionColor);
+                materialData.EmissionColor = new ColorData() 
+                    {Red = emissionColor.r, Green = emissionColor.g, Blue = emissionColor.b, Alpha = emissionColor.a};
+            }
+            if (material.HasFloat(NormalStrength)) materialData.BumpStrength = material.GetFloat(NormalStrength);
+            if (material.HasTexture(BumpMap)) materialData.BumpTexture = material.GetTexture(BumpMap) ? material.GetTexture(BumpMap).name : "";
+            if (material.HasFloat(TwoSidedNormals)) materialData.TwoSidedNormals = material.GetFloat(TwoSidedNormals) > 0f;
+            if (material.HasFloat(UseStyles)) materialData.UseStyles = material.GetFloat(UseStyles) > 0f;
+            if (material.HasFloat(Style)) materialData.Style = material.GetFloat(Style);
+            if (material.HasTexture(StyleTex)) materialData.StyleTexture = material.GetTexture(StyleTex) ? material.GetTexture(StyleTex).name : "";
+            if (material.HasFloat(AddRain)) materialData.AddRain = material.GetFloat(AddRain) > 0f;
+            data.Materials.Add(materialData);
         }
     }
     
     private static bool GetMonsterData(string creatureName, out MonsterData data)
     {
-        data = new();
+        data = new MonsterData();
         if (!ZNetScene.instance) return false;
         GameObject critter = ZNetScene.instance.GetPrefab(creatureName);
         if (!critter)
@@ -1689,7 +1703,7 @@ public static class MonsterManager
             MonsterDBPlugin.MonsterDBLogger.LogInfo("Failed to find " + creatureName);
             return false;
         }
-        var localScale = critter.transform.localScale;
+        Vector3 localScale = critter.transform.localScale;
         data.Scale = new Scale(){x = localScale.x, y = localScale.y, z = localScale.z};
 
         if (critter.TryGetComponent(out CapsuleCollider collider))
@@ -1719,7 +1733,7 @@ public static class MonsterManager
         if (!m_defaultMonsterData.ContainsKey(creatureName))
         {
             m_defaultMonsterData[creatureName] = data;
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Saved default data for " + data.PrefabName);
+            MonsterDBPlugin.MonsterDBLogger.LogDebug("Saved default data for " + data.PrefabName);
         }
 
         return true;
@@ -1771,8 +1785,8 @@ public static class MonsterManager
         {
             if (prefab == null) continue;
             if (!prefab.TryGetComponent(out ItemDrop component)) continue;
-            var attack = component.m_itemData.m_shared.m_attack;
-            var itemData = new CreatureItem()
+            Attack attack = component.m_itemData.m_shared.m_attack;
+            CreatureItem itemData = new CreatureItem()
             {
                 Name = prefab.name,
                 AttackAnimation = attack.m_attackAnimation,
@@ -1813,7 +1827,7 @@ public static class MonsterManager
 
             if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
             {
-                var projectilePrefab = component.m_itemData.m_shared.m_attack.m_attackProjectile;
+                GameObject projectilePrefab = component.m_itemData.m_shared.m_attack.m_attackProjectile;
                 if (projectilePrefab.TryGetComponent(out Projectile projectile))
                 {
                     itemData.Projectile_PrefabName = projectile.name;
@@ -1842,7 +1856,7 @@ public static class MonsterManager
 
     private static AttackDamages FormatDamages(HitData.DamageTypes input)
     {
-        return new()
+        return new AttackDamages
         {
             Damage = input.m_damage,
             Blunt = input.m_blunt,
@@ -1900,7 +1914,7 @@ public static class MonsterManager
 
     private static DamageModifiersData FormatDamageModifiers(HitData.DamageModifiers data)
     {
-        return new()
+        return new DamageModifiersData
         {
             Blunt = data.m_blunt.ToString(),
             Slash = data.m_slash.ToString(),

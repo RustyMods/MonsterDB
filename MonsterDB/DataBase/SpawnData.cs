@@ -31,13 +31,13 @@ public static class SpawnData
     {
         if (!ZNet.instance.IsServer()) return;
         string[] files = Directory.GetFiles(Paths.SpawnPath, "*.yml");
-        var deserializer = new DeserializerBuilder().Build();
+        IDeserializer deserializer = new DeserializerBuilder().Build();
         int count = 0;
-        foreach (var file in files)
+        foreach (string file in files)
         {
-            var data = File.ReadAllText(file);
-            var info = deserializer.Deserialize<MonsterSpawnData>(data);
-            m_spawnData[info.m_name] = info;
+            string text = File.ReadAllText(file);
+            MonsterSpawnData data = deserializer.Deserialize<MonsterSpawnData>(text);
+            m_spawnData[data.m_name] = data;
             ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug("Server: Registered " + count + " spawn data files");
@@ -48,8 +48,8 @@ public static class SpawnData
 
     private static void UpdateServerFiles()
     {
-        var serializer = new SerializerBuilder().Build();
-        var serial = serializer.Serialize(m_spawnData);
+        ISerializer serializer = new SerializerBuilder().Build();
+        string serial = serializer.Serialize(m_spawnData);
         ServerSync.UpdateServerSpawnSystem(serial);
     }
     
@@ -59,17 +59,17 @@ public static class SpawnData
 
         string exampleFile = Paths.SpawnPath + Path.DirectorySeparatorChar + "Example.yml";
         if (File.Exists(exampleFile)) return;
-        var data = new MonsterSpawnData();
-        var serializer = new SerializerBuilder().Build();
-        var serial = serializer.Serialize(data);
+        MonsterSpawnData data = new MonsterSpawnData();
+        ISerializer serializer = new SerializerBuilder().Build();
+        string serial = serializer.Serialize(data);
         File.WriteAllText(exampleFile, serial);
     }
 
     public static void ReadFile(string filePath)
     {
-        var deserializer = new DeserializerBuilder().Build();
-        var serial = File.ReadAllText(filePath);
-        var data = deserializer.Deserialize<MonsterSpawnData>(serial);
+        IDeserializer deserializer = new DeserializerBuilder().Build();
+        string serial = File.ReadAllText(filePath);
+        MonsterSpawnData data = deserializer.Deserialize<MonsterSpawnData>(serial);
         m_spawnData[data.m_name] = data;
         UpdateSpawnList();
         MonsterDBPlugin.MonsterDBLogger.LogInfo("Updated spawn list");
@@ -80,7 +80,7 @@ public static class SpawnData
     private static SpawnSystem.SpawnData? FormatSpawnData(MonsterSpawnData input)
     {
         if (input.m_name.IsNullOrWhiteSpace()) return null;
-        GameObject? prefab = DataBase.TryGetGameObject(input.m_prefab);
+        GameObject? prefab = MonsterDB.TryGetGameObject(input.m_prefab);
         if (prefab == null) return null;
         if (!Enum.TryParse(input.m_biome, out Heightmap.Biome biome)) return null;
         if (!Enum.TryParse(input.m_biomeArea, out Heightmap.BiomeArea biomeArea)) return null;

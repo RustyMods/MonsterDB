@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MonsterDB.DataBase;
 
-public static class DataBase
+public static class MonsterDB
 {
     private static readonly Dictionary<string, GameObject> m_items = new();
     public static readonly Dictionary<string, Texture2D> m_textures = new();

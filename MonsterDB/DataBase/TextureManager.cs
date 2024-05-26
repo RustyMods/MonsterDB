@@ -6,54 +6,34 @@ namespace MonsterDB.DataBase;
 
 public static class TextureManager
 {
-    public static readonly Dictionary<string, Texture2D> RegisteredTextures = new();
+    public static Dictionary<string, Texture2D> RegisteredTextures = new();
 
-    public static void SaveTextureToPNG(Texture2D texture, string creatureName)
-    {
-        try
-        {
-            string FolderPath = Paths.TexturePath + Path.DirectorySeparatorChar + creatureName;
-            if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
-            string FilePath = FolderPath + Path.DirectorySeparatorChar + texture.name;
-            byte[] bytes = texture.EncodeToPNG();
+    public static readonly Dictionary<string, byte[]> ServerSync_Textures = new();
 
-            File.WriteAllBytes(FilePath, bytes);
-        }
-        catch
-        {
-            MonsterDBPlugin.MonsterDBLogger.LogDebug("Failed to save textures for " + creatureName);
-        }
-    }
-
+    public static void ClearRegisteredTextures() => RegisteredTextures.Clear();
+    public static void UpdateRegisteredTextures(Dictionary<string, Texture2D> data) => RegisteredTextures = data;
+    
     public static void ReadLocalTextures()
     {
-        string[] directories = Directory.GetDirectories(Paths.TexturePath);
-        foreach (var directory in directories)
-        {
-            string[] files = Directory.GetFiles(directory);
-            foreach (var file in files)
-            {
-                RegisterTexture(file);
-            }
-        }
+        string[] files = Directory.GetFiles(Paths.TexturePath, "*.png");
+        foreach (string file in files) RegisterTexture(file);
+    }
+
+    public static Texture2D LoadTexture(string name, byte[] data)
+    {
+        Texture2D texture = new Texture2D(2, 2);
+        texture.LoadImage(data);
+        texture.name = name;
+        return texture;
     }
 
     private static void RegisterTexture(string filePath)
     {
         byte[] fileData = File.ReadAllBytes(filePath);
-        Texture2D texture = new Texture2D(2, 2);
-        texture.LoadImage(fileData);
-
-        string? parentDir = Path.GetDirectoryName(filePath);
-        if (parentDir != null)
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(parentDir);
-            string parent = directoryInfo.Name;
-            string name = filePath.Replace(Paths.TexturePath, string.Empty).Replace(".png", string.Empty)
-                .Replace(parent, string.Empty).Replace("\\", string.Empty);
-            texture.name = name;
-            RegisteredTextures[texture.name] = texture;
-            MonsterDBPlugin.MonsterDBLogger.LogDebug("Successfully registered custom texture: " + texture.name);
-        }
+        string fileName = Path.GetFileName(filePath).Replace(".png", string.Empty);
+        Texture2D texture = LoadTexture(fileName, fileData);
+        RegisteredTextures[texture.name] = texture;
+        ServerSync_Textures[texture.name] = fileData;
+        MonsterDBPlugin.MonsterDBLogger.LogDebug("Successfully registered custom texture: " + texture.name);
     }
 }
