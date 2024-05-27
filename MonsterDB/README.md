@@ -548,7 +548,7 @@ RandomWeapons: []
 RandomArmors: []
 RandomShields: []
 RandomSets:
-  ## Name you random set
+  ## Name your random set
   - Name: Leather
     Items:
     ## Insert Attack Items like above

@@ -7,25 +7,25 @@ Can only be used locally. Create your monster tweaks / clones locally, then tran
 ```
 save [prefabName]
     Writes to disk monster data
-    
+
 save attack [prefabName]
     Writes to disk monster attack data
-    
+
 save textures
     save to file all the names of textures in available resources
-    
+
 clone [prefabName] [customName]
     clones creature and writes to disk clone data
-    
+
 update [prefabName]
     updates creature with latest data
-    
+
 search texture [filter]
     prints a list of textures where filter is contained in name
-    
+
 search attack [filter]
     prints a list of attacks where filter is contained in name
-    
+
 reset [prefabName]
     Tries to resets monster to default settings
 ```
@@ -86,7 +86,7 @@ Each section has an enable keyword to optimize to optimize for performance
 If you make changes then disable section, it will not revert the changes
 ```yaml
 ## ENABLED must be set to 'true' to make changes
-ENABLED: false 
+ENABLED: false
 ## Insert the prefab name of the original monster you are cloning from
 OriginalMonster: ''
 ## isClone is true, then plugin will search for original monster, if it exists, clone it with data below
@@ -244,7 +244,7 @@ CHANGE_ATTACKS: false
 DefaultItems:
 - ENABLE_ITEM: true
   Name: GoblinKing_Beam
-  ## Attack Animation cannot be empty 
+  ## Attack Animation cannot be empty
   ## It is related to the unique triggers each monster has
   AttackAnimation: beam
   ## Most attacks do not require an attack origin, can be left empty
@@ -548,7 +548,7 @@ RandomWeapons: []
 RandomArmors: []
 RandomShields: []
 RandomSets:
-  ## Name you random set
+  ## Name your random set
   - Name: Leather
     Items:
     ## Insert Attack Items like above
@@ -723,7 +723,7 @@ PregnancyDuration: 0
 RequiredLovePoints: 0
 ChangeOffSpring: false
 ## Offspring prefab name
-OffSpring: 
+OffSpring:
 MinimumOffspringLevel: 0
 SpawnOffset: 0
 ChangeEffects: false
@@ -842,9 +842,9 @@ You can use the command search attack [filter] to look for available attack item
 m_name: ''
 m_enabled: true
 m_devDisabled: false
-m_prefab: 
+m_prefab:
 ## Meadows | BlackForest | Swamp | Mountains | Plains | Mistlands | DeepNorth | AshLands | Ocean | All
-m_biome: 
+m_biome:
 ## Edge | Median | Everything
 m_biomeArea: Everything
 m_maxSpawned: 1
