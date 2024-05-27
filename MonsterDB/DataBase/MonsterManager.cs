@@ -1785,73 +1785,80 @@ public static class MonsterManager
         {
             if (prefab == null) continue;
             if (!prefab.TryGetComponent(out ItemDrop component)) continue;
-            Attack attack = component.m_itemData.m_shared.m_attack;
-            CreatureItem itemData = new CreatureItem()
-            {
-                Name = prefab.name,
-                AttackAnimation = attack.m_attackAnimation,
-                AttackOrigin = attack.m_attackOriginJoint,
-                HitTerrain = attack.m_hitTerrain,
-                HitFriendly = attack.m_hitFriendly,
-                AttackRange = component.m_itemData.m_shared.m_aiAttackRange,
-                AttackRangeMinimum = component.m_itemData.m_shared.m_aiAttackRangeMin,
-                AttackInterval = component.m_itemData.m_shared.m_aiAttackInterval,
-                AttackMaxAngle = component.m_itemData.m_shared.m_aiAttackMaxAngle,
-                AttackDamages = FormatDamages(component.m_itemData.m_shared.m_damages),
-                ToolTier = component.m_itemData.m_shared.m_toolTier,
-                AttackForce = component.m_itemData.m_shared.m_attackForce,
-                Dodgeable = component.m_itemData.m_shared.m_dodgeable,
-                Blockable = component.m_itemData.m_shared.m_blockable,
-                HitThroughWalls = component.m_itemData.m_shared.m_attack.m_hitThroughWalls,
-                HitEffects = FormatEffectData(attack.m_hitEffect),
-                HitTerrainEffects = FormatEffectData(attack.m_hitTerrainEffect),
-                StartEffects = FormatEffectData(attack.m_startEffect),
-                TriggerEffects = FormatEffectData(attack.m_triggerEffect),
-                TrailStartEffects = FormatEffectData(attack.m_trailStartEffect),
-                BurstEffects = FormatEffectData(attack.m_burstEffect)
-            };
-            if (component.m_itemData.m_shared.m_spawnOnHit)
-            {
-                itemData.SpawnOnHit = component.m_itemData.m_shared.m_spawnOnHit.name;
-            }
-
-            if (component.m_itemData.m_shared.m_spawnOnHitTerrain)
-            {
-                itemData.SpawnOnHitTerrain = component.m_itemData.m_shared.m_spawnOnHitTerrain.name;
-            }
-
-            if (component.m_itemData.m_shared.m_attackStatusEffect)
-            {
-                itemData.AttackStatusEffect = component.m_itemData.m_shared.m_attackStatusEffect.name;
-            }
-
-            if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
-            {
-                GameObject projectilePrefab = component.m_itemData.m_shared.m_attack.m_attackProjectile;
-                if (projectilePrefab.TryGetComponent(out Projectile projectile))
-                {
-                    itemData.Projectile_PrefabName = projectile.name;
-                    itemData.Projectile_Damages = FormatDamages(projectile.m_damage);
-                    itemData.Projectile_AOE = projectile.m_aoe;
-                    itemData.Projectile_Dodgeable = projectile.m_dodgeable;
-                    itemData.Projectile_Blockable = projectile.m_blockable;
-                    itemData.Projectile_AttackForce = projectile.m_attackForce;
-                    itemData.Projectile_StatusEffect = projectile.m_statusEffect;
-                    itemData.Projectile_CanHitWater = projectile.m_canHitWater;
-                    itemData.Projectile_SpawnOnHit = projectile.m_spawnOnHit == null ? "" : projectile.m_spawnOnHit.name;
-                    itemData.Projectile_SpawnChance = projectile.m_spawnOnHitChance;
-                    itemData.Projectile_RandomSpawnOnHit = projectile.m_randomSpawnOnHit.Where(x => x != null).Select(x => x.name).ToList();
-                    itemData.Projectile_StaticHitOnly = projectile.m_staticHitOnly;
-                    itemData.Projectile_GroundHitOnly = projectile.m_groundHitOnly;
-                    itemData.Projectile_HitEffects = FormatEffectData(projectile.m_hitEffects);
-                    itemData.Projectile_HitWaterEffects = FormatEffectData(projectile.m_hitWaterEffects);
-                    itemData.Projectile_SpawnOnHitEffects = FormatEffectData(projectile.m_spawnOnHitEffects);
-                }
-            }
+            CreatureItem itemData = FormatAttack(component);
             output.Add(itemData);
         }
 
         return output;
+    }
+
+    public static CreatureItem FormatAttack(ItemDrop component)
+    {
+        Attack attack = component.m_itemData.m_shared.m_attack;
+        CreatureItem itemData = new CreatureItem()
+        {
+            Name = component.name,
+            AttackAnimation = attack.m_attackAnimation,
+            AttackOrigin = attack.m_attackOriginJoint,
+            HitTerrain = attack.m_hitTerrain,
+            HitFriendly = attack.m_hitFriendly,
+            AttackRange = component.m_itemData.m_shared.m_aiAttackRange,
+            AttackRangeMinimum = component.m_itemData.m_shared.m_aiAttackRangeMin,
+            AttackInterval = component.m_itemData.m_shared.m_aiAttackInterval,
+            AttackMaxAngle = component.m_itemData.m_shared.m_aiAttackMaxAngle,
+            AttackDamages = FormatDamages(component.m_itemData.m_shared.m_damages),
+            ToolTier = component.m_itemData.m_shared.m_toolTier,
+            AttackForce = component.m_itemData.m_shared.m_attackForce,
+            Dodgeable = component.m_itemData.m_shared.m_dodgeable,
+            Blockable = component.m_itemData.m_shared.m_blockable,
+            HitThroughWalls = component.m_itemData.m_shared.m_attack.m_hitThroughWalls,
+            HitEffects = FormatEffectData(attack.m_hitEffect),
+            HitTerrainEffects = FormatEffectData(attack.m_hitTerrainEffect),
+            StartEffects = FormatEffectData(attack.m_startEffect),
+            TriggerEffects = FormatEffectData(attack.m_triggerEffect),
+            TrailStartEffects = FormatEffectData(attack.m_trailStartEffect),
+            BurstEffects = FormatEffectData(attack.m_burstEffect)
+        };
+        if (component.m_itemData.m_shared.m_spawnOnHit)
+        {
+            itemData.SpawnOnHit = component.m_itemData.m_shared.m_spawnOnHit.name;
+        }
+
+        if (component.m_itemData.m_shared.m_spawnOnHitTerrain)
+        {
+            itemData.SpawnOnHitTerrain = component.m_itemData.m_shared.m_spawnOnHitTerrain.name;
+        }
+
+        if (component.m_itemData.m_shared.m_attackStatusEffect)
+        {
+            itemData.AttackStatusEffect = component.m_itemData.m_shared.m_attackStatusEffect.name;
+        }
+
+        if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
+        {
+            GameObject projectilePrefab = component.m_itemData.m_shared.m_attack.m_attackProjectile;
+            if (projectilePrefab.TryGetComponent(out Projectile projectile))
+            {
+                itemData.Projectile_PrefabName = projectile.name;
+                itemData.Projectile_Damages = FormatDamages(projectile.m_damage);
+                itemData.Projectile_AOE = projectile.m_aoe;
+                itemData.Projectile_Dodgeable = projectile.m_dodgeable;
+                itemData.Projectile_Blockable = projectile.m_blockable;
+                itemData.Projectile_AttackForce = projectile.m_attackForce;
+                itemData.Projectile_StatusEffect = projectile.m_statusEffect;
+                itemData.Projectile_CanHitWater = projectile.m_canHitWater;
+                itemData.Projectile_SpawnOnHit = projectile.m_spawnOnHit == null ? "" : projectile.m_spawnOnHit.name;
+                itemData.Projectile_SpawnChance = projectile.m_spawnOnHitChance;
+                itemData.Projectile_RandomSpawnOnHit = projectile.m_randomSpawnOnHit.Where(x => x != null).Select(x => x.name).ToList();
+                itemData.Projectile_StaticHitOnly = projectile.m_staticHitOnly;
+                itemData.Projectile_GroundHitOnly = projectile.m_groundHitOnly;
+                itemData.Projectile_HitEffects = FormatEffectData(projectile.m_hitEffects);
+                itemData.Projectile_HitWaterEffects = FormatEffectData(projectile.m_hitWaterEffects);
+                itemData.Projectile_SpawnOnHitEffects = FormatEffectData(projectile.m_spawnOnHitEffects);
+            }
+        }
+
+        return itemData;
     }
 
     private static AttackDamages FormatDamages(HitData.DamageTypes input)

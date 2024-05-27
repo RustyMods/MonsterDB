@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BepInEx;
 using HarmonyLib;
 using UnityEngine;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB.DataBase;
 
@@ -17,7 +19,26 @@ public static class MonsterDB
         private static void Postfix() => CacheResources();
     }
 
-    public static List<GameObject> GetCachedItems() => m_items.Values.ToList();
+    public static List<GameObject> GetCachedItems() => m_items.Values.Where(x => x != null && x.GetComponent<ItemDrop>()).ToList();
+
+    private static CreatureItem? GetCreatureItem(string prefabName)
+    {
+        GameObject? prefab = TryGetGameObject(prefabName);
+        if (prefab == null) return null;
+        if (!prefab.TryGetComponent(out ItemDrop component)) return null;
+        return MonsterManager.FormatAttack(component);
+    }
+
+    public static bool SaveCreatureItem(string prefabName)
+    {
+        var data = GetCreatureItem(prefabName);
+        if (data == null) return false;
+        string filePath = Paths.DataPath + Path.DirectorySeparatorChar + prefabName + ".yml";
+        var serializer = new SerializerBuilder().Build();
+        var serial = serializer.Serialize(data);
+        File.WriteAllText(filePath, serial);
+        return true;
+    }
     
     private static void CacheResources()
     {

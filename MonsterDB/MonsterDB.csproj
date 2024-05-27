@@ -141,6 +141,7 @@
         <Content Include="Libs\ServerSync.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="README.md" />
         <Content Include="UpdateManifest.ps1" />
     </ItemGroup>
     <ItemGroup>

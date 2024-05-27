@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
 using HarmonyLib;
@@ -16,7 +17,7 @@ public static class ServerSync
     
     public static Dictionary<string, MonsterData> m_serverData = new();
 
-    public static bool m_initialized;
+    private static bool m_initialized;
     public static void UpdateServerSpawnSystem(string data) => ServerSpawnSystem.Value = data;
 
     public static void UpdateServerMonsterDB()
@@ -49,11 +50,13 @@ public static class ServerSync
             if (m_initialized) return;
             AwaitServerFiles();
             m_initialized = true;
-            MonsterDBPlugin.MonsterDBLogger.LogDebug("Client: Awaiting files from server");
+            MonsterDBPlugin.MonsterDBLogger.LogMessage("Client: Awaiting files from server");
         }
     }
     private static void UpdateMonsterData()
     {
+        if (ServerMonsterDB.Value.IsNullOrWhiteSpace()) return;
+
         IDeserializer deserializer = new DeserializerBuilder().Build();
 
         foreach (MonsterData data in m_serverData.Values)
@@ -84,6 +87,7 @@ public static class ServerSync
 
     private static void UpdateSpawnData()
     {
+        if (ServerSpawnSystem.Value.IsNullOrWhiteSpace()) return;
         IDeserializer deserializer = new DeserializerBuilder().Build();
         Dictionary<string, MonsterSpawnData> data = deserializer.Deserialize<Dictionary<string, MonsterSpawnData>>(ServerSpawnSystem.Value);
         SpawnData.ClearSpawnData();
@@ -94,6 +98,7 @@ public static class ServerSync
 
     private static void UpdateTextureData()
     {
+        if (ServerTextures.Value.IsNullOrWhiteSpace()) return;
         IDeserializer deserializer = new DeserializerBuilder().Build();
         TextureManager.ClearRegisteredTextures();
         Dictionary<string, byte[]> data = deserializer.Deserialize<Dictionary<string, byte[]>>(ServerTextures.Value);
@@ -108,22 +113,11 @@ public static class ServerSync
 
     private static void AwaitServerFiles()
     {
-        ServerTextures.ValueChanged += () =>
-        {
-            if (ServerTextures.Value.IsNullOrWhiteSpace()) return;
-            UpdateTextureData();
-        };
-        ServerMonsterDB.ValueChanged += () =>
-        {
-            if (ServerMonsterDB.Value.IsNullOrWhiteSpace()) return;
-            UpdateMonsterData();
-        };
+        ServerTextures.ValueChanged += UpdateTextureData;
 
-        ServerSpawnSystem.ValueChanged += () =>
-        {
-            if (ServerSpawnSystem.Value.IsNullOrWhiteSpace()) return;
-            UpdateSpawnData();
-        };
+        ServerMonsterDB.ValueChanged += UpdateMonsterData;
+
+        ServerSpawnSystem.ValueChanged += UpdateSpawnData;
 
     }
     

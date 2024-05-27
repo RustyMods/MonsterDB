@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 
 namespace MonsterDB.DataBase;
 
@@ -35,5 +36,12 @@ public static class TextureManager
         RegisteredTextures[texture.name] = texture;
         ServerSync_Textures[texture.name] = fileData;
         MonsterDBPlugin.MonsterDBLogger.LogDebug("Successfully registered custom texture: " + texture.name);
+    }
+
+    public static void WriteTextureNamesToFile()
+    {
+        string filePath = Paths.TexturePath + Path.DirectorySeparatorChar + "Textures.yml";
+        List<string> textureNames = DataBase.MonsterDB.m_textures.Keys.ToList();
+        File.WriteAllLines(filePath, textureNames);
     }
 }
