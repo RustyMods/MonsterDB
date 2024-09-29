@@ -13,6 +13,7 @@ public static class VisualMethods
 {
     private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
     private static readonly int MainTex = Shader.PropertyToID("_MainTex");
+    private static Dictionary<string, Material> m_clonedMaterials = new();
 
     public static void Write(GameObject critter, string folderPath)
     {
@@ -162,6 +163,19 @@ public static class VisualMethods
         {
             LogParseFailure(scaleFilePath);
         }
+
+        string ragDollFilePath = visualFolderPath + Path.DirectorySeparatorChar + "RagdollScale.yml";
+        if (File.Exists(ragDollFilePath))
+        {
+            try
+            {
+                creatureData.m_ragdollScale = deserializer.Deserialize<ScaleData>(File.ReadAllText(ragDollFilePath));
+            }
+            catch
+            {
+                LogParseFailure(ragDollFilePath);
+            }
+        }
         
         string materialFolderPath = visualFolderPath + Path.DirectorySeparatorChar + "Materials";
         if (!Directory.Exists(materialFolderPath)) return;
@@ -234,12 +248,13 @@ public static class VisualMethods
                 sharedMats.Add(mat);
                 ++count;
                 output[material.name] = mat;
+                m_clonedMaterials[material.name] = mat;
             }
 
             renderer.sharedMaterials = sharedMats.ToArray();
             renderer.materials = sharedMats.ToArray();
         }
-
+        
         return output;
     }
 

@@ -55,7 +55,8 @@ public class Visuals : MonoBehaviour
     public void RandomName(Humanoid component, bool isFemale)
     {
         if (!m_nview.IsValid()) return;
-        string? vikingName = m_nview.GetZDO().GetString("RandomName".GetStableHashCode());
+        string vikingName = m_nview.GetZDO().GetString(ZDOVars.s_tamedName);
+        // string? vikingName = m_nview.GetZDO().GetString("RandomName".GetStableHashCode());
         if (vikingName.IsNullOrWhiteSpace())
         {
             var firstName = isFemale
@@ -63,7 +64,16 @@ public class Visuals : MonoBehaviour
                 : m_maleFirstNames[Random.Range(0, m_maleFirstNames.Count)];
             var lastName = m_lastNames[Random.Range(0, m_lastNames.Count)];
             component.m_name = $"{firstName} {lastName}";
-            m_nview.GetZDO().Set("RandomName".GetStableHashCode(), component.m_name);
+            if (TryGetComponent(out Tameable tameable))
+            {
+                if (tameable.m_randomStartingName.Count > 0)
+                {
+                    component.m_name =
+                        tameable.m_randomStartingName[Random.Range(0, tameable.m_randomStartingName.Count)];
+                }
+            }
+            m_nview.GetZDO().Set(ZDOVars.s_tamedName, component.m_name);
+            // m_nview.GetZDO().Set("RandomName".GetStableHashCode(), component.m_name);
         }
         else
         {

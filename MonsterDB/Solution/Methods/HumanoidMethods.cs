@@ -38,6 +38,20 @@ public static class HumanoidMethods
         SaveItemData(component.m_randomShield, ref creatureData.m_randomShields);
         SaveRandomItems(component.m_randomItems, ref creatureData.m_randomItems);
         SaveRandomSets(component.m_randomSets, ref creatureData.m_randomSets);
+        
+        if (component.m_deathEffects != null)
+        {
+            foreach (var effect in component.m_deathEffects.m_effectPrefabs)
+            {
+                if (!effect.m_prefab.GetComponent<Ragdoll>()) continue;
+                var scale = effect.m_prefab.transform.localScale;
+                VisualMethods.ScaleData scaleData = new VisualMethods.ScaleData()
+                {
+                    x = scale.x, y = scale.y, z = scale.z
+                };
+                creatureData.m_ragdollScale = scaleData;
+            }
+        }
     }
 
     private static CharacterData RecordCharacterData(Humanoid component, string clonedFrom, GameObject critter)
@@ -141,6 +155,23 @@ public static class HumanoidMethods
         WriteEffectList(component.m_equipEffects, equipEffectsPath);
         WriteEffectList(component.m_perfectBlockEffect, perfectBlockEffectsPath);
 
+        if (component.m_deathEffects != null)
+        {
+            foreach (var effect in component.m_deathEffects.m_effectPrefabs)
+            {
+                if (!effect.m_prefab.GetComponent<Ragdoll>()) continue;
+                var scale = effect.m_prefab.transform.localScale;
+                VisualMethods.ScaleData scaleData = new VisualMethods.ScaleData()
+                {
+                    x = scale.x, y = scale.y, z = scale.z
+                };
+                string visualFolderPath = folderPath + Path.DirectorySeparatorChar + "Visual";
+                if (!Directory.Exists(visualFolderPath)) Directory.CreateDirectory(visualFolderPath);
+                string ragdollscalePath = visualFolderPath + Path.DirectorySeparatorChar + "RagdollScale.yml";
+                File.WriteAllText(ragdollscalePath, serializer.Serialize(scaleData));
+            }
+        }
+
         string itemsPath = folderPath + Path.DirectorySeparatorChar + "Items";
         if (!Directory.Exists(itemsPath)) Directory.CreateDirectory(itemsPath);
 
@@ -157,13 +188,13 @@ public static class HumanoidMethods
             randomShieldPath, randomSetsPath, randomItemsPath
         };
         foreach (string folder in itemsDir.Where(folder => !Directory.Exists(folder))) Directory.CreateDirectory(folder);
-
-        WriteItemData(component.m_defaultItems, defaultItemsPath);
-        WriteItemData(component.m_randomWeapon, randomWeaponPath);
-        WriteItemData(component.m_randomArmor, randomArmorPath);
-        WriteItemData(component.m_randomShield, randomShieldPath);
+        
+        WriteItemData(component.m_defaultItems, defaultItemsPath, critter);
+        WriteItemData(component.m_randomWeapon, randomWeaponPath, critter);
+        WriteItemData(component.m_randomArmor, randomArmorPath, critter);
+        WriteItemData(component.m_randomShield, randomShieldPath, critter);
         WriteRandomItems(component.m_randomItems, randomItemsPath);
-        WriteRandomSets(component.m_randomSets, randomSetsPath);
+        WriteRandomSets(component.m_randomSets, randomSetsPath, critter);
     }
 
     private static void SaveRandomSets(Humanoid.ItemSet[]? sets, ref List<RandomItemSetsData> list)
@@ -181,7 +212,7 @@ public static class HumanoidMethods
         }
     }
 
-    private static void WriteRandomSets(Humanoid.ItemSet[]? sets, string parentFolder)
+    private static void WriteRandomSets(Humanoid.ItemSet[]? sets, string parentFolder, GameObject critter)
     {
         if (sets is not { Length: > 0 }) return;
         int count = 0;
@@ -195,7 +226,7 @@ public static class HumanoidMethods
                 ++count;
             }
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-            WriteItemData(set.m_items, folderPath);
+            WriteItemData(set.m_items, folderPath, critter);
         }
     }
 
@@ -315,9 +346,10 @@ public static class HumanoidMethods
         }
     }
 
-    private static void WriteItemData(GameObject[]? items, string parentFolder)
+    private static void WriteItemData(GameObject[]? items, string parentFolder, GameObject critter)
     {
         if (items is not { Length: > 0 }) return;
+        bool isClone = CreatureManager.IsClone(critter);
         ISerializer serializer = new SerializerBuilder().Build();
         int count = 0;
         foreach (GameObject item in items)
@@ -326,7 +358,13 @@ public static class HumanoidMethods
             if (!item.TryGetComponent(out ItemDrop component)) continue;
             ItemDrop.ItemData.SharedData shared = component.m_itemData.m_shared;
             AttackData data = RecordAttackData(component);
-
+            if (isClone)
+            {
+                var prefix = critter.name + "_";
+                var originalPrefabName = item.name.Replace(prefix, string.Empty);
+                var prefab = DataBase.TryGetGameObject(originalPrefabName);
+                if (prefab != null) data.OriginalPrefab = originalPrefabName;
+            }
             string serial = serializer.Serialize(data);
             string folderPath = parentFolder + Path.DirectorySeparatorChar + item.name;
             if (Directory.Exists(folderPath))
@@ -435,7 +473,8 @@ public static class HumanoidMethods
         if (!critter.TryGetComponent(out Humanoid component)) return;
         CharacterData data = creatureData.m_characterData;
         CharacterEffects effectData = creatureData.m_effects;
-        Vector3 scale = new Vector3(creatureData.m_scale.x, creatureData.m_scale.y, creatureData.m_scale.z);
+        Vector3 scale = GetScale(creatureData.m_scale);
+        Vector3 ragDollScale = GetScale(creatureData.m_ragdollScale);
         
         component.m_name = data.Name;
         component.m_group = data.Group;
@@ -534,7 +573,7 @@ public static class HumanoidMethods
         UpdateEffectList(effectData.m_hitEffects, ref component.m_hitEffects, scale);
         UpdateEffectList(effectData.m_critHitEffects, ref component.m_critHitEffects, scale);
         UpdateEffectList(effectData.m_backstabHitEffects, ref component.m_backstabHitEffects, scale);
-        UpdateEffectList(effectData.m_deathEffects, ref component.m_deathEffects, scale);
+        UpdateEffectList(effectData.m_deathEffects, ref component.m_deathEffects, ragDollScale);
         UpdateEffectList(effectData.m_waterEffects, ref component.m_waterEffects, scale);
         UpdateEffectList(effectData.m_tarEffects, ref component.m_tarEffects, scale);
         UpdateEffectList(effectData.m_slideEffects, ref component.m_slideEffects, scale);
@@ -717,8 +756,9 @@ public static class HumanoidMethods
             UpdateEffectList(effects.m_unEquipEffects, ref component.m_itemData.m_shared.m_unequipEffect, scale);
             UpdateEffectList(effects.m_triggerEffects, ref component.m_itemData.m_shared.m_triggerEffect, scale);
             UpdateEffectList(effects.m_trailStartEffects, ref component.m_itemData.m_shared.m_trailStartEffect, scale);
-            RegisterToZNetScene(clone);
-            RegisterToObjectDB(clone);
+            ItemDataMethods.m_clonedItems[clone.name] = clone;
+            // RegisterToZNetScene(clone);
+            // RegisterToObjectDB(clone);
             items.Add(prefab);
         }
         list = items.ToArray();
@@ -1074,9 +1114,10 @@ public static class HumanoidMethods
         var name = critter.name + "_" + item.name;
         if (clonedItems.TryGetValue(name, out GameObject alreadyCloned)) return alreadyCloned;
         var clone = Object.Instantiate(item, MonsterDBPlugin.m_root.transform, false);
-        clone.name = name;  
-        RegisterToObjectDB(clone);
-        RegisterToZNetScene(clone);
+        clone.name = name;
+        ItemDataMethods.m_clonedItems[name] = clone;
+        // RegisterToObjectDB(clone);
+        // RegisterToZNetScene(clone);
         return clone;
     }
 }

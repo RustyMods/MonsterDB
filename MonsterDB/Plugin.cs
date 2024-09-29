@@ -29,19 +29,19 @@ namespace MonsterDB
         public enum Toggle { On = 1, Off = 0 }
 
         public static GameObject m_root = null!;
-        public static MonsterDBPlugin m_plugin = null!;
+        // public static MonsterDBPlugin m_plugin = null!;
 
-        private static ConfigEntry<Toggle> _serverConfigLocked = null!;
-
-        private void InitConfigs()
-        {
-            _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On,
-                "If on, the configuration is locked and can be changed by server admins only.");
-            _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
-        }
+        // private static ConfigEntry<Toggle> _serverConfigLocked = null!;
+        //
+        // private void InitConfigs()
+        // {
+        //     _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On,
+        //         "If on, the configuration is locked and can be changed by server admins only.");
+        //     _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
+        // }
         public void Awake()
         {
-            m_plugin = this;
+            // m_plugin = this;
             m_root = new GameObject("root");
             DontDestroyOnLoad(m_root);
             m_root.SetActive(false);
@@ -56,11 +56,7 @@ namespace MonsterDB
             SetupWatcher();
         }
 
-        private void OnDestroy()
-        {
-            Config.Save();
-        }
-
+        private void OnDestroy() => Config.Save();
         private void SetupWatcher()
         {
             FileSystemWatcher watcher = new(Paths.ConfigPath, ConfigFileName);
@@ -86,11 +82,7 @@ namespace MonsterDB
                 MonsterDBLogger.LogError("Please check your config entries for spelling and format!");
             }
         }
-
-
-        #region ConfigOptions
-
-
+        
         private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description,
             bool synchronizedSetting = true)
         {
@@ -120,23 +112,6 @@ namespace MonsterDB
             [UsedImplicitly] public bool? Browsable;
             [UsedImplicitly] public string? Category;
             [UsedImplicitly] public Action<ConfigEntryBase>? CustomDrawer;
-        }
-
-        #endregion
-    }
-
-    public static class KeyboardExtensions
-    {
-        public static bool IsKeyDown(this KeyboardShortcut shortcut)
-        {
-            return shortcut.MainKey != KeyCode.None && Input.GetKeyDown(shortcut.MainKey) &&
-                   shortcut.Modifiers.All(Input.GetKey);
-        }
-
-        public static bool IsKeyHeld(this KeyboardShortcut shortcut)
-        {
-            return shortcut.MainKey != KeyCode.None && Input.GetKey(shortcut.MainKey) &&
-                   shortcut.Modifiers.All(Input.GetKey);
         }
     }
 }

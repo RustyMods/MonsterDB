@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BepInEx;
 using HarmonyLib;
+using MonsterDB.Solution.Methods;
 using UnityEngine;
 
 namespace MonsterDB.Solution;
@@ -31,6 +33,11 @@ public static class DataBase
         {
             m_textures[texture.name] = texture;
         }
+
+        string filePath = TextureManager.m_texturePath + Path.DirectorySeparatorChar + "Resources.txt";
+        if (File.Exists(filePath)) return;
+        List<string> textureNames = m_textures.Keys.ToList();
+        File.WriteAllLines(filePath, textureNames);
     }
     
     public static GameObject? TryGetGameObject(string prefabName)
@@ -40,6 +47,7 @@ public static class DataBase
         if (prefab != null) return prefab;
         prefab = ZNetScene.instance.GetPrefab(prefabName);
         if (prefab != null) return prefab;
+        if (ItemDataMethods.m_clonedItems.TryGetValue(prefabName, out GameObject clone)) return clone;
         return !m_items.TryGetValue(prefabName, out GameObject item) ? null : item;
     }
 

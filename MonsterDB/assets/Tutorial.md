@@ -5,10 +5,12 @@ Plugin allows users to manipulate variables of monsters in the game and clone th
 ```
 monsterdb write [prefabName]                    - Writes monster data to disk
 monsterdb update [prefabName]                   - Forice updates monster using registered data
-monsterdb clone [prefabName] [newPrefabName]    - Clones prefab and registers data
+monsterdb clone [prefabName] [cloneName]        - Clones prefab and registers data
 monsterdb reset [prefabName]                    - Resets prefab to orignal data
 monsterdb reload                                - Updates all registered data
-monsterdb save [prefabName]                     - If prefab is an item (monster attack data), writes data to disk to use as reference
+monsterdb write_item [prefabName]               - If prefab is an item (monster attack data), writes data to disk to use as reference
+monsterdb clone_item [prefabName] [cloneName]   - clones prefab and saves to items folder, copy it to your creatures item folders
+monsterdb write_spawn [prefabName]              - Writes spawn data - location dependant, go to area where creature spawns
 ```
 ## How To
 In-game, use the commands to write data to disk to start manipulating monsters
@@ -21,7 +23,6 @@ Effects        // Specific files are set in this folder for you to manipulate
 Items          // Humanoid creatures only - folders are organized in this
 Visual         // Manipulate the materials and scale
 ```
-
 ## Effects Folder
 Files generated are based on the data in the game, if you make creature tameable or talker,
 you will need to add the missing YML files
@@ -33,7 +34,7 @@ Tameable component looks for:
 - SoothEffects.yml
 - UnsummonEffecst.yml
 ```
-
+These files contains list of effects. You can add or remove items in this list.
 ## How to make creature tameable
 You will to add two files to make creature tameable:
 ```
@@ -41,10 +42,10 @@ You will to add two files to make creature tameable:
 - Tameable.yml
 ```
 Copy the data from the AnimalAI.yml file into the MonsterAI.yml, without removing the extra lines
-in the MonsterAI.yml file. (line 39 - 75):
+in the MonsterAI.yml file. (line 39+):
 
 MonsterAI is AnimalAI plus extra data:
-```yml
+```
 AlertRange: 6
 FleeIfHurtWhenTargetCannotBeReached: true
 FleeUnreachableSinceAttack: 30
@@ -83,7 +84,6 @@ ConsumeRange: 1
 ConsumeSearchRange: 10
 ConsumeSearchInterval: 10
 ```
-
 ## How to make creature talk
 Add NPCTalk.yml into the creature folder (only works with MonsterAI creatures - monsters that attack)
 
@@ -93,7 +93,6 @@ If want NPC Talk effects, you will need to add these files in the Effects folder
 - RandomGreetFX.yml
 - RandomGoodbyeFX.yml
 ```
-
 ## Textures
 Place png files in the CustomTextures directory
 
@@ -121,8 +120,7 @@ _EmissionColor:      // Manipulate the emission of the material (glow)
 ## How to change attacks
 Best practice is to save item data using commands, and use them as reference when manipulating 
 ItemData.yml
-
-```yaml
+```
 Name: Dverger_melee               // ID - You can change this to use a different prefab, although items are quite specific
 AnimationState: OneHanded         // State the creature holds the item
 SpawnOnHit: ''                    // PrefabName
@@ -135,14 +133,13 @@ AttackOriginJoint: ''             // Use Visual.txt to know the names of availab
 SpawnOnTrigger: ''                // PrefabName 
 Projectile: ''                    // PrefabName
 ```
-
 ## How to make creatures spawn
 You will find a directory named SpawnData
 
 In this folder, the plugin generates an Example.yml file.
 
 Copy and Paste this file, rename it to something that is not Example.yml
-```yaml
+```
 m_name: ''                    // Name of the SpawnData - Does not do anything
 m_enabled: false              // Easily enable / disable spawn file
 m_devDisabled: false          // Not sure what this does
@@ -153,11 +150,17 @@ m_requiredGlobalKey: ''       // Add key as conditionals
 m_requiredEnvironments: []    // List of environment names
 m_foldout: false              // Not sure what this does
 ```
+The command 'write_spawn' attempts to find spawn data matching the creature name, and saves it into a reference folder.
+These 'reference' files will not modify existing spawn data if added to main folder. Rather, it will add.
 
+These are to be used as references to develop your own spawn files.
+## Import / Export
+```
+monsterdb import - imports all creature data files in the Import directory
+monsterdb export [prefabName] - exports to a single file creature data to share
+```
+You can use this file structure to easily share MonsterDB files with your friends or even use this file structure
+to create/edit creatures.
 ## Special considerations
 Only Tameable.yml, NPCTalk.yml can be added into creature folders and actually add the components.
-
-If you want more control over the creature attacks, I would recommend installing WackyDB to clone 
-items. You can then use save [prefabName] to format the item for MonsterDB and add the folder into
-your creatures directory.
 

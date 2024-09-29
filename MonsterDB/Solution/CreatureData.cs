@@ -8,6 +8,7 @@ namespace MonsterDB.Solution;
 public class CreatureData
 {
     public VisualMethods.ScaleData m_scale = new();
+    public VisualMethods.ScaleData m_ragdollScale = new();
     public Dictionary<string, VisualMethods.MaterialData> m_materials = new();
     public CharacterData m_characterData = new();
     public CharacterEffects m_effects = new();

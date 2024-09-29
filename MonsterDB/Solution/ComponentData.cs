@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 namespace MonsterDB.Solution;
 
@@ -97,6 +96,7 @@ public class EffectInfo
 [Serializable]
 public class AttackData
 {
+    public string OriginalPrefab = "";
     public string Name = "";
     public string AnimationState = "";
     public int ToolTier;
@@ -378,6 +378,6 @@ public class NPCTalkData
     public List<string> RandomTalkInFactionBase = new();
     public List<string> RandomGreets = new();
     public List<string> RandomGoodbye = new();
-    [FormerlySerializedAs("PriveAreaAlarm")] [FormerlySerializedAs("RandomAreaAlarm")] public List<string> PrivateAreaAlarm = new();
+    public List<string> PrivateAreaAlarm = new();
     public List<string> Aggravated = new();
 }

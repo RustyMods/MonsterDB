@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MonsterDB.Solution.Behaviors;
-using MonsterDB.Solution.Methods;
 using UnityEngine;
 
 namespace MonsterDB.Solution;
@@ -181,8 +180,7 @@ public static class HumanMan
             tameable.m_petEffect = loxTame.m_petEffect;
             tameable.m_commandable = true;
             tameable.m_unsummonDistance = 0f;
-            tameable.m_randomStartingName = new()
-                { "Bjorn", "Harald", "Bo", "Frode", "Birger", "Arne", "Erik", "Kare", "Loki", "Thor", "Odin" };
+            tameable.m_randomStartingName = new();
         }
 
         human.AddComponent<Visuals>();

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using YamlDotNet.Serialization;
 using static MonsterDB.Solution.Methods.Helpers;
@@ -8,7 +9,8 @@ namespace MonsterDB.Solution.Methods;
 public static class ItemDataMethods
 {
     private static readonly string m_folderPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "Items";
-    public static void Write(GameObject item)
+    public static readonly Dictionary<string, GameObject> m_clonedItems = new();
+    public static void Write(GameObject item, string originalPrefab = "")
     {
         if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
         if (item == null) return;
@@ -17,6 +19,8 @@ public static class ItemDataMethods
         
         ItemDrop.ItemData.SharedData shared = component.m_itemData.m_shared;
         AttackData data = HumanoidMethods.RecordAttackData(component);
+
+        data.OriginalPrefab = originalPrefab;
 
         string serial = serializer.Serialize(data);
         string folderPath = m_folderPath + Path.DirectorySeparatorChar + item.name;
@@ -51,5 +55,17 @@ public static class ItemDataMethods
         
         MonsterDBPlugin.MonsterDBLogger.LogDebug("Wrote ItemData to file");
         MonsterDBPlugin.MonsterDBLogger.LogDebug(folderPath);
+    }
+
+    public static void Clone(GameObject item, string name, bool write = true)
+    {
+        if (item == null) return;
+        if (!item.GetComponent<ItemDrop>()) return;
+        GameObject clone = Object.Instantiate(item, MonsterDBPlugin.m_root.transform, false);
+        clone.name = name;
+        // RegisterToObjectDB(clone);
+        // RegisterToZNetScene(clone);
+        m_clonedItems[clone.name] = clone;
+        if (write) Write(clone, item.name);
     }
 }

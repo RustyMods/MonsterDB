@@ -2,6 +2,7 @@
 using System.IO;
 using BepInEx;
 using HarmonyLib;
+using MonsterDB.Solution.Methods;
 using UnityEngine;
 
 namespace MonsterDB.Solution;
@@ -25,6 +26,7 @@ public static class Initialization
     public static void ReadLocalFiles()
     {
         if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
+        CreatureManager.Import();
         if (!Directory.Exists(CreatureManager.m_creatureFolderPath)) Directory.CreateDirectory(CreatureManager.m_creatureFolderPath);
         string[] creatureFolders = Directory.GetDirectories(CreatureManager.m_creatureFolderPath);
         int count = 0;
@@ -51,9 +53,9 @@ public static class Initialization
     {
         int count = 0;
 
-        foreach (GameObject clone in CreatureManager.m_clones)
+        foreach (KeyValuePair<string, GameObject> kvp in CreatureManager.m_clones)
         {
-            CreatureManager.Delete(clone, true);
+            CreatureManager.Delete(kvp.Value, true);
             ++count;
         }
         CreatureManager.m_clones.Clear();
@@ -66,6 +68,7 @@ public static class Initialization
 
         foreach (KeyValuePair<string, CreatureData> kvp in CreatureManager.m_data)
         {
+            CloneAllItems(kvp.Value);
             string originalCreature = kvp.Value.m_characterData.ClonedFrom;
             if (originalCreature.IsNullOrWhiteSpace()) continue;
             GameObject? prefab = DataBase.TryGetGameObject(originalCreature);
@@ -76,6 +79,30 @@ public static class Initialization
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Cloned {count} creatures");
     }
+
+    private static void CloneAllItems(CreatureData data)
+    {
+        CloneItems(data.m_defaultItems);
+        CloneItems(data.m_randomWeapons);
+        CloneItems(data.m_randomShields);
+        CloneItems(data.m_randomArmors);
+        foreach (var set in data.m_randomSets)
+        {
+            CloneItems(set.m_items);
+        }
+    }
+
+    private static void CloneItems(List<ItemAttackData> data)
+    {
+        foreach (var itemData in data)
+        {
+            if (itemData.m_attackData.OriginalPrefab.IsNullOrWhiteSpace()) continue;
+            var item = DataBase.TryGetGameObject(itemData.m_attackData.OriginalPrefab);
+            if (item == null) continue;
+            ItemDataMethods.Clone(item, itemData.m_attackData.Name, false);
+        }
+    }
+    
 
     public static void UpdateAll()
     {

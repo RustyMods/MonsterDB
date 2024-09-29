@@ -1,17 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using BepInEx;
-using HarmonyLib;
-using ServerSync;
 using UnityEngine;
 
 namespace MonsterDB.Solution;
 
 public static class TextureManager
 {
-    private static readonly string m_texturePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "CustomTextures";
+    public static readonly string m_texturePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "CustomTextures";
     public static readonly Dictionary<string, Texture2D> RegisteredTextures = new();
 
     public static void ClearRegisteredTextures() => RegisteredTextures.Clear();

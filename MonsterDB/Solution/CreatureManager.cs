@@ -14,11 +14,13 @@ public static class CreatureManager
     public static readonly string m_folderPath = Paths.ConfigPath + Path.DirectorySeparatorChar + "MonsterDB";
     public static readonly string m_creatureFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Creatures";
     public static readonly string m_cloneFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Clones";
+    private static readonly string m_exportFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Export";
+    private static readonly string m_importFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Import";
 
     private static readonly CustomSyncedValue<string> m_serverDataFiles = new(MonsterDBPlugin.ConfigSync, "MonsterDB_ServerFiles", "");
     private static readonly Dictionary<string, CreatureData> m_originalData = new();
     public static Dictionary<string, CreatureData> m_data = new();
-    public static readonly List<GameObject> m_clones = new();
+    public static readonly Dictionary<string, GameObject> m_clones = new();
 
     private static FileSystemWatcher m_creatureWatcher = null!;
     private static FileSystemWatcher m_cloneWatcher = null!;
@@ -38,7 +40,7 @@ public static class CreatureManager
         m_serverDataFiles.Value = serializer.Serialize(m_data);
     }
 
-    public static bool IsClone(GameObject creature) => m_clones.Contains(creature);
+    public static bool IsClone(GameObject creature) => m_clones.ContainsKey(creature.name);
     
     public static void Setup()
     {
@@ -70,6 +72,36 @@ public static class CreatureManager
         };
 
         m_cloneWatcher.Changed += OnCloneFileChange;
+
+        FileSystemWatcher m_importFileWatcher = new FileSystemWatcher(m_importFolderPath, "*.yml")
+        {
+            EnableRaisingEvents = true,
+            IncludeSubdirectories = true,
+            SynchronizingObject = ThreadingHelper.SynchronizingObject,
+            NotifyFilter = NotifyFilters.LastWrite
+        };
+        m_importFileWatcher.Changed += OnImportFileChange;
+    }
+
+    private static void OnImportFileChange(object sender, FileSystemEventArgs e)
+    {
+        if (!ZNet.instance || !ZNet.instance.IsServer()) return;
+        try
+        {
+            string fileName = Path.GetFileName(e.Name);
+            var deserializer = new DeserializerBuilder().Build();
+            var serial = File.ReadAllText(e.FullPath);
+            var data = deserializer.Deserialize<CreatureData>(serial);
+            var prefab = DataBase.TryGetGameObject(data.m_characterData.PrefabName);
+            if (prefab == null) return;
+            m_data[data.m_characterData.PrefabName] = data;
+            Update(prefab);
+            MonsterDBPlugin.MonsterDBLogger.LogDebug($"{prefab.name} data changed: {fileName}");
+        }
+        catch
+        {
+            Helpers.LogParseFailure(e.FullPath);
+        }
     }
 
     private static void OnCloneFileChange(object sender, FileSystemEventArgs e)
@@ -126,15 +158,12 @@ public static class CreatureManager
 
     public static void Delete(GameObject critter, bool loop = true)
     {
-        var ragdollName = critter.name + "_ragdoll";
-        var ragdoll = DataBase.TryGetGameObject(ragdollName);
-        if (ragdoll != null)
-        {
-            Delete(ragdoll, loop);
-        }
+        string ragDollName = critter.name + "_ragdoll";
+        GameObject? ragDoll = DataBase.TryGetGameObject(ragDollName);
+        if (ragDoll != null) Delete(ragDoll, loop);
         Helpers.RemoveFromZNetScene(critter);
         Helpers.RemoveFromObjectDB(critter);
-        if (!loop) m_clones.Remove(critter);
+        if (!loop) m_clones.Remove(critter.name);
         Transform clone = MonsterDBPlugin.m_root.transform.Find(critter.name);
         if (!clone) return;
         Object.Destroy(clone.gameObject);
@@ -240,14 +269,52 @@ public static class CreatureManager
         CharacterMethods.CloneRagDoll(clone, ragDollMats);
         HumanoidMethods.CloneRagDoll(clone, ragDollMats);
         HumanoidMethods.CloneItems(clone);
-        if (saveToDisk)
-        {
-            Write(clone, out string folderPath, true, critter.name);
-            Read(clone.name, true);
-            MonsterDBPlugin.MonsterDBLogger.LogInfo($"Cloned {critter.name} as {clone.name}");
-            MonsterDBPlugin.MonsterDBLogger.LogInfo(folderPath);
-        }
         Helpers.RegisterToZNetScene(clone);
-        m_clones.Add(clone);
+        m_clones[clone.name] = clone;
+        if (!saveToDisk) return;
+        Write(clone, out string folderPath, true, critter.name);
+        Read(clone.name, true);
+        MonsterDBPlugin.MonsterDBLogger.LogInfo($"Cloned {critter.name} as {clone.name}");
+        MonsterDBPlugin.MonsterDBLogger.LogInfo(folderPath);
+    }
+
+    public static void Export(string creatureName)
+    {
+        if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
+        if (!Directory.Exists(m_exportFolderPath)) Directory.CreateDirectory(m_exportFolderPath);
+        if (!Directory.Exists(m_importFolderPath)) Directory.CreateDirectory(m_importFolderPath);
+        if (!m_data.TryGetValue(creatureName, out CreatureData data)) return;
+        var serializer = new SerializerBuilder().Build();
+        var serial = serializer.Serialize(data);
+        string filePath = m_exportFolderPath + Path.DirectorySeparatorChar + creatureName + ".yml";
+        File.WriteAllText(filePath, serial);
+        MonsterDBPlugin.MonsterDBLogger.LogDebug("Exported creature data: ");
+        MonsterDBPlugin.MonsterDBLogger.LogDebug(filePath);
+    }
+
+    public static void Import()
+    {
+        if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
+        if (!Directory.Exists(m_importFolderPath)) Directory.CreateDirectory(m_importFolderPath);
+        string[] files = Directory.GetFiles(m_importFolderPath);
+        if (files.Length <= 0) return;
+        IDeserializer deserializer = new DeserializerBuilder().Build();
+        int count = 0;
+        foreach (string filePath in files)
+        {
+            try
+            {
+                string serial = File.ReadAllText(filePath);
+                CreatureData data = deserializer.Deserialize<CreatureData>(serial);
+                string creatureName = data.m_characterData.PrefabName;
+                m_data[creatureName] = data;
+                ++count;
+            }
+            catch
+            {
+                Helpers.LogParseFailure(filePath);
+            }
+        }
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"Imported {count} creature data files");
     }
 }

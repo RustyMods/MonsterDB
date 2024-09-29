@@ -14,6 +14,7 @@ public static class SpawnMan
 {
     private static readonly CustomSyncedValue<string> ServerSpawnSystem = new(MonsterDBPlugin.ConfigSync, "MonsterDB_SpawnSystemData", "");
     private static readonly string m_spawnFolderPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "SpawnData";
+    private static readonly string m_referenceFolderPath = m_spawnFolderPath + Path.DirectorySeparatorChar + "References";
     private static SpawnSystemList m_spawnSystemList = null!;
     private static Dictionary<string, CreatureSpawnData> m_spawnData = new();
 
@@ -61,7 +62,7 @@ public static class SpawnMan
         FileSystemWatcher watcher = new FileSystemWatcher(m_spawnFolderPath, "*.yml")
         {
             EnableRaisingEvents = true,
-            IncludeSubdirectories = true,
+            IncludeSubdirectories = false,
             SynchronizingObject = ThreadingHelper.SynchronizingObject,
             NotifyFilter = NotifyFilters.LastWrite
         };
@@ -75,22 +76,9 @@ public static class SpawnMan
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         string fileName = Path.GetFileName(e.Name);
         if (fileName == "Example.yml") return;
-        switch (e.ChangeType)
-        {
-            case WatcherChangeTypes.Changed:
-                MonsterDBPlugin.MonsterDBLogger.LogInfo("File changed: " + fileName);
-                ReadFile(e.FullPath);
-                break;
-            case WatcherChangeTypes.Created:
-                MonsterDBPlugin.MonsterDBLogger.LogInfo("File created: " + fileName);
-                ReadFile(e.FullPath);
-                break;
-            case WatcherChangeTypes.Deleted:
-                MonsterDBPlugin.MonsterDBLogger.LogInfo("File deleted: " + fileName);
-                ClearSpawnData();
-                ReadSpawnFiles();
-                break;
-        }
+        MonsterDBPlugin.MonsterDBLogger.LogDebug("Spawn files changed");
+        ClearSpawnData();
+        ReadSpawnFiles();
     }
 
     private static void ReadFile(string filePath)
@@ -155,6 +143,65 @@ public static class SpawnMan
     private static void ClearSpawnData() => m_spawnData.Clear();
     private static void AddSpawnData(Dictionary<string, CreatureSpawnData> data) => m_spawnData = data;
     private static void UpdateSpawnList() => m_spawnSystemList.m_spawners = m_spawnData.Values.Select(FormatSpawnData).Where(info => info != null).ToList();
+    public static bool Write(GameObject critter)
+    {
+        if (!Directory.Exists(m_spawnFolderPath)) Directory.CreateDirectory(m_spawnFolderPath);
+        if (!Directory.Exists(m_referenceFolderPath)) Directory.CreateDirectory(m_referenceFolderPath);
+        CreatureSpawnData data = new();
+        foreach (SpawnSystemList info in SpawnSystem.m_instances.SelectMany(instance => instance.m_spawnLists))
+        {
+            foreach (SpawnSystem.SpawnData stream in info.m_spawners.Where(stream => stream.m_prefab == critter))
+            {
+                data.m_name = stream.m_name;
+                data.m_enabled = stream.m_enabled;
+                data.m_prefab = stream.m_prefab.name;
+                data.m_biome = stream.m_biome.ToString();
+                data.m_biomeArea = stream.m_biomeArea.ToString();
+                data.m_maxSpawned = stream.m_maxSpawned;
+                data.m_spawnInterval = stream.m_spawnInterval;
+                data.m_spawnChance = stream.m_spawnChance;
+                data.m_spawnDistance = stream.m_spawnDistance;
+                data.m_spawnRadiusMin = stream.m_spawnRadiusMin;
+                data.m_spawnRadiusMax = stream.m_spawnRadiusMax;
+                data.m_requiredGlobalKey = stream.m_requiredGlobalKey;
+                data.m_requiredEnvironments = stream.m_requiredEnvironments;
+                data.m_groupSizeMin = stream.m_groupSizeMin;
+                data.m_groupSizeMax = stream.m_groupSizeMax;
+                data.m_groupRadius = stream.m_groupRadius;
+                data.m_spawnAtNight = stream.m_spawnAtNight;
+                data.m_spawnAtDay = stream.m_spawnAtDay;
+                data.m_minAltitude = stream.m_minAltitude;
+                data.m_maxAltitude = stream.m_maxAltitude;
+                data.m_minTilt = stream.m_minTilt;
+                data.m_maxTilt = stream.m_maxTilt;
+                data.m_inForest = stream.m_inForest;
+                data.m_outsideForest = stream.m_outsideForest;
+                data.m_inLava = stream.m_inLava;
+                data.m_outsideLava = stream.m_outsideLava;
+                data.m_canSpawnCloseToPlayer = stream.m_canSpawnCloseToPlayer;
+                data.m_insidePlayerBase = stream.m_insidePlayerBase;
+                data.m_minOceanDepth = stream.m_minOceanDepth;
+                data.m_maxOceanDepth = stream.m_maxOceanDepth;
+                data.m_huntPlayer = stream.m_huntPlayer;
+                data.m_groundOffset = stream.m_groundOffset;
+                data.m_groundOffsetRandom = stream.m_groundOffsetRandom;
+                data.m_maxLevel = stream.m_maxLevel;
+                data.m_minLevel = stream.m_minLevel;
+                data.m_levelUpMinCenterDistance = stream.m_levelUpMinCenterDistance;
+                data.m_overrideLevelupChance = stream.m_overrideLevelupChance;
+                data.m_foldout = stream.m_foldout;
+                break;
+            }
+        }
+
+        if (data.m_prefab.IsNullOrWhiteSpace()) return false;
+        string fileName = data.m_prefab + ".yml";
+        string filePath = m_referenceFolderPath + Path.DirectorySeparatorChar + fileName;
+        var serializer = new SerializerBuilder().Build();
+        var serial = serializer.Serialize(data);
+        File.WriteAllText(filePath, serial);
+        return true;
+    }
     
     private static SpawnSystem.SpawnData? FormatSpawnData(CreatureSpawnData input)
     {

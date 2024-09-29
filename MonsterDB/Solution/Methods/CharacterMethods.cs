@@ -22,6 +22,19 @@ public static class CharacterMethods
         SaveEffectList(component.m_slideEffects, ref creatureData.m_effects.m_slideEffects);
         SaveEffectList(component.m_jumpEffects, ref creatureData.m_effects.m_jumpEffects);
         SaveEffectList(component.m_flyingContinuousEffect, ref creatureData.m_effects.m_flyingContinuousEffects);
+        if (component.m_deathEffects != null)
+        {
+            foreach (var effect in component.m_deathEffects.m_effectPrefabs)
+            {
+                if (!effect.m_prefab.GetComponent<Ragdoll>()) continue;
+                var scale = effect.m_prefab.transform.localScale;
+                VisualMethods.ScaleData scaleData = new VisualMethods.ScaleData()
+                {
+                    x = scale.x, y = scale.y, z = scale.z
+                };
+                creatureData.m_ragdollScale = scaleData;
+            }
+        }
     }
     
     public static void Write(GameObject critter, string folderPath, string clonedFrom = "")
@@ -56,6 +69,23 @@ public static class CharacterMethods
         WriteEffectList(component.m_slideEffects, slideEffectsPath);
         WriteEffectList(component.m_jumpEffects, jumpEffectsPath);
         WriteEffectList(component.m_flyingContinuousEffect, flyingContinuousEffectsPath);
+        
+        if (component.m_deathEffects != null)
+        {
+            foreach (var effect in component.m_deathEffects.m_effectPrefabs)
+            {
+                if (!effect.m_prefab.GetComponent<Ragdoll>()) continue;
+                var scale = effect.m_prefab.transform.localScale;
+                VisualMethods.ScaleData scaleData = new VisualMethods.ScaleData()
+                {
+                    x = scale.x, y = scale.y, z = scale.z
+                };
+                string visualFolderPath = folderPath + Path.DirectorySeparatorChar + "Visual";
+                if (!Directory.Exists(visualFolderPath)) Directory.CreateDirectory(visualFolderPath);
+                string ragdollscalePath = visualFolderPath + Path.DirectorySeparatorChar + "RagdollScale.yml";
+                File.WriteAllText(ragdollscalePath, serializer.Serialize(scaleData));
+            }
+        }
     }
 
     private static CharacterData RecordCharacterData(Character component, string clonedFrom, GameObject critter)
@@ -164,6 +194,7 @@ public static class CharacterMethods
         if (!critter.TryGetComponent(out Character component)) return;
         CharacterData data = creatureData.m_characterData;
         Vector3 scale = GetScale(creatureData.m_scale);
+        Vector3 ragDollScale = GetScale(creatureData.m_ragdollScale);
         CharacterEffects effectData = creatureData.m_effects;
         
         component.m_name = data.Name;
@@ -264,7 +295,7 @@ public static class CharacterMethods
         UpdateEffectList(effectData.m_hitEffects, ref component.m_hitEffects, scale);
         UpdateEffectList(effectData.m_critHitEffects, ref component.m_critHitEffects, scale);
         UpdateEffectList(effectData.m_backstabHitEffects, ref component.m_backstabHitEffects, scale);
-        UpdateEffectList(effectData.m_deathEffects, ref component.m_deathEffects, scale);
+        UpdateEffectList(effectData.m_deathEffects, ref component.m_deathEffects, ragDollScale);
         UpdateEffectList(effectData.m_waterEffects, ref component.m_waterEffects, scale);
         UpdateEffectList(effectData.m_tarEffects, ref component.m_tarEffects, scale);
         UpdateEffectList(effectData.m_slideEffects, ref component.m_slideEffects, scale);
