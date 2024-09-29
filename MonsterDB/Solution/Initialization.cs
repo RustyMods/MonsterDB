@@ -22,7 +22,7 @@ public static class Initialization
             SpawnMan.UpdateSpawnData();
         }
     }
-
+    
     public static void ReadLocalFiles()
     {
         if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
@@ -47,6 +47,21 @@ public static class Initialization
             ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Registered {count} cloned creature directories");
+    }
+
+    public static void ResetAll()
+    {
+        int count = 0;
+
+        foreach (var kvp in CreatureManager.m_data)
+        {
+            var prefab = DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName);
+            if (prefab == null) continue;
+            CreatureManager.Reset(prefab);
+            ++count;
+        }
+        
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"Reset {count} creature data");
     }
 
     public static void RemoveAll()

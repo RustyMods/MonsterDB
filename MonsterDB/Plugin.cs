@@ -29,7 +29,7 @@ namespace MonsterDB
         public enum Toggle { On = 1, Off = 0 }
 
         public static GameObject m_root = null!;
-        // public static MonsterDBPlugin m_plugin = null!;
+        public static MonsterDBPlugin m_plugin = null!;
 
         // private static ConfigEntry<Toggle> _serverConfigLocked = null!;
         //
@@ -41,7 +41,7 @@ namespace MonsterDB
         // }
         public void Awake()
         {
-            // m_plugin = this;
+            m_plugin = this;
             m_root = new GameObject("root");
             DontDestroyOnLoad(m_root);
             m_root.SetActive(false);

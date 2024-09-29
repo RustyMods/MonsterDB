@@ -156,8 +156,8 @@ These 'reference' files will not modify existing spawn data if added to main fol
 These are to be used as references to develop your own spawn files.
 ## Import / Export
 ```
-monsterdb import - imports all creature data files in the Import directory
-monsterdb export [prefabName] - exports to a single file creature data to share
+monsterdb import                - imports all creature data files in the Import directory
+monsterdb export [prefabName]   - exports to a single file creature data to share
 ```
 You can use this file structure to easily share MonsterDB files with your friends or even use this file structure
 to create/edit creatures.

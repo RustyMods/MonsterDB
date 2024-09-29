@@ -214,7 +214,7 @@ public static class VisualMethods
                 if (!materialData.TryGetValue(name, out MaterialData data)) continue;
                 material.name = name;
                 material.color = GetColor(data._Color);
-                if (TextureManager.RegisteredTextures.TryGetValue(data._MainTex, out Texture2D texture2D))
+                if (TextureManager.m_customTextures.TryGetValue(data._MainTex, out Texture2D texture2D))
                 {
                     material.mainTexture = texture2D;
                 }

@@ -53,16 +53,7 @@ public static class DataBase
 
     public static bool TryGetTexture(string textureName, out Texture2D texture)
     {
-        if (TextureManager.GetRegisteredTexture(textureName, out texture))
-        {
-            return true;
-        }
-
-        if (m_textures.TryGetValue(textureName, out texture))
-        {
-            return true;
-        }
-
-        return false;
+        if (TextureManager.m_customTextures.TryGetValue(textureName, out texture)) return true;
+        return m_textures.TryGetValue(textureName, out texture);
     }
 }

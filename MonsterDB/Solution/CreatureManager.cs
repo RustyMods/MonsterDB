@@ -53,6 +53,7 @@ public static class CreatureManager
         if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
         if (!Directory.Exists(m_creatureFolderPath)) Directory.CreateDirectory(m_creatureFolderPath);
         if (!Directory.Exists(m_cloneFolderPath)) Directory.CreateDirectory(m_cloneFolderPath);
+        if (!Directory.Exists(m_importFolderPath)) Directory.CreateDirectory(m_importFolderPath);
         m_creatureWatcher = new FileSystemWatcher(m_creatureFolderPath, "*.yml")
         {
             EnableRaisingEvents = true,
@@ -95,6 +96,7 @@ public static class CreatureManager
             var prefab = DataBase.TryGetGameObject(data.m_characterData.PrefabName);
             if (prefab == null) return;
             m_data[data.m_characterData.PrefabName] = data;
+            UpdateServer();
             Update(prefab);
             MonsterDBPlugin.MonsterDBLogger.LogDebug($"{prefab.name} data changed: {fileName}");
         }
@@ -144,6 +146,7 @@ public static class CreatureManager
         IDeserializer deserializer = new DeserializerBuilder().Build();
         try
         {
+            Initialization.ResetAll();
             m_data = deserializer.Deserialize<Dictionary<string, CreatureData>>(m_serverDataFiles.Value);
             Initialization.RemoveAll();
             Initialization.CloneAll();

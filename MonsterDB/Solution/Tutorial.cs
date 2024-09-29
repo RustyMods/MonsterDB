@@ -9,9 +9,9 @@ public static class Tutorial
 {
     public static void Write()
     {
-        var filePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "README.md";
+        string filePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "README.md";
         if (File.Exists(filePath)) return;
-        var text = GetText("Tutorial.md");
+        TextAsset text = GetText("Tutorial.md");
         File.WriteAllText(filePath, text.text);
     }
 
