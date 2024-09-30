@@ -9,6 +9,7 @@ public static class Tutorial
 {
     public static void Write()
     {
+        if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
         string filePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "README.md";
         if (File.Exists(filePath)) return;
         TextAsset text = GetText("Tutorial.md");
