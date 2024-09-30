@@ -57,8 +57,8 @@ public static class Commands
                                     break;
                                 case "clone_item":
                                     if (args.Length < 4) return false;
-                                    var itemName = args[3];
-                                    ItemDataMethods.Clone(prefab, itemName);
+                                    string? itemName = args[3];
+                                    ItemDataMethods.Clone(prefab, itemName, true);
                                     break;
                                 case "write_spawn":
                                     MonsterDBPlugin.MonsterDBLogger.LogInfo(SpawnMan.Write(prefab)

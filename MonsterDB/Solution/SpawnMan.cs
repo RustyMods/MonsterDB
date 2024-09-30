@@ -55,6 +55,8 @@ public static class SpawnMan
         };
         
         SetupFileWatch();
+        if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
+        if (!Directory.Exists(m_spawnFolderPath)) Directory.CreateDirectory(m_spawnFolderPath);
     }
 
     private static void SetupFileWatch()

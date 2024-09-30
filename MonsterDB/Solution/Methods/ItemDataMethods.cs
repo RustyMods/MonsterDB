@@ -53,19 +53,22 @@ public static class ItemDataMethods
         WriteEffectList(shared.m_triggerEffect, triggerEffectsPath);
         WriteEffectList(shared.m_trailStartEffect, trailStartEffectsPath);
         
-        MonsterDBPlugin.MonsterDBLogger.LogDebug("Wrote ItemData to file");
+        MonsterDBPlugin.MonsterDBLogger.LogDebug("Wrote ItemData to file: ");
         MonsterDBPlugin.MonsterDBLogger.LogDebug(folderPath);
     }
 
-    public static void Clone(GameObject item, string name, bool write = true)
+    public static void Clone(GameObject item, string name, bool write = true, bool register = false)
     {
         if (item == null) return;
         if (!item.GetComponent<ItemDrop>()) return;
         GameObject clone = Object.Instantiate(item, MonsterDBPlugin.m_root.transform, false);
         clone.name = name;
-        // RegisterToObjectDB(clone);
-        // RegisterToZNetScene(clone);
+        RegisterToObjectDB(clone);
+        if (register) RegisterToZNetScene(clone);
         m_clonedItems[clone.name] = clone;
-        if (write) Write(clone, item.name);
+        if (write)
+        {
+            Write(clone, item.name);
+        }
     }
 }

@@ -1108,16 +1108,15 @@ public static class HumanoidMethods
         items = newItems.ToArray();
     }
 
-    private static GameObject CloneAttack(GameObject item, GameObject critter,
-        ref Dictionary<string, GameObject> clonedItems)
+    private static GameObject CloneAttack(GameObject item, GameObject critter, ref Dictionary<string, GameObject> clonedItems, bool register = false)
     {
         var name = critter.name + "_" + item.name;
         if (clonedItems.TryGetValue(name, out GameObject alreadyCloned)) return alreadyCloned;
         var clone = Object.Instantiate(item, MonsterDBPlugin.m_root.transform, false);
         clone.name = name;
         ItemDataMethods.m_clonedItems[name] = clone;
-        // RegisterToObjectDB(clone);
-        // RegisterToZNetScene(clone);
+        RegisterToObjectDB(clone);
+        if (register) RegisterToZNetScene(clone);
         return clone;
     }
 }

@@ -46,6 +46,11 @@ public static class CreatureManager
     {
         m_serverDataFiles.ValueChanged += ReadServerFiles;
         SetupFileWatch();
+        if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
+        if (!Directory.Exists(m_creatureFolderPath)) Directory.CreateDirectory(m_creatureFolderPath);
+        if (!Directory.Exists(m_cloneFolderPath)) Directory.CreateDirectory(m_cloneFolderPath);
+        if (!Directory.Exists(m_importFolderPath)) Directory.CreateDirectory(m_importFolderPath);
+        if (!Directory.Exists(m_exportFolderPath)) Directory.CreateDirectory(m_exportFolderPath);
     }
 
     private static void SetupFileWatch()

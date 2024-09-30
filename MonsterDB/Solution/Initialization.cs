@@ -26,8 +26,16 @@ public static class Initialization
     public static void ReadLocalFiles()
     {
         if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
-        CreatureManager.Import();
         if (!Directory.Exists(CreatureManager.m_creatureFolderPath)) Directory.CreateDirectory(CreatureManager.m_creatureFolderPath);
+        if (!Directory.Exists(CreatureManager.m_cloneFolderPath)) Directory.CreateDirectory(CreatureManager.m_cloneFolderPath);
+        
+        CreatureManager.Import();
+        ReadCreatureDirectory();
+        ReadCloneDirectory();
+    }
+
+    private static void ReadCreatureDirectory()
+    {
         string[] creatureFolders = Directory.GetDirectories(CreatureManager.m_creatureFolderPath);
         int count = 0;
         foreach (string folder in creatureFolders)
@@ -37,8 +45,11 @@ public static class Initialization
             ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Registered {count} creature directories");
-        count = 0;
-        if (!Directory.Exists(CreatureManager.m_cloneFolderPath)) Directory.CreateDirectory(CreatureManager.m_cloneFolderPath);
+    }
+
+    private static void ReadCloneDirectory()
+    {
+        int count = 0;
         string[] cloneFolders = Directory.GetDirectories(CreatureManager.m_cloneFolderPath);
         foreach (string folder in cloneFolders)
         {
@@ -48,14 +59,15 @@ public static class Initialization
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Registered {count} cloned creature directories");
     }
+    
 
     public static void ResetAll()
     {
         int count = 0;
 
-        foreach (var kvp in CreatureManager.m_data)
+        foreach (KeyValuePair<string, CreatureData> kvp in CreatureManager.m_data)
         {
-            var prefab = DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName);
+            GameObject? prefab = DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName);
             if (prefab == null) continue;
             CreatureManager.Reset(prefab);
             ++count;
@@ -101,18 +113,15 @@ public static class Initialization
         CloneItems(data.m_randomWeapons);
         CloneItems(data.m_randomShields);
         CloneItems(data.m_randomArmors);
-        foreach (var set in data.m_randomSets)
-        {
-            CloneItems(set.m_items);
-        }
+        foreach (RandomItemSetsData set in data.m_randomSets) CloneItems(set.m_items);
     }
 
     private static void CloneItems(List<ItemAttackData> data)
     {
-        foreach (var itemData in data)
+        foreach (ItemAttackData itemData in data)
         {
             if (itemData.m_attackData.OriginalPrefab.IsNullOrWhiteSpace()) continue;
-            var item = DataBase.TryGetGameObject(itemData.m_attackData.OriginalPrefab);
+            GameObject? item = DataBase.TryGetGameObject(itemData.m_attackData.OriginalPrefab);
             if (item == null) continue;
             ItemDataMethods.Clone(item, itemData.m_attackData.Name, false);
         }
