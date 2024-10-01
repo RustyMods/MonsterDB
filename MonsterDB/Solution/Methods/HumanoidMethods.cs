@@ -1086,11 +1086,13 @@ public static class HumanoidMethods
         List<Humanoid.RandomItem> newItems = new();
         foreach (var item in items)
         {
-            newItems.Add(new Humanoid.RandomItem()
+            if (item.m_prefab == null) continue;
+            var data = new Humanoid.RandomItem()
             {
                 m_chance = item.m_chance,
                 m_prefab = CloneAttack(item.m_prefab, critter, ref clonedItems)
-            });
+            };
+            newItems.Add(data);
         }
 
         items = newItems.ToArray();
@@ -1102,6 +1104,7 @@ public static class HumanoidMethods
         List<GameObject> newItems = new();
         foreach (var item in items)
         {
+            if (item == null) continue;
             newItems.Add(CloneAttack(item, critter, ref clonedItems));
         }
 
