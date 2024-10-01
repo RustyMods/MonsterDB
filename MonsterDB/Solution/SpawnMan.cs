@@ -83,6 +83,14 @@ public static class SpawnMan
         ReadSpawnFiles();
     }
 
+    public static void ClearSpawns()
+    {
+        if (m_spawnSystemList == null) return;
+        m_spawnSystemList.m_spawners.Clear();
+        ServerSpawnSystem.Value = "";
+        ClearSpawnData();
+    }
+
     private static void ReadFile(string filePath)
     {
         try
@@ -108,7 +116,8 @@ public static class SpawnMan
         int count = 0;
         foreach (string file in files)
         {
-            if (file.EndsWith("Example.yml")) continue;
+            var fileName = Path.GetFileName(file);
+            if (fileName == "Example.yml") continue;
             string text = File.ReadAllText(file);
             try
             {

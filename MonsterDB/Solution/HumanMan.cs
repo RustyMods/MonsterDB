@@ -8,6 +8,7 @@ public static class HumanMan
 {
     public static void Create()
     {
+        if (!ZNetScene.instance) return;
         GameObject player = ZNetScene.instance.GetPrefab("Player");
         if (!player) return;
         if (!player.TryGetComponent(out Player component)) return;

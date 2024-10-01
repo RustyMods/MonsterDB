@@ -47,6 +47,8 @@ You will to add two files to make creature tameable:
 Copy the data from the AnimalAI.yml file into the MonsterAI.yml, without removing the extra lines
 in the MonsterAI.yml file. (line 39+):
 
+You will need to fill in the new MonsterAI data fields a little bit, else, maybe they behave oddly.
+
 MonsterAI is AnimalAI plus extra data:
 ```
 AlertRange: 6
@@ -101,7 +103,7 @@ Place png files in the CustomTextures directory
 
 Plugin will load them during boot-up and you can use the file name in the Visual/Materials files
 
-You will need to share your textures with your friends if you want them.
+If connecting to a server, the client will check with the server for missing textures and cache them to CustomTextures folder.
 
 ## Materials
 ```
@@ -165,7 +167,7 @@ monsterdb export [prefabName]   - exports to a single file creature data to shar
 You can use this file structure to easily share MonsterDB files with your friends or even use this file structure
 to create/edit creatures.
 ## Grow Up
-```yaml
+```
 GrowTime: 100                 // Set time in seconds
 InheritTame: true             // If parent is tamed, inherits
 GrownPrefab: Lox
@@ -177,7 +179,7 @@ AltGrownPrefabs:
 ```
 ## Level Effects
 Only some creatures have level effects. MonsterDB modifies component to stretch scale a bit farther than normally.
-```yaml
+```
 - Scale: 1.1                  // Level 2 ( 1 star )
   Hue: 0                      // -0.5 - 0.5
   Saturation: -0.15           // -1 - 1
@@ -219,4 +221,5 @@ Plugin loading steps:
 ```
 ## Special considerations
 Only Tameable.yml, NPCTalk.yml can be added into creature folders and actually add the components.
+If you set new tames, taming time to 0, plugin will remove component
 

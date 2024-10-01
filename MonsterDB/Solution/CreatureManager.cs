@@ -20,6 +20,7 @@ public static class CreatureManager
     private static readonly CustomSyncedValue<string> m_serverDataFiles = new(MonsterDBPlugin.ConfigSync, "MonsterDB_ServerFiles", "");
     private static readonly Dictionary<string, CreatureData> m_originalData = new();
     public static Dictionary<string, CreatureData> m_data = new();
+    public static readonly Dictionary<string, CreatureData> m_localData = new();
     public static readonly Dictionary<string, GameObject> m_clones = new();
 
     private static FileSystemWatcher m_creatureWatcher = null!;
@@ -148,12 +149,13 @@ public static class CreatureManager
     private static void ReadServerFiles()
     {
         if (!ZNet.instance || ZNet.instance.IsServer()) return;
+        if (m_serverDataFiles.Value.IsNullOrWhiteSpace()) return;
         IDeserializer deserializer = new DeserializerBuilder().Build();
         try
         {
             Initialization.ResetAll();
             m_data = deserializer.Deserialize<Dictionary<string, CreatureData>>(m_serverDataFiles.Value);
-            Initialization.RemoveAll();
+            Initialization.RemoveAllClones();
             Initialization.CloneAll();
             Initialization.UpdateAll();
             MonsterDBPlugin.MonsterDBLogger.LogDebug("Server updated MonsterDB Files");
@@ -238,14 +240,24 @@ public static class CreatureManager
         GrowUpMethods.Read(folderPath, ref data);
         LevelEffectsMethods.Read(folderPath, ref data);
         m_data[creatureName] = data;
+        m_localData[creatureName] = data;
         UpdateServer();
     }
 
-    public static void Update(GameObject critter)
+    public static void Update(GameObject critter, bool local = false)
     {
-        if (!m_data.TryGetValue(critter.name, out CreatureData data)) return;
-        Save(critter, data.m_characterData.ClonedFrom);
-        Update(critter, data);
+        if (local)
+        {
+            if (!m_localData.TryGetValue(critter.name, out CreatureData data)) return;
+            Save(critter, data.m_characterData.ClonedFrom);
+            Update(critter, data);
+        }
+        else
+        {
+            if (!m_data.TryGetValue(critter.name, out CreatureData data)) return;
+            Save(critter, data.m_characterData.ClonedFrom);
+            Update(critter, data);
+        }
     }
 
     private static void Update(GameObject critter, CreatureData data)

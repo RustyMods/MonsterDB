@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -12,105 +11,129 @@ public static class TextureManager
     public static readonly string m_texturePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "CustomTextures";
     public static readonly Dictionary<string, Texture2D> m_customTextures = new();
     private static readonly Dictionary<string, byte[]> m_textureBytes = new();
+    
 
-    // private static readonly Dictionary<ZNetPeer, int> m_peerIndex = new();
-    //
-    // private static readonly List<string> m_receivedTextures = new();
-    //
-    // [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
-    // private static class ZNetScene_Awake_Patch
-    // {
-    //     private static void Postfix()
-    //     {
-    //         if (ZNet.instance.IsServer())
-    //         {
-    //             StartCoroutine();
-    //         }
-    //     }
-    // }
-    //
-    // [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]
-    // private static class ZNet_OnNewConnection_Patch
-    // {
-    //     private static void Postfix(ZNetPeer peer)
-    //     {
-    //         Debug.LogWarning($"new connection: {peer.m_playerName}");
-    //         m_peerIndex[peer] = 0;
-    //         peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTexture),RPC_ReceiveTexture);
-    //     }
-    // }
-    //
-    // [HarmonyPatch(typeof(ZNet), nameof(ZNet.Disconnect))]
-    // private static class ZNet_Disconnect_Patch
-    // {
-    //     private static void Postfix(ZNetPeer peer) => m_peerIndex.Remove(peer);
-    // }
-    //
-    // private static void StartCoroutine()
-    // {
-    //     MonsterDBPlugin.MonsterDBLogger.LogDebug("Starting coroutine to send textures to clients");
-    //     MonsterDBPlugin.m_plugin.StartCoroutine(nameof(SendTextures));
-    // }
-    //
-    // private static IEnumerator SendTextures()
-    // {
-    //     while (ZNet.instance)
-    //     {
-    //         SendToClients();
-    //         yield return new WaitForSeconds(60);
-    //     }
-    // }
-    //
-    // private static void SendToClients()
-    // {
-    //     if (!ZNet.instance) return;
-    //     var textures = m_textureBytes.ToList();
-    //     foreach (ZNetPeer peer in ZNet.instance.m_peers)
-    //     {
-    //         if (!m_peerIndex.TryGetValue(peer, out int index)) continue;
-    //         if (index > textures.Count)
-    //         {
-    //             m_peerIndex[peer] = 0;
-    //             continue;
-    //         }
-    //         var texture = textures[index];
-    //         var pkg = PackageTexture(texture.Key, texture.Value);
-    //         peer.m_rpc.Invoke(nameof(RPC_ReceiveTexture), pkg);
-    //     }
-    // }
-    //
-    // private static void RPC_ReceiveTexture(ZRpc rpc, ZPackage pkg)
-    // {
-    //     ReadPackage(pkg);
-    // }
+    [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]
+    private static class ZNet_OnNewConnection_Patch
+    {
+        private static void Postfix(ZNet __instance, ZNetPeer peer)
+        {
+            peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTexture),RPC_ReceiveTexture);
+            peer.m_rpc.Register(nameof(RPC_ForceUpdate), RPC_ForceUpdate);
+            peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveServerTextureCount), RPC_ReceiveServerTextureCount);
+            if (__instance.IsServer())
+            {
+                peer.m_rpc.Register<ZPackage>(nameof(RPC_ClientTextureRequest), RPC_ClientTextureRequest);
+            }
+        }
+    }
 
-    // private static void ReadPackage(ZPackage pkg)
-    // {
-    //     string name = pkg.ReadString();
-    //     if (m_receivedTextures.Contains(name)) return;
-    //     if (m_customTextures.ContainsKey(name)) return;
-    //     MonsterDBPlugin.MonsterDBLogger.LogDebug($"Received texture: {name}");
-    //     byte[] data = pkg.ReadByteArray();
-    //     Texture2D texture = ReadBytes(name, data);
-    //     WriteTexture(texture);
-    //     m_receivedTextures.Add(name);
-    // }
+    [HarmonyPatch(typeof(ZNet), nameof(ZNet.RPC_CharacterID))]
+    private static class ZNet_RPC_CharacterID_Patch
+    {
+        private static void Postfix(ZNet __instance, ZRpc rpc)
+        {
+            if (!__instance.IsServer()) return;
+            if (m_textureBytes.Count == 0) return;
+            ZNetPeer peer = __instance.GetPeer(rpc);
+            if (peer == null) return;
+            MonsterDBPlugin.MonsterDBLogger.LogDebug("Server: New Connection, checking textures");
+            ZPackage pkg = new ZPackage();
+            pkg.Write(m_textureBytes.Count);
+            foreach (var kvp in m_textureBytes)
+            {
+                pkg.Write(kvp.Key);
+            }
+            peer.m_rpc.Invoke(nameof(RPC_ReceiveServerTextureCount), pkg);
+        }
+    }
 
-    // private static void WriteTexture(Texture2D texture2D)
-    // {
-    //     var data = texture2D.EncodeToPNG();
-    //     var filePath = m_texturePath + Path.DirectorySeparatorChar + texture2D.name + ".png";
-    //     if (!File.Exists(filePath)) return;
-    //     File.WriteAllBytes(filePath, data);
-    // }
-    //
-    // private static ZPackage PackageTexture(string name, byte[] data)
-    // {
-    //     ZPackage pkg = new ZPackage();
-    //     pkg.Write(name);
-    //     pkg.Write(data);
-    //     return pkg;
-    // }
+    private static void RPC_ClientTextureRequest(ZRpc rpc, ZPackage pkg)
+    {
+        ZNetPeer peer = ZNet.instance.GetPeer(rpc);
+        int count = pkg.ReadInt();
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"{peer.m_playerName} requesting {count} textures");
+
+        Dictionary<string, byte[]> texturesToSend = new();
+        for (int index = 0; index < count; ++index)
+        {
+            var name = pkg.ReadString();
+            if (!m_textureBytes.TryGetValue(name, out byte[] data)) continue;
+            texturesToSend[name] = data;
+        }
+
+        MonsterDBPlugin.m_plugin.StartCoroutine(StartSendingTextures(peer, texturesToSend));
+
+    }
+
+    private static void RPC_ReceiveServerTextureCount(ZRpc rpc, ZPackage pkg)
+    {
+        int count = pkg.ReadInt();
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"Client: server has {count} textures");
+
+        List<string> texturesToRequest = new();
+
+        for (int index = 0; index < count; ++index)
+        {
+            string name = pkg.ReadString();
+            if (m_customTextures.ContainsKey(name)) continue;
+            texturesToRequest.Add(name);
+        }
+        if (texturesToRequest.Count == 0) return;
+        
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"Missing {texturesToRequest.Count} textures, requesting...");
+        ZPackage package = new ZPackage();
+        package.Write(texturesToRequest.Count);
+        foreach (string name in texturesToRequest)
+        {
+            package.Write(name);
+        }
+        rpc.Invoke(nameof(RPC_ClientTextureRequest), package);
+    }
+    
+    private static IEnumerator StartSendingTextures(ZNetPeer peer, Dictionary<string, byte[]> data)
+    {
+        foreach (KeyValuePair<string, byte[]> kvp in data)
+        {
+            ZPackage pkg = PackageTexture(kvp.Key, kvp.Value);
+            peer.m_rpc.Invoke(nameof(RPC_ReceiveTexture), pkg);
+            double kilobytes = kvp.Value.Length / 1024.0;
+            MonsterDBPlugin.MonsterDBLogger.LogDebug($"Sent texture ({kilobytes}kb): {kvp.Key}");
+            
+            yield return new WaitForSeconds(1);
+        }
+        peer.m_rpc.Invoke(nameof(RPC_ForceUpdate));
+    }
+
+    private static void RPC_ForceUpdate(ZRpc rpc)
+    {
+        MonsterDBPlugin.MonsterDBLogger.LogDebug("Received textures from server, updating...");
+        Initialization.UpdateAll();
+    }
+    private static void RPC_ReceiveTexture(ZRpc rpc, ZPackage pkg)
+    {
+        string name = pkg.ReadString();
+        byte[] data = pkg.ReadByteArray();
+        Texture2D texture = ReadBytes(name, data);
+        WriteTexture(texture);
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"Received texture: {name}");
+    }
+
+    private static void WriteTexture(Texture2D texture2D)
+    {
+        string filePath = m_texturePath + Path.DirectorySeparatorChar + texture2D.name + ".png";
+        if (File.Exists(filePath)) return;
+        byte[] data = texture2D.EncodeToPNG();
+        File.WriteAllBytes(filePath, data);
+    }
+    
+    private static ZPackage PackageTexture(string name, byte[] data)
+    {
+        ZPackage pkg = new ZPackage();
+        pkg.Write(name);
+        pkg.Write(data);
+        return pkg;
+    }
     public static void ReadLocalTextures()
     {
         if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
@@ -139,7 +162,7 @@ public static class TextureManager
         string name = Path.GetFileName(filePath).Replace(".png", string.Empty).Trim();
         Texture2D texture = LoadTexture(name, fileData);
         m_customTextures[texture.name] = texture;
-        // ServerSync_Textures[texture.name] = fileData;
+        m_textureBytes[texture.name] = fileData;
         MonsterDBPlugin.MonsterDBLogger.LogDebug("Registered texture: " + texture.name);
     }
 
@@ -147,7 +170,6 @@ public static class TextureManager
     {
         Texture2D texture = LoadTexture(name, data);
         m_customTextures[texture.name] = texture;
-        m_textureBytes[texture.name] = data;
         return texture;
     }
 }

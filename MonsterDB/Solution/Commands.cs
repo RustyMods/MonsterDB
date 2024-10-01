@@ -71,13 +71,13 @@ public static class Commands
                             }
                             break;
                         case "reload":
-                            Initialization.RemoveAll();
+                            Initialization.RemoveAllClones();
                             Initialization.CloneAll();
                             Initialization.UpdateAll();
                             break;
                         case "import":
                             CreatureManager.Import();
-                            Initialization.RemoveAll();
+                            Initialization.RemoveAllClones();
                             Initialization.CloneAll();
                             Initialization.UpdateAll();
                             break;

@@ -17,12 +17,23 @@ public static class Initialization
         {
             if (!__instance || !ZNetScene.instance) return;
             HumanMan.Create();
-            CloneAll();
-            UpdateAll();
+            CloneAll(true);
+            UpdateAll(true);
             SpawnMan.UpdateSpawnData();
         }
     }
-    
+
+    [HarmonyPatch(typeof(Game), nameof(Game.Logout))]
+    private static class Game_Logout_Patch
+    {
+        private static void Prefix()
+        {
+            ResetAll();
+            RemoveAllClones();
+            SpawnMan.ClearSpawns();
+        }
+    }
+
     public static void ReadLocalFiles()
     {
         if (!Directory.Exists(CreatureManager.m_folderPath)) Directory.CreateDirectory(CreatureManager.m_folderPath);
@@ -76,7 +87,7 @@ public static class Initialization
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Reset {count} creature data");
     }
 
-    public static void RemoveAll()
+    public static void RemoveAllClones()
     {
         int count = 0;
 
@@ -89,11 +100,11 @@ public static class Initialization
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Removed {count} clones");
     }
 
-    public static void CloneAll()
+    public static void CloneAll(bool local = false)
     {
         int count = 0;
 
-        foreach (KeyValuePair<string, CreatureData> kvp in CreatureManager.m_data)
+        foreach (KeyValuePair<string, CreatureData> kvp in local ? CreatureManager.m_localData : CreatureManager.m_data)
         {
             CloneAllItems(kvp.Value);
             string originalCreature = kvp.Value.m_characterData.ClonedFrom;
@@ -128,15 +139,15 @@ public static class Initialization
     }
     
 
-    public static void UpdateAll()
+    public static void UpdateAll(bool local = false)
     {
         if (!ZNetScene.instance || !ObjectDB.instance) return;
         int count = 0;
-        foreach (var kvp in CreatureManager.m_data)
+        foreach (var kvp in local ? CreatureManager.m_localData : CreatureManager.m_data)
         {
             GameObject? creature = DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName);
             if (creature == null) continue;
-            CreatureManager.Update(creature);
+            CreatureManager.Update(creature, local);
             ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Updated {count} creatures");

@@ -8,8 +8,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class NPCTalkMethods
 {
-    private static Dictionary<string, GameObject> m_newNPCTalkers = new();
-
+    private static readonly Dictionary<string, GameObject> m_newNPCTalkers = new();
     public static void Save(GameObject critter, ref CreatureData creatureData)
     {
         if (!critter.TryGetComponent(out NpcTalk component)) return;
@@ -91,11 +90,22 @@ public static class NPCTalkMethods
         Helpers.ReadEffectInfo(randomGoodbyeFXPath, ref creatureData.m_effects.m_randomGoodbyeFX);
     }
 
+    private static void RemoveComponent(GameObject critter)
+    {
+        if (!m_newNPCTalkers.ContainsKey(critter.name)) return;
+        if (!critter.TryGetComponent(out NpcTalk component)) return;
+        Object.Destroy(component);
+        m_newNPCTalkers.Remove(critter.name);
+    }
     public static void Update(GameObject critter, CreatureData creatureData)
     {
         if (!critter.GetComponent<MonsterAI>()) return;
         NPCTalkData data = creatureData.m_npcTalk;
-        if (data.Name.IsNullOrWhiteSpace()) return;
+        if (data.Name.IsNullOrWhiteSpace())
+        {
+            RemoveComponent(critter);
+            return;
+        }
         if (!critter.TryGetComponent(out NpcTalk component))
         {
             component = critter.AddComponent<NpcTalk>();
