@@ -134,10 +134,12 @@
         <Compile Include="Solution\Initialization.cs" />
         <Compile Include="Solution\Methods\AnimalAIMethods.cs" />
         <Compile Include="Solution\Methods\CharacterMethods.cs" />
+        <Compile Include="Solution\Methods\GrowUpMethods.cs" />
         <Compile Include="Solution\Methods\Helpers.cs" />
         <Compile Include="Solution\Methods\CharacterDropMethods.cs" />
         <Compile Include="Solution\Methods\HumanoidMethods.cs" />
         <Compile Include="Solution\Methods\ItemDataMethods.cs" />
+        <Compile Include="Solution\Methods\LevelEffectsMethods.cs" />
         <Compile Include="Solution\Methods\MonsterAIMethods.cs" />
         <Compile Include="Solution\Methods\NPCTalkMethods.cs" />
         <Compile Include="Solution\Methods\ProcreationMethods.cs" />

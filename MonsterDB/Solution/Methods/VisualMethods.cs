@@ -273,7 +273,7 @@ public static class VisualMethods
         }
     }
 
-    private static Color GetColor(ColorData data) => new Color(data.r, data.g, data.b, data.a);
+    public static Color GetColor(ColorData data) => new Color(data.r, data.g, data.b, data.a);
 
     [Serializable]
     public class ScaleData

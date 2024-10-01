@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MonsterDB.Solution.Methods;
 
 namespace MonsterDB.Solution;
 
@@ -380,4 +381,32 @@ public class NPCTalkData
     public List<string> RandomGoodbye = new();
     public List<string> PrivateAreaAlarm = new();
     public List<string> Aggravated = new();
+}
+
+[Serializable]
+public class GrowUpData
+{
+    public float GrowTime;
+    public bool InheritTame;
+    public string GrownPrefab = "";
+    public List<AltGrownData> AltGrownPrefabs = new();
+}
+
+[Serializable]
+public class AltGrownData
+{
+    public string GrownPrefab = "";
+    public float Weight;
+}
+
+[Serializable]
+public class LevelEffectData
+{
+    public float Scale;
+    public float Hue;
+    public float Saturation;
+    public float Value;
+    public bool SetEmissiveColor;
+    public VisualMethods.ColorData EmissiveColor = new();
+    public string EnableObject = "";
 }

@@ -190,6 +190,8 @@ public static class CreatureManager
         TameableMethods.Save(critter, ref data);
         ProcreationMethods.Save(critter, ref data);
         NPCTalkMethods.Save(critter, ref data);
+        GrowUpMethods.Save(critter, ref data);
+        LevelEffectsMethods.Save(critter, ref data);
         m_originalData[critter.name] = data;
     }
 
@@ -212,7 +214,8 @@ public static class CreatureManager
         TameableMethods.Write(critter, folderPath);
         ProcreationMethods.Write(critter, folderPath);
         NPCTalkMethods.Write(critter, folderPath);
-        
+        GrowUpMethods.Write(critter, folderPath);
+        LevelEffectsMethods.Write(critter, folderPath);
         m_creatureWatcher.EnableRaisingEvents = true;
         m_cloneWatcher.EnableRaisingEvents = true;
     }
@@ -222,17 +225,19 @@ public static class CreatureManager
         string folderPath = (isClone ? m_cloneFolderPath : m_creatureFolderPath) + Path.DirectorySeparatorChar + creatureName;
         if (!Directory.Exists(folderPath)) return;
         
-        CreatureData creatureData = new();
-        VisualMethods.Read(folderPath, ref creatureData);
-        HumanoidMethods.Read(folderPath, ref creatureData);
-        CharacterMethods.Read(folderPath, ref creatureData);
-        MonsterAIMethods.Read(folderPath, ref creatureData);
-        AnimalAIMethods.Read(folderPath, ref creatureData);
-        CharacterDropMethods.Read(folderPath, ref creatureData);
-        TameableMethods.Read(folderPath, ref creatureData);
-        ProcreationMethods.Read(folderPath, ref creatureData);
-        NPCTalkMethods.Read(folderPath, ref creatureData);
-        m_data[creatureName] = creatureData;
+        CreatureData data = new();
+        VisualMethods.Read(folderPath, ref data);
+        HumanoidMethods.Read(folderPath, ref data);
+        CharacterMethods.Read(folderPath, ref data);
+        MonsterAIMethods.Read(folderPath, ref data);
+        AnimalAIMethods.Read(folderPath, ref data);
+        CharacterDropMethods.Read(folderPath, ref data);
+        TameableMethods.Read(folderPath, ref data);
+        ProcreationMethods.Read(folderPath, ref data);
+        NPCTalkMethods.Read(folderPath, ref data);
+        GrowUpMethods.Read(folderPath, ref data);
+        LevelEffectsMethods.Read(folderPath, ref data);
+        m_data[creatureName] = data;
         UpdateServer();
     }
 
@@ -240,6 +245,11 @@ public static class CreatureManager
     {
         if (!m_data.TryGetValue(critter.name, out CreatureData data)) return;
         Save(critter, data.m_characterData.ClonedFrom);
+        Update(critter, data);
+    }
+
+    private static void Update(GameObject critter, CreatureData data)
+    {
         VisualMethods.Update(critter, data);
         TameableMethods.Update(critter, data);
         HumanoidMethods.Update(critter, data);
@@ -249,20 +259,14 @@ public static class CreatureManager
         CharacterDropMethods.Update(critter, data);
         ProcreationMethods.Update(critter, data);
         NPCTalkMethods.Update(critter, data);
+        GrowUpMethods.Update(critter, data);
+        LevelEffectsMethods.Update(critter, data);
     }
 
     public static void Reset(GameObject critter)
     {
         if (!m_originalData.TryGetValue(critter.name, out CreatureData data)) return;
-        VisualMethods.Update(critter, data);
-        HumanoidMethods.Update(critter, data);
-        CharacterMethods.Update(critter, data);
-        MonsterAIMethods.Update(critter, data);
-        AnimalAIMethods.Update(critter, data);
-        CharacterDropMethods.Update(critter, data);
-        TameableMethods.Update(critter, data);
-        ProcreationMethods.Update(critter, data);
-        NPCTalkMethods.Update(critter, data);
+        Update(critter, data);
         MonsterDBPlugin.MonsterDBLogger.LogInfo("Reset: " + critter.name);
     }
 
@@ -292,8 +296,8 @@ public static class CreatureManager
         if (!Directory.Exists(m_exportFolderPath)) Directory.CreateDirectory(m_exportFolderPath);
         if (!Directory.Exists(m_importFolderPath)) Directory.CreateDirectory(m_importFolderPath);
         if (!m_data.TryGetValue(creatureName, out CreatureData data)) return;
-        var serializer = new SerializerBuilder().Build();
-        var serial = serializer.Serialize(data);
+        ISerializer serializer = new SerializerBuilder().Build();
+        string serial = serializer.Serialize(data);
         string filePath = m_exportFolderPath + Path.DirectorySeparatorChar + creatureName + ".yml";
         File.WriteAllText(filePath, serial);
         MonsterDBPlugin.MonsterDBLogger.LogDebug("Exported creature data: ");

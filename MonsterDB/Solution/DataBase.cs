@@ -10,7 +10,7 @@ namespace MonsterDB.Solution;
 
 public static class DataBase
 {
-    private static readonly Dictionary<string, GameObject> m_items = new();
+    public static readonly Dictionary<string, GameObject> m_allObjects = new();
     public static readonly Dictionary<string, Texture2D> m_textures = new();
     
     [HarmonyPriority(Priority.First)]
@@ -25,7 +25,7 @@ public static class DataBase
         List<GameObject> allGameObjects = Resources.FindObjectsOfTypeAll<GameObject>().ToList();
         foreach (GameObject prefab in allGameObjects)
         {
-            m_items[prefab.name] = prefab;
+            m_allObjects[prefab.name] = prefab;
         }
 
         List<Texture2D> allTextures = Resources.FindObjectsOfTypeAll<Texture2D>().ToList();
@@ -48,7 +48,7 @@ public static class DataBase
         prefab = ZNetScene.instance.GetPrefab(prefabName);
         if (prefab != null) return prefab;
         if (ItemDataMethods.m_clonedItems.TryGetValue(prefabName, out GameObject clone)) return clone;
-        return !m_items.TryGetValue(prefabName, out GameObject item) ? null : item;
+        return !m_allObjects.TryGetValue(prefabName, out GameObject item) ? null : item;
     }
 
     public static bool TryGetTexture(string textureName, out Texture2D texture)

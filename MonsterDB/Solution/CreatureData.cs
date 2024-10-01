@@ -24,6 +24,8 @@ public class CreatureData
     public TameableData m_tameable = new();
     public ProcreationData m_procreation = new();
     public NPCTalkData m_npcTalk = new();
+    public GrowUpData m_growUp = new();
+    public List<LevelEffectData> m_levelEffects = new();
 }
 
 [Serializable]
