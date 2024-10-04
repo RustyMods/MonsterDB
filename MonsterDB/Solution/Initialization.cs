@@ -16,7 +16,7 @@ public static class Initialization
         private static void Postfix(ObjectDB __instance)
         {
             if (!__instance || !ZNetScene.instance) return;
-            HumanMan.Create();
+            HumanMan.Create("Human");
             CloneAll(true);
             UpdateAll(true);
             SpawnMan.UpdateSpawnData();
@@ -51,7 +51,7 @@ public static class Initialization
         int count = 0;
         foreach (string folder in creatureFolders)
         {
-            string name = folder.Replace(CreatureManager.m_creatureFolderPath, string.Empty).Replace(Path.DirectorySeparatorChar.ToString(), string.Empty);
+            string name = Path.GetFileName(folder);
             CreatureManager.Read(name);
             ++count;
         }
@@ -64,7 +64,7 @@ public static class Initialization
         string[] cloneFolders = Directory.GetDirectories(CreatureManager.m_cloneFolderPath);
         foreach (string folder in cloneFolders)
         {
-            string name = folder.Replace(CreatureManager.m_cloneFolderPath, string.Empty).Replace(Path.DirectorySeparatorChar.ToString(), string.Empty);
+            string name = Path.GetFileName(folder);
             CreatureManager.Read(name, true);
             ++count;
         }
@@ -112,7 +112,7 @@ public static class Initialization
             GameObject? prefab = DataBase.TryGetGameObject(originalCreature);
             if (prefab == null) continue;
             string name = kvp.Value.m_characterData.PrefabName;
-            CreatureManager.Clone(prefab, name, false);
+            CreatureManager.Clone(prefab, name, false, false);
             ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Cloned {count} creatures");
@@ -143,7 +143,7 @@ public static class Initialization
     {
         if (!ZNetScene.instance || !ObjectDB.instance) return;
         int count = 0;
-        foreach (var kvp in local ? CreatureManager.m_localData : CreatureManager.m_data)
+        foreach (KeyValuePair<string, CreatureData> kvp in local ? CreatureManager.m_localData : CreatureManager.m_data)
         {
             GameObject? creature = DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName);
             if (creature == null) continue;

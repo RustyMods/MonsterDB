@@ -16,7 +16,7 @@ namespace MonsterDB
     public class MonsterDBPlugin : BaseUnityPlugin
     {
         internal const string ModName = "MonsterDB";
-        internal const string ModVersion = "0.0.6";
+        internal const string ModVersion = "0.0.7";
         internal const string Author = "RustyMods";
         private const string ModGUID = Author + "." + ModName;
         private static readonly string ConfigFileName = ModGUID + ".cfg";
@@ -25,18 +25,22 @@ namespace MonsterDB
         private readonly Harmony _harmony = new(ModGUID);
         public static readonly ManualLogSource MonsterDBLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
         public static readonly ConfigSync ConfigSync = new(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
-        public enum Toggle { On = 1, Off = 0 }
+
+        private enum Toggle { On = 1, Off = 0 }
 
         public static GameObject m_root = null!;
         public static MonsterDBPlugin m_plugin = null!;
 
         // private static ConfigEntry<Toggle> _serverConfigLocked = null!;
-        //
+        // private static ConfigEntry<Toggle> _shareTextures = null!;
+        // public static bool ShareTextures() => _shareTextures.Value is Toggle.On;
         // private void InitConfigs()
         // {
         //     _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On,
         //         "If on, the configuration is locked and can be changed by server admins only.");
         //     _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
+        //     _shareTextures = config("2 - Settings", "Server Sync Textures", Toggle.Off,
+        //         "If on, clients can download textures from server, experimental");
         // }
         public void Awake()
         {

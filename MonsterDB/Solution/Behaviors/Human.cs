@@ -2,6 +2,7 @@
 using System.Linq;
 using BepInEx;
 using HarmonyLib;
+using MonsterDB.Solution.Methods;
 using UnityEngine;
 
 namespace MonsterDB.Solution.Behaviors;
@@ -17,6 +18,27 @@ public class Human : Humanoid
     public override void Awake()
     {
         base.Awake();
+        UpdateComponent();
+    }
+
+    private void UpdateComponent()
+    {
+        if (!CreatureManager.m_data.TryGetValue(gameObject.name.Replace("(Clone)", string.Empty), out CreatureData creatureData)) return;
+        Vector3 scale = Helpers.GetScale(creatureData.m_scale);
+            
+        m_defaultItems = new List<GameObject>().ToArray();
+        m_randomWeapon = new List<GameObject>().ToArray();
+        m_randomShield = new List<GameObject>().ToArray();
+        m_randomArmor = new List<GameObject>().ToArray();
+        m_randomSets = new List<ItemSet>().ToArray();
+        m_randomItems = new List<RandomItem>().ToArray();
+
+        HumanoidMethods.UpdateItems(ref m_defaultItems, creatureData.m_defaultItems, scale);
+        HumanoidMethods.UpdateItems(ref m_randomWeapon, creatureData.m_randomWeapons, scale);
+        HumanoidMethods.UpdateItems(ref m_randomShield, creatureData.m_randomShields, scale);
+        HumanoidMethods.UpdateItems(ref m_randomArmor, creatureData.m_randomArmors, scale);
+        HumanoidMethods.UpdateRandomSets(ref m_randomSets, creatureData.m_randomSets, scale);
+        HumanoidMethods.UpdateRandomItems(ref m_randomItems, creatureData.m_randomItems, scale);
     }
 
     public void FixedUpdate()

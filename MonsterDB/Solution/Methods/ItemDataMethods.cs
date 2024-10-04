@@ -10,6 +10,8 @@ public static class ItemDataMethods
 {
     private static readonly string m_folderPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "Items";
     public static readonly Dictionary<string, GameObject> m_clonedItems = new();
+
+    public static bool IsClone(GameObject prefab) => m_clonedItems.ContainsKey(prefab.name);
     public static void Write(GameObject item, string originalPrefab = "")
     {
         if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);

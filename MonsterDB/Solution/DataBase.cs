@@ -47,6 +47,7 @@ public static class DataBase
         if (prefab != null) return prefab;
         prefab = ZNetScene.instance.GetPrefab(prefabName);
         if (prefab != null) return prefab;
+        if (HumanMan.m_newHumans.TryGetValue(prefabName, out GameObject human)) return human;
         if (ItemDataMethods.m_clonedItems.TryGetValue(prefabName, out GameObject clone)) return clone;
         return !m_allObjects.TryGetValue(prefabName, out GameObject item) ? null : item;
     }

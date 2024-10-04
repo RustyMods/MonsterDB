@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
-using MonsterDB.Solution.Behaviors;
 using UnityEngine;
 using YamlDotNet.Serialization;
 using static MonsterDB.Solution.Methods.Helpers;
@@ -467,10 +466,10 @@ public static class HumanoidMethods
             ReadRandomItems(randomItemsPath, ref creatureData.m_randomItems);
         }
     }
-
     public static void Update(GameObject critter, CreatureData creatureData)
     {
         if (!critter.TryGetComponent(out Humanoid component)) return;
+        
         CharacterData data = creatureData.m_characterData;
         CharacterEffects effectData = creatureData.m_effects;
         Vector3 scale = GetScale(creatureData.m_scale);
@@ -478,7 +477,7 @@ public static class HumanoidMethods
         
         component.m_name = data.Name;
         component.m_group = data.Group;
-        if (Enum.TryParse(data.Faction, out Character.Faction faction))
+        if (Enum.TryParse(data.Faction, true, out Character.Faction faction))
         {
             component.m_faction = faction;
         }
@@ -505,7 +504,7 @@ public static class HumanoidMethods
         component.m_swimDepth = data.SwimDepth;
         component.m_swimTurnSpeed = data.SwimTurnSpeed;
         component.m_swimAcceleration = data.SwimAcceleration;
-        if (Enum.TryParse(data.GroundTilt, out Character.GroundTiltType groundTiltType))
+        if (Enum.TryParse(data.GroundTilt, true, out Character.GroundTiltType groundTiltType))
         {
             component.m_groundTilt = groundTiltType;
         }
@@ -520,56 +519,57 @@ public static class HumanoidMethods
         component.m_tolerateSmoke = data.TolerateSmoke;
         component.m_tolerateTar = data.TolerateTar;
         component.m_health = data.Health;
-        if (Enum.TryParse(data.BluntResistance, out HitData.DamageModifier blunt))
+        if (Enum.TryParse(data.BluntResistance, true, out HitData.DamageModifier blunt))
         {
             component.m_damageModifiers.m_blunt = blunt;
         }
-        if (Enum.TryParse(data.SlashResistance, out HitData.DamageModifier slash))
+        if (Enum.TryParse(data.SlashResistance, true, out HitData.DamageModifier slash))
         {
             component.m_damageModifiers.m_slash = slash;
         }
 
-        if (Enum.TryParse(data.PierceResistance, out HitData.DamageModifier pierce))
+        if (Enum.TryParse(data.PierceResistance, true, out HitData.DamageModifier pierce))
         {
             component.m_damageModifiers.m_pierce = pierce;
         }
 
-        if (Enum.TryParse(data.ChopResistance, out HitData.DamageModifier chop))
+        if (Enum.TryParse(data.ChopResistance, true, out HitData.DamageModifier chop))
         {
             component.m_damageModifiers.m_chop = chop;
         }
 
-        if (Enum.TryParse(data.PickaxeResistance, out HitData.DamageModifier pickaxe))
+        if (Enum.TryParse(data.PickaxeResistance, true, out HitData.DamageModifier pickaxe))
         {
             component.m_damageModifiers.m_pickaxe = pickaxe;
         }
 
-        if (Enum.TryParse(data.FireResistance, out HitData.DamageModifier fire))
+        if (Enum.TryParse(data.FireResistance, true, out HitData.DamageModifier fire))
         {
             component.m_damageModifiers.m_fire = fire;
         }
 
-        if (Enum.TryParse(data.FrostResistance, out HitData.DamageModifier frost))
+        if (Enum.TryParse(data.FrostResistance, true, out HitData.DamageModifier frost))
         {
             component.m_damageModifiers.m_frost = frost;
         }
 
-        if (Enum.TryParse(data.LightningResistance, out HitData.DamageModifier lightning))
+        if (Enum.TryParse(data.LightningResistance, true, out HitData.DamageModifier lightning))
         {
             component.m_damageModifiers.m_lightning = lightning;
         }
 
-        if (Enum.TryParse(data.PoisonResistance, out HitData.DamageModifier poison))
+        if (Enum.TryParse(data.PoisonResistance, true, out HitData.DamageModifier poison))
         {
             component.m_damageModifiers.m_poison = poison;
         }
 
-        if (Enum.TryParse(data.SpiritResistance, out HitData.DamageModifier spirit))
+        if (Enum.TryParse(data.SpiritResistance, true, out HitData.DamageModifier spirit))
         {
             component.m_damageModifiers.m_spirit = spirit;
         }
         component.m_staggerWhenBlocked = data.StaggerWhenBlocked;
         component.m_staggerDamageFactor = data.StaggerDamageFactor;
+        
         UpdateEffectList(effectData.m_hitEffects, ref component.m_hitEffects, scale);
         UpdateEffectList(effectData.m_critHitEffects, ref component.m_critHitEffects, scale);
         UpdateEffectList(effectData.m_backstabHitEffects, ref component.m_backstabHitEffects, scale);
@@ -585,24 +585,19 @@ public static class HumanoidMethods
         UpdateEffectList(effectData.m_equipEffects, ref component.m_equipEffects, scale);
         UpdateEffectList(effectData.m_perfectBlockEffects, ref component.m_perfectBlockEffect, scale);
 
-        if (critter.GetComponent<Human>())
-        {
-            CreateItems(ref component.m_defaultItems, creatureData.m_defaultItems, scale, critter);
-            CreateItems(ref component.m_randomWeapon, creatureData.m_randomWeapons, scale, critter);
-            CreateItems(ref component.m_randomShield, creatureData.m_randomShields, scale, critter);
-            CreateItems(ref component.m_randomArmor, creatureData.m_randomArmors, scale, critter);
-            CreateRandomSets(ref component.m_randomSets, creatureData.m_randomSets, scale, critter);
-            UpdateRandomItems(ref component.m_randomItems, creatureData.m_randomItems, scale);
-        }
-        else
-        {
-            UpdateItems(ref component.m_defaultItems, creatureData.m_defaultItems, scale);
-            UpdateItems(ref component.m_randomWeapon, creatureData.m_randomWeapons, scale);
-            UpdateItems(ref component.m_randomShield, creatureData.m_randomShields, scale);
-            UpdateItems(ref component.m_randomArmor, creatureData.m_randomArmors, scale);
-            UpdateRandomSets(ref component.m_randomSets, creatureData.m_randomSets, scale);
-            UpdateRandomItems(ref component.m_randomItems, creatureData.m_randomItems, scale);
-        }
+        component.m_defaultItems = new List<GameObject>().ToArray();
+        component.m_randomWeapon = new List<GameObject>().ToArray();
+        component.m_randomShield = new List<GameObject>().ToArray();
+        component.m_randomArmor = new List<GameObject>().ToArray();
+        component.m_randomSets = new List<Humanoid.ItemSet>().ToArray();
+        component.m_randomItems = new List<Humanoid.RandomItem>().ToArray();
+
+        UpdateItems(ref component.m_defaultItems, creatureData.m_defaultItems, scale);
+        UpdateItems(ref component.m_randomWeapon, creatureData.m_randomWeapons, scale);
+        UpdateItems(ref component.m_randomShield, creatureData.m_randomShields, scale);
+        UpdateItems(ref component.m_randomArmor, creatureData.m_randomArmors, scale);
+        UpdateRandomSets(ref component.m_randomSets, creatureData.m_randomSets, scale);
+        UpdateRandomItems(ref component.m_randomItems, creatureData.m_randomItems, scale);
     }
 
     private static void ReadItems(string folderPath, ref List<ItemAttackData> serverData)
@@ -669,10 +664,14 @@ public static class HumanoidMethods
             GameObject? prefab = DataBase.TryGetGameObject(prefabName);
             if (prefab == null) continue;
             if (!prefab.GetComponent<ItemDrop>()) continue;
-
+            var name = critter.name + "_" + prefabName;
+            if (ItemDataMethods.m_clonedItems.TryGetValue(name, out GameObject cloned))
+            {
+                items.Add(cloned);
+                continue;
+            }
             GameObject clone = Object.Instantiate(prefab, MonsterDBPlugin.m_root.transform, false);
             clone.name = critter.name + "_" + prefabName;
-
             if (!clone.TryGetComponent(out ItemDrop component)) continue;
             ScaleItem(prefab, scale);
             if (Enum.TryParse(data.AnimationState, out ItemDrop.ItemData.AnimationState state))
@@ -758,13 +757,13 @@ public static class HumanoidMethods
             UpdateEffectList(effects.m_trailStartEffects, ref component.m_itemData.m_shared.m_trailStartEffect, scale);
             ItemDataMethods.m_clonedItems[clone.name] = clone;
             // RegisterToZNetScene(clone);
-            // RegisterToObjectDB(clone);
+            RegisterToObjectDB(clone);
             items.Add(prefab);
         }
         list = items.ToArray();
     }
 
-    private static void UpdateItems(ref GameObject[] list, List<ItemAttackData> itemAttackDataList, Vector3 scale)
+    public static void UpdateItems(ref GameObject[] list, List<ItemAttackData> itemAttackDataList, Vector3 scale)
     {
         if (itemAttackDataList.Count <= 0) return;
         List<GameObject> items = new();
@@ -904,7 +903,7 @@ public static class HumanoidMethods
         list = sets.ToArray();
     }
 
-    private static void UpdateRandomSets(ref Humanoid.ItemSet[] list, List<RandomItemSetsData> data, Vector3 scale)
+    public static void UpdateRandomSets(ref Humanoid.ItemSet[] list, List<RandomItemSetsData> data, Vector3 scale)
     {
         if (data.Count <= 0) return;
         List<Humanoid.ItemSet> sets = new();
@@ -939,7 +938,7 @@ public static class HumanoidMethods
         }
     }
 
-    private static void UpdateRandomItems(ref Humanoid.RandomItem[] list, List<RandomItemData> randomItemDataList, Vector3 scale)
+    public static void UpdateRandomItems(ref Humanoid.RandomItem[] list, List<RandomItemData> randomItemDataList, Vector3 scale)
     {
         if (randomItemDataList.Count <= 0) return;
         List<Humanoid.RandomItem> items = new();
@@ -1062,7 +1061,7 @@ public static class HumanoidMethods
     public static void CloneItems(GameObject critter)
     {
         if (!critter.TryGetComponent(out Humanoid component)) return;
-        if (critter.GetComponent<Human>()) return;
+        // if (critter.GetComponent<Human>()) return;
         Dictionary<string, GameObject> clonedItems = new();
         CloneAttacks(ref component.m_defaultItems, critter, ref clonedItems);
         CloneAttacks(ref component.m_randomWeapon, critter, ref clonedItems);

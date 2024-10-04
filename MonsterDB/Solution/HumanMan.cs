@@ -1,29 +1,76 @@
 ﻿using System.Collections.Generic;
 using MonsterDB.Solution.Behaviors;
+using MonsterDB.Solution.Methods;
 using UnityEngine;
 
 namespace MonsterDB.Solution;
 
 public static class HumanMan
 {
-    public static void Create()
+    public static readonly Dictionary<string, GameObject> m_newHumans = new();
+    public static GameObject? Create(string name)
     {
-        if (!ZNetScene.instance) return;
+        if (!ZNetScene.instance) return null;
         GameObject player = ZNetScene.instance.GetPrefab("Player");
-        if (!player) return;
-        if (!player.TryGetComponent(out Player component)) return;
+        if (!player) return null;
+        if (!player.TryGetComponent(out Player component)) return null;
         GameObject human = Object.Instantiate(player, MonsterDBPlugin.m_root.transform, false);
-        human.name = "Human";
-        Object.Destroy(human.GetComponent<PlayerController>());
+        human.name = name;
+
         Object.Destroy(human.GetComponent<Player>());
+        Object.Destroy(human.GetComponent<PlayerController>());
         Object.Destroy(human.GetComponent<Talker>());
         Object.Destroy(human.GetComponent<Skills>());
+        
         if (human.TryGetComponent(out ZNetView zNetView))
         {
             zNetView.m_persistent = true;
+            zNetView.m_type = ZDO.ObjectType.Default;
         }
+        
         Human humanoid = human.AddComponent<Human>();
-        humanoid.name = human.name;
+        humanoid.m_eye = Utils.FindChild(human.transform, "EyePos");
+        MonsterAI monsterAI = human.AddComponent<MonsterAI>();
+        CharacterDrop characterDrop = human.AddComponent<CharacterDrop>();
+        Tameable tameable = human.AddComponent<Tameable>();
+        human.AddComponent<Visuals>();
+        GameObject newRagDoll = Object.Instantiate(ZNetScene.instance.GetPrefab("Player_ragdoll"), MonsterDBPlugin.m_root.transform, false);
+        if (newRagDoll.TryGetComponent(out Ragdoll rag))
+        {
+            rag.m_ttl = 8f;
+            rag.m_removeEffect = new()
+            {
+                m_effectPrefabs = new[]
+                {
+                    new EffectList.EffectData()
+                    {
+                        m_prefab = ZNetScene.instance.GetPrefab("vfx_corpse_destruction_small"),
+                        m_enabled = true
+                    }
+                }
+            };
+            rag.m_float = true;
+            rag.m_dropItems = true;
+        }
+        newRagDoll.name = name + "_ragdoll";
+        newRagDoll.AddComponent<Visuals>();
+        Helpers.RegisterToZNetScene(newRagDoll);
+        humanoid.m_deathEffects = new EffectList
+        {
+            m_effectPrefabs = new[]
+            {
+                new EffectList.EffectData()
+                {
+                    m_prefab = ZNetScene.instance.GetPrefab("vfx_player_death"),
+                    m_enabled = true,
+                },
+                new EffectList.EffectData()
+                {
+                    m_prefab = newRagDoll,
+                    m_enabled = true
+                }
+            }
+        };
         humanoid.m_name = "Human";
         humanoid.m_group = "Humans";
         humanoid.m_faction = Character.Faction.ForestMonsters;
@@ -45,48 +92,9 @@ public static class HumanMan
         humanoid.m_groundTilt = component.m_groundTilt;
         humanoid.m_groundTiltSpeed = component.m_groundTiltSpeed;
         humanoid.m_jumpStaminaUsage = component.m_jumpStaminaUsage;
-        humanoid.m_eye = Utils.FindChild(human.transform, "EyePos");
         humanoid.m_hitEffects = component.m_hitEffects;
         humanoid.m_critHitEffects = component.m_critHitEffects;
         humanoid.m_backstabHitEffects = component.m_backstabHitEffects;
-
-        GameObject newRagDoll = Object.Instantiate(ZNetScene.instance.GetPrefab("Player_ragdoll"), MonsterDBPlugin.m_root.transform, false);
-        if (newRagDoll.TryGetComponent(out Ragdoll rag))
-        {
-            rag.m_ttl = 8f;
-            rag.m_removeEffect = new()
-            {
-                m_effectPrefabs = new[]
-                {
-                    new EffectList.EffectData()
-                    {
-                        m_prefab = ZNetScene.instance.GetPrefab("vfx_corpse_destruction_small"),
-                        m_enabled = true
-                    }
-                }
-            };
-            rag.m_float = true;
-            rag.m_dropItems = true;
-        }
-        newRagDoll.name = "human_ragdoll";
-        newRagDoll.AddComponent<Visuals>();
-        Methods.Helpers.RegisterToZNetScene(newRagDoll);
-        humanoid.m_deathEffects = new()
-        {
-            m_effectPrefabs = new[]
-            {
-                new EffectList.EffectData()
-                {
-                    m_prefab = ZNetScene.instance.GetPrefab("vfx_player_death"),
-                    m_enabled = true,
-                },
-                new EffectList.EffectData()
-                {
-                    m_prefab = newRagDoll,
-                    m_enabled = true
-                }
-            }
-        };
         humanoid.m_waterEffects = component.m_waterEffects;
         humanoid.m_tarEffects = component.m_tarEffects;
         humanoid.m_slideEffects = component.m_slideEffects;
@@ -131,8 +139,6 @@ public static class HumanMan
         humanoid.m_consumeItemEffects = component.m_consumeItemEffects;
         humanoid.m_equipEffects = component.m_equipStartEffects;
         humanoid.m_perfectBlockEffect = component.m_perfectBlockEffect;
-        
-        MonsterAI monsterAI = human.AddComponent<MonsterAI>();
         monsterAI.m_viewRange = 30f;
         monsterAI.m_viewAngle = 90f;
         monsterAI.m_hearRange = 9999f;
@@ -157,7 +163,6 @@ public static class HumanMan
         monsterAI.m_consumeSearchRange = 5f;
         monsterAI.m_consumeSearchInterval = 10f;
         monsterAI.m_consumeItems = new();
-        CharacterDrop characterDrop = human.AddComponent<CharacterDrop>();
         characterDrop.m_drops = new List<CharacterDrop.Drop>()
         {
             new CharacterDrop.Drop()
@@ -172,7 +177,6 @@ public static class HumanMan
         GameObject boar = ZNetScene.instance.GetPrefab("Boar");
         if (boar.TryGetComponent(out Tameable loxTame))
         {
-            Tameable tameable = human.AddComponent<Tameable>();
             tameable.m_fedDuration = 600f;
             tameable.m_tamingTime = 1800f;
             tameable.m_commandable = true;
@@ -181,10 +185,11 @@ public static class HumanMan
             tameable.m_petEffect = loxTame.m_petEffect;
             tameable.m_commandable = true;
             tameable.m_unsummonDistance = 0f;
-            tameable.m_randomStartingName = new();
+            tameable.m_randomStartingName = new List<string>();
         }
-
-        human.AddComponent<Visuals>();
-        Methods.Helpers.RegisterToZNetScene(human);
+        Helpers.RegisterToZNetScene(human);
+        if (name != "Human") CreatureManager.m_clones[human.name] = human;
+        m_newHumans[human.name] = human;
+        return human;
     }
 }

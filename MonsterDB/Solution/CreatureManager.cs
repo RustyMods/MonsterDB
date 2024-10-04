@@ -239,6 +239,7 @@ public static class CreatureManager
         NPCTalkMethods.Read(folderPath, ref data);
         GrowUpMethods.Read(folderPath, ref data);
         LevelEffectsMethods.Read(folderPath, ref data);
+        
         m_data[creatureName] = data;
         m_localData[creatureName] = data;
         UpdateServer();
@@ -282,19 +283,27 @@ public static class CreatureManager
         MonsterDBPlugin.MonsterDBLogger.LogInfo("Reset: " + critter.name);
     }
 
-    public static void Clone(GameObject critter, string name, bool saveToDisk = true)
+    public static void Clone(GameObject critter, string name, bool saveToDisk = true, bool cloneAttacks = true)
     {
         if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
         if (!Directory.Exists(m_cloneFolderPath)) Directory.CreateDirectory(m_cloneFolderPath);
-        
-        GameObject clone = Object.Instantiate(critter, MonsterDBPlugin.m_root.transform, false);
-        clone.name = name;
-        Dictionary<string, Material> ragDollMats = VisualMethods.CloneMaterials(clone);
-        CharacterMethods.CloneRagDoll(clone, ragDollMats);
-        HumanoidMethods.CloneRagDoll(clone, ragDollMats);
-        HumanoidMethods.CloneItems(clone);
-        Helpers.RegisterToZNetScene(clone);
-        m_clones[clone.name] = clone;
+        GameObject? clone;
+        if (critter.name == "Human")
+        {
+            clone = HumanMan.Create(name);
+            if (clone == null) return;
+        }
+        else
+        {
+            clone = Object.Instantiate(critter, MonsterDBPlugin.m_root.transform, false);
+            clone.name = name;
+            Dictionary<string, Material> ragDollMats = VisualMethods.CloneMaterials(clone);
+            CharacterMethods.CloneRagDoll(clone, ragDollMats);
+            HumanoidMethods.CloneRagDoll(clone, ragDollMats);
+            m_clones[clone.name] = clone;
+            Helpers.RegisterToZNetScene(clone);
+        }
+        if (cloneAttacks) HumanoidMethods.CloneItems(clone);
         if (!saveToDisk) return;
         Write(clone, out string folderPath, true, critter.name);
         Read(clone.name, true);
