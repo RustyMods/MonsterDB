@@ -16,7 +16,7 @@ namespace MonsterDB
     public class MonsterDBPlugin : BaseUnityPlugin
     {
         internal const string ModName = "MonsterDB";
-        internal const string ModVersion = "0.0.7";
+        internal const string ModVersion = "0.0.8";
         internal const string Author = "RustyMods";
         private const string ModGUID = Author + "." + ModName;
         private static readonly string ConfigFileName = ModGUID + ".cfg";
@@ -31,24 +31,25 @@ namespace MonsterDB
         public static GameObject m_root = null!;
         public static MonsterDBPlugin m_plugin = null!;
 
-        // private static ConfigEntry<Toggle> _serverConfigLocked = null!;
-        // private static ConfigEntry<Toggle> _shareTextures = null!;
-        // public static bool ShareTextures() => _shareTextures.Value is Toggle.On;
-        // private void InitConfigs()
-        // {
-        //     _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On,
-        //         "If on, the configuration is locked and can be changed by server admins only.");
-        //     _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
-        //     _shareTextures = config("2 - Settings", "Server Sync Textures", Toggle.Off,
-        //         "If on, clients can download textures from server, experimental");
-        // }
+        private static ConfigEntry<Toggle> _serverConfigLocked = null!;
+        private static ConfigEntry<Toggle> _shareTextures = null!;
+        private static ConfigEntry<Toggle> _useRandomNames = null!;
+        public static bool ShareTextures() => _shareTextures.Value is Toggle.On;
+        public static bool UseNames() => _useRandomNames.Value is Toggle.On;
+        private void InitConfigs()
+        {
+            _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
+            _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
+            _shareTextures = config("2 - Settings", "Server Sync Textures", Toggle.Off, "If on, clients can download textures from server, experimental");
+            _useRandomNames = config("2 - Settings", "Use Viking Names", Toggle.Off, "If on, any creatures based on Human, will use random names");
+        }
         public void Awake()
         {
             m_plugin = this;
             m_root = new GameObject("root");
             DontDestroyOnLoad(m_root);
             m_root.SetActive(false);
-            // InitConfigs();
+            InitConfigs();
             Solution.Tutorial.Write();
             SpawnMan.Setup();
             TextureManager.ReadLocalTextures();

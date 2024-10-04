@@ -142,7 +142,7 @@ public static class TameableMethods
 
     private static void RemoveTameComponent(GameObject critter)
     {
-        if (m_newTames.Contains(critter.name))
+        if (m_newTames.Contains(critter.name) || HumanMan.m_newHumans.ContainsKey(critter.name))
         {
             if (critter.TryGetComponent(out Tameable tameable))
             {

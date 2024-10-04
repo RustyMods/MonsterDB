@@ -48,7 +48,7 @@ public class Visuals : MonoBehaviour
         if (!TryGetComponent(out VisEquipment visEquipment)) return;
         if (!TryGetComponent(out Humanoid component)) return;
         Randomize(component, visEquipment, out bool female);
-        RandomName(component, female);
+        if (MonsterDBPlugin.UseNames()) RandomName(component, female);
         m_nview.GetZDO().Set("RandomHuman", true);
     }
 

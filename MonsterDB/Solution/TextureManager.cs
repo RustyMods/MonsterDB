@@ -33,7 +33,7 @@ public static class TextureManager
     {
         private static void Postfix(ZNet __instance, ZRpc rpc)
         {
-            // if (!MonsterDBPlugin.ShareTextures()) return;
+            if (!MonsterDBPlugin.ShareTextures()) return;
             if (!__instance.IsServer()) return;
             if (m_textureBytes.Count == 0) return;
             ZNetPeer peer = __instance.GetPeer(rpc);

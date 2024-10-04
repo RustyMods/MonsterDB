@@ -58,24 +58,6 @@ public class CharacterData
     public string SpiritResistance = "Normal";
     public bool StaggerWhenBlocked;
     public float StaggerDamageFactor;
-    // public float MinLavaMaskThreshold;
-    // public float MaxLavaMaskThreshold;
-    // public float HeatBuildupBase;
-    // public float HeatCooldownBase;
-    // public float HeatBuildupWater;
-    // public float HeatWaterTouchMultiplier;
-    // public float LavaDamageTickInterval;
-    // public float HeatLevelFirstDamageThreshold;
-    // public float LavaFirstDamage;
-    // public float LavaFullDamage;
-    // public float LavaAirDamageHeight;
-    // public float DayHeatGainRunning;
-    // public float DayHeatGainStill;
-    // public float DayHeatEquipmentStop;
-    // public float LavaSlowMax;
-    // public float LavaSlowHeight;
-    // public float EquipStaminaDrain;
-    // public float BlockStaminaDrain;
 }
 
 [Serializable]

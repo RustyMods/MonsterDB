@@ -797,6 +797,11 @@ public static class HumanoidMethods
             component.m_itemData.m_shared.m_attackForce = data.AttackForce;
             component.m_itemData.m_shared.m_dodgeable = data.Dodgeable;
             component.m_itemData.m_shared.m_blockable = data.Blockable;
+            
+            component.m_itemData.m_shared.m_spawnOnHit = null;
+            component.m_itemData.m_shared.m_spawnOnHitTerrain = null;
+            component.m_itemData.m_shared.m_attackStatusEffect = null;
+
             if (TryGetGameObject(data.SpawnOnHit, out GameObject spawnOnHit))
             {
                 component.m_itemData.m_shared.m_spawnOnHit = spawnOnHit;
@@ -830,10 +835,14 @@ public static class HumanoidMethods
             component.m_itemData.m_shared.m_attack.m_attackRange = data.AttackRange;
             component.m_itemData.m_shared.m_attack.m_attackHeight = data.AttackHeight;
             component.m_itemData.m_shared.m_attack.m_attackOffset = data.AttackOffset;
+
+            component.m_itemData.m_shared.m_attack.m_spawnOnTrigger = null;
+            
             if (TryGetGameObject(data.SpawnOnTrigger, out GameObject spawnOnTrigger))
             {
                 component.m_itemData.m_shared.m_attack.m_spawnOnTrigger = spawnOnTrigger;
             }
+            
             component.m_itemData.m_shared.m_attack.m_toggleFlying = data.ToggleFlying;
             component.m_itemData.m_shared.m_attack.m_attach = data.Attach;
             component.m_itemData.m_shared.m_attack.m_attackAngle = data.AttackAngle;
@@ -844,6 +853,9 @@ public static class HumanoidMethods
             component.m_itemData.m_shared.m_aiAttackRangeMin = data.AttackRangeMinimum;
             component.m_itemData.m_shared.m_aiAttackInterval = data.AttackInterval;
             component.m_itemData.m_shared.m_aiAttackMaxAngle = data.AttackMaxAngle;
+
+            component.m_itemData.m_shared.m_attack.m_attackProjectile = null;
+            
             if (TryGetGameObject(data.Projectile, out GameObject projectile))
             {
                 component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
@@ -1048,8 +1060,8 @@ public static class HumanoidMethods
     {
         statusEffect = null!;
         if (effectName.IsNullOrWhiteSpace()) return false;
-        StatusEffect effect = ObjectDB.instance.GetStatusEffect(effectName.GetStableHashCode());
-        return effect != null;
+        statusEffect = ObjectDB.instance.GetStatusEffect(effectName.GetStableHashCode());
+        return statusEffect != null;
     }
     
     public static void CloneRagDoll(GameObject critter, Dictionary<string, Material> ragDollMats)
@@ -1061,7 +1073,6 @@ public static class HumanoidMethods
     public static void CloneItems(GameObject critter)
     {
         if (!critter.TryGetComponent(out Humanoid component)) return;
-        // if (critter.GetComponent<Human>()) return;
         Dictionary<string, GameObject> clonedItems = new();
         CloneAttacks(ref component.m_defaultItems, critter, ref clonedItems);
         CloneAttacks(ref component.m_randomWeapon, critter, ref clonedItems);

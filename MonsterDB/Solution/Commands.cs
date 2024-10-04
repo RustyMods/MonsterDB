@@ -10,6 +10,24 @@ namespace MonsterDB.Solution;
 
 public static class Commands
 {
+    private static List<string> MonsterNames = new();
+    private static List<string> ItemNames = new();
+    
+    [HarmonyPatch(typeof(Terminal), nameof(Terminal.updateSearch))]
+    private static class Terminal_UpdateSearch_Patch
+    {
+        private static bool Prefix(Terminal __instance, string word)
+        {
+            if (!ZNetScene.instance) return true;
+            if (__instance.m_search == null) return true;
+            string[] strArray = __instance.m_input.text.Split(' ');
+            if (strArray.Length < 3) return true;
+            if (strArray[0] != "monsterdb") return true;
+            HandleSearch(__instance, word, strArray);
+            return false;
+        }
+    }
+    
     [HarmonyPatch(typeof(Terminal), nameof(Terminal.Awake))]
     private static class Terminal_Awake_Patch
     {
@@ -18,79 +36,134 @@ public static class Commands
 
     private static void LoadCommands()
     {
-        Terminal.ConsoleCommand commands = new Terminal.ConsoleCommand("monsterdb", "use help to list out commands",
-            (Terminal.ConsoleEventFailable)(
-                args =>
-                {
-                    if (args.Length < 2) return false;
+        Terminal.ConsoleCommand commands = new Terminal.ConsoleCommand("monsterdb", "use help to list out commands", (Terminal.ConsoleEventFailable)(args =>
+        {
+            if (args.Length < 2) return false;
 
+            switch (args[1])
+            {
+                case "help":
+                    Help();
+                    break;
+                case "reload":
+                    Initialization.RemoveAllClones();
+                    Initialization.CloneAll();
+                    Initialization.UpdateAll();
+                    break;
+                case "import":
+                    CreatureManager.Import();
+                    Initialization.RemoveAllClones();
+                    Initialization.CloneAll();
+                    Initialization.UpdateAll();
+                    break;
+                case "write" or "update" or "clone" or "reset" or "write_item" or "clone_item" or "write_spawn" or "export":
+                    if (args.Length < 3 || !ZNetScene.instance) return false;
+                    string prefabName = args[2];
+                    GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                    if (prefab == null)
+                    {
+                        MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                        return false;
+                    }
                     switch (args[1])
                     {
-                        case "help":
-                            Help();
+                        case "write":
+                            Write(prefab);
                             break;
-                        case "write" or "update" or "clone" or "reset" or "write_item" or "clone_item" or "write_spawn" or "export":
-                            if (args.Length < 3 || !ZNetScene.instance) return false;
-                            string prefabName = args[2];
-                            GameObject? prefab = DataBase.TryGetGameObject(prefabName);
-                            if (prefab == null)
-                            {
-                                MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
-                                return false;
-                            }
-                            switch (args[1])
-                            {
-                                case "write":
-                                    Write(prefab);
-                                    break;
-                                case "update":
-                                    Update(prefab);
-                                    break;
-                                case "clone":
-                                    if (args.Length < 4) return false;
-                                    var cloneName = args[3];
-                                    CreatureManager.Clone(prefab, cloneName);
-                                    break;
-                                case "reset":
-                                    CreatureManager.Reset(prefab);
-                                    break;
-                                case "write_item":
-                                    if (!prefab.GetComponent<ItemDrop>()) return false;
-                                    ItemDataMethods.Write(prefab);
-                                    break;
-                                case "clone_item":
-                                    if (args.Length < 4) return false;
-                                    string? itemName = args[3];
-                                    ItemDataMethods.Clone(prefab, itemName, true);
-                                    break;
-                                case "write_spawn":
-                                    MonsterDBPlugin.MonsterDBLogger.LogInfo(SpawnMan.Write(prefab)
-                                        ? "Wrote spawn data to disk"
-                                        : "Failed to find spawn data");
-                                    break;
-                                case "export":
-                                    CreatureManager.Export(prefabName);
-                                    break;
-                            }
+                        case "update":
+                            Update(prefab);
                             break;
-                        case "reload":
-                            Initialization.RemoveAllClones();
-                            Initialization.CloneAll();
-                            Initialization.UpdateAll();
+                        case "clone":
+                            if (args.Length < 4) return false;
+                            var cloneName = args[3];
+                            CreatureManager.Clone(prefab, cloneName);
                             break;
-                        case "import":
-                            CreatureManager.Import();
-                            Initialization.RemoveAllClones();
-                            Initialization.CloneAll();
-                            Initialization.UpdateAll();
+                        case "reset":
+                            CreatureManager.Reset(prefab);
+                            break;
+                        case "write_item":
+                            if (!prefab.GetComponent<ItemDrop>()) return false;
+                            ItemDataMethods.Write(prefab);
+                            break;
+                        case "clone_item":
+                            if (args.Length < 4) return false;
+                            string? itemName = args[3];
+                            ItemDataMethods.Clone(prefab, itemName, true);
+                            break;
+                        case "write_spawn":
+                            MonsterDBPlugin.MonsterDBLogger.LogInfo(SpawnMan.Write(prefab)
+                                ? "Wrote spawn data to disk"
+                                : "Failed to find spawn data");
+                            break;
+                        case "export":
+                            CreatureManager.Export(prefabName);
                             break;
                     }
-                    
-                    return true;
-                }), onlyAdmin: true, optionsFetcher: () => new List<string>
+                    break;
+            }
+            
+            return true;
+        }), onlyAdmin: true, optionsFetcher: options);
+    }
+
+    private static readonly Terminal.ConsoleOptionsFetcher options = () => new List<string>()
+    {
+        "help", "write", "update", "clone", "reset", "reload", "write_item", "clone_item", "import", "export", "write_spawn"
+    };
+    private static void HandleSearch(Terminal __instance, string word, string[] strArray)
+    {
+        if (word is "reload" or "import" or "write_spawn" or "help")
+        {
+            __instance.m_search.text = word switch
             {
-                "help", "write", "update", "clone", "reset", "reload", "write_item", "clone_item", "import", "export", "write_spawn"
-            });
+                "reload" => "<color=red>Reloads all MonsterDB files</color>",
+                "import" => "<color=yellow>Imports all creature files from Import folder, and reload data</color>",
+                "write_spawn" => "<color=yellow>Tries to export spawn system data of creature</color>, <color=red>location dependant</color>",
+                "help" => "<color=white>Lists out MonsterDB commands and descriptions</color>",
+                _ => ""
+            };
+        }
+        else
+        {
+            List<string> list = word switch
+            {
+                "write" or "clone" => GetMonsterList(),
+                "update" or "reset" => GetUpdateList(),
+                "write_item" or "clone_item" => GetItemList(),
+                _ => new List<string>()
+            };
+            list.Sort();
+        
+            List<string> output;
+            string currentSearch = strArray[2];
+        
+            if (!currentSearch.IsNullOrWhiteSpace())
+            {
+                int indexOf = list.IndexOf(currentSearch);
+                output = indexOf != -1 ? list.GetRange(indexOf, list.Count - indexOf) : list;
+                output = output.FindAll(x => x.ToLower().Contains(currentSearch.ToLower()));
+            }
+            else output = list;
+        
+            __instance.m_lastSearch.Clear();
+            __instance.m_lastSearch.AddRange(output);
+            __instance.m_lastSearch.Remove(word);
+            __instance.m_search.text = "";
+        
+            int maxShown = 10;
+            int count = Math.Min(__instance.m_lastSearch.Count, maxShown);
+        
+            for (int index = 0; index < count; ++index)
+            { 
+                string text = __instance.m_lastSearch[index];
+                int num = text.ToLower().IndexOf(word.ToLower(), StringComparison.Ordinal);
+                __instance.m_search.text += __instance.safeSubstring(text, 0, num) + "  ";
+            }
+
+            if (__instance.m_lastSearch.Count <= maxShown) return;
+            int remainder = __instance.m_lastSearch.Count - maxShown;
+            __instance.m_search.text += $"... {remainder} more.";
+        }
     }
 
     private static void Help()
@@ -132,79 +205,6 @@ public static class Commands
         CreatureManager.Update(prefab, false);
         MonsterDBPlugin.MonsterDBLogger.LogInfo($"Updated {prefab.name}");
     }
-
-    [HarmonyPatch(typeof(Terminal), nameof(Terminal.updateSearch))]
-    private static class Terminal_UpdateSearch_Patch
-    {
-        private static bool Prefix(Terminal __instance, string word, List<string> options)
-        {
-            if (!ZNetScene.instance) return true;
-            if (__instance.m_search == null) return true;
-            string[] strArray = __instance.m_input.text.Split(' ');
-            if (strArray.Length < 3) return true;
-            if (strArray[0] != "monsterdb") return true;
-            if (word is "reload" or "import" or "write_spawn" or "help")
-            {
-                __instance.m_search.text = word switch
-                {
-                    "reload" => "<color=red>Reloads all MonsterDB files</color>",
-                    "import" => "<color=yellow>Imports all creature files from Import folder, and reload data</color>",
-                    "write_spawn" => "<color=yellow>Tries to export spawn system data of creature</color>, <color=red>location dependant</color>",
-                    "help" => "<color=white>Lists out MonsterDB commands and descriptions</color>",
-                    _ => ""
-                };
-                return false;
-            }
-
-            List<string> list;
-            switch (word)
-            {
-                case "write" or "clone":
-                    list = GetMonsterList();
-                    break;
-                case "update" or "reset":
-                    list = GetUpdateList();
-                    break;
-                case "write_item" or "clone_item":
-                    list = GetItemList();
-                    break;
-                default:
-                    list = options;
-                    break;
-            }
-
-            list.Sort();
-            List<string> output;
-            string currentSearch = strArray[2];
-            
-            if (!currentSearch.IsNullOrWhiteSpace())
-            {
-                int indexOf = list.IndexOf(currentSearch);
-                output = indexOf != -1 ? list.GetRange(indexOf, list.Count - indexOf) : list;
-                output = output.FindAll(x => x.ToLower().Contains(currentSearch.ToLower()));
-            }
-            else output = list;
-            
-            __instance.m_lastSearch.Clear();
-            __instance.m_lastSearch.AddRange(output);
-            __instance.m_lastSearch.Remove(word);
-            __instance.m_search.text = "";
-            
-            int maxShown = 10;
-            for (int index = 0; index < Math.Min(__instance.m_lastSearch.Count, maxShown); ++index)
-            { 
-                string text = __instance.m_lastSearch[index];
-                int num = text.ToLower().IndexOf(word.ToLower(), StringComparison.Ordinal);
-                __instance.m_search.text += __instance.safeSubstring(text, 0, num) + "  ";
-            }
-
-            if (__instance.m_lastSearch.Count <= maxShown) return false;
-            __instance.m_search.text += $"... {__instance.m_lastSearch.Count - maxShown} more.";
-            return false;
-        }
-    }
-
-    private static List<string> MonsterNames = new();
     private static List<string> GetMonsterList()
     {
         if (MonsterNames.Count > 0) return MonsterNames;
@@ -218,9 +218,6 @@ public static class Commands
         MonsterNames = output;
         return output;
     }
-
-    private static List<string> ItemNames = new();
-
     private static List<string> GetItemList()
     {
         if (ItemNames.Count > 0) return ItemNames;
