@@ -26,6 +26,8 @@ public class CreatureData
     public NPCTalkData m_npcTalk = new();
     public GrowUpData m_growUp = new();
     public List<LevelEffectData> m_levelEffects = new();
+    public Dictionary<string, bool> m_particles = new();
+    public VisualMethods.HumanData m_humanData = new();
 }
 
 [Serializable]

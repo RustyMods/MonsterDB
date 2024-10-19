@@ -56,6 +56,10 @@ public static class Commands
                     Initialization.CloneAll();
                     Initialization.UpdateAll();
                     break;
+                case "write_all":
+                    if (!ZNetScene.instance) return false;
+                    WriteAll();
+                    break;
                 case "write" or "update" or "clone" or "reset" or "write_item" or "clone_item" or "write_spawn" or "export":
                     if (args.Length < 3 || !ZNetScene.instance) return false;
                     string prefabName = args[2];
@@ -183,6 +187,15 @@ public static class Commands
                  })
         {
             MonsterDBPlugin.MonsterDBLogger.LogInfo(command);
+        }
+    }
+
+    private static void WriteAll()
+    {
+        foreach (var prefab in ZNetScene.instance.m_prefabs)
+        {
+            if (!prefab.GetComponent<Character>()) continue;
+            Write(prefab);
         }
     }
 

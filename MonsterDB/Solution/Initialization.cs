@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using BepInEx;
 using HarmonyLib;
 using MonsterDB.Solution.Methods;
@@ -10,7 +9,7 @@ namespace MonsterDB.Solution;
 
 public static class Initialization
 {
-    private static string m_statusEffectsPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "StatusEffects.txt";
+    private static readonly string m_statusEffectsPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "StatusEffects.txt";
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(typeof(ObjectDB), nameof(ObjectDB.Awake))]
     private static class ObjectDB_Awake_Patch
@@ -145,8 +144,6 @@ public static class Initialization
             ItemDataMethods.Clone(item, itemData.m_attackData.Name, false);
         }
     }
-    
-
     public static void UpdateAll(bool local = false)
     {
         if (!ZNetScene.instance || !ObjectDB.instance) return;

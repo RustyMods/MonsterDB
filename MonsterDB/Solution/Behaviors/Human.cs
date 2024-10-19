@@ -21,6 +21,16 @@ public class Human : Humanoid
         UpdateComponent();
     }
 
+    public override void OnRagdollCreated(Ragdoll ragdoll)
+    {
+        if (!ragdoll.TryGetComponent(out VisEquipment component)) return;
+        SetupVisEquipment(component, true);
+        Vector3 hairColor = m_nview.GetZDO().GetVec3(ZDOVars.s_hairColor, Vector3.zero);
+        Vector3 skinColor = m_nview.GetZDO().GetVec3(ZDOVars.s_skinColor, Vector3.one);
+        component.SetHairColor(hairColor);
+        component.SetSkinColor(skinColor);
+    }
+
     private void UpdateComponent()
     {
         if (!CreatureManager.m_data.TryGetValue(gameObject.name.Replace("(Clone)", string.Empty), out CreatureData creatureData)) return;
@@ -138,10 +148,10 @@ public class Human : Humanoid
         visEq.SetUtilityItem(m_utilityItem != null ? m_utilityItem.m_dropPrefab.name : "");
         visEq.SetBeardItem(m_beardItem);
         visEq.SetHairItem(m_hairItem);
-        if (TryGetComponent(out Visuals randomHuman))
-        {
-            visEq.SetHairColor(randomHuman.m_hairColor);
-        }
+        // if (TryGetComponent(out Visuals randomHuman))
+        // {
+        //     visEq.SetHairColor(randomHuman.m_hairColor);
+        // }
     }
     
     public override bool ToggleEquipped(ItemDrop.ItemData item)
@@ -221,6 +231,13 @@ public class Human : Humanoid
     {
         return base.InMinorAction();
     }
+
+    public override bool HaveEitr(float amount = 0)
+    {
+        return base.HaveEitr(amount);
+    }
+
+    public override float GetMaxEitr() => 9999f;
 
     public override bool StartAttack(Character? target, bool secondaryAttack)
     {

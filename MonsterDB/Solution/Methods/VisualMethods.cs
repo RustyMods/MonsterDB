@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
+using MonsterDB.Solution.Behaviors;
 using UnityEngine;
 using YamlDotNet.Serialization;
 using static MonsterDB.Solution.Methods.Helpers;
@@ -11,6 +12,8 @@ namespace MonsterDB.Solution.Methods;
 
 public static class VisualMethods
 {
+    private static readonly Dictionary<string, Shader> m_cachedShaders = new();
+
     private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
     private static readonly int MainTex = Shader.PropertyToID("_MainTex");
     private static Dictionary<string, Material> m_clonedMaterials = new();
@@ -32,7 +35,13 @@ public static class VisualMethods
         ISerializer serializer = new SerializerBuilder().Build();
         string serial = serializer.Serialize(scaleData);
         File.WriteAllText(scaleFilePath, serial);
-        
+
+        if (critter.GetComponent<Human>())
+        {
+            string humanFilePath = visualFolderPath + Path.DirectorySeparatorChar + "Human.yml";
+            File.WriteAllText(humanFilePath, serializer.Serialize(new HumanData()));
+        }
+
         SkinnedMeshRenderer[] renderers = critter.GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
@@ -66,13 +75,27 @@ public static class VisualMethods
                         a = emissionColor.a
                     };
                 }
-
                 string materialFilePath = materialFolderPath + Path.DirectorySeparatorChar + name + ".yml";
                 string materialSerial = serializer.Serialize(materialData);
                 File.WriteAllText(materialFilePath, materialSerial);
             }
         }
+
+        Dictionary<string, bool> m_particles = new();
+        foreach (var particle in critter.GetComponentsInChildren<ParticleSystem>(true))
+        {
+            m_particles[particle.name] = particle.gameObject.activeSelf;
+        }
+
+        foreach (var light in critter.GetComponentsInChildren<Light>(true))
+        {
+            m_particles[light.name] = light.gameObject.activeSelf;
+        }
+
         WriteArmatureStructure(critter, visualFolderPath);
+        if (m_particles.Count <= 0) return;
+        string particleFilePath = visualFolderPath + Path.DirectorySeparatorChar + "Particles.yml";
+        File.WriteAllText(particleFilePath, serializer.Serialize(m_particles));
     }
 
     private static void WriteArmatureStructure(GameObject critter, string folderPath)
@@ -143,6 +166,19 @@ public static class VisualMethods
         }
 
         creatureData.m_materials = materialExport;
+        
+        Dictionary<string, bool> m_particles = new();
+        foreach (var particle in critter.GetComponentsInChildren<ParticleSystem>(true))
+        {
+            m_particles[particle.name] = particle.gameObject.activeSelf;
+        }
+
+        foreach (var light in critter.GetComponentsInChildren<Light>(true))
+        {
+            m_particles[light.name] = light.gameObject.activeSelf;
+        }
+
+        creatureData.m_particles = m_particles;
     }
 
     public static void Read(string folderPath, ref CreatureData creatureData)
@@ -162,6 +198,20 @@ public static class VisualMethods
         catch
         {
             LogParseFailure(scaleFilePath);
+        }
+
+        string humanFilePath = visualFolderPath + Path.DirectorySeparatorChar + "Human.yml";
+        if (File.Exists(humanFilePath))
+        {
+            try
+            {
+                var humanData = deserializer.Deserialize<HumanData>(File.ReadAllText(humanFilePath));
+                creatureData.m_humanData = humanData;
+            }
+            catch
+            {
+                LogParseFailure(humanFilePath);
+            }
         }
 
         string ragDollFilePath = visualFolderPath + Path.DirectorySeparatorChar + "RagdollScale.yml";
@@ -197,6 +247,18 @@ public static class VisualMethods
         }
 
         creatureData.m_materials = dataMap;
+
+        string particleFilePath = visualFolderPath + Path.DirectorySeparatorChar + "Particles.yml";
+        if (!File.Exists(particleFilePath)) return;
+        try
+        {
+            var particleData = deserializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(particleFilePath));
+            creatureData.m_particles = particleData;
+        }
+        catch
+        {
+            LogParseFailure(particleFilePath);
+        }
     }
 
     public static void Update(GameObject critter, CreatureData creatureData)
@@ -205,6 +267,7 @@ public static class VisualMethods
         Dictionary<string, MaterialData> materialData = creatureData.m_materials;
         critter.transform.localScale = scale;
         SkinnedMeshRenderer[] renderers = critter.GetComponentsInChildren<SkinnedMeshRenderer>();
+        bool changedLight = false;
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             Material[] materials = renderer.sharedMaterials;
@@ -226,11 +289,55 @@ public static class VisualMethods
                 {
                     material.SetColor(EmissionColor, GetColor(data._EmissionColor));
                 }
+
+                material.shader = GetShader(material.shader, data.ShaderType);
+                if (data.Transparent) SetTransparent(material);
+                else SetOpaque(material);
+
+                if (!changedLight)
+                {
+                    var light = critter.GetComponentInChildren<Light>();
+                    if (light)
+                    {
+                        light.color = material.color;
+                        changedLight = true;
+                    }
+                }
             }
 
             renderer.sharedMaterials = materials.ToArray();
             renderer.materials = materials.ToArray();
         }
+
+        foreach (var kvp in creatureData.m_particles)
+        {
+            var particle = Utils.FindChild(critter.transform, kvp.Key);
+            particle.gameObject.SetActive(kvp.Value);
+        }
+    }
+
+    public static void SetOpaque(Material material)
+    {
+        material.SetOverrideTag("RenderType", "");
+        material.SetInt("_SrcBlend", (int) UnityEngine.Rendering.BlendMode.One);
+        material.SetInt("_DstBlend", (int) UnityEngine.Rendering.BlendMode.Zero);
+        material.SetInt("_ZWrite", 1);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.DisableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = -1;
+    }
+
+    public static void SetTransparent(Material material)
+    {
+        material.SetOverrideTag("RenderType", "Transparent");
+        material.SetInt("_SrcBlend", (int) UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetInt("_DstBlend", (int) UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.EnableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = (int) UnityEngine.Rendering.RenderQueue.Transparent;
     }
 
     public static Dictionary<string, Material> CloneMaterials(GameObject critter)
@@ -273,8 +380,47 @@ public static class VisualMethods
         }
     }
 
+    private static Shader GetShader(Shader original, string name)
+    {
+        if (m_cachedShaders.Count <= 0) CacheShaders();
+        return m_cachedShaders.TryGetValue(name, out Shader shader) ? shader : original;
+    }
+
+    private static void CacheShaders()
+    {
+        var assets = Resources.FindObjectsOfTypeAll<AssetBundle>();
+        foreach (var bundle in assets)
+        {
+            IEnumerable<Shader>? shaders;
+            try
+            {
+                shaders = bundle.isStreamedSceneAssetBundle && bundle
+                    ? bundle.GetAllAssetNames().Select(bundle.LoadAsset<Shader>).Where(shader => shader != null)
+                    : bundle.LoadAllAssets<Shader>();
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+
+            if (shaders == null) continue;
+            foreach (var shader in shaders)
+            {
+                m_cachedShaders[shader.name] = shader;
+            }
+        }
+    }
+
     public static Color GetColor(ColorData data) => new Color(data.r, data.g, data.b, data.a);
 
+    [Serializable]
+    public class HumanData
+    {
+        public int ModelIndex = 0;
+        public int BeardIndex = 0;
+        public int HairIndex = 0;
+    }
+    
     [Serializable]
     public class ScaleData
     {
@@ -291,6 +437,7 @@ public static class VisualMethods
         public ColorData _Color = new();
         public string _MainTex = "";
         public ColorData _EmissionColor = new();
+        public bool Transparent;
     }
 
     [Serializable]
