@@ -26,7 +26,8 @@ public static class CreatureManager
     private static FileSystemWatcher m_creatureWatcher = null!;
     private static FileSystemWatcher m_cloneWatcher = null!;
 
-
+    private static bool m_writing;
+    
     [HarmonyPatch(typeof(ZNet), nameof(ZNet.Awake))]
     private static class ZNet_Awake_Patch
     {
@@ -92,6 +93,7 @@ public static class CreatureManager
 
     private static void OnImportFileChange(object sender, FileSystemEventArgs e)
     {
+        if (!MonsterDBPlugin.AutoUpdate() || m_writing) return;
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         try
         {
@@ -114,6 +116,7 @@ public static class CreatureManager
 
     private static void OnCloneFileChange(object sender, FileSystemEventArgs e)
     {
+        if (!MonsterDBPlugin.AutoUpdate() || m_writing) return;
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         string fileName = Path.GetFileName(e.Name);
         string cloneName = GetCloneFolderName(e.FullPath);
@@ -126,6 +129,7 @@ public static class CreatureManager
 
     private static void OnCreatureFileChange(object sender, FileSystemEventArgs e)
     {
+        if (!MonsterDBPlugin.AutoUpdate() || m_writing) return;
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         string fileName = Path.GetFileName(e.Name);
         string creatureName = GetCreatureFolderName(e.FullPath);
@@ -197,14 +201,18 @@ public static class CreatureManager
         m_originalData[critter.name] = data;
     }
 
-    public static void Write(GameObject critter, out string folderPath, bool clone = false, string clonedFrom = "")
+    public static bool Write(GameObject critter, out string folderPath, bool clone = false, string clonedFrom = "", bool writeAll = false)
     {
-        m_creatureWatcher.EnableRaisingEvents = false;
-        m_cloneWatcher.EnableRaisingEvents = false;
+        m_writing = true;
         if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
         if (!Directory.Exists(m_creatureFolderPath)) Directory.CreateDirectory(m_creatureFolderPath);
         folderPath = (clone ? m_cloneFolderPath : m_creatureFolderPath) + Path.DirectorySeparatorChar + critter.name;
-
+        if (writeAll && Directory.Exists(folderPath))
+        {
+            MonsterDBPlugin.MonsterDBLogger.LogDebug(critter.name + " files already exist, skipping");
+            m_writing = false;
+            return false;
+        }
         if (Directory.Exists(folderPath)) Directory.Delete(folderPath, true);
         Directory.CreateDirectory(folderPath);
         VisualMethods.Write(critter, folderPath);
@@ -218,8 +226,8 @@ public static class CreatureManager
         NPCTalkMethods.Write(critter, folderPath);
         GrowUpMethods.Write(critter, folderPath);
         LevelEffectsMethods.Write(critter, folderPath);
-        m_creatureWatcher.EnableRaisingEvents = true;
-        m_cloneWatcher.EnableRaisingEvents = true;
+        m_writing = false;
+        return true;
     }
 
     public static void Read(string creatureName, bool isClone = false)

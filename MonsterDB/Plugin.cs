@@ -16,7 +16,7 @@ namespace MonsterDB
     public class MonsterDBPlugin : BaseUnityPlugin
     {
         internal const string ModName = "MonsterDB";
-        internal const string ModVersion = "0.1.0";
+        internal const string ModVersion = "0.1.1";
         internal const string Author = "RustyMods";
         private const string ModGUID = Author + "." + ModName;
         private static readonly string ConfigFileName = ModGUID + ".cfg";
@@ -34,14 +34,17 @@ namespace MonsterDB
         private static ConfigEntry<Toggle> _serverConfigLocked = null!;
         private static ConfigEntry<Toggle> _shareTextures = null!;
         private static ConfigEntry<Toggle> _useRandomNames = null!;
+        private static ConfigEntry<Toggle> _autoUpdate = null!;
         public static bool ShareTextures() => _shareTextures.Value is Toggle.On;
         public static bool UseNames() => _useRandomNames.Value is Toggle.On;
+        public static bool AutoUpdate() => _autoUpdate.Value is Toggle.On;
         private void InitConfigs()
         {
             _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
             _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
             _shareTextures = config("2 - Settings", "Server Sync Textures", Toggle.Off, "If on, clients can download textures from server, experimental");
             _useRandomNames = config("2 - Settings", "Use Viking Names", Toggle.Off, "If on, any creatures based on Human, will use random names");
+            _autoUpdate = config("2 - Settings", "Auto Update", Toggle.On, "If on, any changes made to files will automatically update creature");
         }
         public void Awake()
         {

@@ -10,9 +10,10 @@ namespace MonsterDB.Solution;
 
 public static class Commands
 {
+    private static readonly Dictionary<string, CommandInfo> m_commands = new();
     private static List<string> MonsterNames = new();
     private static List<string> ItemNames = new();
-    
+
     [HarmonyPatch(typeof(Terminal), nameof(Terminal.updateSearch))]
     private static class Terminal_UpdateSearch_Patch
     {
@@ -27,93 +28,155 @@ public static class Commands
             return false;
         }
     }
-    
+
     [HarmonyPatch(typeof(Terminal), nameof(Terminal.Awake))]
     private static class Terminal_Awake_Patch
     {
-        private static void Postfix() => LoadCommands();
-    }
-
-    private static void LoadCommands()
-    {
-        Terminal.ConsoleCommand commands = new Terminal.ConsoleCommand("monsterdb", "use help to list out commands", (Terminal.ConsoleEventFailable)(args =>
+        private static void Postfix()
         {
-            if (args.Length < 2) return false;
-
-            switch (args[1])
+            CommandInfo help = new("help", "Use to list out MonsterDB commands", _ =>
             {
-                case "help":
-                    Help();
-                    break;
-                case "reload":
-                    Initialization.RemoveAllClones();
-                    Initialization.CloneAll();
-                    Initialization.UpdateAll();
-                    break;
-                case "import":
-                    CreatureManager.Import();
-                    Initialization.RemoveAllClones();
-                    Initialization.CloneAll();
-                    Initialization.UpdateAll();
-                    break;
-                case "write_all":
-                    if (!ZNetScene.instance) return false;
-                    WriteAll();
-                    break;
-                case "write" or "update" or "clone" or "reset" or "write_item" or "clone_item" or "write_spawn" or "export":
-                    if (args.Length < 3 || !ZNetScene.instance) return false;
-                    string prefabName = args[2];
-                    GameObject? prefab = DataBase.TryGetGameObject(prefabName);
-                    if (prefab == null)
-                    {
-                        MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
-                        return false;
-                    }
-                    switch (args[1])
-                    {
-                        case "write":
-                            Write(prefab);
-                            break;
-                        case "update":
-                            Update(prefab);
-                            break;
-                        case "clone":
-                            if (args.Length < 4) return false;
-                            var cloneName = args[3];
-                            CreatureManager.Clone(prefab, cloneName);
-                            break;
-                        case "reset":
-                            CreatureManager.Reset(prefab);
-                            break;
-                        case "write_item":
-                            if (!prefab.GetComponent<ItemDrop>()) return false;
-                            ItemDataMethods.Write(prefab);
-                            break;
-                        case "clone_item":
-                            if (args.Length < 4) return false;
-                            string? itemName = args[3];
-                            ItemDataMethods.Clone(prefab, itemName, true);
-                            break;
-                        case "write_spawn":
-                            MonsterDBPlugin.MonsterDBLogger.LogInfo(SpawnMan.Write(prefab)
-                                ? "Wrote spawn data to disk"
-                                : "Failed to find spawn data");
-                            break;
-                        case "export":
-                            CreatureManager.Export(prefabName);
-                            break;
-                    }
-                    break;
-            }
-            
-            return true;
-        }), onlyAdmin: true, optionsFetcher: options);
-    }
+                foreach (CommandInfo command in m_commands.Values)
+                {
+                    if (!command.m_show) continue;
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"{command.m_input} - {command.m_description}");
+                }
+            });
+            CommandInfo reload = new("reload", "Reloads all MonsterDB files", _ =>
+            {
+                Initialization.RemoveAllClones();
+                Initialization.CloneAll();
+                Initialization.UpdateAll();
+            });
+            CommandInfo import = new("import", "Imports all creature files from Import folder, and reloads data", _ =>
+            {
+                CreatureManager.Import();
+                Initialization.RemoveAllClones();
+                Initialization.CloneAll();
+                Initialization.UpdateAll();
+            });
+            CommandInfo write_all = new("write_all", "Writes all creatures data to disk", _ =>
+            {
+                if (!ZNetScene.instance) return;
+                foreach (GameObject prefab in ZNetScene.instance.m_prefabs)
+                {
+                    if (!prefab.GetComponent<Character>()) continue;
+                    Write(prefab, true);
+                }
+            });
+            CommandInfo write = new("write", "[prefabName] Writes creature data to disk", args =>
+            {
+                if (args.Length < 3 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                Write(prefab);
+            });
+            CommandInfo update = new("update", "[prefabName] Reads files and updates creature", args =>
+            {
+                if (args.Length < 3 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                CreatureManager.Read(prefab.name, CreatureManager.IsClone(prefab));
+                CreatureManager.Update(prefab, false);
+                MonsterDBPlugin.MonsterDBLogger.LogInfo($"Updated {prefab.name}");
+            });
+            CommandInfo clone = new("clone", "[prefabName] [cloneName] Clones creature, and saves to disk", args =>
+            {
+                if (args.Length < 4 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                var cloneName = args[3];
+                CreatureManager.Clone(prefab, cloneName);
+            });
+            CommandInfo reset = new("reset", "[prefabName] Resets creature data to original state", args =>
+            {
+                if (args.Length < 3 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                CreatureManager.Reset(prefab);
+            });
+            CommandInfo write_item = new("write_item", "[prefabName] Saves itemData to file for reference", args =>
+            {
+                if (args.Length < 3 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                if (!prefab.GetComponent<ItemDrop>()) return;
+                ItemDataMethods.Write(prefab);
+            });
+            CommandInfo clone_item = new("clone_item", "[prefabName] [cloneName] Clones item to use as a new attack for creatures", args =>
+            {
+                if (args.Length < 4 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                string itemName = args[3];
+                ItemDataMethods.Clone(prefab, itemName, true);
+            });
+            CommandInfo write_spawn = new("write_spawn", "[prefabName] Writes to disk spawn data, of current spawn system", args =>
+            {
+                if (args.Length < 3 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
 
-    private static readonly Terminal.ConsoleOptionsFetcher options = () => new List<string>()
-    {
-        "help", "write", "update", "clone", "reset", "reload", "write_item", "clone_item", "import", "export", "write_spawn"
-    };
+                MonsterDBPlugin.MonsterDBLogger.LogInfo(SpawnMan.Write(prefab)
+                    ? "Wrote spawn data to disk"
+                    : "Failed to find spawn data");
+            });
+            CommandInfo export = new("export", "[prefabName] Writes creature data to a single YML document to share", args =>
+            {
+                if (args.Length < 3 || !ZNetScene.instance) return;
+                string prefabName = args[2];
+                GameObject? prefab = DataBase.TryGetGameObject(prefabName);
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.MonsterDBLogger.LogInfo($"Failed to find prefab: {prefabName}");
+                    return;
+                }
+                CreatureManager.Export(prefabName);
+            });
+            Terminal.ConsoleCommand mainCommand = new Terminal.ConsoleCommand("monsterdb", "use help to list out commands", (Terminal.ConsoleEventFailable)(args =>
+            {
+                if (args.Length < 2) return false;
+                if (!m_commands.TryGetValue(args[1], out CommandInfo command)) return false;
+                command.m_command(args);
+                return true;
+            }), onlyAdmin: true, optionsFetcher: m_commands.Keys.ToList);
+        }
+    }
     private static void HandleSearch(Terminal __instance, string word, string[] strArray)
     {
         if (word is "reload" or "import" or "write_spawn" or "help")
@@ -122,7 +185,8 @@ public static class Commands
             {
                 "reload" => "<color=red>Reloads all MonsterDB files</color>",
                 "import" => "<color=yellow>Imports all creature files from Import folder, and reload data</color>",
-                "write_spawn" => "<color=yellow>Tries to export spawn system data of creature</color>, <color=red>location dependant</color>",
+                "write_spawn" =>
+                    "<color=yellow>Tries to export spawn system data of creature</color>, <color=red>location dependant</color>",
                 "help" => "<color=white>Lists out MonsterDB commands and descriptions</color>",
                 _ => ""
             };
@@ -137,10 +201,10 @@ public static class Commands
                 _ => new List<string>()
             };
             list.Sort();
-        
+
             List<string> output;
             string currentSearch = strArray[2];
-        
+
             if (!currentSearch.IsNullOrWhiteSpace())
             {
                 int indexOf = list.IndexOf(currentSearch);
@@ -148,17 +212,17 @@ public static class Commands
                 output = output.FindAll(x => x.ToLower().Contains(currentSearch.ToLower()));
             }
             else output = list;
-        
+
             __instance.m_lastSearch.Clear();
             __instance.m_lastSearch.AddRange(output);
             __instance.m_lastSearch.Remove(word);
             __instance.m_search.text = "";
-        
+
             int maxShown = 10;
             int count = Math.Min(__instance.m_lastSearch.Count, maxShown);
-        
+
             for (int index = 0; index < count; ++index)
-            { 
+            {
                 string text = __instance.m_lastSearch[index];
                 int num = text.ToLower().IndexOf(word.ToLower(), StringComparison.Ordinal);
                 __instance.m_search.text += __instance.safeSubstring(text, 0, num) + "  ";
@@ -170,54 +234,20 @@ public static class Commands
         }
     }
 
-    private static void Help()
+    private static void Write(GameObject prefab, bool writeAll = false)
     {
-        foreach (string command in new List<string>()
-                 {
-                     "write [prefabName] - Write creature data to disk", 
-                     "update [prefabName] - Reads files and updates creature",
-                     "clone [prefabName] [cloneName] - Clones creature, and saves to disk", 
-                     "reset [prefabName] - Resets creature data to original state",
-                     "reload - Reloads all MonsterDB files",
-                     "write_item [prefabName] - Saves ItemData to file for reference",
-                     "clone_item [prefabName] [cloneName] - Clones item to use as a new attack for creatures",
-                     "write_spawn [prefabName] - Writes to disk spawn data, of current spawn system",
-                     "import - Imports all creature files from Import folder, and reload data",
-                     "export [prefabName] - Writes creature data to a single YML document to share"
-                 })
-        {
-            MonsterDBPlugin.MonsterDBLogger.LogInfo(command);
-        }
-    }
-
-    private static void WriteAll()
-    {
-        foreach (var prefab in ZNetScene.instance.m_prefabs)
-        {
-            if (!prefab.GetComponent<Character>()) continue;
-            Write(prefab);
-        }
-    }
-
-    private static void Write(GameObject prefab)
-    {
+        if (prefab.GetComponent<Player>()) return;
         if (CreatureManager.IsClone(prefab))
         {
             MonsterDBPlugin.MonsterDBLogger.LogInfo("Creature is a MonsterDB clone, will not write to disk");
             return;
         }
 
-        CreatureManager.Write(prefab, out string folderPath);
+        if (!CreatureManager.Write(prefab, out string folderPath, writeAll: writeAll)) return;
         MonsterDBPlugin.MonsterDBLogger.LogInfo($"Saved {prefab.name} at:");
         MonsterDBPlugin.MonsterDBLogger.LogInfo(folderPath);
     }
 
-    private static void Update(GameObject prefab)
-    {
-        CreatureManager.Read(prefab.name, CreatureManager.IsClone(prefab));
-        CreatureManager.Update(prefab, false);
-        MonsterDBPlugin.MonsterDBLogger.LogInfo($"Updated {prefab.name}");
-    }
     private static List<string> GetMonsterList()
     {
         if (MonsterNames.Count > 0) return MonsterNames;
@@ -231,11 +261,12 @@ public static class Commands
         MonsterNames = output;
         return output;
     }
+
     private static List<string> GetItemList()
     {
         if (ItemNames.Count > 0) return ItemNames;
         List<string> output = new();
-        foreach (var prefab in DataBase.m_allObjects.Values)
+        foreach (GameObject prefab in DataBase.m_allObjects.Values)
         {
             if (prefab == null) continue;
             if (ItemDataMethods.IsClone(prefab)) continue;
@@ -248,4 +279,20 @@ public static class Commands
 
     private static List<string> GetUpdateList() => CreatureManager.m_data.Keys.ToList();
     
+    private class CommandInfo
+    {
+        public readonly string m_input;
+        public readonly string m_description;
+        public readonly bool m_show;
+        public readonly Action<Terminal.ConsoleEventArgs> m_command;
+
+        public CommandInfo(string input, string description, Action<Terminal.ConsoleEventArgs> command, bool show = true)
+        {
+            m_input = input;
+            m_description = description;
+            m_command = command;
+            m_show = show;
+            m_commands[m_input] = this;
+        }
+    }
 }
