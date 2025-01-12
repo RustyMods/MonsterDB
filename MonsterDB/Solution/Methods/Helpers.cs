@@ -151,6 +151,7 @@ public static class Helpers
         {
             m_effectPrefabs = effects.ToArray()
         };
+        
     }
 
     public static void LogParseFailure(string filePath)

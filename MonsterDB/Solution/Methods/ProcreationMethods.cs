@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using BepInEx;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -8,12 +9,15 @@ namespace MonsterDB.Solution.Methods;
 
 public static class ProcreationMethods
 {
+    public static List<string> m_oldProcreators = new();
+    public static List<string> m_removedOldProcreators = new();
     public static void Save(GameObject critter, ref CreatureData creatureData)
     {
         if (!critter.TryGetComponent(out Procreation component)) return;
         creatureData.m_procreation = RecordProcreationData(component);
         SaveEffectList(component.m_birthEffects, ref creatureData.m_effects.m_birthEffects);
         SaveEffectList(component.m_loveEffects, ref creatureData.m_effects.m_loveEffects);
+        if (!m_oldProcreators.Contains(critter.name)) m_oldProcreators.Add(critter.name);
     }
     
     public static void Write(GameObject critter, string folderPath)
@@ -77,12 +81,20 @@ public static class ProcreationMethods
 
     public static void Update(GameObject critter, CreatureData creatureData)
     {
-        if (!critter.GetComponent<Tameable>() || !critter.GetComponent<Character>() || !critter.GetComponent<BaseAI>()) return;
         ProcreationData data = creatureData.m_procreation;
+        if (data.Offspring.IsNullOrWhiteSpace())
+        {
+            if (RemoveComponent(critter)) return;
+        }
+        if (!critter.GetComponent<Tameable>() || !critter.GetComponent<Character>() || !critter.GetComponent<BaseAI>()) return;
         Vector3 scale = GetScale(creatureData.m_scale);
         GameObject? offspring = DataBase.TryGetGameObject(data.Offspring);
         if (offspring == null) return;
-        if (!critter.TryGetComponent(out Procreation component)) component = critter.AddComponent<Procreation>();
+        if (!critter.TryGetComponent(out Procreation component))
+        {
+            component = critter.AddComponent<Procreation>();
+            if (m_removedOldProcreators.Contains(critter.name)) m_removedOldProcreators.Remove(critter.name);
+        }
         component.m_updateInterval = data.UpdateInterval;
         component.m_totalCheckRange = data.TotalCheckRange;
         component.m_maxCreatures = data.MaxCreatures;
@@ -95,5 +107,15 @@ public static class ProcreationMethods
         component.m_spawnOffset = data.SpawnOffset;
         UpdateEffectList(creatureData.m_effects.m_birthEffects, ref component.m_birthEffects, scale);
         UpdateEffectList(creatureData.m_effects.m_loveEffects, ref component.m_loveEffects, scale);
+    }
+
+    private static bool RemoveComponent(GameObject critter)
+    {
+        if (!m_oldProcreators.Contains(critter.name)) return false;
+        if (!critter.TryGetComponent(out Procreation component)) return false;
+        Object.Destroy(component);
+        m_removedOldProcreators.Add(critter.name);
+        MonsterDBPlugin.MonsterDBLogger.LogDebug($"Procreation removed from {critter.name} that originally had one");
+        return true;
     }
 }

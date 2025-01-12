@@ -15,6 +15,8 @@ public static class TameableMethods
     private static readonly List<string> m_newHumanoids = new();
     private static readonly List<string> m_newMonsterAI = new();
 
+    private static readonly HashSet<string> m_oldTames = new();
+    private static readonly List<string> m_removedOldTames = new();
     public static void Save(GameObject critter, ref CreatureData creatureData)
     {
         if (!critter.TryGetComponent(out Tameable component)) return;
@@ -23,6 +25,7 @@ public static class TameableMethods
         SaveEffectList(component.m_sootheEffect, ref creatureData.m_effects.m_soothEffects);
         SaveEffectList(component.m_petEffect, ref creatureData.m_effects.m_petEffects);
         SaveEffectList(component.m_petEffect, ref creatureData.m_effects.m_unSummonEffects);
+        if (!m_oldTames.Contains(critter.name)) m_oldTames.Add(critter.name);
     }
     
     public static void Write(GameObject critter, string folderPath)
@@ -118,7 +121,8 @@ public static class TameableMethods
                 ConvertToHumanoid(critter, character);
             }
             component = critter.AddComponent<Tameable>();
-            if (!m_newTames.Contains(critter.name)) m_newTames.Add(critter.name);
+            if (m_removedOldTames.Contains(critter.name)) m_removedOldTames.Remove(critter.name);
+            else if (!m_newTames.Contains(critter.name)) m_newTames.Add(critter.name);
         }
         component.m_fedDuration = data.FedDuration;
         component.m_tamingTime = data.TamingTime;
@@ -164,6 +168,16 @@ public static class TameableMethods
             if (critter.TryGetComponent(out MonsterAI monsterAI))
             {
                 ConvertToAnimalAI(critter, monsterAI);
+            }
+        }
+
+        if (m_oldTames.Contains(critter.name))
+        {
+            if (critter.TryGetComponent(out Tameable tameeable))
+            {
+                Object.Destroy(tameeable);
+                m_removedOldTames.Add(critter.name);
+                MonsterDBPlugin.MonsterDBLogger.LogDebug($"Tameable removed from {critter.name} that originally had one");
             }
         }
     }

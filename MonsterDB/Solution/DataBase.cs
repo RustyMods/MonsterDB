@@ -43,10 +43,8 @@ public static class DataBase
     public static GameObject? TryGetGameObject(string prefabName)
     {
         if (!ZNetScene.instance || !ObjectDB.instance) return null;
-        GameObject prefab = ObjectDB.instance.GetItemPrefab(prefabName);
-        if (prefab != null) return prefab;
-        prefab = ZNetScene.instance.GetPrefab(prefabName);
-        if (prefab != null) return prefab;
+        if (ObjectDB.instance.GetItemPrefab(prefabName) is { } dbPrefab) return dbPrefab;
+        if (ZNetScene.instance.GetPrefab(prefabName) is { } zPrefab) return zPrefab; ;
         if (HumanMan.m_newHumans.TryGetValue(prefabName, out GameObject human)) return human;
         if (ItemDataMethods.m_clonedItems.TryGetValue(prefabName, out GameObject clone)) return clone;
         return !m_allObjects.TryGetValue(prefabName, out GameObject item) ? null : item;

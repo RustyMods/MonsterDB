@@ -18,7 +18,8 @@ public class Human : Humanoid
     public override void Awake()
     {
         base.Awake();
-        UpdateComponent();
+        if (!CreatureManager.m_data.TryGetValue(gameObject.name.Replace("(Clone)", string.Empty), out CreatureData creatureData)) return;
+        HumanoidMethods.Update(gameObject, creatureData);
     }
 
     public override void OnRagdollCreated(Ragdoll ragdoll)
@@ -29,26 +30,6 @@ public class Human : Humanoid
         Vector3 skinColor = m_nview.GetZDO().GetVec3(ZDOVars.s_skinColor, Vector3.one);
         component.SetHairColor(hairColor);
         component.SetSkinColor(skinColor);
-    }
-
-    private void UpdateComponent()
-    {
-        if (!CreatureManager.m_data.TryGetValue(gameObject.name.Replace("(Clone)", string.Empty), out CreatureData creatureData)) return;
-        Vector3 scale = Helpers.GetScale(creatureData.m_scale);
-            
-        m_defaultItems = new List<GameObject>().ToArray();
-        m_randomWeapon = new List<GameObject>().ToArray();
-        m_randomShield = new List<GameObject>().ToArray();
-        m_randomArmor = new List<GameObject>().ToArray();
-        m_randomSets = new List<ItemSet>().ToArray();
-        m_randomItems = new List<RandomItem>().ToArray();
-
-        HumanoidMethods.UpdateItems(ref m_defaultItems, creatureData.m_defaultItems, scale);
-        HumanoidMethods.UpdateItems(ref m_randomWeapon, creatureData.m_randomWeapons, scale);
-        HumanoidMethods.UpdateItems(ref m_randomShield, creatureData.m_randomShields, scale);
-        HumanoidMethods.UpdateItems(ref m_randomArmor, creatureData.m_randomArmors, scale);
-        HumanoidMethods.UpdateRandomSets(ref m_randomSets, creatureData.m_randomSets, scale);
-        HumanoidMethods.UpdateRandomItems(ref m_randomItems, creatureData.m_randomItems, scale);
     }
 
     public void FixedUpdate()
@@ -414,7 +395,7 @@ public class Human : Humanoid
     {
         private static void Postfix(Humanoid character, ref bool __result)
         {
-            if (character is not Human companion) return;
+            if (character is not Human) return;
             __result = true;
         }
     }
@@ -424,7 +405,7 @@ public class Human : Humanoid
     {
         private static void Prefix(Humanoid character, ItemDrop.ItemData weapon, ref bool __result)
         {
-            if (character is not Human companion) return;
+            if (character is not Human) return;
             switch (weapon.m_shared.m_ammoType)
             {
                 case "$ammo_arrows":

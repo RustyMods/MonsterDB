@@ -15,10 +15,10 @@ public static class CreatureManager
     public static readonly string m_creatureFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Creatures";
     public static readonly string m_cloneFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Clones";
     private static readonly string m_exportFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Export";
-    private static readonly string m_importFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Import";
+    public static readonly string m_importFolderPath = m_folderPath + Path.DirectorySeparatorChar + "Import";
 
     private static readonly CustomSyncedValue<string> m_serverDataFiles = new(MonsterDBPlugin.ConfigSync, "MonsterDB_ServerFiles", "");
-    private static readonly Dictionary<string, CreatureData> m_originalData = new();
+    public static readonly Dictionary<string, CreatureData> m_originalData = new();
     public static Dictionary<string, CreatureData> m_data = new();
     public static readonly Dictionary<string, CreatureData> m_localData = new();
     public static readonly Dictionary<string, GameObject> m_clones = new();
@@ -230,10 +230,15 @@ public static class CreatureManager
         return true;
     }
 
-    public static void Read(string creatureName, bool isClone = false)
+    public static bool Read(string creatureName, bool isClone = false)
     {
         string folderPath = (isClone ? m_cloneFolderPath : m_creatureFolderPath) + Path.DirectorySeparatorChar + creatureName;
-        if (!Directory.Exists(folderPath)) return;
+        if (!Directory.Exists(folderPath))
+        {
+            Debug.LogWarning("Failed to find folder: ");
+            Debug.LogWarning(folderPath);
+            return false;
+        }
         
         CreatureData data = new();
         VisualMethods.Read(folderPath, ref data);
@@ -251,22 +256,33 @@ public static class CreatureManager
         m_data[creatureName] = data;
         m_localData[creatureName] = data;
         UpdateServer();
+        return true;
     }
 
-    public static void Update(GameObject critter, bool local = false)
+    public static bool Update(GameObject critter, bool local = false)
     {
         if (local)
         {
-            if (!m_localData.TryGetValue(critter.name, out CreatureData data)) return;
+            if (!m_localData.TryGetValue(critter.name, out CreatureData data))
+            {
+                Debug.LogWarning("Failed to find: " + critter.name);
+                return false;
+            }
             Save(critter, data.m_characterData.ClonedFrom);
             Update(critter, data);
         }
         else
         {
-            if (!m_data.TryGetValue(critter.name, out CreatureData data)) return;
+            if (!m_data.TryGetValue(critter.name, out CreatureData data))
+            {
+                Debug.LogWarning("Failed to find: " + critter.name);
+                return false;
+            }
             Save(critter, data.m_characterData.ClonedFrom);
             Update(critter, data);
         }
+
+        return true;
     }
 
     private static void Update(GameObject critter, CreatureData data)

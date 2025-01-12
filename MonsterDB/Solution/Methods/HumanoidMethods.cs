@@ -474,7 +474,6 @@ public static class HumanoidMethods
         CharacterEffects effectData = creatureData.m_effects;
         Vector3 scale = GetScale(creatureData.m_scale);
         Vector3 ragDollScale = GetScale(creatureData.m_ragdollScale);
-        
         component.m_name = data.Name;
         component.m_group = data.Group;
         if (Enum.TryParse(data.Faction, true, out Character.Faction faction))
@@ -592,11 +591,11 @@ public static class HumanoidMethods
         component.m_randomSets = new List<Humanoid.ItemSet>().ToArray();
         component.m_randomItems = new List<Humanoid.RandomItem>().ToArray();
 
-        UpdateItems(ref component.m_defaultItems, creatureData.m_defaultItems, scale);
-        UpdateItems(ref component.m_randomWeapon, creatureData.m_randomWeapons, scale);
-        UpdateItems(ref component.m_randomShield, creatureData.m_randomShields, scale);
-        UpdateItems(ref component.m_randomArmor, creatureData.m_randomArmors, scale);
-        UpdateRandomSets(ref component.m_randomSets, creatureData.m_randomSets, scale);
+        UpdateItems(ref component.m_defaultItems, creatureData.m_defaultItems, scale, creatureData);
+        UpdateItems(ref component.m_randomWeapon, creatureData.m_randomWeapons, scale, creatureData);
+        UpdateItems(ref component.m_randomShield, creatureData.m_randomShields, scale, creatureData);
+        UpdateItems(ref component.m_randomArmor, creatureData.m_randomArmors, scale, creatureData);
+        UpdateRandomSets(ref component.m_randomSets, creatureData.m_randomSets, scale, creatureData);
         UpdateRandomItems(ref component.m_randomItems, creatureData.m_randomItems, scale);
     }
 
@@ -763,7 +762,7 @@ public static class HumanoidMethods
         list = items.ToArray();
     }
 
-    public static void UpdateItems(ref GameObject[] list, List<ItemAttackData> itemAttackDataList, Vector3 scale)
+    public static void UpdateItems(ref GameObject[] list, List<ItemAttackData> itemAttackDataList, Vector3 scale, CreatureData creatureData)
     {
         if (itemAttackDataList.Count <= 0) return;
         List<GameObject> items = new();
@@ -777,6 +776,7 @@ public static class HumanoidMethods
             if (prefab == null) continue;
             if (!prefab.TryGetComponent(out ItemDrop component)) continue;
             ScaleItem(prefab, scale);
+            
             if (Enum.TryParse(data.AnimationState, true, out ItemDrop.ItemData.AnimationState state))
             {
                 component.m_itemData.m_shared.m_animationState = state;
@@ -915,7 +915,7 @@ public static class HumanoidMethods
         list = sets.ToArray();
     }
 
-    public static void UpdateRandomSets(ref Humanoid.ItemSet[] list, List<RandomItemSetsData> data, Vector3 scale)
+    public static void UpdateRandomSets(ref Humanoid.ItemSet[] list, List<RandomItemSetsData> data, Vector3 scale, CreatureData creatureData)
     {
         if (data.Count <= 0) return;
         List<Humanoid.ItemSet> sets = new();
@@ -926,7 +926,7 @@ public static class HumanoidMethods
             {
                 m_name = setName
             };
-            UpdateItems(ref set.m_items, setData.m_items, scale);
+            UpdateItems(ref set.m_items, setData.m_items, scale, creatureData);
             sets.Add(set);
         }
 

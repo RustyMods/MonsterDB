@@ -11,9 +11,7 @@ public static class HumanMan
     public static GameObject? Create(string name)
     {
         if (!ZNetScene.instance) return null;
-        GameObject player = ZNetScene.instance.GetPrefab("Player");
-        if (!player) return null;
-        if (!player.TryGetComponent(out Player component)) return null;
+        if (ZNetScene.instance.GetPrefab("Player") is not { } player || !player.TryGetComponent(out Player component)) return null;
         GameObject human = Object.Instantiate(player, MonsterDBPlugin.m_root.transform, false);
         human.name = name;
 
@@ -174,15 +172,14 @@ public static class HumanMan
                 m_levelMultiplier = true,
             }
         };
-        GameObject boar = ZNetScene.instance.GetPrefab("Boar");
-        if (boar.TryGetComponent(out Tameable loxTame))
+        if (ZNetScene.instance.GetPrefab("Boar").TryGetComponent(out Tameable boar))
         {
             tameable.m_fedDuration = 600f;
             tameable.m_tamingTime = 1800f;
             tameable.m_commandable = true;
-            tameable.m_tamedEffect = loxTame.m_tamedEffect;
-            tameable.m_sootheEffect = loxTame.m_sootheEffect;
-            tameable.m_petEffect = loxTame.m_petEffect;
+            tameable.m_tamedEffect = boar.m_tamedEffect;
+            tameable.m_sootheEffect = boar.m_sootheEffect;
+            tameable.m_petEffect = boar.m_petEffect;
             tameable.m_commandable = true;
             tameable.m_unsummonDistance = 0f;
             tameable.m_randomStartingName = new List<string>();

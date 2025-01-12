@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BepInEx;
 using HarmonyLib;
 using MonsterDB.Solution.Methods;
@@ -10,6 +11,7 @@ namespace MonsterDB.Solution;
 public static class Initialization
 {
     private static readonly string m_statusEffectsPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "StatusEffects.txt";
+    
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(typeof(ObjectDB), nameof(ObjectDB.Awake))]
     private static class ObjectDB_Awake_Patch
@@ -21,13 +23,14 @@ public static class Initialization
             CloneAll(true);
             UpdateAll(true);
             SpawnMan.UpdateSpawnData();
-            List<string> effects = new();
-            foreach (var effect in __instance.m_StatusEffects)
-            {
-                effects.Add(effect.name);
-            }
-            File.WriteAllLines(m_statusEffectsPath, effects);
+            WriteAvailableStatusEffects();
         }
+    }
+
+    private static void WriteAvailableStatusEffects()
+    {
+        List<string> effects = ObjectDB.instance.m_StatusEffects.Select(effect => effect.name).ToList();
+        File.WriteAllLines(m_statusEffectsPath, effects);
     }
 
     [HarmonyPatch(typeof(Game), nameof(Game.Logout))]
@@ -59,8 +62,7 @@ public static class Initialization
         foreach (string folder in creatureFolders)
         {
             string name = Path.GetFileName(folder);
-            CreatureManager.Read(name);
-            ++count;
+            if (CreatureManager.Read(name)) ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Registered {count} creature directories");
     }
@@ -72,8 +74,7 @@ public static class Initialization
         foreach (string folder in cloneFolders)
         {
             string name = Path.GetFileName(folder);
-            CreatureManager.Read(name, true);
-            ++count;
+            if (CreatureManager.Read(name, true)) ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Registered {count} cloned creature directories");
     }
@@ -116,8 +117,7 @@ public static class Initialization
             CloneAllItems(kvp.Value);
             string originalCreature = kvp.Value.m_characterData.ClonedFrom;
             if (originalCreature.IsNullOrWhiteSpace()) continue;
-            GameObject? prefab = DataBase.TryGetGameObject(originalCreature);
-            if (prefab == null) continue;
+            if (DataBase.TryGetGameObject(originalCreature) is not { } prefab) continue;
             string name = kvp.Value.m_characterData.PrefabName;
             CreatureManager.Clone(prefab, name, false, false);
             ++count;
@@ -150,10 +150,12 @@ public static class Initialization
         int count = 0;
         foreach (KeyValuePair<string, CreatureData> kvp in local ? CreatureManager.m_localData : CreatureManager.m_data)
         {
-            GameObject? creature = DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName);
-            if (creature == null) continue;
-            CreatureManager.Update(creature, local);
-            ++count;
+            if (DataBase.TryGetGameObject(kvp.Value.m_characterData.PrefabName) is not { } creature)
+            {
+                Debug.LogWarning("Failed to find: " + kvp.Value.m_characterData.PrefabName + " to update");
+                continue;
+            }
+            if (CreatureManager.Update(creature, local)) ++count;
         }
         MonsterDBPlugin.MonsterDBLogger.LogDebug($"Updated {count} creatures");
     }

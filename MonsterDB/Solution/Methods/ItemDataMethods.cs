@@ -10,8 +10,26 @@ public static class ItemDataMethods
 {
     private static readonly string m_folderPath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "Items";
     public static readonly Dictionary<string, GameObject> m_clonedItems = new();
-
     public static bool IsClone(GameObject prefab) => m_clonedItems.ContainsKey(prefab.name);
+
+    public static bool Save(GameObject item, out ItemAttackData output)
+    {
+        output = new();
+        if (!item.TryGetComponent(out ItemDrop component)) return false;
+        ItemDrop.ItemData.SharedData shared = component.m_itemData.m_shared;
+        AttackData data = HumanoidMethods.RecordAttackData(component);
+        output.m_attackData = data;
+        SaveEffectList(shared.m_hitEffect, ref output.m_effects.m_hitEffects);
+        SaveEffectList(shared.m_hitTerrainEffect, ref output.m_effects.m_hitTerrainEffects);
+        SaveEffectList(shared.m_blockEffect, ref output.m_effects.m_blockEffects);
+        SaveEffectList(shared.m_startEffect, ref output.m_effects.m_startEffects);
+        SaveEffectList(shared.m_holdStartEffect, ref output.m_effects.m_holdStartEffects);
+        SaveEffectList(shared.m_equipEffect, ref output.m_effects.m_equipEffects);
+        SaveEffectList(shared.m_unequipEffect, ref output.m_effects.m_unEquipEffects);
+        SaveEffectList(shared.m_triggerEffect, ref output.m_effects.m_triggerEffects);
+        SaveEffectList(shared.m_trailStartEffect, ref output.m_effects.m_trailStartEffects);
+        return true;
+    }
     public static void Write(GameObject item, string originalPrefab = "")
     {
         if (!Directory.Exists(m_folderPath)) Directory.CreateDirectory(m_folderPath);
@@ -58,7 +76,6 @@ public static class ItemDataMethods
         MonsterDBPlugin.MonsterDBLogger.LogDebug("Wrote ItemData to file: ");
         MonsterDBPlugin.MonsterDBLogger.LogDebug(folderPath);
     }
-
     public static void Clone(GameObject item, string name, bool write = true, bool register = false)
     {
         if (item == null) return;

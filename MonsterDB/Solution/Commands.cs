@@ -34,6 +34,10 @@ public static class Commands
     {
         private static void Postfix()
         {
+            CommandInfo convert = new("convert", "Reads json files in import folder", _ =>
+            {
+                RRRConverter.ReadAllRRRFiles();
+            });
             CommandInfo help = new("help", "Use to list out MonsterDB commands", _ =>
             {
                 foreach (CommandInfo command in m_commands.Values)
@@ -45,6 +49,7 @@ public static class Commands
             CommandInfo reload = new("reload", "Reloads all MonsterDB files", _ =>
             {
                 Initialization.RemoveAllClones();
+                Initialization.ReadLocalFiles();
                 Initialization.CloneAll();
                 Initialization.UpdateAll();
             });
@@ -172,7 +177,7 @@ public static class Commands
             {
                 if (args.Length < 2) return false;
                 if (!m_commands.TryGetValue(args[1], out CommandInfo command)) return false;
-                command.m_command(args);
+                command.Run(args);
                 return true;
             }), onlyAdmin: true, optionsFetcher: m_commands.Keys.ToList);
         }
@@ -284,8 +289,8 @@ public static class Commands
         public readonly string m_input;
         public readonly string m_description;
         public readonly bool m_show;
-        public readonly Action<Terminal.ConsoleEventArgs> m_command;
-
+        private readonly Action<Terminal.ConsoleEventArgs> m_command;
+        public void Run(Terminal.ConsoleEventArgs args) => m_command(args);
         public CommandInfo(string input, string description, Action<Terminal.ConsoleEventArgs> command, bool show = true)
         {
             m_input = input;
