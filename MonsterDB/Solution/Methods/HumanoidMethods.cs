@@ -762,7 +762,28 @@ public static class HumanoidMethods
         list = items.ToArray();
     }
 
-    public static void UpdateItems(ref GameObject[] list, List<ItemAttackData> itemAttackDataList, Vector3 scale, CreatureData creatureData)
+    private static void UpdateMaterial(string materialName,Dictionary<string, VisualMethods.MaterialData> materialDataList, GameObject prefab)
+    {
+        if (materialName.IsNullOrWhiteSpace()) return;
+        if (!materialDataList.TryGetValue(materialName, out VisualMethods.MaterialData materialData)) return;
+        if (prefab.GetComponentInChildren<Renderer>() is not { } renderer) return;
+        List<Material> newMats = new List<Material>();
+        foreach (var material in renderer.sharedMaterials)
+        {
+            var mat = new Material(material);
+            if (TextureManager.GetTex(materialData._MainTex) is { } tex) mat.mainTexture = tex;
+            if (mat.HasProperty(VisualMethods.EmissionColor)) material.SetColor(VisualMethods.EmissionColor, VisualMethods.GetColor(materialData._EmissionColor));
+            if (mat.HasProperty(VisualMethods.Hue)) material.SetFloat(VisualMethods.Hue, materialData._Hue);
+            if (mat.HasProperty(VisualMethods.Value)) material.SetFloat(VisualMethods.Value, materialData._Value);
+            if (mat.HasProperty(VisualMethods.Saturation)) material.SetFloat(VisualMethods.Saturation, materialData._Saturation);
+            newMats.Add(mat);
+        }
+
+        renderer.sharedMaterials = newMats.ToArray();
+        renderer.materials = newMats.ToArray();
+    }
+
+    private static void UpdateItems(ref GameObject[] list, List<ItemAttackData> itemAttackDataList, Vector3 scale, CreatureData creatureData)
     {
         if (itemAttackDataList.Count <= 0) return;
         List<GameObject> items = new();
@@ -771,11 +792,10 @@ public static class HumanoidMethods
             AttackData data = itemAttackData.m_attackData;
             ItemEffects effects = itemAttackData.m_effects;
             string prefabName = data.Name;
-            
-            GameObject? prefab = DataBase.TryGetGameObject(prefabName);
-            if (prefab == null) continue;
-            if (!prefab.TryGetComponent(out ItemDrop component)) continue;
+
+            if (DataBase.TryGetGameObject(prefabName) is not { } prefab || !prefab.TryGetComponent(out ItemDrop component)) continue;
             ScaleItem(prefab, scale);
+            UpdateMaterial(itemAttackData.m_attackData.MaterialOverride, creatureData.m_materials, component.gameObject);
             
             if (Enum.TryParse(data.AnimationState, true, out ItemDrop.ItemData.AnimationState state))
             {

@@ -11,6 +11,20 @@ public static class TextureManager
     public static readonly string m_texturePath = CreatureManager.m_folderPath + Path.DirectorySeparatorChar + "CustomTextures";
     public static readonly Dictionary<string, Texture2D> m_customTextures = new();
     private static readonly Dictionary<string, byte[]> m_textureBytes = new();
+
+    public static Texture? GetTex(string textureName)
+    {
+        if (m_customTextures.TryGetValue(textureName, out Texture2D texture2D))
+        {
+            return texture2D;
+        }
+        if (DataBase.m_textures.TryGetValue(textureName, out texture2D))
+        {
+            return texture2D;
+        }
+
+        return null;
+    }
     
 
     [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]

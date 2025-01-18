@@ -139,8 +139,7 @@ public static class Initialization
         foreach (ItemAttackData itemData in data)
         {
             if (itemData.m_attackData.OriginalPrefab.IsNullOrWhiteSpace()) continue;
-            GameObject? item = DataBase.TryGetGameObject(itemData.m_attackData.OriginalPrefab);
-            if (item == null) continue;
+            if (DataBase.TryGetGameObject(itemData.m_attackData.OriginalPrefab) is not { } item) continue;
             ItemDataMethods.Clone(item, itemData.m_attackData.Name, false);
         }
     }

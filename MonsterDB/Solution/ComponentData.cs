@@ -128,6 +128,7 @@ public class AttackData
     public float AttackInterval;
     public float AttackMaxAngle;
     public string Projectile = "";
+    public string MaterialOverride = "";
 }
 
 [Serializable]

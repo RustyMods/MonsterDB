@@ -13,10 +13,13 @@ namespace MonsterDB.Solution.Methods;
 public static class VisualMethods
 {
     private static readonly Dictionary<string, Shader> m_cachedShaders = new();
+    private static readonly Dictionary<string, Material> m_clonedMaterials = new();
 
-    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
+    public static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
     private static readonly int MainTex = Shader.PropertyToID("_MainTex");
-    private static Dictionary<string, Material> m_clonedMaterials = new();
+    public static readonly int Hue = Shader.PropertyToID("_Hue");
+    public static readonly int Saturation = Shader.PropertyToID("_Saturation");
+    public static readonly int Value = Shader.PropertyToID("_Value");
 
     public static void Write(GameObject critter, string folderPath)
     {
@@ -161,6 +164,21 @@ public static class VisualMethods
                     };
                 }
 
+                if (material.HasProperty(Hue))
+                {
+                    materialData._Hue = material.GetFloat(Hue);
+                }
+
+                if (material.HasProperty(Saturation))
+                {
+                    materialData._Saturation = material.GetFloat(Saturation);
+                }
+
+                if (material.HasProperty(Value))
+                {
+                    materialData._Value = material.GetFloat(Value);
+                }
+
                 materialExport[name] = materialData;
             }
         }
@@ -277,19 +295,23 @@ public static class VisualMethods
                 if (!materialData.TryGetValue(name, out MaterialData data)) continue;
                 material.name = name;
                 material.color = GetColor(data._Color);
-                if (TextureManager.m_customTextures.TryGetValue(data._MainTex, out Texture2D texture2D))
+                if (TextureManager.GetTex(data._MainTex) is { } tex)
                 {
-                    material.mainTexture = texture2D;
+                    material.mainTexture = tex;
                 }
-                else if (DataBase.m_textures.TryGetValue(data._MainTex, out texture2D))
-                {
-                    material.mainTexture = texture2D;
-                }
-                if (material.HasProperty(EmissionColor))
-                {
-                    material.SetColor(EmissionColor, GetColor(data._EmissionColor));
-                }
-
+                // if (TextureManager.m_customTextures.TryGetValue(data._MainTex, out Texture2D texture2D))
+                // {
+                //     material.mainTexture = texture2D;
+                // }
+                // else if (DataBase.m_textures.TryGetValue(data._MainTex, out texture2D))
+                // {
+                //     material.mainTexture = texture2D;
+                // }
+                if (material.HasProperty(EmissionColor)) material.SetColor(EmissionColor, GetColor(data._EmissionColor));
+                if (material.HasProperty(Hue)) material.SetFloat(Hue, data._Hue);
+                if (material.HasProperty(Value)) material.SetFloat(Value, data._Value);
+                if (material.HasProperty(Saturation)) material.SetFloat(Saturation, data._Saturation);
+                
                 material.shader = GetShader(material.shader, data.ShaderType);
                 if (data.Transparent) SetTransparent(material);
                 else SetOpaque(material);
@@ -438,6 +460,9 @@ public static class VisualMethods
         public string _MainTex = "";
         public ColorData _EmissionColor = new();
         public bool Transparent;
+        public float _Hue;
+        public float _Value;
+        public float _Saturation;
     }
 
     [Serializable]
