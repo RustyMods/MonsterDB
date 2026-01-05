@@ -1,0 +1,431 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: staff_greenroots_tentaroot
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_summonedroot
+  group: ''
+  faction: Players
+  boss: false
+  dontHideBossHud: false
+  bossEvent: ''
+  defeatSetGlobalKey: ''
+  aiSkipTarget: true
+  crouchSpeed: 2
+  walkSpeed: 0
+  speed: 0
+  turnSpeed: 200
+  runSpeed: 0
+  runTurnSpeed: 200
+  acceleration: 0.5
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 1.3
+  swimSpeed: 0
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: true
+  tolerateSmoke: true
+  tolerateTar: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_greydwarf_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: vfx_greydwarf_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_tentaroot_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_staff_elder_burst
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects: 
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 250
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Normal
+    slash: Normal
+    pierce: Normal
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Resistant
+    frost: Normal
+    lightning: Normal
+    poison: Immune
+    spirit: Normal
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  defaultItems: []
+  randomWeapon:
+  - staff_greenroots_tentaroot_attack
+  randomArmor: []
+  randomShield:
+  - ShieldWood
+  - ShieldBronzeBuckler
+  randomSets: []
+  randomItems: []
+  consumeItemEffects: 
+  equipEffects: 
+  perfectBlockEffect: 
+  attacks:
+  - prefab: staff_greenroots_tentaroot_attack
+    toolTier: 4
+    damages:
+      damage: 0
+      blunt: 70
+      slash: 0
+      pierce: 0
+      chop: 20
+      pickaxe: 20
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 40
+      spirit: 0
+    attackForce: 40
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: ImmobilizedAshlands
+    attackStatusEffectChance: 0.1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Vertical
+      attackAnimation: attack
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 3
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 7
+      attackHeight: 1.5
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 1
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Average
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 7
+    aiAttackRangeMin: 0
+    aiAttackInterval: 2
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_greydwarf_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_staff_elder_root_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_staff_elder_root_swing
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_staff_elder_root_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_tentaroot_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: false
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects: 
+  sleepEffects: 
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeItems: []
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 30
+  mistVision: false
+  alertedEffects: 
+  idleSound: 
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 10
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  spawnMessage: ''
+  deathMessage: ''
+  alertedMessage: ''
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 1.5
+    y: 1.5
+    z: 1.5
+  levelSetups: 
+  materials:
+  - name: Thornroot_mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#FFFF00FF'
+    mainTexture: Thornroot_d
+Drops: 
+Tameable: 
+Procreation: 
+GrowUp: 
+NPCTalk: 
+MovementDamage: 
+Saddle: 

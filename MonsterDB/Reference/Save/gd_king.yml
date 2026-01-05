@@ -1,0 +1,990 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: gd_king
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_gdking
+  group: ''
+  faction: Boss
+  boss: true
+  dontHideBossHud: false
+  bossEvent: boss_gdking
+  defeatSetGlobalKey: defeated_gdking
+  aiSkipTarget: false
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 3
+  turnSpeed: 100
+  runSpeed: 6
+  runTurnSpeed: 200
+  acceleration: 0.1
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 6
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: true
+  tolerateTar: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_SawDust
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_troll_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_gdking_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: gdking_Ragdoll
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects: 
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 2500
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Normal
+    slash: Normal
+    pierce: Normal
+    chop: Ignore
+    pickaxe: Ignore
+    fire: VeryWeak
+    frost: Normal
+    lightning: Normal
+    poison: Immune
+    spirit: Immune
+  staggerWhenBlocked: false
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  defaultItems:
+  - gd_king_rootspawn
+  - gd_king_scream
+  - gd_king_shoot
+  - gd_king_stomp
+  randomWeapon: []
+  randomArmor: []
+  randomShield: []
+  randomSets: []
+  randomItems: []
+  consumeItemEffects: 
+  equipEffects: 
+  perfectBlockEffect: 
+  attacks:
+  - prefab: gd_king_rootspawn
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 0
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 0
+    backstabBonus: 4
+    dodgeable: false
+    blockable: false
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Projectile
+      attackAnimation: spawn
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 0
+      attackHeight: 0.5
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: spawn_roots
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: true
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 30
+    aiAttackRangeMin: 0
+    aiAttackInterval: 25
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_greydwarf_attack_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_gdking_spawn
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: gd_king_scream
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 0
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 30
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: None
+      attackAnimation: scream
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 2
+      attackHeight: 1.2
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0.4
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 50
+    aiAttackRangeMin: 10
+    aiAttackInterval: 30
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_greydwarf_attack_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect: 
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_gdking_scream
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: gd_king_shoot
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 35
+      chop: 20
+      pickaxe: 20
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 0
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Projectile
+      attackAnimation: shoot
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0.5
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 8.24
+      attackHeight: 7.63
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0.5
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: gdking_root_projectile
+      projectileRef:
+        prefab: gdking_root_projectile
+        type: Magic, Nature
+        damage:
+          damage: 0
+          blunt: 0
+          slash: 0
+          pierce: 0
+          chop: 0
+          pickaxe: 0
+          fire: 0
+          frost: 0
+          lightning: 0
+          poison: 0
+          spirit: 0
+        aoe: 0
+        dodgeable: false
+        blockable: false
+        attackForce: 0
+        backstabBonus: 4
+        statusEffect: ''
+        healthReturn: 0
+        ttl: 6
+        hitNoise: 50
+        hitEffects:
+          effectPrefabs:
+          - prefab: vfx_gdking_projectile_hit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+          - prefab: sfx_gdking_projectile_hit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+        hitWaterEffects: 
+        spawnOnTtl: false
+        spawnOnHit: 
+        spawnOnHitChance: 1
+        spawnCount: 1
+        randomSpawnOnHit: 
+        randomSpawnOnHitCount: 1
+        randomSpawnSkipLava: false
+        staticHitOnly: false
+        groundHitOnly: false
+        spawnOffset: 
+        spawnRandomRotation: false
+        spawnFacingRotation: false
+        spawnOnHitEffects: 
+        spawnProjectileNewVelocity: false
+        spawnProjectileMinVel: 1
+        spawnProjectileMaxVel: 5
+        spawnProjectileRandomDir: 0
+        spawnProjectileHemisphereDir: false
+        projectilesInheritHitData: false
+        onlySpawnedProjectilesDealDamage: false
+        divideDamageBetweenProjectiles: false
+      projectileVel: 30
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: true
+      useCharacterFacingYAim: true
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 25
+      burstInterval: 0.1
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 50
+    aiAttackRangeMin: 15
+    aiAttackInterval: 6
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_greydwarf_attack_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_gdking_shoot_start
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_gdking_shoot_trigger
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: gd_king_stomp
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 60
+      slash: 0
+      pierce: 0
+      chop: 1000
+      pickaxe: 1000
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 30
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Area
+      attackAnimation: stomp
+      chargeAnimationBool: ''
+      attackRandomAnimations: 2
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 3
+      attackHeight: 0
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 5
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: true
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 3
+    aiAttackRangeMin: 0
+    aiAttackInterval: 5
+    aiAttackMaxAngle: 40
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect: 
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_gdking_stomp
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_gdking_footstep
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_gdking_stomp
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_gdking_rock_destroyed
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+AI:
+  alertRange: 9999
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: true
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 1
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: true
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects: 
+  sleepEffects: 
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeItems: []
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 50
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_gdking_alert
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_gdking_idle
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSoundInterval: 5
+  idleSoundChance: 0.25
+  pathAgentType: HugeSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 15
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  spawnMessage: $event_boss02_start
+  deathMessage: $event_boss02_end
+  alertedMessage: ''
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups: 
+  materials:
+  - name: Elder_mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#FF0053FF'
+    mainTexture: Elder_d
+Drops:
+  drops:
+  - prefab: TrophyTheElder
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  - prefab: CryptKey
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: true
+    levelMultiplier: false
+    dontScale: true
+  dropsEnabled: true
+Tameable: 
+Procreation: 
+GrowUp: 
+NPCTalk: 
+MovementDamage: 
+Saddle: 

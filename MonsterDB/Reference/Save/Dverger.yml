@@ -1,0 +1,1255 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Dverger
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_dvergr
+  group: ''
+  faction: Dverger
+  boss: false
+  dontHideBossHud: false
+  bossEvent: ''
+  defeatSetGlobalKey: ''
+  aiSkipTarget: false
+  crouchSpeed: 2
+  walkSpeed: 2
+  speed: 2
+  turnSpeed: 200
+  runSpeed: 7
+  runTurnSpeed: 200
+  acceleration: 0.5
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 0.8
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_Dverger_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_dverger_vo_hurt
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_Dverger_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: Dverger_ragdoll
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_dverger_vo_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects: 
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 350
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Normal
+    slash: Normal
+    pierce: Normal
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Normal
+    frost: Normal
+    lightning: Normal
+    poison: Normal
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  defaultItems:
+  - DvergerArbalest
+  - DvergerArbalest_shoot
+  - Dverger_melee
+  - DvergerSuitArbalest
+  randomWeapon: []
+  randomArmor: []
+  randomShield:
+  - DvergerHairMale
+  - DvergerHairFemale
+  randomSets: []
+  randomItems: []
+  consumeItemEffects: 
+  equipEffects: 
+  perfectBlockEffect: 
+  attacks:
+  - prefab: DvergerArbalest
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 160
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 200
+    backstabBonus: 3
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Projectile
+      attackAnimation: attack_cast
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.3
+      speedFactorRotation: 0
+      attackStartNoise: 15
+      attackHitNoise: 8
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 20
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 0.89
+      attackHeight: 1.02
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0.2
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: reload_crossbow
+      reloadTime: 4
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: DvergerArbalest_projectile
+      projectileRef:
+        prefab: DvergerArbalest_projectile
+        type: Bolt
+        damage:
+          damage: 0
+          blunt: 0
+          slash: 0
+          pierce: 0
+          chop: 0
+          pickaxe: 0
+          fire: 0
+          frost: 0
+          lightning: 0
+          poison: 0
+          spirit: 0
+        aoe: 0
+        dodgeable: false
+        blockable: false
+        attackForce: 30
+        backstabBonus: 4
+        statusEffect: ''
+        healthReturn: 0
+        ttl: 4
+        hitNoise: 40
+        hitEffects:
+          effectPrefabs:
+          - prefab: sfx_arrow_hit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+          - prefab: vfx_arrowhit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+        hitWaterEffects: 
+        spawnOnTtl: false
+        spawnOnHit: 
+        spawnOnHitChance: 1
+        spawnCount: 1
+        randomSpawnOnHit: 
+        randomSpawnOnHitCount: 1
+        randomSpawnSkipLava: false
+        staticHitOnly: false
+        groundHitOnly: false
+        spawnOffset: 
+        spawnRandomRotation: false
+        spawnFacingRotation: false
+        spawnOnHitEffects: 
+        spawnProjectileNewVelocity: false
+        spawnProjectileMinVel: 1
+        spawnProjectileMaxVel: 5
+        spawnProjectileRandomDir: 0
+        spawnProjectileHemisphereDir: false
+        projectilesInheritHitData: false
+        onlySpawnedProjectilesDealDamage: false
+        divideDamageBetweenProjectiles: false
+      projectileVel: 40
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 2
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: true
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 15
+    aiAttackRangeMin: 1
+    aiAttackInterval: 2
+    aiAttackMaxAngle: 25
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect: 
+    hitTerrainEffect: 
+    blockEffect:
+      effectPrefabs:
+      - prefab: sfx_wood_blocked
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_blocked
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: fx_block_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    startEffect: 
+    holdStartEffect:
+      effectPrefabs:
+      - prefab: sfx_bow_draw
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    triggerEffect:
+      effectPrefabs:
+      - prefab: fx_swing_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_bow_fire
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_arbalest_fire
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: DvergerArbalest_shoot
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 110
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 30
+    backstabBonus: 3
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Projectile
+      attackAnimation: attack_cast
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0
+      attackStartNoise: 15
+      attackHitNoise: 8
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 20
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 0.89
+      attackHeight: 1.02
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0.2
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: reload_crossbow
+      reloadTime: 4
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: DvergerArbalest_projectile
+      projectileRef:
+        prefab: DvergerArbalest_projectile
+        type: Bolt
+        damage:
+          damage: 0
+          blunt: 0
+          slash: 0
+          pierce: 0
+          chop: 0
+          pickaxe: 0
+          fire: 0
+          frost: 0
+          lightning: 0
+          poison: 0
+          spirit: 0
+        aoe: 0
+        dodgeable: false
+        blockable: false
+        attackForce: 30
+        backstabBonus: 4
+        statusEffect: ''
+        healthReturn: 0
+        ttl: 4
+        hitNoise: 40
+        hitEffects:
+          effectPrefabs:
+          - prefab: sfx_arrow_hit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+          - prefab: vfx_arrowhit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+        hitWaterEffects: 
+        spawnOnTtl: false
+        spawnOnHit: 
+        spawnOnHitChance: 1
+        spawnCount: 1
+        randomSpawnOnHit: 
+        randomSpawnOnHitCount: 1
+        randomSpawnSkipLava: false
+        staticHitOnly: false
+        groundHitOnly: false
+        spawnOffset: 
+        spawnRandomRotation: false
+        spawnFacingRotation: false
+        spawnOnHitEffects: 
+        spawnProjectileNewVelocity: false
+        spawnProjectileMinVel: 1
+        spawnProjectileMaxVel: 5
+        spawnProjectileRandomDir: 0
+        spawnProjectileHemisphereDir: false
+        projectilesInheritHitData: false
+        onlySpawnedProjectilesDealDamage: false
+        divideDamageBetweenProjectiles: false
+      projectileVel: 40
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 2
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: true
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 15
+    aiAttackRangeMin: 1
+    aiAttackInterval: 6
+    aiAttackMaxAngle: 25
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect: 
+    hitTerrainEffect: 
+    blockEffect:
+      effectPrefabs:
+      - prefab: sfx_wood_blocked
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_blocked
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: fx_block_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    startEffect: 
+    holdStartEffect:
+      effectPrefabs:
+      - prefab: sfx_bow_draw
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    triggerEffect:
+      effectPrefabs:
+      - prefab: fx_swing_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_bow_fire
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_bow_fire
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: Dverger_melee
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 70
+      slash: 0
+      pierce: 0
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 80
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_poke
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 1
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 0.2
+      attackStartNoise: 10
+      attackHitNoise: 40
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 2.5
+      attackHeight: 0.8
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0.3
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 2.5
+    aiAttackRangeMin: 0.5
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 35
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_clubhit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_club_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: fx_hit_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect:
+      effectPrefabs:
+      - prefab: sfx_wood_blocked
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_blocked
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: fx_block_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_club_swing
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: fx_swing_camshake
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: DvergerSuitArbalest
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 0
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 10
+    backstabBonus: 4
+    dodgeable: false
+    blockable: false
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: ''
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 0.2
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 1.5
+      attackHeight: 0.6
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 2
+    aiAttackRangeMin: 0
+    aiAttackInterval: 2
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect: 
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect: 
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 5
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 300
+  minAttackInterval: 0
+  circleTargetInterval: 15
+  circleTargetDuration: 6
+  circleTargetDistance: 20
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects: 
+  sleepEffects: 
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeItems: []
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 40
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_dverger_vo_alerted
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_dverger_vo_idle
+      variant: 0
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSoundInterval: 20
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 30
+  randomMoveRange: 3
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: true
+  passiveAggresive: false
+  spawnMessage: ''
+  deathMessage: ''
+  alertedMessage: ''
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1
+    hue: 0.1
+    saturation: 0.2
+    value: 0
+    setEmissiveColor: true
+    emissiveColor: '#00FFFFFF'
+    enableObject: ''
+  - scale: 1
+    hue: 0
+    saturation: -1
+    value: 0
+    setEmissiveColor: true
+    emissiveColor: '#FF00FFFF'
+    enableObject: ''
+  materials:
+  - name: DvergerBody
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#0062FFFF'
+    mainTexture: DvergrBody
+  - name: dvergermage_mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#000000FF'
+    mainTexture: dvergrmage_d
+Drops:
+  drops:
+  - prefab: Softtissue
+    amountMin: 1
+    amountMax: 2
+    chance: 0.25
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: BlackMarble
+    amountMin: 1
+    amountMax: 2
+    chance: 0.5
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: Coins
+    amountMin: 2
+    amountMax: 15
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: TrophyDvergr
+    amountMin: 1
+    amountMax: 1
+    chance: 0.05
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  dropsEnabled: true
+Tameable: 
+Procreation: 
+GrowUp: 
+NPCTalk:
+  name: Dvergr
+  maxRange: 20
+  greetRange: 10
+  byeRange: 15
+  offset: 2
+  minTalkInterval: 3
+  hideDialogDelay: 9
+  randomTalkInterval: 30
+  randomTalkChance: 0.2
+  randomTalk:
+  - $npc_dvergrrogue_random_talk1
+  - $npc_dvergrrogue_random_talk2
+  - $npc_dvergrrogue_random_talk3
+  - $npc_dvergrrogue_random_talk4
+  - $npc_dvergrrogue_random_talk5
+  - $npc_dvergrrogue_random_talk6
+  - $npc_dvergrrogue_random_talk7
+  - $npc_dvergrrogue_random_talk8
+  - $npc_dvergrrogue_random_talk9
+  - $npc_dvergrrogue_random_talk10
+  randomTalkInFactionBase:
+  - $npc_dvergrrogue_random_talk_in_faction_base1
+  - $npc_dvergrrogue_random_talk_in_faction_base2
+  - $npc_dvergrrogue_random_talk_in_faction_base3
+  - $npc_dvergrrogue_random_talk_in_faction_base4
+  - $npc_dvergrrogue_random_talk_in_faction_base5
+  - $npc_dvergrrogue_random_talk_in_faction_base6
+  - $npc_dvergrrogue_random_talk_in_faction_base7
+  - $npc_dvergrrogue_random_talk_in_faction_base8
+  - $npc_dvergrrogue_random_talk_in_faction_base9
+  - $npc_dvergrrogue_random_talk_in_faction_base10
+  randomGreets:
+  - $npc_dvergrrogue_random_greet1
+  - $npc_dvergrrogue_random_greet2
+  - $npc_dvergrrogue_random_greet3
+  - $npc_dvergrrogue_random_greet4
+  - $npc_dvergrrogue_random_greet5
+  - $npc_dvergrrogue_random_greet6
+  randomGoodbye:
+  - $npc_dvergrrogue_random_goodbye1
+  - $npc_dvergrrogue_random_goodbye2
+  - $npc_dvergrrogue_random_goodbye3
+  - $npc_dvergrrogue_random_goodbye4
+  - $npc_dvergrrogue_random_goodbye5
+  - $npc_dvergrrogue_random_goodbye6
+  privateAreaAlarm:
+  - $npc_dvergrrogue_random_private_area_alarm1
+  - $npc_dvergrrogue_random_private_area_alarm2
+  - $npc_dvergrrogue_random_private_area_alarm3
+  - $npc_dvergrrogue_random_private_area_alarm4
+  - $npc_dvergrrogue_random_private_area_alarm5
+  - $npc_dvergrrogue_random_private_area_alarm6
+  - $npc_dvergrrogue_random_private_area_alarm7
+  - $npc_dvergrrogue_random_private_area_alarm8
+  aggravated:
+  - $npc_dvergrrogue_random_aggravated1
+  - $npc_dvergrrogue_random_aggravated2
+  - $npc_dvergrrogue_random_aggravated3
+  - $npc_dvergrrogue_random_aggravated4
+  - $npc_dvergrrogue_random_aggravated5
+  - $npc_dvergrrogue_random_aggravated6
+  - $npc_dvergrrogue_random_aggravated7
+  - $npc_dvergrrogue_random_aggravated8
+  - $npc_dvergrrogue_random_aggravated9
+  - $npc_dvergrrogue_random_aggravated10
+  - $npc_dvergrrogue_random_aggravated11
+  randomTalkFX: 
+  randomGreetFX: 
+  randomGoodbyeFX: 
+MovementDamage: 
+Saddle: 

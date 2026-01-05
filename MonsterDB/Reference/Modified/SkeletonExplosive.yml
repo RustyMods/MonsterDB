@@ -1,0 +1,270 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: SkeletonExplosive
+ClonedFrom: Skeleton
+IsCloned: true
+Character:
+  name: $enemy_skeleton Explosive
+  faction: Undead
+  crouchSpeed: 2
+  walkSpeed: 0.5
+  speed: 1
+  turnSpeed: 300
+  runSpeed: 4
+  runTurnSpeed: 300
+  acceleration: 0.5
+  jumpForce: 10
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  swimDepth: 1.3
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTiltSpeed: 50
+  tolerateWater: true
+  tolerateSmoke: true
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_skeleton_hit
+    - prefab: sfx_skeleton_hit
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_skeleton_death
+    - prefab: sfx_skeleton_death
+    - prefab: BlobLava_explosion
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  health: 40
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Weak
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Resistant
+    poison: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  randomWeapon:
+  - MDB_SkeletonExplosive_skeleton_bow
+#  - MDB_SkeletonExplosive_skeleton_sword
+#  randomShield:
+#  - MDB_SkeletonExplosive_ShieldWood
+#  - MDB_SkeletonExplosive_ShieldBronzeBuckler
+  attacks:
+  - prefab: MDB_SkeletonExplosive_skeleton_sword
+    damages:
+      slash: 25
+    attackForce: 40
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    attack:
+      attackAnimation: attack
+      hitTerrain: true
+      speedFactor: 0.2
+      speedFactorRotation: 0.2
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      staggerMultiplier: 1
+      attackRange: 1.8
+      attackHeight: 1.2
+      reloadTime: 2
+      attackAngle: 90
+      attackRayWidth: 0.6
+      lowerDamagePerHit: true
+      multiHit: true
+      lastChainDamageMultiplier: 2
+      projectileVel: 10
+      projectileVelMin: 2
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      projectiles: 1
+      projectileBursts: 1
+    aiAttackRange: 1.6
+    aiAttackInterval: 3
+    aiAttackMaxAngle: 5
+    aiWhenFlying: true
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_clubhit
+      - prefab: sfx_axe_hit
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_axe_swing
+      - prefab: sfx_skeleton_attack
+  - prefab: MDB_SkeletonExplosive_skeleton_bow
+    damages:
+      pierce: 20
+    attackForce: 15
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    attack:
+      attackType: Projectile
+      attackAnimation: attack_bow
+      hitTerrain: true
+      speedFactorRotation: 0.5
+      attackStartNoise: 20
+      attackHitNoise: 30
+      damageMultiplier: 1
+      staggerMultiplier: 1
+      attackRange: 1
+      attackHeight: 1.4
+      reloadTime: 2
+      attackAngle: 90
+      lowerDamagePerHit: true
+      multiHit: true
+      lastChainDamageMultiplier: 2
+      attackProjectile: MDB_SkeletonExplosive_draugr_bow_projectile
+      projectileRef:
+        prefab: MDB_SkeletonExplosive_draugr_bow_projectile
+        type: Arrow
+        adrenaline: 2
+        attackForce: 30
+        backstabBonus: 4
+        ttl: 4
+        hitNoise: 40
+        doOwnerRaytest: true
+        stayAfterHitStatic: true
+        stayTTL: 1
+        attachBoneNearify: 0.25
+        stopEmittersOnHit: true
+        hitEffects:
+          effectPrefabs:
+          - prefab: sfx_arrow_hit
+          - prefab: vfx_arrowhit
+        bouncePower: 0.85
+        bounceRoughness: 0.3
+        maxBounces: 99
+        minBounceVel: 0.25
+        spawnOnHit: BlobLava_explosion
+        spawnOnHitChance: 1
+        spawnCount: 1
+        randomSpawnOnHitCount: 1
+        copyProjectileRotation: true
+        spawnProjectileMinVel: 1
+        spawnProjectileMaxVel: 5
+      projectileVel: 30
+      projectileVelMin: 2
+      projectileAccuracy: 2
+      projectileAccuracyMin: 20
+      projectiles: 1
+      projectileBursts: 1
+    aiAttackRange: 20
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 10
+    aiWhenFlying: true
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    blockEffect:
+      effectPrefabs:
+      - prefab: sfx_wood_blocked
+      - prefab: vfx_blocked
+      - prefab: fx_block_camshake
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bow_draw
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_bow_fire
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 2
+  circleTargetDuration: 2
+  circleTargetDistance: 4
+  wakeupRange: 5
+  maxNoiseWakeupRange: 50
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_skeleton_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_skeleton_idle
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentTurnRadius: 20
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 10
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidWater: true
+  avoidLava: true
+  avoidLavaFlee: true
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.1
+    hue: -0.03
+    saturation: 0.3
+  - scale: 1.2
+    hue: -0.1
+    saturation: 0.3
+    value: -0.1
+  materials:
+  - name: MDB_SkeletonExplosive_Skeleton
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    emissionColor: '#00000000'
+    mainTexture: Skeleton_d
+Drops:
+  drops:
+  - prefab: TrophySkeleton
+    amountMin: 1
+    amountMax: 1
+    chance: 0.1
+    levelMultiplier: false
+  - prefab: BoneFragments
+    amountMin: 1
+    amountMax: 1
+    chance: 1

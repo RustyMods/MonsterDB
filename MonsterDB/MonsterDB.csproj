@@ -10,7 +10,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>MonsterDB</RootNamespace>
         <AssemblyName>MonsterDB</AssemblyName>
-        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
@@ -70,7 +70,7 @@
             <HintPath>$(PublicizedAssembliesPath)\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-            <HintPath>$(PublicizedAssembliesPath)\assembly_utils_publicized.dll</HintPath>
+          <HintPath>$(PublicizedAssembliesPath)\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
             <HintPath>$(PublicizedAssembliesPath)\assembly_valheim_publicized.dll</HintPath>
@@ -79,7 +79,7 @@
             <HintPath>$(BepInExPath)\core\BepInEx.dll</HintPath>
         </Reference>
         <Reference Include="gui_framework">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\publicized_assemblies\gui_framework_publicized.dll</HintPath>
+          <HintPath>$(PublicizedAssembliesPath)\gui_framework_publicized.dll</HintPath>
         </Reference>
         <Reference Include="ServerSync">
             <HintPath>Libs\ServerSync.dll</HintPath>
@@ -91,109 +91,249 @@
         <Reference Include="UnityEngine">
             <HintPath>$(CorlibPath)\UnityEngine.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.AnimationModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-        </Reference>
         <Reference Include="UnityEngine.AssetBundleModule">
-            <HintPath>$(CorlibPath)\UnityEngine.AssetBundleModule.dll</HintPath>
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AudioModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>$(CorlibPath)\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ImageConversionModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+          <HintPath>Libs\UnityEngine.ImageConversionModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(CorlibPath)\UnityEngine.IMGUIModule.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.InputLegacyModule">
-            <HintPath>$(CorlibPath)\UnityEngine.InputLegacyModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ParticleSystemModule">
-            <HintPath>$(CorlibPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(CorlibPath)\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.TextMeshPro">
-            <HintPath>$(GamePath)\valheim_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Behaviours\Human.cs" />
+        <Compile Include="Managers\AudioManager\AudioManager.cs" />
+        <Compile Include="Managers\AudioManager\AudioRef.cs" />
+        <Compile Include="Managers\CloneManager\Clone.cs" />
+        <Compile Include="Managers\CloneManager\CloneManager.cs" />
+        <Compile Include="Managers\CommandManager\CommandManager.cs" />
+        <Compile Include="Managers\CommandManager\Command.cs" />
+        <Compile Include="Managers\ConfigManager\ConfigManager.cs" />
+        <Compile Include="Managers\ConfigManager\ConfigurationManagerAttributes.cs" />
+        <Compile Include="Managers\ConfigManager\YamlSettings.cs" />
+        <Compile Include="Managers\CreatureManager\AI\AnimalAIRef.cs" />
+        <Compile Include="Managers\CreatureManager\AI\BaseAIRef.cs" />
+        <Compile Include="Managers\CreatureManager\AI\MonsterAIRef.cs" />
+        <Compile Include="Managers\CreatureManager\Character\CharacterRef.cs" />
+        <Compile Include="Managers\CreatureManager\Character\HumanoidRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\AoeRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\CharacterDropRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\GrowUpRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\MovementDamageRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\NPCTalkRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\ProcreationRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\SaddleRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\TameableRef.cs" />
+        <Compile Include="Managers\CreatureManager\CreatureManager.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\BaseCreature.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\CharacterCreature.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\Creature.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\HumanoidCreature.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\PlayerCreature.cs" />
+        <Compile Include="Managers\CreatureManager\EffectListRef.cs" />
+        <Compile Include="Managers\CreatureManager\Extensions.cs" />
+        <Compile Include="Managers\CreatureManager\Items\AttackRef.cs" />
+        <Compile Include="Managers\CreatureManager\Items\ItemDataSharedRef.cs" />
+        <Compile Include="Managers\CreatureManager\Items\ProjectileRef.cs" />
+        <Compile Include="Managers\CreatureManager\Reference.cs" />
+        <Compile Include="Managers\CreatureManager\Vector3Ref.cs" />
+        <Compile Include="Managers\CreatureManager\Visuals\LevelSetupRef.cs" />
+        <Compile Include="Managers\CreatureManager\Visuals\MaterialRef.cs" />
+        <Compile Include="Managers\CreatureManager\Visuals\PlayerVisualRef.cs" />
+        <Compile Include="Managers\CreatureManager\Visuals\ShaderRef.cs" />
+        <Compile Include="Managers\CreatureManager\Visuals\VisualRef.cs" />
+        <Compile Include="Managers\EggManager\BaseEgg.cs" />
+        <Compile Include="Managers\EggManager\EggGrowRef.cs" />
+        <Compile Include="Managers\EggManager\EggManager.cs" />
+        <Compile Include="Managers\Helpers.cs" />
+        <Compile Include="Managers\PrefabManager.cs" />
+        <Compile Include="Managers\SpawnManager\SpawnDataRef.cs" />
+        <Compile Include="Managers\SpawnManager\SpawnManager.cs" />
+        <Compile Include="Managers\SyncManager\Base.cs" />
+        <Compile Include="Managers\SyncManager\SyncManager.cs" />
+        <Compile Include="Managers\TextureManager\TextureData.cs" />
+        <Compile Include="Managers\TextureManager\TextureManager.cs" />
+        <Compile Include="Managers\TextureManager\TextureRef.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Solution\AudioManager.cs" />
-        <Compile Include="Solution\Behaviors\Human.cs" />
-        <Compile Include="Solution\Behaviors\HairColors.cs" />
-        <Compile Include="Solution\Behaviors\Visuals.cs" />
-        <Compile Include="Solution\Commands.cs" />
-        <Compile Include="Solution\ComponentData.cs" />
-        <Compile Include="Solution\CreatureData.cs" />
-        <Compile Include="Solution\CreatureManager.cs" />
-        <Compile Include="Solution\DataBase.cs" />
-        <Compile Include="Solution\HumanMan.cs" />
-        <Compile Include="Solution\Initialization.cs" />
-        <Compile Include="Solution\Methods\AnimalAIMethods.cs" />
-        <Compile Include="Solution\Methods\CharacterMethods.cs" />
-        <Compile Include="Solution\Methods\GrowUpMethods.cs" />
-        <Compile Include="Solution\Methods\Helpers.cs" />
-        <Compile Include="Solution\Methods\CharacterDropMethods.cs" />
-        <Compile Include="Solution\Methods\HumanoidMethods.cs" />
-        <Compile Include="Solution\Methods\ItemDataMethods.cs" />
-        <Compile Include="Solution\Methods\LevelEffectsMethods.cs" />
-        <Compile Include="Solution\Methods\MonsterAIMethods.cs" />
-        <Compile Include="Solution\Methods\NPCTalkMethods.cs" />
-        <Compile Include="Solution\Methods\ProcreationMethods.cs" />
-        <Compile Include="Solution\Methods\TameableMethods.cs" />
-        <Compile Include="Solution\Methods\VisualMethods.cs" />
-        <Compile Include="Solution\RRRConverter.cs" />
-        <Compile Include="Solution\SpawnMan.cs" />
-        <Compile Include="Solution\TextureManager.cs" />
-        <Compile Include="Solution\Tutorial.cs" />
         <Compile Include="VersionHandshake.cs" />
+        <Compile Include="Wiki\Wiki.cs" />
     </ItemGroup>
     <ItemGroup>
         <Content Include=".gitignore" />
-        <EmbeddedResource Include="assets\Tutorial.md" />
         <Content Include="environment.props" />
         <Content Include="ILRepack.targets" />
         <Content Include="Libs\ServerSync.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="Libs\UnityEngine.ImageConversionModule.dll" />
+        <Content Include="Reference\Modified\DragonEgg.yml" />
+        <Content Include="Reference\Modified\Human.yml" />
+        <Content Include="Reference\Modified\NeckTameable.yml" />
+        <Content Include="Reference\Modified\NeckEgg.yml" />
+        <Content Include="Reference\Modified\Neck_hatchling.yml" />
+        <Content Include="Reference\Modified\SkeletonExplosive.yml" />
+        <Content Include="Reference\Modified\WolfNoHowl.yml" />
+        <Content Include="Reference\Save\Abomination.yml" />
+        <Content Include="Reference\Save\Asksvin.yml" />
+        <Content Include="Reference\Save\AsksvinEgg.yml" />
+        <Content Include="Reference\Save\Asksvin_hatchling.yml" />
+        <Content Include="Reference\Save\Bat.yml" />
+        <Content Include="Reference\Save\Bjorn.yml" />
+        <Content Include="Reference\Save\Blob.yml" />
+        <Content Include="Reference\Save\BlobElite.yml" />
+        <Content Include="Reference\Save\BlobFrost.yml" />
+        <Content Include="Reference\Save\BlobLava.yml" />
+        <Content Include="Reference\Save\BlobTar.yml" />
+        <Content Include="Reference\Save\Boar.yml" />
+        <Content Include="Reference\Save\Boar_piggy.yml" />
+        <Content Include="Reference\Save\BogWitchKvastur.yml" />
+        <Content Include="Reference\Save\Bonemass.yml" />
+        <Content Include="Reference\Save\BonemawSerpent.yml" />
+        <Content Include="Reference\Save\Charred_Archer.yml" />
+        <Content Include="Reference\Save\Charred_Archer_Fader.yml" />
+        <Content Include="Reference\Save\Charred_Mage.yml" />
+        <Content Include="Reference\Save\Charred_Melee.yml" />
+        <Content Include="Reference\Save\Charred_Melee_Dyrnwyn.yml" />
+        <Content Include="Reference\Save\Charred_Melee_Fader.yml" />
+        <Content Include="Reference\Save\Charred_Twitcher.yml" />
+        <Content Include="Reference\Save\Charred_Twitcher_Summoned.yml" />
+        <Content Include="Reference\Save\Chicken.yml" />
+        <Content Include="Reference\Save\ChickenEgg.yml" />
+        <Content Include="Reference\Save\Deathsquito.yml" />
+        <Content Include="Reference\Save\Deer.yml" />
+        <Content Include="Reference\Save\Dragon.yml" />
+        <Content Include="Reference\Save\Draugr.yml" />
+        <Content Include="Reference\Save\Draugr_Elite.yml" />
+        <Content Include="Reference\Save\Draugr_Ranged.yml" />
+        <Content Include="Reference\Save\Dverger.yml" />
+        <Content Include="Reference\Save\DvergerAshlands.yml" />
+        <Content Include="Reference\Save\DvergerMage.yml" />
+        <Content Include="Reference\Save\DvergerMageFire.yml" />
+        <Content Include="Reference\Save\DvergerMageIce.yml" />
+        <Content Include="Reference\Save\DvergerMageSupport.yml" />
+        <Content Include="Reference\Save\DvergerTest.yml" />
+        <Content Include="Reference\Save\Eikthyr.yml" />
+        <Content Include="Reference\Save\Fader.yml" />
+        <Content Include="Reference\Save\FallenValkyrie.yml" />
+        <Content Include="Reference\Save\Fenring.yml" />
+        <Content Include="Reference\Save\Fenring_Cultist.yml" />
+        <Content Include="Reference\Save\Fenring_Cultist_Hildir.yml" />
+        <Content Include="Reference\Save\Fenring_Cultist_Hildir_nochest.yml" />
+        <Content Include="Reference\Save\gd_king.yml" />
+        <Content Include="Reference\Save\Ghost.yml" />
+        <Content Include="Reference\Save\Gjall.yml" />
+        <Content Include="Reference\Save\Goblin.yml" />
+        <Content Include="Reference\Save\GoblinArcher.yml" />
+        <Content Include="Reference\Save\GoblinBrute.yml" />
+        <Content Include="Reference\Save\GoblinBruteBros.yml" />
+        <Content Include="Reference\Save\GoblinBruteBros_nochest.yml" />
+        <Content Include="Reference\Save\GoblinBrute_Hildir.yml" />
+        <Content Include="Reference\Save\GoblinKing.yml" />
+        <Content Include="Reference\Save\GoblinShaman.yml" />
+        <Content Include="Reference\Save\GoblinShaman_Hildir.yml" />
+        <Content Include="Reference\Save\GoblinShaman_Hildir_nochest.yml" />
+        <Content Include="Reference\Save\Goblin_Gem.yml" />
+        <Content Include="Reference\Save\Greydwarf.yml" />
+        <Content Include="Reference\Save\Greydwarf_Elite.yml" />
+        <Content Include="Reference\Save\Greydwarf_Shaman.yml" />
+        <Content Include="Reference\Save\Greyling.yml" />
+        <Content Include="Reference\Save\Hare.yml" />
+        <Content Include="Reference\Save\Hatchling.yml" />
+        <Content Include="Reference\Save\Hen.yml" />
+        <Content Include="Reference\Save\Hive.yml" />
+        <Content Include="Reference\Save\Leech.yml" />
+        <Content Include="Reference\Save\Leech_cave.yml" />
+        <Content Include="Reference\Save\Lox.yml" />
+        <Content Include="Reference\Save\Lox_Calf.yml" />
+        <Content Include="Reference\Save\Mistile.yml" />
+        <Content Include="Reference\Save\Morgen.yml" />
+        <Content Include="Reference\Save\Morgen_NonSleeping.yml" />
+        <Content Include="Reference\Save\Neck.yml" />
+        <Content Include="Reference\Save\piece_TrainingDummy.yml" />
+        <Content Include="Reference\Save\Seeker.yml" />
+        <Content Include="Reference\Save\SeekerBrood.yml" />
+        <Content Include="Reference\Save\SeekerBrute.yml" />
+        <Content Include="Reference\Save\SeekerQueen.yml" />
+        <Content Include="Reference\Save\Serpent.yml" />
+        <Content Include="Reference\Save\Skeleton.yml" />
+        <Content Include="Reference\Save\Skeleton_Friendly.yml" />
+        <Content Include="Reference\Save\Skeleton_Hildir.yml" />
+        <Content Include="Reference\Save\Skeleton_Hildir_nochest.yml" />
+        <Content Include="Reference\Save\Skeleton_NoArcher.yml" />
+        <Content Include="Reference\Save\Skeleton_Poison.yml" />
+        <Content Include="Reference\Save\staff_greenroots_tentaroot.yml" />
+        <Content Include="Reference\Save\StoneGolem.yml" />
+        <Content Include="Reference\Save\Surtling.yml" />
+        <Content Include="Reference\Save\TentaRoot.yml" />
+        <Content Include="Reference\Save\TheHive.yml" />
+        <Content Include="Reference\Save\Tick.yml" />
+        <Content Include="Reference\Save\TrainingDummy.yml" />
+        <Content Include="Reference\Save\Troll.yml" />
+        <Content Include="Reference\Save\Troll_Summoned.yml" />
+        <Content Include="Reference\Save\Ulv.yml" />
+        <Content Include="Reference\Save\Unbjorn.yml" />
+        <Content Include="Reference\Save\Volture.yml" />
+        <Content Include="Reference\Save\Wolf.yml" />
+        <Content Include="Reference\Save\Wolf_cub.yml" />
+        <Content Include="Reference\Save\Wraith.yml" />
+        <Content Include="Thunderstore\icon.png" />
+        <Content Include="Thunderstore\manifest.json" />
         <Content Include="UpdateManifest.ps1" />
+        <EmbeddedResource Include="Wiki\Commands.md" />
+        <Content Include="Thunderstore\CHANGELOG.md" />
+        <Content Include="Thunderstore\README.md" />
+        <EmbeddedResource Include="Wiki\AI.md" />
+        <EmbeddedResource Include="Wiki\Character.md" />
+        <EmbeddedResource Include="Wiki\CharacterDrop.md" />
+        <EmbeddedResource Include="Wiki\EffectList.md" />
+        <EmbeddedResource Include="Wiki\Egg.md" />
+        <EmbeddedResource Include="Wiki\MovementDamage.md" />
+        <EmbeddedResource Include="Wiki\NPCTalk.md" />
+        <EmbeddedResource Include="Wiki\Saddle.md" />
+        <EmbeddedResource Include="Wiki\Tameable.md" />
+        <EmbeddedResource Include="Wiki\ItemData.md" />
+        <EmbeddedResource Include="Wiki\Visuals.md" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="assets\" />
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
+
     <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" Condition="'$(AfterTargets)' == 'KeyManager'" />
     <Target Name="KeyManager" AfterTargets="ILRepack" Condition="'$(AfterTargets)' == 'KeyManager'">
         <Seal DLL="$(TargetPath)" />
     </Target>
+    
     <Target Name="GetAssemblyVersion" AfterTargets="$(AfterTargets)">
         <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
             <Output TaskParameter="Assemblies" ItemName="Targets" />
@@ -212,76 +352,12 @@
             <PackageDir>$(ProjectDir)\Thunderstore\$(PackageName)</PackageDir>
         </PropertyGroup>
     </Target>
+    
     <Target Name="CopyOutputDLL" AfterTargets="GetAssemblyVersion">
         <Error Text="DLL not found in target directory." Condition="!Exists('$(TargetDir)$(AssemblyName).dll')" />
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath)" OverwriteReadOnlyFiles="true" />
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath2)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath2)')" />
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath3)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath3)')" />
     </Target>
-    <Target Name="CopyReadMeToTSFolder" AfterTargets="CopyOutputDLL" Condition=" ('$(Configuration)|$(Platform)' == 'Release|AnyCPU') And ('$(OS)' == 'Windows_NT') ">
-        <Warning Text="README.md not found in project directory. A default README.md file will be created for the Thunderstore package" Condition="!Exists('README.md')" />
-        <WriteLinesToFile File="README.md" Lines="Default Readme file from one of Azumatt's Templates. Replace this with actual content." Overwrite="false" Condition="!Exists('README.md')" />
-        <Copy SourceFiles="README.md" DestinationFolder="$(PackageDir)" OverwriteReadOnlyFiles="true" />
-        <Copy SourceFiles="README.md" DestinationFolder="$(ProjectDir)\Thunderstore" OverwriteReadOnlyFiles="true" />
-    </Target>
-    <UsingTask TaskName="WriteManifestFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-        <ParameterGroup>
-            <ManifestFile ParameterType="System.String" Required="true" />
-            <AssemblyName ParameterType="System.String" Required="true" />
-        </ParameterGroup>
-        <Task>
-            <Code Type="Fragment" Language="cs">
-                <![CDATA[
-if (!System.IO.File.Exists(ManifestFile))
-{
-string content = @"{
-  ""name"": """ + AssemblyName + @""",
-  ""version_number"": ""1.0.0"",
-  ""website_url"": ""https://discord.gg/pdHgy6Bsng"",
-  ""description"": ""Your mod description goes here. Do not forget to replace the icon.png file with your own. Must be 256x256. Your Readme.md file will be copied from the one in your project folder."",
-  ""dependencies"": [
-    ""denikson-BepInExPack_Valheim-5.4.2105""
-]
-}";
-System.IO.File.WriteAllText(ManifestFile, content);
-}
-]]>
-
-            </Code>
-        </Task>
-    </UsingTask>
-    <Target Name="UpdateManifestVersion" AfterTargets="CopyReadmeToTSFolder" Condition=" ('$(Configuration)|$(Platform)' == 'Release|AnyCPU') And ('$(OS)' == 'Windows_NT') ">
-        <WriteManifestFile ManifestFile="$(ProjectDir)Thunderstore\manifest.json" AssemblyName="$(AssemblyName)" />
-        <ItemGroup>
-            <ManifestFile Include="$(ProjectDir)Thunderstore\manifest.json" />
-        </ItemGroup>
-        <Message Text="ManifestFile is @(ManifestFile)" />
-        <Message Text="Updating version number in Thunderstore\manifest.json" Condition="Exists(@(ManifestFile))" />
-        <Exec Command="powershell.exe -ExecutionPolicy Bypass -Command &quot;&amp; { &amp; '$(ProjectDir)UpdateManifest.ps1' -manifestFile '@(ManifestFile)' -versionString '$(PackageVersion)' }&quot;" />
-    </Target>
-    <Target Name="MakeThunderstorePackage" AfterTargets="UpdateManifestVersion" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <Error Text="manifest.json not found in Thunderstore directory." Condition="!Exists('$(ProjectDir)\Thunderstore\manifest.json')" />
-        <Error Text="icon.png not found in Thunderstore directory. Please note that Thunderstore requires this image to be 256x256 in dimension" Condition="!Exists('$(ProjectDir)\Thunderstore\icon.png')" />
-        <ItemGroup>
-            <PackageFiles Include="$(TargetDir)$(AssemblyName).dll" Condition="Exists('$(TargetDir)$(AssemblyName).dll')" />
-            <PackageFiles Include="$(ProjectDir)\Thunderstore\CHANGELOG.md" Condition="Exists('$(ProjectDir)\Thunderstore\CHANGELOG.md')" />
-            <PackageFiles Include="$(ProjectDir)\Thunderstore\manifest.json" Condition="Exists('$(ProjectDir)\Thunderstore\manifest.json')" />
-            <PackageFiles Include="$(ProjectDir)\Thunderstore\icon.png" Condition="Exists('$(ProjectDir)\Thunderstore\icon.png')" />
-        </ItemGroup>
-        <MakeDir Directories="$(PackageDir)" />
-        <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(PackageDir)" />
-        <ZipDirectory SourceDirectory="$(PackageDir)" DestinationFile="Thunderstore\$(PackageName).zip" Overwrite="true" />
-        <RemoveDir Directories="$(PackageDir)" />
-    </Target>
-    <Target Name="MakeNexusPackage" AfterTargets="MakeThunderstorePackage" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <MakeDir Directories="$(ProjectDir)\Nexus" />
-        <ItemGroup>
-            <NexusPackageFiles Include="$(TargetDir)$(AssemblyName).dll;" />
-        </ItemGroup>
-        <MakeDir Directories="$(PackageDir)" />
-        <Copy SourceFiles="@(NexusPackageFiles)" DestinationFolder="$(PackageDir)" />
-        <ZipDirectory SourceDirectory="$(PackageDir)" DestinationFile="Nexus\$(PackageName).zip" Overwrite="true" />
-        <RemoveDir Directories="$(PackageDir)" />
-    </Target>
-
+    
 </Project>

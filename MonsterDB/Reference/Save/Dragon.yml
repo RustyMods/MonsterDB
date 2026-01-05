@@ -1,0 +1,1325 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Dragon
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_dragon
+  group: ''
+  faction: Boss
+  boss: true
+  dontHideBossHud: false
+  bossEvent: boss_moder
+  defeatSetGlobalKey: defeated_dragon
+  aiSkipTarget: false
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 4
+  turnSpeed: 60
+  runSpeed: 6
+  runTurnSpeed: 80
+  acceleration: 0.3
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: true
+  flySlowSpeed: 10
+  flyFastSpeed: 20
+  flyTurnSpeed: 80
+  canSwim: true
+  swimDepth: 2.5
+  swimSpeed: 4
+  swimTurnSpeed: 60
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_dragon_hurt
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: vfx_dragon_hurt
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_dragon_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_dragon_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_rock_destroyed
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: vfx_troll_rock_destroyed
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 7500
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Normal
+    slash: Normal
+    pierce: Normal
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Immune
+    lightning: Normal
+    poison: Normal
+    spirit: Immune
+  staggerWhenBlocked: false
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  defaultItems:
+  - dragon_taunt
+  - dragon_bite
+  - dragon_claw_left
+  - dragon_claw_right
+  - dragon_spit_shotgun
+  - dragon_coldbreath
+  randomWeapon: []
+  randomArmor: []
+  randomShield: []
+  randomSets: []
+  randomItems: []
+  consumeItemEffects: 
+  equipEffects: 
+  perfectBlockEffect: 
+  attacks:
+  - prefab: dragon_taunt
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 0
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 30
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: None
+      attackAnimation: attack_taunt
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 0.2
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 2
+      attackHeight: 1.2
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0.4
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 50
+    aiAttackRangeMin: 10
+    aiAttackInterval: 30
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: false
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: false
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect: 
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect: 
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_scream
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: dragon_bite
+    toolTier: 3
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 120
+      chop: 1000
+      pickaxe: 1000
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 50
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_bite
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 0.5
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 8
+      attackHeight: 2
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 20
+      attackRayWidth: 2
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: true
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 7
+    aiAttackRangeMin: 0
+    aiAttackInterval: 30
+    aiAttackMaxAngle: 10
+    aiInvertAngleCheck: false
+    aiWhenFlying: false
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_dragon_melee_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_melee_start
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: dragon_claw_left
+    toolTier: 3
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 110
+      pierce: 0
+      chop: 1000
+      pickaxe: 1000
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 120
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_claw_left
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 12
+      attackHeight: 2
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: -2
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 50
+      attackRayWidth: 2
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: true
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 10
+    aiAttackRangeMin: 0
+    aiAttackInterval: 30
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: false
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_dragon_melee_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_melee_start
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: dragon_claw_right
+    toolTier: 3
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 110
+      pierce: 0
+      chop: 1000
+      pickaxe: 1000
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 120
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_claw_right
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 12
+      attackHeight: 2
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 2
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 50
+      attackRayWidth: 2
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: true
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 10
+    aiAttackRangeMin: 0
+    aiAttackInterval: 30
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: false
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_dragon_melee_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_melee_start
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: dragon_spit_shotgun
+    toolTier: 3
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 30
+      chop: 200
+      pickaxe: 200
+      fire: 0
+      frost: 200
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 30
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Projectile
+      attackAnimation: attack_iceball
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0.2
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: Jaw
+      attackRange: 1
+      attackHeight: 0
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 0
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: true
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: dragon_ice_projectile
+      projectileRef:
+        prefab: dragon_ice_projectile
+        type: Magic, Frost
+        damage:
+          damage: 0
+          blunt: 0
+          slash: 0
+          pierce: 0
+          chop: 0
+          pickaxe: 0
+          fire: 0
+          frost: 0
+          lightning: 0
+          poison: 0
+          spirit: 0
+        aoe: 0
+        dodgeable: true
+        blockable: true
+        attackForce: 0
+        backstabBonus: 4
+        statusEffect: ''
+        healthReturn: 0
+        ttl: 10
+        hitNoise: 50
+        hitEffects:
+          effectPrefabs:
+          - prefab: vfx_dragon_ice_hit
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+          - prefab: sfx_dragon_coldball_explode
+            variant: -1
+            attach: false
+            follow: false
+            inheritParentRotation: false
+            inheritParentScale: false
+            multiplyParentVisualScale: false
+            randomRotation: false
+            scale: false
+            childTransform: ''
+        hitWaterEffects: 
+        spawnOnTtl: false
+        spawnOnHit: IceBlocker
+        spawnOnHitChance: 1
+        spawnCount: 1
+        randomSpawnOnHit: 
+        randomSpawnOnHitCount: 1
+        randomSpawnSkipLava: false
+        staticHitOnly: true
+        groundHitOnly: false
+        spawnOffset: 
+        spawnRandomRotation: true
+        spawnFacingRotation: false
+        spawnOnHitEffects: 
+        spawnProjectileNewVelocity: false
+        spawnProjectileMinVel: 1
+        spawnProjectileMaxVel: 5
+        spawnProjectileRandomDir: 0
+        spawnProjectileHemisphereDir: false
+        projectilesInheritHitData: false
+        onlySpawnedProjectilesDealDamage: false
+        divideDamageBetweenProjectiles: false
+      projectileVel: 25
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 13
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 16
+      burstInterval: 0.05
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 25
+    aiAttackRangeMin: 5
+    aiAttackInterval: 8
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: false
+    aiWhenSwiming: false
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_greydwarf_attack_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_coldball_start
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_coldball_launch
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_ColdBall_launch
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+  - prefab: dragon_coldbreath
+    toolTier: 3
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 0
+      chop: 200
+      pickaxe: 200
+      fire: 0
+      frost: 200
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 40
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_breath
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: false
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: Jaw
+      attackRange: 30
+      attackHeight: 1
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 10
+      attackRayWidth: 2
+      attackRayWidthCharExtra: 0
+      maxYAngle: 25
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: true
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: true
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 20
+    aiAttackRangeMin: 5
+    aiAttackInterval: 8
+    aiAttackMaxAngle: 5
+    aiInvertAngleCheck: false
+    aiWhenFlying: false
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: false
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_greydwarf_attack_hit
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_dragon_coldbreath_start
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: vfx_greydwarf_shaman_pray
+        variant: -1
+        attach: true
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect:
+      effectPrefabs:
+      - prefab: vfx_dragon_coldbreath
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_dragon_coldbreath_trailon
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+AI:
+  alertRange: 30
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: true
+  enableHuntPlayer: true
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 2
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects: 
+  sleepEffects: 
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeItems: []
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 60
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_dragon_alerted
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_dragon_idle
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSoundInterval: 5
+  idleSoundChance: 0.5
+  pathAgentType: HugeSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 5
+  randomMoveInterval: 10
+  randomMoveRange: 35
+  randomFly: true
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 60
+  airDuration: 20
+  maxLandAltitude: 12
+  takeoffTime: 10
+  flyAltitudeMin: 10
+  flyAltitudeMax: 20
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  spawnMessage: $enemy_boss_dragon_spawnmessage
+  deathMessage: $enemy_boss_dragon_deathmessage
+  alertedMessage: ''
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups: 
+  materials:
+  - name: DragonQueen_mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#FFFFFFFF'
+    mainTexture: DragonQueen_d
+Drops:
+  drops:
+  - prefab: TrophyDragonQueen
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  - prefab: DragonTear
+    amountMin: 10
+    amountMax: 10
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  dropsEnabled: true
+Tameable: 
+Procreation: 
+GrowUp: 
+NPCTalk: 
+MovementDamage: 
+Saddle: 

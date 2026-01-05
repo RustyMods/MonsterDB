@@ -1,0 +1,35 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Egg
+Prefab: NeckEgg
+ClonedFrom: ChickenEgg
+IsCloned: true
+EggGrow:
+  growTime: 1800
+  grownPrefab: Neck_hatchling
+  tamed: true
+  updateInterval: 5
+  requireNearbyFire: false
+  requireUnderRoof: false
+  requireCoverPercentige: 0.7
+  hatchEffect:
+    effectPrefabs:
+      - prefab: fx_chicken_birth
+        variant: 0
+  notGrowingObject: Not Growing
+Visuals:
+  scale:
+    x: 1.5
+    y: 1.5
+    z: 1.5
+  materials:
+    - name: ChickenEgg_mat
+      shader: Standard
+      color: '#2E8B57'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: ChickenEgg_d
+name: Neck Egg
+description: Keep it warm, maybe something will happen.

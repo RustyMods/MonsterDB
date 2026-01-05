@@ -1,0 +1,65 @@
+﻿using System;
+using JetBrains.Annotations;
+using YamlDotNet.Serialization;
+
+namespace MonsterDB;
+
+[Serializable][UsedImplicitly]
+public class CharacterRef : Reference
+{
+    [YamlMember(Order = 0)] public string? m_name;
+    [YamlMember(Order = 1)] public string? m_group;
+    [YamlMember(Order = 2)] public Character.Faction? m_faction;
+    [YamlMember(Order = 10)] public bool? m_boss;
+    [YamlMember(Order = 11)] public bool? m_dontHideBossHud;
+    [YamlMember(Order = 12)] public string? m_bossEvent;
+    [YamlMember(Order = 13)] public string? m_defeatSetGlobalKey;
+    [YamlMember(Order = 14)] public bool? m_aiSkipTarget;
+    [YamlMember(Order = 20)] public float? m_crouchSpeed;
+    [YamlMember(Order = 21)] public float? m_walkSpeed;
+    [YamlMember(Order = 22)] public float? m_speed;
+    [YamlMember(Order = 23)] public float? m_turnSpeed;
+    [YamlMember(Order = 24)] public float? m_runSpeed;
+    [YamlMember(Order = 25)] public float? m_runTurnSpeed;
+    [YamlMember(Order = 26)] public float? m_acceleration;
+    [YamlMember(Order = 30)] public float? m_jumpForce;
+    [YamlMember(Order = 31)] public float? m_jumpForceForward;
+    [YamlMember(Order = 32)] public float? m_jumpForceTiredFactor;
+    [YamlMember(Order = 33)] public float? m_airControl;
+    [YamlMember(Order = 34)] public float? m_jumpStaminaUsage;
+    [YamlMember(Order = 40)] public bool? m_flying;
+    [YamlMember(Order = 41)] public float? m_flySlowSpeed;
+    [YamlMember(Order = 42)] public float? m_flyFastSpeed;
+    [YamlMember(Order = 43)] public float? m_flyTurnSpeed;
+    [YamlMember(Order = 50)] public bool? m_canSwim;
+    [YamlMember(Order = 51)] public float? m_swimDepth;
+    [YamlMember(Order = 52)] public float? m_swimSpeed;
+    [YamlMember(Order = 53)] public float? m_swimTurnSpeed;
+    [YamlMember(Order = 54)] public float? m_swimAcceleration;
+    [YamlMember(Order = 60)] public Character.GroundTiltType? m_groundTilt;
+    [YamlMember(Order = 61)] public float? m_groundTiltSpeed;
+    [YamlMember(Order = 70)] public bool? m_disableWhileSleeping;
+    [YamlMember(Order = 71)] public bool? m_useAltStatusEffectScaling;
+    [YamlMember(Order = 72)] public bool? m_tolerateWater;
+    [YamlMember(Order = 73)] public bool? m_tolerateFire;
+    [YamlMember(Order = 74)] public bool? m_tolerateSmoke;
+    [YamlMember(Order = 75)] public bool? m_tolerateTar;
+    [YamlMember(Order = 80)] public EffectListRef? m_hitEffects;
+    [YamlMember(Order = 81)] public EffectListRef? m_critHitEffects;
+    [YamlMember(Order = 82)] public EffectListRef? m_backstabHitEffects;
+    [YamlMember(Order = 83)] public EffectListRef? m_deathEffects;
+    [YamlMember(Order = 84)] public EffectListRef? m_waterEffects;
+    [YamlMember(Order = 85)] public EffectListRef? m_tarEffects;
+    [YamlMember(Order = 86)] public EffectListRef? m_slideEffects;
+    [YamlMember(Order = 87)] public EffectListRef? m_jumpEffects;
+    [YamlMember(Order = 88)] public EffectListRef? m_flyingContinuousEffect;
+    [YamlMember(Order = 89)] public EffectListRef? m_pheromoneLoveEffect;
+    [YamlMember(Order = 90)] public float? m_health;
+    [YamlMember(Order = 91)] public float? m_regenAllHPTime;
+    [YamlMember(Order = 92)] public HitData.DamageModifiers? m_damageModifiers;
+    [YamlMember(Order = 93)] public bool? m_staggerWhenBlocked;
+    [YamlMember(Order = 94)] public float? m_staggerDamageFactor;
+    [YamlMember(Order = 95)] public float? m_enemyAdrenalineMultiplier;
+
+    public virtual ItemDataSharedRef[]? GetAttacks() => null;
+}

@@ -1,0 +1,1267 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Bjorn
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_bjorn
+  group: bjorn
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  bossEvent: ''
+  defeatSetGlobalKey: ''
+  aiSkipTarget: false
+  crouchSpeed: 2
+  walkSpeed: 1.5
+  speed: 3.33
+  turnSpeed: 80
+  runSpeed: 7
+  runTurnSpeed: 100
+  acceleration: 0.5
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 1.7
+  swimSpeed: 3
+  swimTurnSpeed: 50
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_bjorn_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_bear_hurt
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_bjorn_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: Bjorn_ragdoll
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_bear_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects: 
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 800
+  regenAllHPTime: 3000
+  damageModifiers:
+    blunt: Resistant
+    slash: Normal
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Resistant
+    lightning: Normal
+    poison: Normal
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  defaultItems:
+  - bjorn_bite
+  - bjorn_claws
+  - bjorn_swipe_l
+  - bjorn_swipe_r
+  - bjorn_swipe_combo
+  - bjorn_slam
+  randomWeapon: []
+  randomArmor: []
+  randomShield: []
+  randomSets: []
+  randomItems: []
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_creature_consume
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  equipEffects: 
+  perfectBlockEffect: 
+  attacks:
+  - prefab: bjorn_bite
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 0
+      pierce: 55
+      chop: 0
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 40
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_bite
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: false
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0.5
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 4
+      attackHeight: 1.3
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 45
+      attackRayWidth: 1
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 3
+    aiAttackRangeMin: 0
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_bear_bite_attack_impact
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_bite_attack
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: bjorn_claws
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 50
+      pierce: 0
+      chop: 40
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 40
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_claws
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: false
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 5.5
+      attackHeight: 1.3
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 45
+      attackRayWidth: 1
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 5
+    aiAttackRangeMin: 0
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_bear_claw_attack slash
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_claw_attack
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: bjorn_swipe_l
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 25
+      pierce: 0
+      chop: 40
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 35
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_swipe_l
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: false
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0.5
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 5.5
+      attackHeight: 1.3
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 45
+      attackRayWidth: 1
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 5
+    aiAttackRangeMin: 0
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_bear_claw_attack slash
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_claw_attack
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: bjorn_swipe_r
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 25
+      pierce: 0
+      chop: 40
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 35
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_swipe_r
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: false
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0.5
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 5.5
+      attackHeight: 1.3
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 45
+      attackRayWidth: 1
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 5
+    aiAttackRangeMin: 0
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_bear_claw_attack slash
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_claw_attack
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: bjorn_swipe_combo
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 0
+      slash: 25
+      pierce: 0
+      chop: 40
+      pickaxe: 0
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 40
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Horizontal
+      attackAnimation: attack_swipe_combo
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: false
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 0.8
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 5.5
+      attackHeight: 1.3
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 45
+      attackRayWidth: 1
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: false
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 5
+    aiAttackRangeMin: 0
+    aiAttackInterval: 4
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: vfx_HitSparks
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_bear_claw_attack slash
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_claw_attack
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect: 
+    trailStartEffect: 
+  - prefab: bjorn_slam
+    toolTier: 0
+    damages:
+      damage: 0
+      blunt: 50
+      slash: 0
+      pierce: 0
+      chop: 40
+      pickaxe: 40
+      fire: 0
+      frost: 0
+      lightning: 0
+      poison: 0
+      spirit: 0
+    attackForce: 100
+    backstabBonus: 4
+    dodgeable: true
+    blockable: true
+    tamedOnly: false
+    attackStatusEffect: 
+    attackStatusEffectChance: 1
+    spawnOnHit: 
+    spawnOnHitTerrain: 
+    attack:
+      attackType: Area
+      attackAnimation: attack_slam
+      chargeAnimationBool: ''
+      attackRandomAnimations: 0
+      attackChainLevels: 0
+      loopingAttack: false
+      consumeItem: false
+      hitTerrain: true
+      attackHealthReturnHit: 0
+      attackKillsSelf: false
+      speedFactor: 0
+      speedFactorRotation: 1
+      attackStartNoise: 10
+      attackHitNoise: 30
+      damageMultiplier: 1
+      damageMultiplierPerMissingHP: 0
+      damageMultiplierByTotalHealthMissing: 0
+      staminaReturnPerMissingHP: 0
+      forceMultiplier: 1
+      staggerMultiplier: 1
+      recoilPushback: 0
+      selfDamage: 0
+      attackOriginJoint: ''
+      attackRange: 2.5
+      attackHeight: 0.1
+      attackHeightChar1: 0
+      attackHeightChar2: 0
+      attackOffset: 0
+      spawnOnTrigger: 
+      toggleFlying: false
+      attach: false
+      cantUseInDungeon: false
+      requiresReload: false
+      reloadAnimation: ''
+      reloadTime: 2
+      drawAnimationState: ''
+      attackAngle: 90
+      attackRayWidth: 2.5
+      attackRayWidthCharExtra: 0
+      maxYAngle: 0
+      lowerDamagePerHit: false
+      hitPointtype: Closest
+      hitThroughWalls: true
+      multiHit: true
+      pickaxeSpecial: false
+      lastChainDamageMultiplier: 2
+      resetChainIfHit: None
+      spawnOnHit: 
+      spawnOnHitChance: 0
+      attackProjectile: 
+      projectileRef: 
+      projectileVel: 10
+      projectileVelMin: 2
+      randomVelocity: false
+      projectileAccuracy: 10
+      projectileAccuracyMin: 20
+      circularProjectileLaunch: false
+      distributeProjectilesAroundCircle: false
+      useCharacterFacing: false
+      useCharacterFacingYAim: false
+      launchAngle: 0
+      projectiles: 1
+      projectileBursts: 1
+      burstInterval: 0
+      destroyPreviousProjectile: false
+      perBurstResourceUsage: false
+      hitEffect: 
+      hitTerrainEffect: 
+      startEffect: 
+      triggerEffect: 
+      trailStartEffect: 
+      burstEffect: 
+    aiAttackRange: 4
+    aiAttackRangeMin: 0
+    aiAttackInterval: 12
+    aiAttackMaxAngle: 30
+    aiInvertAngleCheck: false
+    aiWhenFlying: true
+    aiWhenFlyingAltitudeMin: 0
+    aiWhenFlyingAltitudeMax: 999999
+    aiWhenWalking: true
+    aiWhenSwiming: true
+    aiPrioritized: false
+    aiInDungeonOnly: false
+    aiInMistOnly: false
+    aiMaxHealthPercentage: 1
+    aiMinHealthPercentage: 0
+    aiTargetType: Enemy
+    hitEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_claw_attack slash
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    hitTerrainEffect: 
+    blockEffect: 
+    startEffect:
+      effectPrefabs:
+      - prefab: sfx_bear_claw_attack
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    holdStartEffect: 
+    triggerEffect:
+      effectPrefabs:
+      - prefab: vfx_bjorn_groundslam
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+      - prefab: sfx_troll_rock_destroyed
+        variant: -1
+        attach: false
+        follow: false
+        inheritParentRotation: false
+        inheritParentScale: false
+        multiplyParentVisualScale: false
+        randomRotation: false
+        scale: false
+        childTransform: ''
+    trailStartEffect: 
+AI:
+  alertRange: 6
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 1.5
+  circleTargetInterval: 9
+  circleTargetDuration: 2
+  circleTargetDistance: 20
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects: 
+  sleepEffects: 
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeItems:
+  - Blueberries
+  consumeRange: 4
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+  viewRange: 25
+  viewAngle: 90
+  hearRange: 15
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_bear_idle
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_bear_idle
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSoundInterval: 15
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidBigNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 8
+  randomMoveInterval: 60
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  spawnMessage: ''
+  deathMessage: ''
+  alertedMessage: ''
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.3
+    hue: -0.027
+    saturation: 0.24
+    value: -0.06
+    setEmissiveColor: true
+    emissiveColor: '#FFEC0000'
+    enableObject: arrow
+  - scale: 1.5
+    hue: 0.107
+    saturation: -0.63
+    value: -0.09
+    setEmissiveColor: false
+    emissiveColor: '#FF00FF00'
+    enableObject: arrow
+  materials:
+  - name: Bjorn_mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#404040FF'
+    mainTexture: Bjorn_d
+Drops:
+  drops:
+  - prefab: BjornPaw
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: BjornMeat
+    amountMin: 2
+    amountMax: 3
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: BjornHide
+    amountMin: 4
+    amountMax: 5
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: TrophyBjorn
+    amountMin: 1
+    amountMax: 1
+    chance: 0.1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  dropsEnabled: true
+Tameable: 
+Procreation: 
+GrowUp: 
+NPCTalk: 
+MovementDamage: 
+Saddle: 

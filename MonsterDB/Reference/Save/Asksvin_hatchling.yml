@@ -1,0 +1,331 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Asksvin_hatchling
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_asksvin_hatchling
+  group: asksvin
+  faction: Undead
+  boss: false
+  dontHideBossHud: false
+  bossEvent: ''
+  defeatSetGlobalKey: ''
+  aiSkipTarget: false
+  crouchSpeed: 2
+  walkSpeed: 3
+  speed: 7
+  turnSpeed: 95
+  runSpeed: 9
+  runTurnSpeed: 120
+  acceleration: 0.5
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 2.7
+  swimSpeed: 3
+  swimTurnSpeed: 50
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: false
+  tolerateFire: true
+  tolerateSmoke: true
+  tolerateTar: true
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_lox_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: Ragdoll_Asksvin_Hatchling
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_asksvin_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects: 
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 400
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Normal
+    slash: Normal
+    pierce: Normal
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Resistant
+    frost: Normal
+    lightning: Normal
+    poison: Resistant
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  defaultItems: []
+  randomWeapon: []
+  randomArmor: []
+  randomShield: []
+  randomSets: []
+  randomItems: []
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_creature_consume
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  equipEffects: 
+  perfectBlockEffect: 
+  attacks: []
+AI:
+  alertRange: 10
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 2
+  circleTargetInterval: 30
+  circleTargetDuration: 3
+  circleTargetDistance: 5
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects: 
+  sleepEffects: 
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeItems:
+  - Cloudberry
+  - Barley
+  - Flax
+  consumeRange: 4
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+  viewRange: 35
+  viewAngle: 150
+  hearRange: 30
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_asksvin_alert
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_asksvin_idle
+      variant: 0
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSoundInterval: 6
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidBigNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  spawnMessage: ''
+  deathMessage: ''
+  alertedMessage: ''
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 0.3
+    y: 0.3
+    z: 0.3
+  levelSetups:
+  - scale: 1.1
+    hue: -0.477
+    saturation: -1
+    value: 0.02
+    setEmissiveColor: false
+    emissiveColor: '#738E0000'
+    enableObject: ''
+  - scale: 1.2
+    hue: 0.5
+    saturation: -0.08
+    value: 0.08
+    setEmissiveColor: false
+    emissiveColor: '#00000000'
+    enableObject: ''
+  materials:
+  - name: asksvincub_Mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#000000FF'
+    mainTexture: asksvincub_d
+  - name: asksvincub_Mat
+    shader: Custom/Creature
+    color: '#FFFFFFFF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#000000FF'
+    mainTexture: asksvincub_d
+Drops:
+  drops:
+  - prefab: AskBladder
+    amountMin: 1
+    amountMax: 1
+    chance: 0.2
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: AskHide
+    amountMin: 1
+    amountMax: 1
+    chance: 0.2
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: AsksvinMeat
+    amountMin: 1
+    amountMax: 1
+    chance: 0.2
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  dropsEnabled: true
+Tameable: 
+Procreation: 
+GrowUp:
+  growTime: 3000
+  inheritTame: true
+  grownPrefab: Asksvin
+  altGrownPrefabs: []
+NPCTalk: 
+MovementDamage: 
+Saddle: 

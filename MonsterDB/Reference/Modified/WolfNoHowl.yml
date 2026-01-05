@@ -1,0 +1,8 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Wolf
+AI:
+  idleSoundChance: 0 # set to 0 for no idle sounds
+Tameable: # must leave this here, else mdb will remove component
+Procreation: # must leave this here, elsse mdb will remove component

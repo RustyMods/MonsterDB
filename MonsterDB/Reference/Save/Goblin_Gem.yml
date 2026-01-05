@@ -1,0 +1,280 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Goblin_Gem
+ClonedFrom: ''
+IsCloned: false
+Character:
+  name: $enemy_gemgoblin
+  group: ''
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  bossEvent: ''
+  defeatSetGlobalKey: ''
+  aiSkipTarget: false
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 1.5
+  turnSpeed: 80
+  runSpeed: 12
+  runTurnSpeed: 200
+  acceleration: 0.5
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 1.2
+  swimSpeed: 2
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: Pitch
+  groundTiltSpeed: 50
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_deer_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_greydwarf_hit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_goblin_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: sfx_goblin_death
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+    - prefab: Goblin_Dragdoll
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  tarEffects: 
+  slideEffects: 
+  jumpEffects: 
+  flyingContinuousEffect: 
+  pheromoneLoveEffect: 
+  health: 1000
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Normal
+    slash: Normal
+    pierce: Normal
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Normal
+    frost: Normal
+    lightning: Normal
+    poison: Normal
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+AI:
+  timeToSafe: 15
+  viewRange: 25
+  viewAngle: 45
+  hearRange: 15
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_goblin_alerted
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_goblin_idle
+      variant: -1
+      attach: false
+      follow: false
+      inheritParentRotation: false
+      inheritParentScale: false
+      multiplyParentVisualScale: false
+      randomRotation: false
+      scale: false
+      childTransform: ''
+  idleSoundInterval: 5
+  idleSoundChance: 0.9
+  pathAgentType: HorseSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 60
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: true
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: true
+  spawnMessage: ''
+  deathMessage: ''
+  alertedMessage: ''
+  fleeRange: 30
+  fleeAngle: 45
+  fleeInterval: 2
+  patrol: 
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.1
+    hue: -0.05
+    saturation: 0
+    value: 0
+    setEmissiveColor: false
+    emissiveColor: '#FFFFFFFF'
+    enableObject: ''
+  - scale: 1.2
+    hue: -0.15
+    saturation: 0
+    value: 0
+    setEmissiveColor: false
+    emissiveColor: '#FFFFFFFF'
+    enableObject: ''
+  materials:
+  - name: goblin
+    shader: Custom/Creature
+    color: '#D4D4D4FF'
+    hue: 0
+    saturation: 0
+    value: 0
+    emissionColor: '#000000FF'
+    mainTexture: goblin_d
+Drops:
+  drops:
+  - prefab: GemstoneBlue
+    amountMin: 2
+    amountMax: 4
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: GemstoneGreen
+    amountMin: 2
+    amountMax: 4
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: GemstoneRed
+    amountMin: 2
+    amountMax: 4
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  dropsEnabled: true
+Tameable: 
+Procreation: 
+GrowUp: 
+NPCTalk: 
+MovementDamage: 
+Saddle: 
