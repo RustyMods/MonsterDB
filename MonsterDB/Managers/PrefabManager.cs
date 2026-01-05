@@ -147,8 +147,7 @@ public static class PrefabManager
 
     public static void Register(this ObjectDB db, GameObject prefab)
     {
-        if (db.m_items.Contains(prefab)) return;
-        if (!prefab.GetComponent<ZNetView>()) return;
+        if (db.m_items.Contains(prefab) || !prefab.GetComponent<ItemDrop>()) return;
         db.m_items.Add(prefab);
         db.m_itemByHash[prefab.name.GetStableHashCode()] = prefab;
     }
@@ -175,7 +174,7 @@ public static class PrefabManager
     {
         foreach (GameObject prefab in PrefabsToRegister)
         {
-            if (!prefab.GetComponent<ZNetView>()) continue;
+            if (__instance.m_prefabs.Contains(prefab) || !prefab.GetComponent<ZNetView>()) continue;
             __instance.m_prefabs.Add(prefab);
         }
     }
@@ -184,7 +183,7 @@ public static class PrefabManager
     {
         foreach (GameObject prefab in PrefabsToRegister)
         {
-            if (!prefab.GetComponent<ZNetView>() || !prefab.GetComponent<ItemDrop>()) continue;
+            if (__instance.m_items.Contains(prefab) || !prefab.GetComponent<ItemDrop>()) continue;
             __instance.m_items.Add(prefab);
         }
     }

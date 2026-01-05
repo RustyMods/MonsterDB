@@ -153,6 +153,7 @@ public static class SpawnManager
         SpawnDataRef spawnRef = new SpawnDataRef();
         spawnRef.m_name = $"MDB {prefab.name} Spawn Data";
         spawnRef.m_prefab = prefab.name;
+        spawnRef.m_enabled = false;
         string text = ConfigManager.Serialize(spawnRef);
         File.WriteAllText(filePath, text);
         MonsterDBPlugin.LogInfo($"Saved spawn data file: {filePath}");

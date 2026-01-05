@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HarmonyLib;
 using ServerSync;
 using UnityEngine;
 
@@ -511,15 +512,21 @@ public static class CreatureManager
                 {
                     newItems.Add(prefab);
                     newItem = prefab;
-
-                    if (projectile != null && prefab.TryGetComponent(out ItemDrop component))
+                    if (prefab.TryGetComponent(out ItemDrop component))
                     {
-                        component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
+                        if (projectile != null)
+                        {
+                            component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
+                        }
                     }
                 };
                 
                 mock.Create();
-                clones[newItemName] = newItem;
+                
+                if (newItem != null)
+                {
+                    clones[newItemName] = newItem;
+                }
             }
 
             return newItems.ToArray();
