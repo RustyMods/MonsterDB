@@ -109,16 +109,12 @@ public static class CommandManager
         return false;
     }
 
-    private static bool Patch_Terminal_TabCycle(Terminal __instance, string word, List<string>? options, bool usePrefix)
+    private static void Patch_Terminal_TabCycle(Terminal __instance, string word, ref List<string>? options, bool usePrefix)
     {
-        if (options == null || options.Count == 0) return true;
-        usePrefix = usePrefix && __instance.m_tabPrefix > char.MinValue;
-        if (usePrefix)
+        if (commands.TryGetValue(word, out var command))
         {
-            if (word.Length < 1 || word[0] != __instance.m_tabPrefix) return true;
-            word = word.Substring(1);
+            options = command.FetchOptions();
         }
-        return HandleTabCycle(__instance, word, options, usePrefix);
     }
     
     private static bool HandleTabCycle(Terminal __instance, string word, List<string> options, bool usePrefix)
@@ -126,11 +122,13 @@ public static class CommandManager
         string currentInput = __instance.m_input.text;
         string[] inputParts = currentInput.Split(' ');
 
-        if (!(inputParts.Length >= 2 && 
-              String.Equals(inputParts[0], startCommand, StringComparison.CurrentCultureIgnoreCase) &&
-              commands.ContainsKey(inputParts[1].ToLower())))
+        bool isCustomCommand = inputParts.Length >= 2 &&
+                               String.Equals(inputParts[0], startCommand, StringComparison.CurrentCultureIgnoreCase) &&
+                               commands.ContainsKey(inputParts[1]);
+
+        if (!isCustomCommand)
         {
-            return true; // Let original method handle it
+            return true; 
         }
         
         if (__instance.m_tabCaretPosition == -1)
@@ -205,6 +203,5 @@ public static class CommandManager
         __instance.m_tabCaretPositionEnd = __instance.m_input.caretPosition = __instance.m_input.text.Length;
         return false;
     }
-    
 }
 

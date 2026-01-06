@@ -70,7 +70,7 @@ public static class EggManager
             return true;
         });
 
-        Command read = new Command("mod_egg", "[prefabName]: read egg reference from Modified folder", args =>
+        Command read = new Command("mod_egg", "[fileName]: read egg reference from Modified folder", args =>
         {
             if (args.Length < 3)
             {
@@ -88,7 +88,7 @@ public static class EggManager
             string filePath = Path.Combine(CreatureManager.ModifiedFolder, prefabName + ".yml");
             Read(filePath);
             return true;
-        }, adminOnly: true);
+        }, CreatureManager.GetModFileNames, adminOnly: true);
 
         Command revert = new Command("revert_egg", "[prefabName]: revert egg to factory settings", args =>
         {
@@ -117,7 +117,7 @@ public static class EggManager
             SyncManager.UpdateSync();
             
             return true;
-        }, adminOnly: true);
+        }, optionsFetcher: SyncManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
 
         Command clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
         {
@@ -148,7 +148,7 @@ public static class EggManager
             
             Clone(prefab, newName);
             return true;
-        }, adminOnly: true);
+        }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
     }
 
     public static string? Save(GameObject prefab, bool isClone = false, string clonedFrom = "")
@@ -183,7 +183,7 @@ public static class EggManager
         string text = File.ReadAllText(filePath);
         try
         {
-            Header header = ConfigManager.Deserialize<Header>(text);
+            Base header = ConfigManager.Deserialize<Base>(text);
             if (header.Type != CreatureType.Egg) return;
             BaseEgg reference = ConfigManager.Deserialize<BaseEgg>(text);
             reference.Update();

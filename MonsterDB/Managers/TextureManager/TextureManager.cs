@@ -36,7 +36,7 @@ public static class TextureManager
     }
     private static void Start()
     {
-        string[] files = Directory.GetFiles(CustomFolder, "*.png");
+        string[] files = Directory.GetFiles(CustomFolder, "*.png", SearchOption.AllDirectories);
         for (int i = 0; i < files.Length; ++i)
         {
             string filePath = files[i];
@@ -98,7 +98,7 @@ public static class TextureManager
             }
             Export(texture, ExportFolder);
             return true;
-        });
+        }, m_cachedTextures.Keys.ToList);
     }
     public static void WriteAll()
     {
@@ -147,7 +147,7 @@ public static class TextureManager
         return defaultValue;
     }
 
-    public static Dictionary<string, Sprite> GetAllSprites(bool clear = false)
+    private static Dictionary<string, Sprite> GetAllSprites(bool clear = false)
     {
         if (clear) m_cachedSprites.Clear();
         if (m_cachedSprites.Count > 0) return m_cachedSprites;
@@ -179,7 +179,7 @@ public static class TextureManager
             RenderTexture.active = previous;
             RenderTexture.ReleaseTemporary(tmp);
 
-            var encoded = newTex.EncodeToPNG();
+            byte[]? encoded = newTex.EncodeToPNG();
             File.WriteAllBytes(filePath, encoded);
             MonsterDBPlugin.LogInfo($"Exported texture: {filePath}");
         }
@@ -198,22 +198,6 @@ public static class TextureManager
         if (texture == null) return;
 
         Export(texture, path);
-    }
-    
-    private static Texture? RegisterTexture(string fileName, string folderName = "assets")
-    {
-        Assembly assembly = Assembly.GetExecutingAssembly();
-
-        string path = $"{MonsterDBPlugin.ModName}.{folderName}.{fileName}";
-
-        using Stream? stream = assembly.GetManifestResourceStream(path);
-        if (stream == null) return null;
-        byte[] buffer = new byte[stream.Length];
-        _ = stream.Read(buffer, 0, buffer.Length);
-        Texture2D texture = new Texture2D(2, 2);
-        texture.name = fileName.Replace(".png", string.Empty);
-
-        return texture.LoadImage(buffer) ? texture : null;
     }
 
     private static void ReadTexture(string filePath)

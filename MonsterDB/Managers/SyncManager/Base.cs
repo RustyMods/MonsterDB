@@ -7,14 +7,7 @@ namespace MonsterDB;
 
 public enum CreatureType
 {
-    None, Humanoid, Character, Egg, Human
-}
-
-[Serializable][UsedImplicitly]
-public sealed class Header
-{
-    public CreatureType Type;
-    public string ClonedFrom = "";
+    None, Humanoid, Character, Egg, Human, Item
 }
 
 [Serializable][UsedImplicitly]

@@ -19,9 +19,9 @@ public static class SpawnManager
     static SpawnManager()
     {
         FolderPath = Path.Combine(ConfigManager.DirectoryPath, FolderName);
-        spawnRefs = new();
-        map = new();
-        sync = new(ConfigManager.ConfigSync, "MDB.ServerSync.SpawnList");
+        spawnRefs = new Dictionary<string, SpawnDataRef>();
+        map = new Dictionary<SpawnDataRef, SpawnSystem.SpawnData>();
+        sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.SpawnList");
         SpawnList = MonsterDBPlugin.instance.gameObject.AddComponent<SpawnSystemList>();
         if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
         
@@ -45,7 +45,7 @@ public static class SpawnManager
                 }
                 Create(prefab);
                 return true;
-            });
+            }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>, adminOnly: true);
     }
 
     private static void Start()
@@ -55,10 +55,17 @@ public static class SpawnManager
         {
             string filePath = files[i];
             string text = File.ReadAllText(filePath);
-            SpawnDataRef data = ConfigManager.Deserialize<SpawnDataRef>(text);
-            spawnRefs[filePath] = data;
-            SpawnSystem.SpawnData spawnData = data;
-            SpawnList.m_spawners.Add(spawnData);
+            try
+            {
+                SpawnDataRef data = ConfigManager.Deserialize<SpawnDataRef>(text);
+                spawnRefs[filePath] = data;
+                SpawnSystem.SpawnData spawnData = data;
+                SpawnList.m_spawners.Add(spawnData);
+            }
+            catch
+            {
+                MonsterDBPlugin.LogWarning($"Failed to deserialize {Path.GetFileName(filePath)}");
+            }
         }
         MonsterDBPlugin.LogInfo($"Loaded {files.Length} spawn files");
     }
@@ -91,7 +98,7 @@ public static class SpawnManager
         spawnRefs = data;
         SpawnList.m_spawners.Clear();
         map.Clear();
-        foreach (var spawnRef in spawnRefs)
+        foreach (KeyValuePair<string, SpawnDataRef> spawnRef in spawnRefs)
         {
             SpawnSystem.SpawnData spawnData = spawnRef.Value;
             SpawnList.m_spawners.Add(spawnData);
@@ -115,12 +122,13 @@ public static class SpawnManager
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         
         string? filePath = e.FullPath;
+        string fileName = Path.GetFileName(filePath);
         try
         {
             SpawnDataRef info = ConfigManager.Deserialize<SpawnDataRef>(File.ReadAllText(filePath));
             if (spawnRefs.TryGetValue(filePath, out SpawnDataRef data))
             {
-                if (map.TryGetValue(data, out var spawnDat))
+                if (map.TryGetValue(data, out SpawnSystem.SpawnData? spawnDat))
                 {
                     spawnDat.SetFieldsFrom(info);
                 }
@@ -136,10 +144,11 @@ public static class SpawnManager
             }
 
             UpdateSync();
+            
+            MonsterDBPlugin.LogInfo($"Updated Spawn Data: {fileName}");
         }
         catch
         {
-            string? fileName = Path.GetFileName(filePath);
             MonsterDBPlugin.LogError($"Failed to deserialize spawn data file: {fileName}");
         }
     }
@@ -153,21 +162,9 @@ public static class SpawnManager
         SpawnDataRef spawnRef = new SpawnDataRef();
         spawnRef.m_name = $"MDB {prefab.name} Spawn Data";
         spawnRef.m_prefab = prefab.name;
-        spawnRef.m_enabled = false;
         string text = ConfigManager.Serialize(spawnRef);
         File.WriteAllText(filePath, text);
         MonsterDBPlugin.LogInfo($"Saved spawn data file: {filePath}");
-        if (spawnRefs.TryGetValue(filePath, out SpawnDataRef data))
-        {
-            if (map.TryGetValue(data, out var spawnDat))
-            {
-                SpawnList.m_spawners.Remove(spawnDat);
-            }
-        }
-        SpawnSystem.SpawnData spawnData = spawnRef;
-        map[spawnRef] = spawnData;
-        SpawnList.m_spawners.Add(spawnData);
-        spawnRefs[filePath] = spawnRef;
     }
 
     public static void Setup()

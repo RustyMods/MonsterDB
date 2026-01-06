@@ -167,7 +167,10 @@
         <Compile Include="Managers\EggManager\BaseEgg.cs" />
         <Compile Include="Managers\EggManager\EggGrowRef.cs" />
         <Compile Include="Managers\EggManager\EggManager.cs" />
+        <Compile Include="Managers\EggManager\ItemDataRef.cs" />
         <Compile Include="Managers\Helpers.cs" />
+        <Compile Include="Managers\ItemManager\BaseItem.cs" />
+        <Compile Include="Managers\ItemManager\ItemManager.cs" />
         <Compile Include="Managers\PrefabManager.cs" />
         <Compile Include="Managers\SpawnManager\SpawnDataRef.cs" />
         <Compile Include="Managers\SpawnManager\SpawnManager.cs" />
@@ -352,7 +355,7 @@
     
     <Target Name="CopyOutputDLL" AfterTargets="GetAssemblyVersion">
         <Error Text="DLL not found in target directory." Condition="!Exists('$(TargetDir)$(AssemblyName).dll')" />
-        <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath)" OverwriteReadOnlyFiles="true" />
+        <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath)')"/>
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath2)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath2)')" />
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath3)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath3)')" />
     </Target>

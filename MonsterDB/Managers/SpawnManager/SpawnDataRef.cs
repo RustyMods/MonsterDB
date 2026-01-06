@@ -12,7 +12,7 @@ public class SpawnDataRef : Reference
     public bool m_enabled = true;
     public bool m_devDisabled;
     public string m_prefab = "";
-    public Heightmap.Biome m_biome = Heightmap.Biome.All;
+    public Heightmap.Biome m_biome = Heightmap.Biome.None;
     public Heightmap.BiomeArea m_biomeArea = Heightmap.BiomeArea.Everything;
     public int m_maxSpawned = 1;
     public float m_spawnInterval = 4f;

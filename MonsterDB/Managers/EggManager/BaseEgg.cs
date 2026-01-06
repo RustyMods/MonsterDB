@@ -12,8 +12,7 @@ public class BaseEgg : Base
 {
     [YamlMember(Order = 6)] public EggGrowRef? EggGrow;
     [YamlMember(Order = 7)] public VisualRef? Visuals;
-    [YamlMember(Order = 8)] public string? m_name;
-    [YamlMember(Order = 9)] public string? m_description;
+    [YamlMember(Order = 8)] public ItemDataRef? Item;
 
     public override void Setup(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {
@@ -31,8 +30,8 @@ public class BaseEgg : Base
 
         if (prefab.TryGetComponent(out ItemDrop item))
         {
-            m_name = item.m_itemData.m_shared.m_name;
-            m_description = item.m_itemData.m_shared.m_description;
+            Item = new ItemDataRef();
+            Item.ReferenceFrom(item.m_itemData.m_shared);
         }
 
         HashSet<Material> materials = new();
@@ -44,9 +43,11 @@ public class BaseEgg : Base
                 materials.Add(material);
             }
         }
-        Visuals = new VisualRef();
-        Visuals.m_scale = prefab.transform.localScale;
-        Visuals.m_materials = materials.ToArray().ToRef();
+        Visuals = new VisualRef
+        {
+            m_scale = prefab.transform.localScale,
+            m_materials = materials.ToArray().ToRef()
+        };
     }
 
     public override void Update()
@@ -67,14 +68,9 @@ public class BaseEgg : Base
 
     private void UpdateItem(ItemDrop item)
     {
-        if (m_name != null)
+        if (Item != null)
         {
-            item.m_itemData.m_shared.m_name = m_name;
-        }
-
-        if (m_description != null)
-        {
-            item.m_itemData.m_shared.m_description = m_description;
+            item.m_itemData.m_shared.SetFieldsFrom(Item);
         }
     }
 
@@ -90,9 +86,9 @@ public class BaseEgg : Base
             if (Visuals.m_materials != null)
             {
                 Dictionary<string, MaterialRef> dict = Visuals.m_materials.ToDictionary(f => f.m_name);
-                foreach (var renderer in prefab.GetComponentsInChildren<Renderer>(true))
+                foreach (Renderer? renderer in prefab.GetComponentsInChildren<Renderer>(true))
                 {
-                    var materials = renderer.sharedMaterials;
+                    Material[]? materials = renderer.sharedMaterials;
                     for (int i = 0; i < materials.Length; ++i)
                     {
                         Material? mat = materials[i];

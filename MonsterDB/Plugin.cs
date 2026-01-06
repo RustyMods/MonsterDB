@@ -27,6 +27,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
         TextureManager.Setup();
         CreatureManager.Setup();
         EggManager.Setup();
+        ItemManager.Setup();
         PrefabManager.Setup();
         SpawnManager.Setup();
         Wiki.Write();

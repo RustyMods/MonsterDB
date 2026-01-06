@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BepInEx;
 using ServerSync;
 using UnityEngine;
@@ -25,6 +26,11 @@ public static class SyncManager
     
     public static T? GetOriginal<T>(string prefabName) where T : Base =>
         originals.TryGetValue(prefabName, out Base? baseValue) ? baseValue as T : null;
+
+    public static List<string> GetOriginalKeys<T>() where T : Base => originals
+        .Where(x => x.Value is T)
+        .Select(x => x.Key)
+        .ToList();
 
     private static void SetupFileWatcher()
     {
@@ -79,7 +85,7 @@ public static class SyncManager
         {
             try
             {
-                Header header = ConfigManager.Deserialize<Header>(file.Value);
+                Base header = ConfigManager.Deserialize<Base>(file.Value);
                 switch (header.Type)
                 {
                     case CreatureType.Character:
@@ -97,6 +103,10 @@ public static class SyncManager
                     case CreatureType.Egg:
                         BaseEgg egg = ConfigManager.Deserialize<BaseEgg>(file.Value);
                         loadList.Add(egg);
+                        break;
+                    case CreatureType.Item:
+                        BaseItem item = ConfigManager.Deserialize<BaseItem>(file.Value);
+                        loadList.Add(item);
                         break;
                 }
             }
@@ -116,6 +126,7 @@ public static class SyncManager
         int humanoids = 0;
         int players = 0;
         int eggs = 0;
+        int items = 0;
         
         for (int i = 0; i < loadList.Count; ++i)
         {
@@ -142,12 +153,16 @@ public static class SyncManager
                         ++eggs;
                         EggManager.Clone(prefab, data.Prefab, false);
                         break;
+                    case CreatureType.Item:
+                        ++items;
+                        ItemManager.Clone(prefab, data.Prefab, false);
+                        break;
                 }
             }
         }
 
-        int count = players + humanoids + characters + eggs;
-        MonsterDBPlugin.LogInfo($"Loading clones: {characters} characters, {humanoids} humanoids, {players} players, {eggs} eggs (total:{count})");
+        int count = players + humanoids + characters + eggs + items;
+        MonsterDBPlugin.LogInfo($"Loading clones: {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items} (total:{count})");
     }
     
     private static void Load()
@@ -156,6 +171,7 @@ public static class SyncManager
         int humanoids = 0;
         int players = 0;
         int eggs = 0;
+        int items = 0;
         for (int i = 0; i < loadList.Count; ++i)
         {
             Base data = loadList[i];
@@ -175,10 +191,13 @@ public static class SyncManager
                 case CreatureType.Egg:
                     ++eggs;
                     break;
+                case CreatureType.Item:
+                    ++items;
+                    break;
             }
         }
-        int count = characters + humanoids + players + eggs;
-        MonsterDBPlugin.LogInfo($"Modified {characters} characters, {humanoids} humanoids, {players} players, {eggs} eggs (total: {count})");
+        int count = characters + humanoids + players + eggs + items;
+        MonsterDBPlugin.LogInfo($"Modified {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items} (total: {count})");
     }
 
     public static void Init(ZNet net)

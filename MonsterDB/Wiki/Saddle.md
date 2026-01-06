@@ -15,3 +15,5 @@ staminaRegenHungry: float
 drownEffects: EffectList
 mountIcon: string             # Sprite ID
 ```
+
+See file `Resources.Sprites.Names.txt` for available sprite IDs

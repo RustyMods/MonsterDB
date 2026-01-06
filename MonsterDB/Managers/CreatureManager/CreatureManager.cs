@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using HarmonyLib;
-using ServerSync;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -22,6 +20,11 @@ public static class CreatureManager
         if (!Directory.Exists(ModifiedFolder)) Directory.CreateDirectory(ModifiedFolder);
         Start();
     }
+
+    public static List<string> GetModFileNames() => Directory
+            .GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories)
+            .Select(Path.GetFileNameWithoutExtension)
+            .ToList();
     
     private static void Start()
     {
@@ -32,7 +35,7 @@ public static class CreatureManager
             string text = File.ReadAllText(filePath);
             try
             {
-                Header header = ConfigManager.Deserialize<Header>(text);
+                Base header = ConfigManager.Deserialize<Base>(text);
                 switch (header.Type)
                 {
                     case CreatureType.Character:
@@ -54,6 +57,11 @@ public static class CreatureManager
                         BaseEgg data = ConfigManager.Deserialize<BaseEgg>(text);
                         SyncManager.loadList.Add(data);
                         SyncManager.rawFiles[data.Prefab] = text;
+                        break;
+                    case CreatureType.Item:
+                        BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
+                        SyncManager.loadList.Add(item);
+                        SyncManager.rawFiles[item.Prefab] = text;
                         break;
                 }
 
@@ -107,7 +115,7 @@ public static class CreatureManager
             return true;
         });
 
-        Command read = new Command("mod", "[prefabName]: read creature file from Modified folder and update", args =>
+        Command read = new Command("mod", "[fileName]: read creature file from Modified folder and update", args =>
         {
             if (args.Length < 3)
             {
@@ -125,10 +133,7 @@ public static class CreatureManager
             string filePath = Path.Combine(ModifiedFolder, prefabName + ".yml");
             Read(filePath);
             return true;
-        }, () => Directory.GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories)
-            .Select(Path.GetFileNameWithoutExtension)
-            .ToList(), 
-            adminOnly: true);
+        }, GetModFileNames, adminOnly: true);
 
         Command revert = new Command("revert", "[prefabName]: revert creature to factory settings", args =>
         {
@@ -155,7 +160,7 @@ public static class CreatureManager
             SyncManager.rawFiles[creature.Prefab] = text;
             SyncManager.UpdateSync();
             return true;
-        }, () => SyncManager.originals.Keys.ToList(), adminOnly: true);
+        }, SyncManager.GetOriginalKeys<BaseCreature>, adminOnly: true);
 
         Command clone = new Command("clone", "[prefabName][newName]: must be a character", args =>
         {
@@ -200,7 +205,7 @@ public static class CreatureManager
         {
             if (SyncManager.GetOriginal<PlayerCreature>(prefab.name) is { } original)
             {
-                return ConfigManager.serializer.Serialize(original);
+                return ConfigManager.Serialize(original);
             } 
             PlayerCreature creature = new PlayerCreature();
             creature.Setup(prefab,isClone, source);
@@ -232,7 +237,7 @@ public static class CreatureManager
         {
             if (SyncManager.GetOriginal<CharacterCreature>(prefab.name) is { } original)
             {
-                return ConfigManager.serializer.Serialize(original);
+                return ConfigManager.Serialize(original);
             }
             CharacterCreature creature = new CharacterCreature();
             creature.Setup(prefab,  isClone, source);
@@ -266,7 +271,7 @@ public static class CreatureManager
         string text = File.ReadAllText(filePath);
         try
         {
-            Header header = ConfigManager.Deserialize<Header>(text);
+            Base header = ConfigManager.Deserialize<Base>(text);
             switch (header.Type)
             {
                 case CreatureType.Humanoid:
@@ -297,6 +302,12 @@ public static class CreatureManager
                     BaseEgg reference = ConfigManager.Deserialize<BaseEgg>(text);
                     reference.Update();
                     SyncManager.rawFiles[reference.Prefab] = text;
+                    SyncManager.UpdateSync();
+                    break;
+                case CreatureType.Item:
+                    BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
+                    item.Update();
+                    SyncManager.rawFiles[item.Prefab] = text;
                     SyncManager.UpdateSync();
                     break;
             }
