@@ -1,80 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 namespace MonsterDB;
 
 public static class CreatureManager
 {
-    public static readonly string SaveFolder;
-    public static readonly string ModifiedFolder;
-    
-    static CreatureManager()
-    {
-        SaveFolder = Path.Combine(ConfigManager.DirectoryPath, "Save");
-        ModifiedFolder = Path.Combine(ConfigManager.DirectoryPath, "Modified");
-
-        if (!Directory.Exists(SaveFolder)) Directory.CreateDirectory(SaveFolder);
-        if (!Directory.Exists(ModifiedFolder)) Directory.CreateDirectory(ModifiedFolder);
-        Start();
-    }
-
-    public static List<string> GetModFileNames() => Directory
-            .GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories)
-            .Select(Path.GetFileNameWithoutExtension)
-            .ToList();
-    
-    private static void Start()
-    {
-        string[] files =  Directory.GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories);
-        for (int i = 0; i < files.Length; ++i)
-        {
-            string filePath = files[i];
-            string text = File.ReadAllText(filePath);
-            try
-            {
-                Base header = ConfigManager.Deserialize<Base>(text);
-                switch (header.Type)
-                {
-                    case CreatureType.Character:
-                        CharacterCreature character = ConfigManager.Deserialize<CharacterCreature>(text);
-                        SyncManager.loadList.Add(character);
-                        SyncManager.rawFiles[character.Prefab] = text;
-                        break;
-                    case CreatureType.Humanoid:
-                        HumanoidCreature humanoid = ConfigManager.Deserialize<HumanoidCreature>(text);
-                        SyncManager.loadList.Add(humanoid);
-                        SyncManager.rawFiles[humanoid.Prefab] = text;
-                        break;
-                    case CreatureType.Human:
-                        PlayerCreature player = ConfigManager.Deserialize<PlayerCreature>(text);
-                        SyncManager.loadList.Add(player);
-                        SyncManager.rawFiles[player.Prefab] = text;
-                        break;
-                    case CreatureType.Egg:
-                        BaseEgg data = ConfigManager.Deserialize<BaseEgg>(text);
-                        SyncManager.loadList.Add(data);
-                        SyncManager.rawFiles[data.Prefab] = text;
-                        break;
-                    case CreatureType.Item:
-                        BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
-                        SyncManager.loadList.Add(item);
-                        SyncManager.rawFiles[item.Prefab] = text;
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to deserialize: {Path.GetFileName(filePath)}");
-                MonsterDBPlugin.LogDebug(ex.Message);
-            }
-        }
-        MonsterDBPlugin.LogInfo($"Loaded {files.Length} modified creature files.");
-    }
-    
     public static void Setup()
     {
         Command save = new Command("write", "[prefabName]: save creature reference to Save folder", args =>
@@ -84,26 +15,26 @@ public static class CreatureManager
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return true;
             }
-            
+                
             string prefabName = args[2];
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return false;
             }
-            
+                
             GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
             if (prefab == null)
             {
                 return true;
             }
-            
+                
             Write(prefab);
 
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>);
-
+        
         Command saveAll = new Command("write_all", "save all creatures to Save folder", _ =>
         {
             List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
@@ -130,10 +61,10 @@ public static class CreatureManager
                 return true;
             }
             
-            string filePath = Path.Combine(ModifiedFolder, prefabName + ".yml");
-            Read(filePath);
+            string filePath = Path.Combine(FileManager.ModifiedFolder, prefabName + ".yml");
+            FileManager.Read(filePath);
             return true;
-        }, GetModFileNames, adminOnly: true);
+        }, FileManager.GetModFileNames, adminOnly: true);
 
         Command revert = new Command("revert", "[prefabName]: revert creature to factory settings", args =>
         {
@@ -150,7 +81,7 @@ public static class CreatureManager
                 return true;
             }
 
-            if (SyncManager.GetOriginal<BaseCreature>(prefabName) is not { } creature)
+            if (SyncManager.GetOriginal<Base>(prefabName) is not { } creature)
             {
                 MonsterDBPlugin.LogInfo("Original data not found");
                 return true;
@@ -160,7 +91,7 @@ public static class CreatureManager
             SyncManager.rawFiles[creature.Prefab] = text;
             SyncManager.UpdateSync();
             return true;
-        }, SyncManager.GetOriginalKeys<BaseCreature>, adminOnly: true);
+        }, SyncManager.GetOriginalKeys<Base>, adminOnly: true);
 
         Command clone = new Command("clone", "[prefabName][newName]: must be a character", args =>
         {
@@ -192,7 +123,7 @@ public static class CreatureManager
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>, adminOnly: true);
     }
-
+    
     public static string? Save(GameObject prefab, bool isClone = false, string source = "")
     {
         Character? character = prefab.GetComponent<Character>();
@@ -203,11 +134,11 @@ public static class CreatureManager
 
         if (character is Human && ai is MonsterAI)
         {
-            if (SyncManager.GetOriginal<PlayerCreature>(prefab.name) is { } original)
+            if (SyncManager.GetOriginal<BaseHuman>(prefab.name) is { } original)
             {
                 return ConfigManager.Serialize(original);
             } 
-            PlayerCreature creature = new PlayerCreature();
+            BaseHuman creature = new BaseHuman();
             creature.Setup(prefab,isClone, source);
             if (!SyncManager.originals.ContainsKey(prefab.name)) SyncManager.originals.Add(prefab.name, creature);
             text = ConfigManager.Serialize(creature);
@@ -219,11 +150,11 @@ public static class CreatureManager
         }
         else if (character is Humanoid && ai is MonsterAI)
         {
-            if (SyncManager.GetOriginal<HumanoidCreature>(prefab.name) is { } original)
+            if (SyncManager.GetOriginal<BaseHumanoid>(prefab.name) is { } original)
             {
                 return ConfigManager.Serialize(original);
             }
-            HumanoidCreature creature = new HumanoidCreature();
+            BaseHumanoid creature = new BaseHumanoid();
             creature.Setup(prefab, isClone, source);
             if (!SyncManager.originals.ContainsKey(prefab.name)) SyncManager.originals.Add(prefab.name, creature);
             text = ConfigManager.Serialize(creature);
@@ -235,11 +166,11 @@ public static class CreatureManager
         }
         else if (ai is AnimalAI)
         {
-            if (SyncManager.GetOriginal<CharacterCreature>(prefab.name) is { } original)
+            if (SyncManager.GetOriginal<BaseCharacter>(prefab.name) is { } original)
             {
                 return ConfigManager.Serialize(original);
             }
-            CharacterCreature creature = new CharacterCreature();
+            BaseCharacter creature = new BaseCharacter();
             creature.Setup(prefab,  isClone, source);
             if (!SyncManager.originals.ContainsKey(prefab.name)) SyncManager.originals.Add(prefab.name, creature);
             text = ConfigManager.Serialize(creature);
@@ -254,7 +185,7 @@ public static class CreatureManager
 
     private static void Write(GameObject prefab, bool isClone = false, string source = "")
     {
-        string filePath = Path.Combine(SaveFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(FileManager.SaveFolder, prefab.name + ".yml");
         
         string? text = Save(prefab, isClone, source);
 
@@ -264,67 +195,12 @@ public static class CreatureManager
         MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
     }
 
-    public static void Read(string filePath)
-    {
-        if (!File.Exists(filePath)) return;
-        
-        string text = File.ReadAllText(filePath);
-        try
-        {
-            Base header = ConfigManager.Deserialize<Base>(text);
-            switch (header.Type)
-            {
-                case CreatureType.Humanoid:
-                {
-                    HumanoidCreature data = ConfigManager.Deserialize<HumanoidCreature>(text);
-                    data.Update();
-                    SyncManager.rawFiles[data.Prefab] = text;
-                    SyncManager.UpdateSync();
-                    break;
-                }
-                case CreatureType.Character:
-                {
-                    CharacterCreature data = ConfigManager.Deserialize<CharacterCreature>(text);
-                    data.Update();
-                    SyncManager.rawFiles[data.Prefab] = text;
-                    SyncManager.UpdateSync();
-                    break;
-                }
-                case CreatureType.Human:
-                {
-                    PlayerCreature data = ConfigManager.Deserialize<PlayerCreature>(text);
-                    data.Update();
-                    SyncManager.rawFiles[data.Prefab] = text;
-                    SyncManager.UpdateSync();
-                    break;
-                }
-                case CreatureType.Egg:
-                    BaseEgg reference = ConfigManager.Deserialize<BaseEgg>(text);
-                    reference.Update();
-                    SyncManager.rawFiles[reference.Prefab] = text;
-                    SyncManager.UpdateSync();
-                    break;
-                case CreatureType.Item:
-                    BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
-                    item.Update();
-                    SyncManager.rawFiles[item.Prefab] = text;
-                    SyncManager.UpdateSync();
-                    break;
-            }
-        }
-        catch (Exception ex)
-        {
-            MonsterDBPlugin.LogWarning($"Failed to deserialize: {Path.GetFileName(filePath)}");
-            MonsterDBPlugin.LogDebug(ex.Message);
-        }
-    }
-
     public static void Clone(GameObject source, string cloneName, bool write = true)
     {
         if (CloneManager.clones.ContainsKey(cloneName)) return;
         
-        Clone clone = new Clone(source, cloneName);
-        clone.OnCreated += prefab =>
+        Clone c = new Clone(source, cloneName);
+        c.OnCreated += prefab =>
         {
             Character? character = prefab.GetComponent<Character>();
             bool isPlayer = false;
@@ -346,26 +222,37 @@ public static class CreatureManager
                 character = human;
                 isPlayer = true;
             }
-            
-            Renderer? renderer = null;
-            LevelEffects? lvlEffects = prefab.GetComponentInChildren<LevelEffects>();
-            if (lvlEffects != null) renderer = lvlEffects.m_mainRender;
-            if (renderer == null && prefab.TryGetComponent(out VisEquipment visEq)) renderer = visEq.m_bodyModel;
-            if (renderer == null) renderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
-            Material[]? newMaterials = null;
-            if (renderer != null)
-            {
-                List<Material> mats = new();
-                foreach (Material? mat in renderer.sharedMaterials)
-                {
-                    Material material = new Material(mat);
-                    material.name = $"MDB_{cloneName}_{mat.name}";
-                    mats.Add(material);
-                }
 
-                newMaterials = mats.ToArray();
-                renderer.sharedMaterials = newMaterials;
-                renderer.materials = newMaterials;
+            Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
+            
+            for (int i = 0; i < renderers.Length; ++i)
+            {
+                Renderer renderer = renderers[i];
+                CloneMaterials(renderer, ref  newMaterials);
+            }
+
+            void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
+            {
+                List<Material> newMats = new();
+                for (int i = 0; i < r.sharedMaterials.Length; ++i)
+                {
+                    Material mat = r.sharedMaterials[i];
+                    string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
+                    if (mats.TryGetValue(name, out var clonedMat))
+                    {
+                        newMats.Add(clonedMat);
+                    }
+                    else
+                    {
+                        clonedMat = new Material(mat);
+                        clonedMat.name = name;
+                        newMats.Add(clonedMat);
+                        mats.Add(name, clonedMat);
+                    }
+                }
+                r.sharedMaterials = newMats.ToArray();
+                r.materials = newMats.ToArray();
             }
             
             if (!isPlayer && character is Humanoid humanoid)
@@ -444,17 +331,27 @@ public static class CreatureManager
                         Clone newRagdoll = new Clone(effect.m_prefab, $"MDB_{cloneName}_ragdoll");
                         newRagdoll.OnCreated += p =>
                         {
-                            if (newMaterials != null && p.TryGetComponent(out Ragdoll rag))
+                            if (p.TryGetComponent(out Ragdoll rag))
                             {
+                                List<Material> mats = new();
                                 if (rag.m_mainModel != null)
                                 {
-                                    rag.m_mainModel.sharedMaterials = newMaterials;
-                                    rag.m_mainModel.materials = newMaterials;
-                                }
-                                else if (isPlayer && p.TryGetComponent(out VisEquipment visEquip) && visEquip.m_bodyModel != null)
-                                {
-                                    visEquip.m_bodyModel.sharedMaterials = newMaterials;
-                                    visEquip.m_bodyModel.materials = newMaterials;
+                                    for (int i = 0; i < rag.m_mainModel.sharedMaterials.Length; ++i)
+                                    {
+                                        Material? mat = rag.m_mainModel.sharedMaterials[i];
+                                        if (mat == null) continue;
+                                        string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
+                                        if (!newMaterials.TryGetValue(name, out var material))
+                                        {
+                                            mats.Add(mat);
+                                        }
+                                        else
+                                        {
+                                            mats.Add(material);
+                                        }
+                                    }
+                                    rag.m_mainModel.sharedMaterials = mats.ToArray();
+                                    rag.m_mainModel.materials = mats.ToArray();
                                 }
                             }
                             effect.m_prefab = p;
@@ -473,7 +370,7 @@ public static class CreatureManager
             SpawnManager.Create(prefab);
         };
 
-        clone.Create();
+        c.Create();
 
         return;
         

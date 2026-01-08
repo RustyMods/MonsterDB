@@ -7,15 +7,15 @@ namespace MonsterDB;
 
 public static class AudioManager
 {
-    private static string FolderName = "SFX";
-    private static string FolderPath;
+    private const string FolderName = "SFX";
+    private static readonly string FolderPath;
     public static readonly Dictionary<string, AudioRef> clips;
 
     static AudioManager()
     {
         FolderPath = Path.Combine(ConfigManager.DirectoryPath, FolderName);
         if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
-        clips = new();
+        clips = new Dictionary<string, AudioRef>();
     }
 
     public static void Start()
@@ -23,7 +23,7 @@ public static class AudioManager
         string[] files = Directory.GetFiles(FolderPath, "*", SearchOption.AllDirectories);
         for (int i = 0; i < files.Length; ++i)
         {
-            string? filePath = files[i];
+            string filePath = files[i];
             _ = new AudioRef(filePath);
         }
     }

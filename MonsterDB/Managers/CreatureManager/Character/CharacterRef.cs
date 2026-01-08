@@ -60,6 +60,22 @@ public class CharacterRef : Reference
     [YamlMember(Order = 93)] public bool? m_staggerWhenBlocked;
     [YamlMember(Order = 94)] public float? m_staggerDamageFactor;
     [YamlMember(Order = 95)] public float? m_enemyAdrenalineMultiplier;
+    public float? m_minLavaMaskThreshold;
+    public float? m_heatBuildupBase;
+    public float? m_heatCooldownBase;
+    public float? m_heatBuildupWater;
+    public float? m_heatWaterTouchMultiplier;
+    public float? m_lavaDamageTickInterval;
+    public float? m_heatLevelFirstDamageThreshold;
+    public float? m_lavaFirstDamage;
+    public float? m_lavaFullDamage;
+    public float? m_lavaAirDamageHeight;
+    public float? m_dayHeatGainRunning;
+    public float? m_dayHeatGainStill;
+    public float? m_dayHeatEquipmentStop;
+    public float? m_lavaSlowMax;
+    public float? m_lavaSlowHeight;
+    public EffectListRef? m_lavaHeatEffects;
 
     public virtual ItemDataSharedRef[]? GetAttacks() => null;
 }

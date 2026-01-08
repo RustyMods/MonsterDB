@@ -5,17 +5,17 @@ using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-public enum CreatureType
+public enum BaseType
 {
-    None, Humanoid, Character, Egg, Human, Item
+    None, Humanoid, Character, Egg, Human, Item, Fish
 }
 
 [Serializable][UsedImplicitly]
-public class Base
+public class Header
 {
     [YamlMember(Order = 0)] public string? GameVersion;
     [YamlMember(Order = 1)] public string? ModVersion;
-    [YamlMember(Order = 2)] public CreatureType Type;
+    [YamlMember(Order = 2)] public BaseType Type;
     [YamlMember(Order = 3)] public string Prefab = "";
     [YamlMember(Order = 4)] public string ClonedFrom = "";
     [YamlMember(Order = 5)] public bool IsCloned;

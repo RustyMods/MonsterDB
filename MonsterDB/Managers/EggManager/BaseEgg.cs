@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -8,46 +6,32 @@ using YamlDotNet.Serialization;
 namespace MonsterDB;
 
 [Serializable][UsedImplicitly]
-public class BaseEgg : Base
+public class BaseEgg : BaseItem
 {
-    [YamlMember(Order = 6)] public EggGrowRef? EggGrow;
-    [YamlMember(Order = 7)] public VisualRef? Visuals;
-    [YamlMember(Order = 8)] public ItemDataRef? Item;
+    [YamlMember(Order = 8, Description = "If field removed, will remove component")] public EggGrowRef? EggGrow;
 
-    public override void Setup(GameObject prefab, bool isClone = false, string clonedFrom = "")
+    public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
-        if (prefab == null) return;
-        base.Setup(prefab, isClone, clonedFrom);
-        Type = CreatureType.Egg;
-        IsCloned = isClone;
-        ClonedFrom = clonedFrom;
+        if (prefab == null || !prefab.TryGetComponent(out ItemDrop item)) return;
+        GameVersion = Version.GetVersionString();
+        ModVersion = MonsterDBPlugin.ModVersion;
+        Type = BaseType.Egg;
         Prefab = prefab.name;
+        ClonedFrom = source;
+        IsCloned = isClone;
+        ItemData = new ItemDataSharedRef();
+        ItemData.SetBasicFields(item.m_itemData.m_shared);
+        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+        Visuals = new VisualRef();
+        Visuals.m_scale = prefab.transform.localScale;
+        if (renderers.Length > 0)
+        {
+            Visuals.m_renderers = renderers.ToRef();
+        }
         if (prefab.TryGetComponent(out EggGrow component))
         {
-            EggGrow = new EggGrowRef();
-            EggGrow.ReferenceFrom(component);
+            EggGrow = component;
         }
-
-        if (prefab.TryGetComponent(out ItemDrop item))
-        {
-            Item = new ItemDataRef();
-            Item.ReferenceFrom(item.m_itemData.m_shared);
-        }
-
-        HashSet<Material> materials = new();
-        foreach (Renderer? renderer in prefab.GetComponentsInChildren<Renderer>(true))
-        {
-            foreach (Material? material in renderer.sharedMaterials)
-            {
-                if (material.name == "item_particle") continue;
-                materials.Add(material);
-            }
-        }
-        Visuals = new VisualRef
-        {
-            m_scale = prefab.transform.localScale,
-            m_materials = materials.ToArray().ToRef()
-        };
     }
 
     public override void Update()
@@ -55,76 +39,11 @@ public class BaseEgg : Base
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
         if (prefab == null) return;
 
-        if (!prefab.TryGetComponent(out ItemDrop item)) return;
+        base.Update();
 
         EggManager.Save(prefab, IsCloned, ClonedFrom);
-
-        UpdateItem(item);
-        UpdateVisuals(prefab);
-        UpdateEgg(prefab);
         
-        base.Update();
-    }
-
-    private void UpdateItem(ItemDrop item)
-    {
-        if (Item != null)
-        {
-            item.m_itemData.m_shared.SetFieldsFrom(Item);
-        }
-    }
-
-    private void UpdateVisuals(GameObject prefab)
-    {
-        if (Visuals != null)
-        {
-            if (Visuals.m_scale.HasValue)
-            {
-                prefab.transform.localScale = Visuals.m_scale.Value;
-            }
-
-            if (Visuals.m_materials != null)
-            {
-                Dictionary<string, MaterialRef> dict = Visuals.m_materials.ToDictionary(f => f.m_name);
-                foreach (Renderer? renderer in prefab.GetComponentsInChildren<Renderer>(true))
-                {
-                    Material[]? materials = renderer.sharedMaterials;
-                    for (int i = 0; i < materials.Length; ++i)
-                    {
-                        Material? mat = materials[i];
-                        if (!dict.TryGetValue(mat.name, out MaterialRef matRef)) continue;
-                        if (mat.shader.name != matRef.m_shader)
-                        {
-                            mat.shader = ShaderRef.GetShader(matRef.m_shader, mat.shader);
-                        }
-                        if (mat.HasProperty(ShaderRef._Color) && matRef.m_color != null)
-                        {
-                            if (!string.IsNullOrEmpty(matRef.m_color)) mat.color = matRef.m_color.FromHex(mat.color);
-                        }
-                        if (matRef.m_hue != null && mat.HasProperty(ShaderRef._Hue))
-                        {
-                            mat.SetFloat(ShaderRef._Hue, matRef.m_hue.Value);
-                        }
-                        if (matRef.m_saturation != null && mat.HasProperty(ShaderRef._Saturation))
-                        {
-                            mat.SetFloat(ShaderRef._Saturation, matRef.m_saturation.Value);
-                        }
-                        if (matRef.m_value != null && mat.HasProperty(ShaderRef._Value))
-                        {
-                            mat.SetFloat(ShaderRef._Value, matRef.m_value.Value);
-                        }
-                        if (matRef.m_emissionColor != null && mat.HasProperty(ShaderRef._EmissionColor))
-                        {
-                            if (!string.IsNullOrEmpty(matRef.m_emissionColor)) mat.SetColor(ShaderRef._EmissionColor, matRef.m_emissionColor.FromHex(mat.GetColor(ShaderRef._EmissionColor)));
-                        }
-                        if (matRef.m_mainTexture != null && matRef.m_mainTexture != (mat.mainTexture?.name ?? ""))
-                        {
-                            mat.mainTexture = TextureManager.GetTexture(matRef.m_mainTexture, mat.mainTexture);;
-                        }
-                    }
-                }
-            }
-        }
+        UpdateEgg(prefab);
     }
 
     private void UpdateEgg(GameObject prefab)

@@ -2,11 +2,22 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: SeekerQueen
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_seekerqueen
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: Boss
   boss: true
   dontHideBossHud: true
@@ -45,101 +56,30 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: fx_seeker_hurt
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: fx_Queen_Death
       variant: 0
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
   jumpEffects:
     effectPrefabs:
     - prefab: sfx_troll_rock_destroyed
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_troll_rock_destroyed
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 12500
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
-    slash: Normal
     pierce: Resistant
     chop: Ignore
     pickaxe: Ignore
-    fire: Normal
-    frost: Normal
-    lightning: Normal
-    poison: Normal
     spirit: Immune
   staggerWhenBlocked: false
   staggerDamageFactor: 0
@@ -152,42 +92,28 @@ Character:
   - SeekerQueen_Spit
   - SeekerQueen_Slap
   - SeekerQueen_PierceAOE
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: SeekerQueen_Teleport
+    name: Brute taunt
+    maxStackSize: 1
+    maxQuality: 7
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 80
-      pierce: 0
       chop: 10
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_teleport
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -200,27 +126,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 40
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 3.56
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 45
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -232,12 +164,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 1
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: SeekerQueen_projectile_teleport
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 0
       projectileAccuracyMin: 0
@@ -251,12 +182,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 400
     aiAttackRangeMin: 0
     aiAttackInterval: 60
@@ -264,7 +189,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: false
     aiPrioritized: false
@@ -273,40 +197,28 @@ Character:
     aiMaxHealthPercentage: 0.9
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: SeekerQueen_Rush
+    name: slap
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
       slash: 100
-      pierce: 0
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 250
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_rush
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -319,27 +231,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 8
       attackHeight: 1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 120
       attackRayWidth: 2.5
       attackRayWidthCharExtra: 0
@@ -351,12 +269,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -370,12 +286,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 25
     aiAttackRangeMin: 5
     aiAttackInterval: 25
@@ -383,7 +293,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -395,69 +304,33 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: SeekerQueen_Bite
+    name: slap
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 140
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
       poison: 100
-      spirit: 0
     attackForce: 250
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_bite
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -470,27 +343,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 10
       attackHeight: 1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 25
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -502,12 +381,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -521,12 +398,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 10
     aiAttackRangeMin: 0
     aiAttackInterval: 10
@@ -534,7 +405,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -543,51 +413,30 @@ Character:
     aiMaxHealthPercentage: 0.7
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: SeekerQueen_Call
+    name: Brute taunt
+    maxStackSize: 1
+    maxQuality: 7
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 80
-      pierce: 0
       chop: 10
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_call
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -600,27 +449,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 40
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 3.56
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 45
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -632,12 +487,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 1
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: SeekerQueen_triggerspawn_ability
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 0
       projectileAccuracyMin: 0
@@ -651,12 +505,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 25
     aiAttackRangeMin: 0
     aiAttackInterval: 60
@@ -664,7 +512,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: false
     aiPrioritized: true
@@ -673,40 +520,29 @@ Character:
     aiMaxHealthPercentage: 0.99
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: SeekerQueen_Spit
+    name: dragon breath
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
       blunt: 40
-      slash: 0
-      pierce: 0
       chop: 50
       pickaxe: 50
-      fire: 0
-      frost: 0
-      lightning: 0
       poison: 40
-      spirit: 0
     attackForce: 50
     backstabBonus: 1
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_spit
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -719,8 +555,11 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
@@ -732,14 +571,18 @@ Character:
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 10
       attackRayWidth: 3
       attackRayWidthCharExtra: 0
@@ -751,59 +594,39 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: SeekerQueen_projectile_spit
       projectileRef:
         prefab: SeekerQueen_projectile_spit
         type: Physical
-        damage:
-          damage: 0
-          blunt: 0
-          slash: 0
-          pierce: 0
-          chop: 0
-          pickaxe: 0
-          fire: 0
-          frost: 0
-          lightning: 0
-          poison: 0
-          spirit: 0
+        damage: {}
         aoe: 1.5
         dodgeable: true
         blockable: true
         attackForce: 0
         backstabBonus: 4
-        statusEffect: ''
         healthReturn: 0
         ttl: 4
         hitNoise: 50
         hitEffects:
           effectPrefabs:
           - prefab: SeekerQueen_spithit
-            variant: -1
-            attach: false
-            follow: false
-            inheritParentRotation: false
-            inheritParentScale: false
-            multiplyParentVisualScale: false
-            randomRotation: false
-            scale: false
-            childTransform: ''
-        hitWaterEffects: 
+        # Bounce
+        bounce: false
+        bounceOnWater: false
+        # Spawn on Hit
+        respawnItemOnHit: false
         spawnOnTtl: false
         spawnOnHit: SeekerQueen_SpitSpawnAbility
         spawnOnHitChance: 0.3
         spawnCount: 1
-        randomSpawnOnHit: 
         randomSpawnOnHitCount: 1
         randomSpawnSkipLava: false
         staticHitOnly: false
         groundHitOnly: false
-        spawnOffset: 
         spawnRandomRotation: false
         spawnFacingRotation: true
-        spawnOnHitEffects: 
+        # Projectile Spawning
         spawnProjectileNewVelocity: false
         spawnProjectileMinVel: 1
         spawnProjectileMaxVel: 5
@@ -814,6 +637,7 @@ Character:
         divideDamageBetweenProjectiles: false
       projectileVel: 15
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 5
       projectileAccuracyMin: 1
@@ -827,12 +651,6 @@ Character:
       burstInterval: 0.05
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 25
     aiAttackRangeMin: 5
     aiAttackInterval: 20
@@ -840,7 +658,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -852,69 +669,32 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: sfx_goblinking_beam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: SeekerQueen_Slap
+    name: slap
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
       slash: 130
-      pierce: 0
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 250
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_slash
-      chargeAnimationBool: ''
       attackRandomAnimations: 4
       attackChainLevels: 0
       loopingAttack: false
@@ -927,27 +707,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 10
       attackHeight: 1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 145
       attackRayWidth: 2.5
       attackRayWidthCharExtra: 0
@@ -959,12 +745,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -978,12 +762,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 9
     aiAttackRangeMin: 0
     aiAttackInterval: 4
@@ -991,81 +769,42 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: SeekerQueen_PierceAOE
+    name: slap
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 150
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 250
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Area
       attackAnimation: attack_pierce
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1078,27 +817,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 0.24
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 146.62
       attackRayWidth: 4.5
       attackRayWidthCharExtra: 0
@@ -1110,12 +855,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -1129,12 +872,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 4
     aiAttackRangeMin: 0
     aiAttackInterval: 4
@@ -1142,44 +879,20 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_QueenPierceGround
         variant: 0
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
 AI:
   alertRange: 30
   fleeIfHurtWhenTargetCantBeReached: true
@@ -1207,13 +920,10 @@ AI:
   wakeupRange: 5
   noiseWakeup: false
   maxNoiseWakeupRange: 50
-  wakeupEffects: 
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -1224,27 +934,9 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_HiveQueen_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSound:
     effectPrefabs:
     - prefab: sfx_HiveQueen_idle
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 5
   idleSoundChance: 0.5
   pathAgentType: SeekerQueen
@@ -1274,28 +966,65 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
   deathMessage: $enemy_boss_queen_deathmessage
   alertedMessage: $enemy_boss_queen_alertmessage
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: seeker_queen
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#000000FF'
-    mainTexture: SeekerQueen_d
+  renderers:
+  - prefab: flow
+    active: true
+    enabled: true
+    materials:
+    - name: barnacle_piece
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: blob_splat
+    active: false
+    enabled: true
+    materials:
+    - name: puke
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: drops-withdecals
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: Cube
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_queen
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: SeekerQueen_d
+  - prefab: Plane
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_queen
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: SeekerQueen_d
 Drops:
   drops:
   - prefab: TrophySeekerQueen
@@ -1312,83 +1041,23 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: true
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
 MovementDamage:
   runDamageObject: RunHitDamager
   areaOfEffect:
-    name: ''
+    # Attack (overridden by item)
     useAttackSettings: true
     damage:
-      damage: 0
       blunt: 200
-      slash: 0
-      pierce: 0
       chop: 40
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
-    scaleDamageByDistance: 
-    dodgeable: 
-    blockable: 
-    toolTier: 
-    attackForce: 
     backstabBonus: 4
-    statusEffect: ''
-    statusEffectIfBoss: ''
-    attackForceForward: 
-    spawnOnHitTerrain: ''
-    hitTerrainOnlyOnce: 
-    spawnOnGroundType: 
     groundLavaValue: -1
-    hitNoise: 
-    placeOnGround: 
-    randomRotation: 
-    maxTargetsFromCenter: 
-    multiSpawnMin: 
-    multiSpawnMax: 
-    multiSpawnDistanceMin: 
-    multiSpawnDistanceMax: 
-    multiSpawnScaleMin: 
-    multiSpawnScaleMax: 
-    multiSpawnSpringDelayMax: 
-    chainStartChance: 
     chainStartChanceFalloff: 0.8
-    chainChancePerTarget: 
-    chainObj: ''
-    chainStartDelay: 
-    chainMinTargets: 
-    chainMaxTargets: 
-    chainEffects: 
-    chainDelay: 
-    chainChance: 
-    damageSelf: 
-    hitOwner: 
     hitParent: true
-    hitSame: 
     hitFriendly: true
     hitEnemy: true
     hitCharacters: true
     hitProps: true
-    hitTerrain: 
-    launchCharacters: 
     launchForceUpFactor: 0.5
-    useTriggers: 
-    triggerEnterOnly: 
     radius: 4
-    activationDelay: 
     ttl: 4
-    ttlMax: 
-    hitAfterTtl: 
     hitInterval: 1
-    hitOnEnable: 
-    attachToCaster: 
-    hitEffects: 
-    initiateEffect: 
-Saddle: 

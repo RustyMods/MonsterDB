@@ -2,16 +2,26 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: Lox
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_lox
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   group: lox
   faction: PlainsMonsters
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
-  defeatSetGlobalKey: ''
   aiSkipTarget: false
   crouchSpeed: 2
   walkSpeed: 2
@@ -45,90 +55,29 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: fx_lox_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: fx_lox_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: lox_ragdoll
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 1000
   regenAllHPTime: 3600
   damageModifiers:
     blunt: Resistant
     slash: Resistant
-    pierce: Normal
     chop: Ignore
     pickaxe: Ignore
     fire: Weak
     frost: Resistant
-    lightning: Normal
-    poison: Normal
     spirit: Immune
   staggerWhenBlocked: true
   staggerDamageFactor: 0.3
@@ -136,53 +85,30 @@ Character:
   defaultItems:
   - lox_bite
   - lox_stomp
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
   consumeItemEffects:
     effectPrefabs:
     - prefab: sfx_creature_consume
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: lox_bite
+    name: lox bite
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 130
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 150
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_bite
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -195,27 +121,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 5.5
       attackHeight: 1.3
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 45
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -227,12 +159,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -246,12 +176,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 5
     aiAttackRangeMin: 0
     aiAttackInterval: 4
@@ -259,81 +183,42 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_wolf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_lox_attack_bite
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: lox_stomp
+    name: slap
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
       blunt: 120
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 100
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 100
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Area
       attackAnimation: attack_stomp
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -346,27 +231,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 2.5
       attackHeight: 0.1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 4.5
       attackRayWidthCharExtra: 0
@@ -378,12 +269,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -397,12 +286,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 0
     aiAttackInterval: 12
@@ -410,54 +293,20 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_lox_attack_stomp
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: vfx_lox_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
 AI:
   alertRange: 6
   fleeIfHurtWhenTargetCantBeReached: true
@@ -485,8 +334,6 @@ AI:
   wakeupRange: 5
   noiseWakeup: false
   maxNoiseWakeupRange: 50
-  wakeupEffects: 
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
@@ -505,16 +352,6 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_lox_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  idleSound: 
   idleSoundInterval: 15
   idleSoundChance: 0.5
   pathAgentType: TrollSize
@@ -544,36 +381,59 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: lox
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#FFFF00FF'
-    mainTexture: Halstein_d
-  - name: lox
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#FFFF00FF'
-    mainTexture: Halstein_d
+  renderers:
+  - prefab: Body
+    active: true
+    enabled: true
+    materials:
+    - name: lox
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Halstein_d
+    - name: lox
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Halstein_d
+  - prefab: Furr1
+    active: true
+    enabled: true
+    materials:
+    - name: lox
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Halstein_d
+  - prefab: Sadel
+    active: false
+    enabled: true
+    materials:
+    - name: testloxsaddle_m
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: testloxsadle_d
 Drops:
   drops:
   - prefab: LoxMeat
@@ -581,7 +441,6 @@ Drops:
     amountMax: 6
     chance: 1
     onePerPlayer: false
-    levelMultiplier: true
     dontScale: false
   - prefab: TrophyLox
     amountMin: 1
@@ -595,9 +454,7 @@ Drops:
     amountMax: 3
     chance: 1
     onePerPlayer: false
-    levelMultiplier: true
     dontScale: false
-  dropsEnabled: true
 Tameable:
   fedDuration: 600
   tamingTime: 1800
@@ -605,50 +462,19 @@ Tameable:
   tamedEffect:
     effectPrefabs:
     - prefab: fx_lox_tamed
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   sootheEffect:
     effectPrefabs:
     - prefab: vfx_lox_soothed
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   petEffect:
     effectPrefabs:
     - prefab: fx_lox_pet
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   commandable: false
   unsummonDistance: 0
   unsummonOnOwnerLogoutSeconds: 0
-  unSummonEffect: 
   levelUpOwnerSkill: None
   levelUpFactor: 1
-  saddleItem: 
   dropSaddleOnDeath: true
-  dropSaddleOffset: 
   dropItemVel: 5
-  randomStartingName: []
   tamingSpeedMultiplierRange: 60
   tamingBoostMultiplier: 2
   nameBeforeText: true
@@ -666,138 +492,40 @@ Procreation:
   spawnOffset: 2
   spawnOffsetMax: 0
   spawnRandomDirection: false
-  seperatePartner: 
-  noPartnerOffspring: 
   birthEffects:
     effectPrefabs:
     - prefab: sfx_lox_shout
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_boar_birth
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   loveEffects:
     effectPrefabs:
     - prefab: sfx_lox_breath
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_lox_love
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-GrowUp: 
-NPCTalk: 
 MovementDamage:
   runDamageObject: RunHitDamager
   areaOfEffect:
-    name: ''
+    # Attack (overridden by item)
     useAttackSettings: true
     damage:
-      damage: 0
       blunt: 20
-      slash: 0
-      pierce: 0
       chop: 40
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
-    scaleDamageByDistance: 
-    dodgeable: 
-    blockable: 
-    toolTier: 
-    attackForce: 
     backstabBonus: 4
-    statusEffect: ''
-    statusEffectIfBoss: ''
-    attackForceForward: 
-    spawnOnHitTerrain: ''
-    hitTerrainOnlyOnce: 
-    spawnOnGroundType: 
     groundLavaValue: -1
-    hitNoise: 
-    placeOnGround: 
-    randomRotation: 
-    maxTargetsFromCenter: 
-    multiSpawnMin: 
-    multiSpawnMax: 
-    multiSpawnDistanceMin: 
-    multiSpawnDistanceMax: 
-    multiSpawnScaleMin: 
-    multiSpawnScaleMax: 
-    multiSpawnSpringDelayMax: 
-    chainStartChance: 
     chainStartChanceFalloff: 0.8
-    chainChancePerTarget: 
-    chainObj: ''
-    chainStartDelay: 
-    chainMinTargets: 
-    chainMaxTargets: 
-    chainEffects: 
-    chainDelay: 
-    chainChance: 
-    damageSelf: 
-    hitOwner: 
     hitParent: true
-    hitSame: 
     hitFriendly: true
     hitEnemy: true
     hitCharacters: true
     hitProps: true
-    hitTerrain: 
-    launchCharacters: 
     launchForceUpFactor: 0.5
-    useTriggers: 
-    triggerEnterOnly: 
     radius: 4
-    activationDelay: 
     ttl: 4
-    ttlMax: 
-    hitAfterTtl: 
     hitInterval: 1
-    hitOnEnable: 
-    attachToCaster: 
-    hitEffects: 
-    initiateEffect: 
 Saddle:
   hoverText: $item_saddlelox
   maxUseRange: 6
-  detachOffset: 
   attachAnimation: attach_lox
   maxStamina: 240
   runStaminaDrain: 1
   swimStaminaDrain: 5
   staminaRegen: 0.2
   staminaRegenHungry: 0.1
-  drownEffects: 
-  mountIcon: 
-  rideSkill: 0

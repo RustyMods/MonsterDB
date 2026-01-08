@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -21,6 +22,11 @@ public class ProjectileRef : Reference
     public float? m_hitNoise;
     public EffectListRef? m_hitEffects;
     public EffectListRef? m_hitWaterEffects;
+    [YamlMember(Description = "Bounce")]
+    public bool? m_bounce;
+    public bool? m_bounceOnWater;
+    [YamlMember(Description = "Spawn on Hit")]
+    public bool? m_respawnItemOnHit;
     public bool? m_spawnOnTtl;
     public string? m_spawnOnHit;
     public float? m_spawnOnHitChance;
@@ -34,6 +40,7 @@ public class ProjectileRef : Reference
     public bool? m_spawnRandomRotation;
     public bool? m_spawnFacingRotation;
     public EffectListRef? m_spawnOnHitEffects;
+    [YamlMember(Description = "Projectile Spawning")]
     public bool? m_spawnProjectileNewVelocity;
     public float? m_spawnProjectileMinVel;
     public float? m_spawnProjectileMaxVel;

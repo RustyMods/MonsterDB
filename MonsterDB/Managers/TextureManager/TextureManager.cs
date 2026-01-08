@@ -99,7 +99,42 @@ public static class TextureManager
             Export(texture, ExportFolder);
             return true;
         }, m_cachedTextures.Keys.ToList);
+
+        Command search = new Command("search_tex", "search texture names", args =>
+        {
+            if (args.Length < 3) return true;
+
+            string query = args[2];
+            var names = m_cachedTextures.Keys.ToList();
+            for (int i = 0; i < names.Count; ++i)
+            {
+                var name = names[i];
+                if (name.ToLower().Contains(query.ToLower()))
+                {
+                    MonsterDBPlugin.LogInfo(name);
+                }
+            }
+            return true;
+        });
+
+        Command searchSprite = new Command("search_sprite", "search sprite names", args =>
+        {
+            if (args.Length < 3) return true;
+
+            string query = args[2];
+            var names = m_cachedSprites.Keys.ToList();
+            for (int i = 0; i < names.Count; ++i)
+            {
+                var name = names[i];
+                if (name.ToLower().Contains(query.ToLower()))
+                {
+                    MonsterDBPlugin.LogInfo(name);
+                }
+            }
+            return true;
+        });
     }
+
     public static void WriteAll()
     {
         GetAllTextures();

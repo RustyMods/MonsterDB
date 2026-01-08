@@ -16,4 +16,11 @@ public class EggGrowRef : Reference
     public EffectListRef? m_hatchEffect;
     public string? m_growingObject;
     public string? m_notGrowingObject;
+
+    public static implicit operator EggGrowRef(EggGrow egg)
+    {
+        var reference = new EggGrowRef();
+        reference.ReferenceFrom(egg);
+        return reference;
+    }
 }

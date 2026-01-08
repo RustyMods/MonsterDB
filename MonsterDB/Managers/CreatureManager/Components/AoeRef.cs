@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -7,6 +8,7 @@ namespace MonsterDB;
 public class AoeRef : Reference
 {
     public string m_name = "";
+    [YamlMember(Description = "Attack (overridden by item)")] 
     public bool? m_useAttackSettings = true;
     public HitData.DamageTypes? m_damage;
     public bool? m_scaleDamageByDistance;
@@ -26,6 +28,7 @@ public class AoeRef : Reference
     public bool? m_placeOnGround;
     public bool? m_randomRotation;
     public int? m_maxTargetsFromCenter;
+    [YamlMember(Description = "Multi Spawn (Lava Bomb)")] 
     public int? m_multiSpawnMin;
     public int? m_multiSpawnMax;
     public float? m_multiSpawnDistanceMin;
@@ -33,6 +36,7 @@ public class AoeRef : Reference
     public float? m_multiSpawnScaleMin;
     public float? m_multiSpawnScaleMax;
     public float? m_multiSpawnSpringDelayMax;
+    [YamlMember(Description = "Chain Spawn")] 
     public float? m_chainStartChance;
     public float? m_chainStartChanceFalloff = 0.8f;
     public float? m_chainChancePerTarget;
@@ -44,6 +48,7 @@ public class AoeRef : Reference
     public float? m_chainDelay;
     public float? m_chainChance;
     public float? m_damageSelf;
+    [YamlMember(Description = "Ignore targets")]
     public bool? m_hitOwner;
     public bool? m_hitParent = true;
     public bool? m_hitSame;
@@ -57,8 +62,10 @@ public class AoeRef : Reference
     public bool? m_useTriggers;
     public bool? m_triggerEnterOnly;
     public float? m_radius = 4f;
+    [YamlMember(Description = "Wait this long before we start doing any damage")]
     public float? m_activationDelay;
     public float? m_ttl = 4f;
+    [YamlMember(Description = "When set, ttl will be a random value between tll and ttlMax")]
     public float? m_ttlMax;
     public bool? m_hitAfterTtl;
     public float? m_hitInterval = 1f;
@@ -72,7 +79,7 @@ public static partial class Extensions
 {
     public static AoeRef ToRef(this Aoe aoe)
     {
-        var aoeRef = new AoeRef();
+        AoeRef aoeRef = new AoeRef();
         aoeRef.ReferenceFrom(aoe);
         return aoeRef;
     }

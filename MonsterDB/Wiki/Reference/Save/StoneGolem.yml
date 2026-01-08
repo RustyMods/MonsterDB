@@ -2,16 +2,25 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: StoneGolem
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_stonegolem
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: ForestMonsters
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
-  defeatSetGlobalKey: ''
   aiSkipTarget: false
   crouchSpeed: 2
   walkSpeed: 5
@@ -45,119 +54,38 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: vfx_stonegolem_hurt
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_stonegolem_hurt
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: sfx_stonegolem_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: Stonegolem_ragdoll
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_stonegolem_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 800
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
     slash: Resistant
     pierce: Resistant
     chop: Ignore
     pickaxe: VeryWeak
     fire: Immune
     frost: Immune
-    lightning: Normal
     poison: Immune
     spirit: Immune
   staggerWhenBlocked: true
   staggerDamageFactor: 0.33
   enemyAdrenalineMultiplier: 1
-  defaultItems: []
-  randomWeapon: []
   randomArmor:
   - StoneGolem_hat
-  randomShield: []
   randomSets:
   - name: Spike
     items:
@@ -169,38 +97,29 @@ Character:
     - stonegolem_attack2_left_groundslam
     - stonegolem_attack_doublesmash
     - StoneGolem_clubs
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: stonegolem_attack1_spike
+    name: Spike attack
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 110
       chop: 100
       pickaxe: 100
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Vertical
       attackAnimation: attack
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -213,27 +132,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 7
       attackHeight: 2.1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 0.1
       attackRayWidth: 1.86
       attackRayWidthCharExtra: 0
@@ -245,12 +170,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -264,12 +187,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 0
     aiAttackInterval: 8
@@ -277,124 +194,52 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_primary_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_hit_camshake
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_spikeattack_trailon
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: stonegolem_attack3_spikesweep
+    name: Spike sweep
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
       blunt: 110
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 100
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack3
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -407,27 +252,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 7.71
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 104.24
       attackRayWidth: 1.37
       attackRayWidthCharExtra: 0
@@ -439,12 +290,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -458,12 +307,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 0
     aiAttackInterval: 15
@@ -471,182 +314,42 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_second_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_spikeattack_trailon
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: StoneGolem_spikes
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 30
     backstabBonus: 4
     dodgeable: false
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
-    attack:
-      attackType: Horizontal
-      attackAnimation: ''
-      chargeAnimationBool: ''
-      attackRandomAnimations: 0
-      attackChainLevels: 0
-      loopingAttack: false
-      consumeItem: false
-      hitTerrain: true
-      attackHealthReturnHit: 0
-      attackKillsSelf: false
-      speedFactor: 0.2
-      speedFactorRotation: 0.2
-      attackStartNoise: 10
-      attackHitNoise: 30
-      damageMultiplier: 1
-      damageMultiplierPerMissingHP: 0
-      damageMultiplierByTotalHealthMissing: 0
-      staminaReturnPerMissingHP: 0
-      forceMultiplier: 1
-      staggerMultiplier: 1
-      recoilPushback: 0
-      selfDamage: 0
-      attackOriginJoint: ''
-      attackRange: 1.5
-      attackHeight: 0.6
-      attackHeightChar1: 0
-      attackHeightChar2: 0
-      attackOffset: 0
-      spawnOnTrigger: 
-      toggleFlying: false
-      attach: false
-      cantUseInDungeon: false
-      requiresReload: false
-      reloadAnimation: ''
-      reloadTime: 2
-      drawAnimationState: ''
-      attackAngle: 90
-      attackRayWidth: 0
-      attackRayWidthCharExtra: 0
-      maxYAngle: 0
-      lowerDamagePerHit: true
-      hitPointtype: Closest
-      hitThroughWalls: false
-      multiHit: true
-      pickaxeSpecial: false
-      lastChainDamageMultiplier: 2
-      resetChainIfHit: None
-      spawnOnHit: 
-      spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
-      projectileVel: 10
-      projectileVelMin: 2
-      randomVelocity: false
-      projectileAccuracy: 10
-      projectileAccuracyMin: 20
-      circularProjectileLaunch: false
-      distributeProjectilesAroundCircle: false
-      useCharacterFacing: false
-      useCharacterFacingYAim: false
-      launchAngle: 0
-      projectiles: 1
-      projectileBursts: 1
-      burstInterval: 0
-      destroyPreviousProjectile: false
-      perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 2
     aiAttackRangeMin: 0
     aiAttackInterval: 2
@@ -654,49 +357,35 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: stonegolem_attack2_left_groundslam
+    name: One hand ground slam
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
       blunt: 110
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 100
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Vertical
       attackAnimation: attack2
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -709,27 +398,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 8
       attackHeight: 2.6
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 70
       attackRayWidth: 1.5
       attackRayWidthCharExtra: 0
@@ -741,12 +436,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -760,12 +453,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 5
     aiAttackRangeMin: 0
     aiAttackInterval: 8
@@ -773,113 +460,49 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_primary_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_attack_wosh
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: stonegolem_attack_doublesmash
+    name: slap
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
       blunt: 110
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 100
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 120
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Vertical
       attackAnimation: doublesmash
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -892,27 +515,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 8.66
       attackHeight: 2.6
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 70
       attackRayWidth: 1.5
       attackRayWidthCharExtra: 0
@@ -924,12 +553,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -943,12 +570,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 5
     aiAttackRangeMin: 0
     aiAttackInterval: 15
@@ -956,182 +577,42 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_stonegolem_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_second_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_stonegolem_attack_wosh
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: StoneGolem_clubs
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 30
     backstabBonus: 4
     dodgeable: false
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
-    attack:
-      attackType: Horizontal
-      attackAnimation: ''
-      chargeAnimationBool: ''
-      attackRandomAnimations: 0
-      attackChainLevels: 0
-      loopingAttack: false
-      consumeItem: false
-      hitTerrain: true
-      attackHealthReturnHit: 0
-      attackKillsSelf: false
-      speedFactor: 0.2
-      speedFactorRotation: 0.2
-      attackStartNoise: 10
-      attackHitNoise: 30
-      damageMultiplier: 1
-      damageMultiplierPerMissingHP: 0
-      damageMultiplierByTotalHealthMissing: 0
-      staminaReturnPerMissingHP: 0
-      forceMultiplier: 1
-      staggerMultiplier: 1
-      recoilPushback: 0
-      selfDamage: 0
-      attackOriginJoint: ''
-      attackRange: 1.5
-      attackHeight: 0.6
-      attackHeightChar1: 0
-      attackHeightChar2: 0
-      attackOffset: 0
-      spawnOnTrigger: 
-      toggleFlying: false
-      attach: false
-      cantUseInDungeon: false
-      requiresReload: false
-      reloadAnimation: ''
-      reloadTime: 2
-      drawAnimationState: ''
-      attackAngle: 90
-      attackRayWidth: 0
-      attackRayWidthCharExtra: 0
-      maxYAngle: 0
-      lowerDamagePerHit: true
-      hitPointtype: Closest
-      hitThroughWalls: false
-      multiHit: true
-      pickaxeSpecial: false
-      lastChainDamageMultiplier: 2
-      resetChainIfHit: None
-      spawnOnHit: 
-      spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
-      projectileVel: 10
-      projectileVelMin: 2
-      randomVelocity: false
-      projectileAccuracy: 10
-      projectileAccuracyMin: 20
-      circularProjectileLaunch: false
-      distributeProjectilesAroundCircle: false
-      useCharacterFacing: false
-      useCharacterFacingYAim: false
-      launchAngle: 0
-      projectiles: 1
-      projectileBursts: 1
-      burstInterval: 0
-      destroyPreviousProjectile: false
-      perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 2
     aiAttackRangeMin: 0
     aiAttackInterval: 2
@@ -1139,22 +620,13 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
 AI:
   alertRange: 20
   fleeIfHurtWhenTargetCantBeReached: true
@@ -1185,31 +657,11 @@ AI:
   wakeupEffects:
     effectPrefabs:
     - prefab: vfx_stonegolem_wakeup
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_stonegolem_wakeup
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -1220,27 +672,9 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_stonegolem_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSound:
     effectPrefabs:
     - prefab: sfx_stonegolem_idle
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 3
   idleSoundChance: 0.25
   pathAgentType: TrollSize
@@ -1270,28 +704,59 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: MountainGolem_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#000000FF'
-    mainTexture: Golem_d
+  renderers:
+  - prefab: Particle System
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: '#A1FFFFFF'
+      emissionColor: '#FFFF16FF'
+  - prefab: Particle System
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: '#A1FFFFFF'
+      emissionColor: '#FFFF16FF'
+  - prefab: Particle System
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: '#A1FFFFFF'
+      emissionColor: '#FFFF16FF'
+  - prefab: Particle System
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: '#A1FFFFFF'
+      emissionColor: '#FFFF16FF'
+  - prefab: Cube.001
+    active: true
+    enabled: true
+    materials:
+    - name: MountainGolem_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Golem_d
 Drops:
   drops:
   - prefab: TrophySGolem
@@ -1306,19 +771,10 @@ Drops:
     amountMax: 10
     chance: 1
     onePerPlayer: false
-    levelMultiplier: true
     dontScale: false
   - prefab: Crystal
     amountMin: 8
     amountMax: 12
     chance: 1
     onePerPlayer: false
-    levelMultiplier: true
     dontScale: false
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
-MovementDamage: 
-Saddle: 

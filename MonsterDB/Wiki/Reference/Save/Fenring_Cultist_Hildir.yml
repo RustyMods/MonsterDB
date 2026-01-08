@@ -2,15 +2,25 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: Fenring_Cultist_Hildir
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_fenringcultist_hildir
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: MountainMonsters
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
   defeatSetGlobalKey: BossHildir2
   aiSkipTarget: false
   crouchSpeed: 2
@@ -45,111 +55,29 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: vfx_fenring_hurt
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_greydwarf_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: vfx_fenring_cultist_hildir_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_fenring_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: Fenring_cultist_ragdoll_hildir
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 3700
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
-    slash: Normal
-    pierce: Normal
     chop: Ignore
     pickaxe: Ignore
     fire: Weak
     frost: Immune
-    lightning: Normal
-    poison: Normal
-    spirit: Normal
   staggerWhenBlocked: true
   staggerDamageFactor: 0.5
   enemyAdrenalineMultiplier: 1
@@ -158,42 +86,28 @@ Character:
   - Fenring_attack_iceclaw
   - Fenring_attack_frost
   - Fenring_attack_IceNova
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: Fenring_attack_iceclaw_double
+    name: claw
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 60
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
       frost: 70
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 60
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_claw_double
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -206,27 +120,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 3
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0.88
       attackRayWidthCharExtra: 0
@@ -238,12 +158,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -257,12 +175,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 1.5
     aiAttackRangeMin: 0
     aiAttackInterval: 10
@@ -270,102 +182,51 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_fenring_claw_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: fx_fenring_frost_hand
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: LeftHand
       - prefab: fx_fenring_frost_hand
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: RightHand
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_fenring_fireclaw
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: Fenring_attack_iceclaw
+    name: claw
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 40
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
       frost: 60
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 60
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_claw
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -378,27 +239,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 3
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0.88
       attackRayWidthCharExtra: 0
@@ -410,12 +277,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -429,12 +294,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 1.5
     aiAttackRangeMin: 0
     aiAttackInterval: 2
@@ -442,81 +301,43 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_fenring_claw_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: fx_fenring_frost_hand
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: RightHand
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: Fenring_attack_frost
+    name: Fenring cultist frost
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
       frost: 100
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 0
     backstabBonus: 4
     dodgeable: true
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_flames
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -529,27 +350,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 35
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -561,12 +388,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fenring_attack_flames_aoe
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -580,12 +406,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 2
     aiAttackInterval: 10
@@ -593,102 +413,52 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: fx_fenring_frost_hand_long
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: LeftHand
       - prefab: fx_fenring_frost_hand_long
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: RightHand
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_fenring_frost
         variant: 0
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: Fenring_attack_IceNova
+    name: Club
+    description: $item_club_description
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
       frost: 20
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_nova
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -701,8 +471,11 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 40
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
@@ -714,14 +487,18 @@ Character:
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0.3
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0.3
       attackRayWidthCharExtra: 0
@@ -733,12 +510,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: FenringIceNova_aoe
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 1
       projectileAccuracyMin: 10
@@ -752,12 +528,6 @@ Character:
       burstInterval: 1.46
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 7
     aiAttackRangeMin: 0
     aiAttackInterval: 15
@@ -765,115 +535,35 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_clubhit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_club_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: fx_hit_camshake
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
     blockEffect:
       effectPrefabs:
       - prefab: sfx_wood_blocked
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: vfx_blocked
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: fx_block_camshake
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     startEffect:
       effectPrefabs:
       - prefab: fx_fenring_icenova
         variant: 0
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: fx_fenring_frost_hand_aoestart
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: LeftHand
       - prefab: fx_fenring_frost_hand_aoestart
         variant: 0
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
         childTransform: RightHand
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
 AI:
   alertRange: 20
   fleeIfHurtWhenTargetCantBeReached: true
@@ -901,13 +591,10 @@ AI:
   wakeupRange: 5
   noiseWakeup: false
   maxNoiseWakeupRange: 50
-  wakeupEffects: 
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -918,27 +605,9 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_fenring_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSound:
     effectPrefabs:
     - prefab: sfx_fenring_idle
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 10
   idleSoundChance: 0.5
   pathAgentType: HumanoidBig
@@ -968,36 +637,35 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: fenring_Leader_Hildir
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0.218
-    emissionColor: '#FF5F00FF'
-    mainTexture: Fenring_d
-  - name: fenringcape_Hildir
-    shader: Custom/Creature
-    color: '#ABABABFF'
-    hue: 0.004
-    saturation: -0.075
-    value: -0.065
-    emissionColor: '#000000FF'
-    mainTexture: WolfLeaderCloth_d
+  renderers:
+  - prefab: Fenring.001
+    active: true
+    enabled: true
+    materials:
+    - name: fenring_Leader_Hildir
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0.218
+      emissionColor: '#FF5F00FF'
+      mainTexture: Fenring_d
+    - name: fenringcape_Hildir
+      shader: Custom/Creature
+      color: '#ABABABFF'
+      hue: 0.004
+      saturation: -0.075
+      value: -0.065
+      emissionColor: '#000000FF'
+      mainTexture: WolfLeaderCloth_d
 Drops:
   drops:
   - prefab: chest_hildir2
@@ -1014,10 +682,3 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: true
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
-MovementDamage: 
-Saddle: 

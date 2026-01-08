@@ -2,16 +2,25 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: Abomination
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_abomination
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: Undead
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
-  defeatSetGlobalKey: ''
   aiSkipTarget: false
   crouchSpeed: 2
   walkSpeed: 4
@@ -45,109 +54,31 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: sfx_tree_hit_abomination
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_SawDust
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: sfx_tree_fall_abomination
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: Abomination_ragdoll
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_firetreecut_dead_abomination
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 800
   regenAllHPTime: 3600
   damageModifiers:
     blunt: Resistant
-    slash: Normal
     pierce: VeryResistant
     chop: Ignore
     pickaxe: Ignore
     fire: Weak
     frost: Immune
-    lightning: Normal
     poison: Immune
     spirit: Immune
   staggerWhenBlocked: true
@@ -157,42 +88,29 @@ Character:
   - Abomination_attack1
   - Abomination_attack2
   - Abomination_attack3
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: Abomination_attack1
+    name: Swing attack
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 2
     damages:
-      damage: 0
       blunt: 60
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 60
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -205,27 +123,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 11
       attackHeight: 0.7
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 45
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -237,12 +161,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -256,12 +178,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 2.5
     aiAttackInterval: 7
@@ -269,114 +185,51 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_Abomination_attack
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack1
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     trailStartEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack1_trailon
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: Abomination_attack2
+    name: Slam attack
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 2
     damages:
-      damage: 0
       blunt: 80
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 60
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Area
       attackAnimation: attack2
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -389,27 +242,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 7.61
       attackHeight: 0
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: -0.79
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 0
       attackRayWidth: 4.3
       attackRayWidthCharExtra: 0
@@ -421,12 +280,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -440,12 +297,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 5
     aiAttackRangeMin: 3
     aiAttackInterval: 8
@@ -453,103 +304,48 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_Abomination_attack
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack2
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: Abomination_attack3
+    name: Stub to the ground
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 2
     damages:
-      damage: 0
       blunt: 80
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 60
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Area
       attackAnimation: attack3
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -562,27 +358,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 0
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 0
       attackRayWidth: 5.4
       attackRayWidthCharExtra: 0
@@ -594,12 +396,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -613,12 +413,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 3
     aiAttackRangeMin: 0
     aiAttackInterval: 6
@@ -626,76 +420,26 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: true
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: vfx_troll_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_troll_rock_destroyed
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_Abomination_attack
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_Abomination_attack3
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
 AI:
   alertRange: 20
   fleeIfHurtWhenTargetCantBeReached: true
@@ -726,21 +470,10 @@ AI:
   wakeupEffects:
     effectPrefabs:
     - prefab: fx_Abomination_arise
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 8
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -751,27 +484,9 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_Abomination_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSound:
     effectPrefabs:
     - prefab: sfx_Abomination_idle
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 15
   idleSoundChance: 0.25
   pathAgentType: Abomination
@@ -801,28 +516,71 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: Abomination_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#000000FF'
-    mainTexture: Rotvalta_d
+  renderers:
+  - prefab: flies
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_lit_opaque
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: ooz
+    active: true
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: wetsplsh
+    active: true
+    enabled: true
+    materials:
+    - name: dirt
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: wetsplsh (1)
+    active: false
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: Abomination
+    active: true
+    enabled: true
+    materials:
+    - name: Abomination_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Rotvalta_d
+  - prefab: mud particle (1)
+    active: true
+    enabled: true
+    materials:
+    - name: footstep_mud
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slime_splash
 Drops:
   drops:
   - prefab: TrophyAbomination
@@ -846,10 +604,3 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: false
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
-MovementDamage: 
-Saddle: 

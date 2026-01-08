@@ -130,6 +130,16 @@ public static class PrefabManager
             _prefabs.Add(go.name, go);
         }
     }
+
+    public static List<string> SearchCache<T>(string query) where T : MonoBehaviour
+    {
+        return _prefabs.Values
+            .Where(x => x != null)
+            .Where(x => x.GetComponent<T>())
+            .Where(x => x.name.ToLower().Contains(query.ToLower()))
+            .Select(x => x.name)
+            .ToList();
+    }
     
     public static StatusEffect? GetStatusEffect(string name)
     {

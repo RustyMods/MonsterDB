@@ -140,7 +140,7 @@ public static partial class Extensions
         return prefabs;
     }
 
-    public static GameObject[] FromRef(this string[] goNames)
+    public static GameObject[] ToGameObjectArray(this string[] goNames)
     {
         GameObject[] prefabs = goNames
             .Where(x => !string.IsNullOrEmpty(x))

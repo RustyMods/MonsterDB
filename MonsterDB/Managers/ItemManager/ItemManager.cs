@@ -54,10 +54,10 @@ public static class ItemManager
                 return true;
             }
             
-            string filePath = Path.Combine(CreatureManager.ModifiedFolder, prefabName + ".yml");
+            string filePath = Path.Combine(FileManager.ModifiedFolder, prefabName + ".yml");
             Read(filePath);
             return true;
-        }, CreatureManager.GetModFileNames, adminOnly: true);
+        }, FileManager.GetModFileNames, adminOnly: true);
 
         Command revert = new Command("revert_item", "[prefabName]: revert item to factory settings", args =>
         {
@@ -118,9 +118,24 @@ public static class ItemManager
             Clone(prefab, newName);
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
-    }
 
-    public static string? Save(GameObject prefab, bool isClone = false, string source = "")
+        Command search = new Command("search_item", "search item by name", args =>
+        {
+            if (args.Length < 3) return true;
+
+            string query = args[2];
+            var names = PrefabManager.SearchCache<ItemDrop>(query);
+            for (int i = 0; i < names.Count; ++i)
+            {
+                MonsterDBPlugin.LogInfo(names[i]);
+            }
+            
+            return true;
+        }, () => PrefabManager.SearchCache<ItemDrop>(""));
+    }
+    
+
+    private static string? Save(GameObject prefab, bool isClone = false, string source = "")
     {
         if (!prefab.GetComponent<ItemDrop>()) return null;
 
@@ -132,9 +147,9 @@ public static class ItemManager
         return ConfigManager.Serialize(reference);
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
+    private static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {
-        string filePath = Path.Combine(CreatureManager.SaveFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(FileManager.SaveFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);
         if (string.IsNullOrEmpty(text)) return;
         File.WriteAllText(filePath, text);
@@ -147,8 +162,8 @@ public static class ItemManager
         string text = File.ReadAllText(filePath);
         try
         {
-            Base header = ConfigManager.Deserialize<Base>(text);
-            if (header.Type != CreatureType.Item) return;
+            Header header = ConfigManager.Deserialize<Header>(text);
+            if (header.Type != BaseType.Item) return;
             BaseItem reference = ConfigManager.Deserialize<BaseItem>(text);
             reference.Update();
             SyncManager.rawFiles[reference.Prefab] = text;
@@ -165,8 +180,8 @@ public static class ItemManager
         if (CloneManager.clones.ContainsKey(cloneName)) return;
         if  (!source.GetComponent<ItemDrop>()) return;
         
-        Clone clone = new Clone(source, cloneName);
-        clone.OnCreated += p =>
+        Clone c = new Clone(source, cloneName);
+        c.OnCreated += p =>
         {
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
@@ -174,6 +189,6 @@ public static class ItemManager
                 Write(p, true, source.name);
             }
         };
-        clone.Create();
+        c.Create();
     }
 }

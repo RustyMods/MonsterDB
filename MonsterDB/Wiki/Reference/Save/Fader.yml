@@ -2,11 +2,22 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: Fader
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_fader
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: Boss
   boss: true
   dontHideBossHud: true
@@ -42,113 +53,32 @@ Character:
   tolerateFire: true
   tolerateSmoke: false
   tolerateTar: false
-  hitEffects: 
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: fx_Fader_Ragdoll
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_fader_death_start
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_fader_death_explosion
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
   jumpEffects:
     effectPrefabs:
     - prefab: sfx_troll_rock_destroyed
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_troll_rock_destroyed
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 25000
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
-    slash: Normal
     pierce: Resistant
     chop: Ignore
     pickaxe: Ignore
     fire: Immune
-    frost: Normal
-    lightning: Normal
-    poison: Normal
     spirit: Immune
   staggerWhenBlocked: false
   staggerDamageFactor: 0
@@ -166,42 +96,29 @@ Character:
   - Fader_Meteors_Intense
   - Fader_Fissure_Intense
   - Fader_Roar_Intense
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: Fader_Fissure
+    name: Fader Fissure
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 120
       chop: 1000
       pickaxe: 1000
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_Fissure
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -214,27 +131,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 20
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -246,12 +169,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fader_Fissure_Spawn
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: true
       projectileAccuracy: 30
       projectileAccuracyMin: 20
@@ -265,12 +187,6 @@ Character:
       burstInterval: 3
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 40
     aiAttackRangeMin: 0
     aiAttackInterval: 30
@@ -278,7 +194,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -290,80 +205,35 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: sfx_fader_fissure
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: Fader_Bite
+    name: Fader Bite
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 210
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 100
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_bite
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -376,27 +246,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 0.8
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 10
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 40
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -408,12 +284,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -427,12 +301,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 9
     aiAttackRangeMin: 0
     aiAttackInterval: 3
@@ -440,60 +308,38 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: Fader_Claw_Left
+    name: Fader Claw Left
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 200
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 100
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_ClawL
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -506,27 +352,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 0.8
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 10
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 65
       attackRayWidth: 1.33
       attackRayWidthCharExtra: 0
@@ -538,12 +390,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -557,12 +407,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 9
     aiAttackRangeMin: 0
     aiAttackInterval: 3
@@ -570,60 +414,38 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: Fader_Claw_Right
+    name: Fader Claw Right
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 200
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 100
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack_ClawR
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -636,27 +458,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 0.8
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 10
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 65
       attackRayWidth: 1.33
       attackRayWidthCharExtra: 0
@@ -668,12 +496,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -687,12 +513,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 9
     aiAttackRangeMin: 0
     aiAttackInterval: 3
@@ -700,60 +520,38 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: Fader_Spin
+    name: Fader Spin
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 140
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 130
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Area
       attackAnimation: attack_Spin
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -766,27 +564,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 20
       attackRayWidth: 8.5
       attackRayWidthCharExtra: 0
@@ -798,12 +602,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 25
       projectileVelMin: 5
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: true
       projectileAccuracy: 30
       projectileAccuracyMin: 20
@@ -817,12 +619,6 @@ Character:
       burstInterval: 0.65
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 8
     aiAttackRangeMin: 0
     aiAttackInterval: 20
@@ -830,71 +626,42 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_Fader_Spin
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: Fader_Flamebreath
+    name: Fader Firebreath
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
       chop: 40
       pickaxe: 40
       fire: 60
-      frost: 0
-      lightning: 0
-      poison: 0
       spirit: 60
     attackForce: 0
     backstabBonus: 4
     dodgeable: true
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_flamebreath
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -907,27 +674,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 17
       attackHeight: -1
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 35
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -939,12 +712,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fader_Flamebreath_AOE
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -958,12 +730,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 20
     aiAttackRangeMin: 2
     aiAttackInterval: 25
@@ -971,7 +737,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0.5
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -983,69 +748,30 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_fallenvalkyrie_poisonbreath
         variant: 0
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: Fader_Meteors
+    name: spawn
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 0
     backstabBonus: 4
     dodgeable: false
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: taunt
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1058,27 +784,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: -60
       attackHeight: 0.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0
       attackRayWidthCharExtra: 0
@@ -1090,12 +822,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: spawn_fader_meteors
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -1109,12 +840,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 30
     aiAttackRangeMin: 0
     aiAttackInterval: 25
@@ -1122,81 +847,39 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0.25
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: fx_goblinking_vo_meteors2
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: Fader_Roar
+    name: Fader Roar
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_roar
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1209,27 +892,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 4
       attackHeight: 9
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 20
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -1241,59 +930,39 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fader_Roar_Projectile
       projectileRef:
         prefab: Fader_Roar_Projectile
         type: Magic
-        damage:
-          damage: 0
-          blunt: 0
-          slash: 0
-          pierce: 0
-          chop: 0
-          pickaxe: 0
-          fire: 0
-          frost: 0
-          lightning: 0
-          poison: 0
-          spirit: 0
+        damage: {}
         aoe: 3
         dodgeable: true
         blockable: true
         attackForce: 0
         backstabBonus: 4
-        statusEffect: ''
         healthReturn: 0
         ttl: 20
         hitNoise: 50
         hitEffects:
           effectPrefabs:
           - prefab: fx_Fader_Roar_Projectile_Hit
-            variant: -1
-            attach: false
-            follow: false
-            inheritParentRotation: false
-            inheritParentScale: false
-            multiplyParentVisualScale: false
-            randomRotation: false
-            scale: false
-            childTransform: ''
-        hitWaterEffects: 
+        # Bounce
+        bounce: false
+        bounceOnWater: false
+        # Spawn on Hit
+        respawnItemOnHit: false
         spawnOnTtl: false
         spawnOnHit: Fader_Roar_Spawn
         spawnOnHitChance: 1
         spawnCount: 1
-        randomSpawnOnHit: 
         randomSpawnOnHitCount: 1
         randomSpawnSkipLava: false
         staticHitOnly: false
         groundHitOnly: false
-        spawnOffset: 
         spawnRandomRotation: false
         spawnFacingRotation: false
-        spawnOnHitEffects: 
+        # Projectile Spawning
         spawnProjectileNewVelocity: false
         spawnProjectileMinVel: 1
         spawnProjectileMaxVel: 5
@@ -1304,6 +973,7 @@ Character:
         divideDamageBetweenProjectiles: false
       projectileVel: 50
       projectileVelMin: 20
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: true
       projectileAccuracy: 60
       projectileAccuracyMin: 20
@@ -1317,23 +987,9 @@ Character:
       burstInterval: 0.5
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
       burstEffect:
         effectPrefabs:
         - prefab: fx_Fader_Roar
-          variant: -1
-          attach: false
-          follow: false
-          inheritParentRotation: false
-          inheritParentScale: false
-          multiplyParentVisualScale: false
-          randomRotation: false
-          scale: false
-          childTransform: ''
     aiAttackRange: 100
     aiAttackRangeMin: 0
     aiAttackInterval: 45
@@ -1341,7 +997,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -1353,69 +1008,32 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: Fader_WallOfFire
+    name: Fader Wall of Fire
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 120
       chop: 1000
       pickaxe: 1000
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_WallOfFire
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1428,27 +1046,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 10
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 20
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -1460,12 +1084,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fader_WallOfFire_Spawn
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 0
       projectileAccuracyMin: 0
@@ -1479,12 +1102,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 40
     aiAttackRangeMin: 0
     aiAttackInterval: 60
@@ -1492,7 +1109,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -1504,69 +1120,29 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: Fader_Meteors_Intense
+    name: spawn
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 0
     backstabBonus: 4
     dodgeable: false
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: taunt
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1579,27 +1155,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: -60
       attackHeight: 0.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0
       attackRayWidthCharExtra: 0
@@ -1611,12 +1193,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: spawn_fader_meteors
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -1630,12 +1211,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 30
     aiAttackRangeMin: 0
     aiAttackInterval: 18
@@ -1643,7 +1218,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -1655,69 +1229,32 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: fx_goblinking_vo_meteors2
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: Fader_Fissure_Intense
+    name: Fader Fissure
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
     damages:
-      damage: 0
-      blunt: 0
-      slash: 0
       pierce: 120
       chop: 1000
       pickaxe: 1000
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_Fissure
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1730,27 +1267,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 20
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -1762,12 +1305,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fader_Fissure_Spawn
-      projectileRef: 
       projectileVel: 0
       projectileVelMin: 0
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: true
       projectileAccuracy: 30
       projectileAccuracyMin: 20
@@ -1781,12 +1323,6 @@ Character:
       burstInterval: 3
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 40
     aiAttackRangeMin: 0
     aiAttackInterval: 20
@@ -1794,7 +1330,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -1806,80 +1341,32 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: sfx_fader_fissure
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: Fader_Roar_Intense
+    name: Fader Roar
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 3
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_roar
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1892,27 +1379,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 4
       attackHeight: 9
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 20
       attackRayWidth: 2
       attackRayWidthCharExtra: 0
@@ -1924,59 +1417,39 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: Fader_Roar_Projectile
       projectileRef:
         prefab: Fader_Roar_Projectile
         type: Magic
-        damage:
-          damage: 0
-          blunt: 0
-          slash: 0
-          pierce: 0
-          chop: 0
-          pickaxe: 0
-          fire: 0
-          frost: 0
-          lightning: 0
-          poison: 0
-          spirit: 0
+        damage: {}
         aoe: 3
         dodgeable: true
         blockable: true
         attackForce: 0
         backstabBonus: 4
-        statusEffect: ''
         healthReturn: 0
         ttl: 20
         hitNoise: 50
         hitEffects:
           effectPrefabs:
           - prefab: fx_Fader_Roar_Projectile_Hit
-            variant: -1
-            attach: false
-            follow: false
-            inheritParentRotation: false
-            inheritParentScale: false
-            multiplyParentVisualScale: false
-            randomRotation: false
-            scale: false
-            childTransform: ''
-        hitWaterEffects: 
+        # Bounce
+        bounce: false
+        bounceOnWater: false
+        # Spawn on Hit
+        respawnItemOnHit: false
         spawnOnTtl: false
         spawnOnHit: Fader_Roar_Spawn
         spawnOnHitChance: 1
         spawnCount: 1
-        randomSpawnOnHit: 
         randomSpawnOnHitCount: 1
         randomSpawnSkipLava: false
         staticHitOnly: false
         groundHitOnly: false
-        spawnOffset: 
         spawnRandomRotation: false
         spawnFacingRotation: false
-        spawnOnHitEffects: 
+        # Projectile Spawning
         spawnProjectileNewVelocity: false
         spawnProjectileMinVel: 1
         spawnProjectileMaxVel: 5
@@ -1987,6 +1460,7 @@ Character:
         divideDamageBetweenProjectiles: false
       projectileVel: 50
       projectileVelMin: 20
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: true
       projectileAccuracy: 60
       projectileAccuracyMin: 20
@@ -2000,23 +1474,9 @@ Character:
       burstInterval: 0.5
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
       burstEffect:
         effectPrefabs:
         - prefab: fx_Fader_Roar
-          variant: -1
-          attach: false
-          follow: false
-          inheritParentRotation: false
-          inheritParentScale: false
-          multiplyParentVisualScale: false
-          randomRotation: false
-          scale: false
-          childTransform: ''
     aiAttackRange: 100
     aiAttackRangeMin: 0
     aiAttackInterval: 26
@@ -2024,7 +1484,6 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: false
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
@@ -2036,42 +1495,10 @@ Character:
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_dragon_melee_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_dragon_melee_start
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
 AI:
   alertRange: 100
   fleeIfHurtWhenTargetCantBeReached: true
@@ -2099,13 +1526,10 @@ AI:
   wakeupRange: 5
   noiseWakeup: false
   maxNoiseWakeupRange: 50
-  wakeupEffects: 
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -2113,19 +1537,9 @@ AI:
   viewAngle: 90
   hearRange: 9999
   mistVision: true
-  alertedEffects: 
   idleSound:
     effectPrefabs:
     - prefab: sfx_fader_idle
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 7
   idleSoundChance: 0.5
   pathAgentType: HugeSize
@@ -2155,28 +1569,113 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
   deathMessage: $enemy_boss_fader_deathmessage
   alertedMessage: $enemy_boss_fader_alertmessage
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: Fader_Mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#00FFFFFF'
-    mainTexture: Fader_d
+  renderers:
+  - prefab: Fader
+    active: true
+    enabled: true
+    materials:
+    - name: Fader_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#00FFFFFF'
+      mainTexture: Fader_d
+  - prefab: HornsBones
+    active: true
+    enabled: true
+    materials:
+    - name: Fader_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#00FFFFFF'
+      mainTexture: Fader_d
+  - prefab: fx_fader_chestfire
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Sparks
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: fx_fader_chestfire
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Sparks
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: fx_fader_chestfire
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Sparks
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: fx_fader_chestfire
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Sparks
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: Wing
+    active: true
+    enabled: true
+    materials:
+    - name: Fader_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#00FFFFFF'
+      mainTexture: Fader_d
 Drops:
   drops:
   - prefab: TrophyFader
@@ -2193,83 +1692,92 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: true
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
 MovementDamage:
   runDamageObject: RunHitDamager
   areaOfEffect:
-    name: ''
+    # Attack (overridden by item)
     useAttackSettings: true
     damage:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
       chop: 300
       pickaxe: 300
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
-    scaleDamageByDistance: 
-    dodgeable: 
-    blockable: 
-    toolTier: 
-    attackForce: 
     backstabBonus: 4
-    statusEffect: ''
-    statusEffectIfBoss: ''
-    attackForceForward: 
-    spawnOnHitTerrain: ''
-    hitTerrainOnlyOnce: 
-    spawnOnGroundType: 
     groundLavaValue: -1
-    hitNoise: 
-    placeOnGround: 
-    randomRotation: 
-    maxTargetsFromCenter: 
-    multiSpawnMin: 
-    multiSpawnMax: 
-    multiSpawnDistanceMin: 
-    multiSpawnDistanceMax: 
-    multiSpawnScaleMin: 
-    multiSpawnScaleMax: 
-    multiSpawnSpringDelayMax: 
-    chainStartChance: 
     chainStartChanceFalloff: 0.8
-    chainChancePerTarget: 
-    chainObj: ''
-    chainStartDelay: 
-    chainMinTargets: 
-    chainMaxTargets: 
-    chainEffects: 
-    chainDelay: 
-    chainChance: 
-    damageSelf: 
-    hitOwner: 
     hitParent: true
-    hitSame: 
     hitFriendly: true
     hitEnemy: true
     hitCharacters: true
     hitProps: true
-    hitTerrain: 
-    launchCharacters: 
     launchForceUpFactor: 0.5
-    useTriggers: 
-    triggerEnterOnly: 
     radius: 4
-    activationDelay: 
     ttl: 4
-    ttlMax: 
-    hitAfterTtl: 
     hitInterval: 1
-    hitOnEnable: 
-    attachToCaster: 
-    hitEffects: 
-    initiateEffect: 
-Saddle: 
+DropProjectileOverDistance:
+  projectilePrefab: Fader_DroppedFire_AOE
+  distancePerProjectile: 5
+  spawnHeight: 1
+  snapToGround: true
+  # If higher than 0, will force a spawn if nothing has spawned in that amount of time.
+  timeToForceSpawn: 10
+  minVelocity: 0
+  maxVelocity: 0
+  projectileAoe:
+    # Attack (overridden by item)
+    useAttackSettings: false
+    damage:
+      fire: 40
+    scaleDamageByDistance: false
+    dodgeable: false
+    blockable: false
+    toolTier: 0
+    attackForce: 0
+    backstabBonus: 4
+    attackForceForward: false
+    hitTerrainOnlyOnce: false
+    spawnOnGroundType: -1
+    groundLavaValue: -1
+    hitNoise: 0
+    placeOnGround: false
+    randomRotation: false
+    maxTargetsFromCenter: 0
+    # Multi Spawn (Lava Bomb)
+    multiSpawnMin: 0
+    multiSpawnMax: 0
+    multiSpawnDistanceMin: 0
+    multiSpawnDistanceMax: 0
+    multiSpawnScaleMin: 0
+    multiSpawnScaleMax: 0
+    multiSpawnSpringDelayMax: 0
+    # Chain Spawn
+    chainStartChance: 0
+    chainStartChanceFalloff: 0.8
+    chainChancePerTarget: 0
+    chainStartDelay: 0
+    chainMinTargets: 0
+    chainMaxTargets: 0
+    chainDelay: 0
+    chainChance: 0
+    damageSelf: 0
+    # Ignore targets
+    hitOwner: false
+    hitParent: true
+    hitSame: false
+    hitFriendly: false
+    hitEnemy: true
+    hitCharacters: true
+    hitProps: true
+    hitTerrain: false
+    launchCharacters: false
+    launchForceUpFactor: 0.5
+    useTriggers: true
+    triggerEnterOnly: false
+    radius: 4
+    # Wait this long before we start doing any damage
+    activationDelay: 0
+    ttl: 20
+    # When set, ttl will be a random value between tll and ttlMax
+    ttlMax: 0
+    hitAfterTtl: false
+    hitInterval: 0.5
+    hitOnEnable: false
+    attachToCaster: false

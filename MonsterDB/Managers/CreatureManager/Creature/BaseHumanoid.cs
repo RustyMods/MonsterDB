@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 namespace MonsterDB;
 
 [Serializable]
-public class HumanoidCreature : Creature
+public class BaseHumanoid : Base
 {
     [YamlMember(Order = 6)] public HumanoidRef? Character;
     [YamlMember(Order = 7)] public MonsterAIRef? AI;
@@ -16,7 +16,7 @@ public class HumanoidCreature : Creature
         Humanoid? character = prefab.GetComponent<Humanoid>();
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
         base.Setup(prefab, isClone, source);
-        Type = CreatureType.Humanoid;
+        Type = BaseType.Humanoid;
         Character = new HumanoidRef();
         AI = new MonsterAIRef();
         Character.ReferenceFrom(character);
@@ -33,10 +33,8 @@ public class HumanoidCreature : Creature
         
         Humanoid? humanoid = prefab.GetComponent<Humanoid>();
         UpdateScale(prefab, humanoid);
-        UpdateLevelEffects(prefab.GetComponentInChildren<LevelEffects>(), out Renderer? mainRenderer);
-        if (mainRenderer == null && prefab.TryGetComponent(out VisEquipment visEq)) mainRenderer = visEq.m_bodyModel;
-        if (mainRenderer == null) mainRenderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
-        UpdateMaterials(mainRenderer);
+        UpdateLevelEffects(prefab);
+        UpdateVisual(prefab);
         UpdateCharacterDrop(prefab);
         UpdateGrowUp(prefab);
         UpdateHumanoid(humanoid, prefab.GetComponent<MonsterAI>(), out bool attacksChanged);
@@ -45,6 +43,10 @@ public class HumanoidCreature : Creature
         UpdateNpcTalk(prefab);
         UpdateMovementDamage(prefab);
         UpdateSaddle(prefab);
+        UpdateDropProjectile(prefab);
+        UpdateCinderSpawner(prefab);
+        UpdateTimedDestruction(prefab);
+        UpdateRandomAnimation(prefab);
 
         List<Character>? characters = global::Character.GetAllCharacters();
         foreach (Character? c in characters)
@@ -54,10 +56,8 @@ public class HumanoidCreature : Creature
             if (c is not Humanoid instanceHumanoid) continue;
             UpdateScale(c.gameObject, instanceHumanoid);
             UpdateInstanceHumanoid(instanceHumanoid, humanoid, attacksChanged);
-            UpdateLevelEffects(c.GetComponentInChildren<LevelEffects>(), out Renderer? instancedRenderer);
-            if (instancedRenderer == null && c.TryGetComponent(out VisEquipment instanceVisEq)) instancedRenderer = instanceVisEq.m_bodyModel;
-            if (instancedRenderer == null) instancedRenderer = c.GetComponentInChildren<SkinnedMeshRenderer>();
-            UpdateMaterials(instancedRenderer);
+            UpdateLevelEffects(c.gameObject);
+            UpdateVisual(c.gameObject);
             UpdateCharacterDrop(c.gameObject);
             UpdateGrowUp(c.gameObject);
             UpdateTameable(c.gameObject);
@@ -65,6 +65,10 @@ public class HumanoidCreature : Creature
             UpdateNpcTalk(c.gameObject);
             UpdateMovementDamage(c.gameObject);
             UpdateSaddle(c.gameObject);
+            UpdateDropProjectile(c.gameObject);
+            UpdateCinderSpawner(c.gameObject);
+            UpdateTimedDestruction(c.gameObject);
+            UpdateRandomAnimation(c.gameObject);
         }
         base.Update();
     }

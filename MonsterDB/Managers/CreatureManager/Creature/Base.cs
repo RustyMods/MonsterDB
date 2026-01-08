@@ -1,21 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using MonsterDB.Misc;
 using UnityEngine;
 using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
 [Serializable][UsedImplicitly]
-public class BaseCreature : Base
+public class Base : Header
 {
-    [YamlMember(Order = 9)] public CharacterDropRef? Drops;
-    [YamlMember(Order = 10)] public TameableRef? Tameable;
-    [YamlMember(Order = 11)] public ProcreationRef? Procreation;
-    [YamlMember(Order = 12)] public GrowUpRef? GrowUp;
-    [YamlMember(Order = 13)] public NPCTalkRef? NPCTalk;
-    [YamlMember(Order = 14)] public MovementDamageRef? MovementDamage;
-    [YamlMember(Order = 15)] public SaddleRef? Saddle;
+    [YamlMember(Order = 8)] 
+    public VisualRef? Visuals;
+    [YamlMember(Order = 9, Description = "If field removed, will remove component")] 
+    public CharacterDropRef? Drops;
+    [YamlMember(Order = 10, Description = "If field removed, will remove component")] 
+    public TameableRef? Tameable;
+    [YamlMember(Order = 11, Description = "If field removed, will remove component")] 
+    public ProcreationRef? Procreation;
+    [YamlMember(Order = 12, Description = "If field removed, will remove component")] 
+    public GrowUpRef? GrowUp;
+    [YamlMember(Order = 13, Description = "If field removed, will remove component")] 
+    public NPCTalkRef? NPCTalk;
+    [YamlMember(Order = 14, Description = "If field removed, will remove component")] 
+    public MovementDamageRef? MovementDamage;
+    [YamlMember(Order = 15)] 
+    public SaddleRef? Saddle;
+    [YamlMember(Order = 16, Description = "If field removed, will remove component")] 
+    public DropProjectileOverDistanceRef? DropProjectileOverDistance;
+    [YamlMember(Order = 17)] 
+    public CinderSpawnerRef? CinderSpawner;
+    [YamlMember(Order = 18)] 
+    public CharacterTimedDestructionRef? TimedDestruction;
+    [YamlMember(Order = 19)] 
+    public RandomAnimationRef? RandomAnimation;
+    [YamlMember(Order = 100)] 
+    public MiscComponent? Extra;
     
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
@@ -36,6 +57,7 @@ public class BaseCreature : Base
         {
             Tameable = tameable;
         }
+        
 
         if (prefab.TryGetComponent(out Procreation procreation))
         {
@@ -57,11 +79,132 @@ public class BaseCreature : Base
         {
             Saddle = saddle;
         }
+
+        if (prefab.TryGetComponent(out DropProjectileOverDistance dp))
+        {
+            DropProjectileOverDistance = dp;
+        }
+        
+        Visuals = new VisualRef
+        {
+            m_scale = prefab.transform.localScale
+        };
+        
+        LevelEffects levelEffects = prefab.GetComponentInChildren<LevelEffects>();
+        if (levelEffects != null)
+        {
+            Visuals.m_levelSetups = levelEffects.m_levelSetups.ToRef();
+        }
+        
+        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+        if (renderers.Length > 0)
+        {
+            Visuals.m_renderers = renderers.ToRef();
+        }
+        
+        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
+        if (lights.Length > 0)
+        {
+            Visuals.m_lights = lights.ToRef();
+        }
+
+        if (prefab.TryGetComponent(out CinderSpawner cinderSpawner))
+        {
+            CinderSpawner = cinderSpawner;
+        }
+
+        if (prefab.TryGetComponent(out CharacterTimedDestruction ctd))
+        {
+            TimedDestruction = ctd;
+        }
+
+        if (prefab.TryGetComponent(out RandomAnimation ra) && ra.m_values.Count > 0)
+        {
+            RandomAnimation = new RandomAnimationRef();
+            RandomAnimation.ReferenceFrom(ra);
+        }
         
         if (isClone)
         {
             IsCloned = true;
             ClonedFrom = source;
+        }
+    }
+
+    protected void SetupUnknowns(GameObject prefab)
+    {
+        MiscComponent misc = new MiscComponent();
+        misc.Setup(prefab);
+        if (misc.components != null)
+        {
+            Extra = misc;
+        }
+    }
+    
+    protected void UpdateVisual(GameObject prefab)
+    {
+        if (Visuals != null)
+        {
+            Visuals.UpdateRenderers(prefab);
+            Visuals.UpdateLights(prefab);
+        }
+    }
+    protected void UpdateScale(GameObject prefab, Character character)
+    {
+        if (Visuals == null || !Visuals.m_scale.HasValue) return;
+        prefab.transform.localScale = Visuals.m_scale.Value;
+        if (character != null && 
+            character.m_deathEffects != null && 
+            character.m_deathEffects.m_effectPrefabs != null)
+        {
+            foreach (EffectList.EffectData? effect in character.m_deathEffects.m_effectPrefabs)
+            {
+                if (effect.m_prefab != null && effect.m_prefab.GetComponent<Ragdoll>())
+                {
+                    effect.m_prefab.transform.localScale = Visuals.m_scale.Value;
+                    break;
+                }
+            }
+        }
+    }
+
+    protected void UpdateRandomAnimation(GameObject prefab)
+    {
+        if (RandomAnimation == null || !prefab.TryGetComponent(out RandomAnimation ra)) return;
+        ra.SetFieldsFrom(RandomAnimation);
+    }
+
+    protected void UpdateTimedDestruction(GameObject prefab)
+    {
+        if (TimedDestruction == null || !prefab.TryGetComponent(out CharacterTimedDestruction ctd)) return;
+        ctd.SetFieldsFrom(TimedDestruction);
+    }
+
+    protected void UpdateCinderSpawner(GameObject prefab)
+    {
+        if (CinderSpawner != null)
+        {
+            CinderSpawner.Update(prefab);
+        }
+    }
+    
+    protected void UpdateLevelEffects(GameObject prefab)
+    {
+        LevelEffects? levelEffects = prefab.GetComponentInChildren<LevelEffects>();
+        if (levelEffects == null) return;
+        if (levelEffects != null && Visuals != null && Visuals.m_levelSetups != null)
+        {
+            Dictionary<string, Renderer> renderers = prefab
+                .GetComponentsInChildren<Renderer>(true)
+                .ToDictionary(f => f.name);
+            List<LevelEffects.LevelSetup> setups = new();
+            foreach (LevelSetupRef? levelRef in Visuals.m_levelSetups)
+            {
+                LevelEffects.LevelSetup levelSetup = new LevelEffects.LevelSetup();
+                levelRef.Set(levelSetup, renderers);
+                setups.Add(levelSetup);
+            }
+            levelEffects.m_levelSetups = setups;
         }
     }
     
@@ -222,7 +365,9 @@ public class BaseCreature : Base
             }
         }
 
-        if (md != null && md.m_runDamageObject != null && md.m_runDamageObject.TryGetComponent(out Aoe aoe))
+        if (md != null && 
+            md.m_runDamageObject != null && 
+            md.m_runDamageObject.TryGetComponent(out Aoe aoe))
         {
             if (MovementDamage == null)
             {
@@ -233,5 +378,12 @@ public class BaseCreature : Base
                 aoe.SetFieldsFrom(MovementDamage.m_areaOfEffect);
             }
         }
+    }
+
+    protected void UpdateDropProjectile(GameObject prefab)
+    {
+        if (DropProjectileOverDistance == null || 
+            !prefab.TryGetComponent(out DropProjectileOverDistance dp)) return;
+        dp.SetFieldsFrom(DropProjectileOverDistance);
     }
 }

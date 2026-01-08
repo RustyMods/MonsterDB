@@ -2,16 +2,27 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: Boar_piggy
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_boarpiggy
+  minLavaMaskThreshold: 0.05
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   group: boar
   faction: ForestMonsters
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
-  defeatSetGlobalKey: ''
   aiSkipTarget: false
   crouchSpeed: 2
   walkSpeed: 5
@@ -45,110 +56,27 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: vfx_boar_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_boar_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: vfx_boar_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: boar_ragdoll
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_boar_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 10
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
-    slash: Normal
-    pierce: Normal
     chop: Ignore
     pickaxe: Ignore
-    fire: Normal
-    frost: Normal
-    lightning: Normal
-    poison: Normal
     spirit: Immune
   staggerWhenBlocked: true
   staggerDamageFactor: 0
@@ -162,27 +90,9 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_boar_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSound:
     effectPrefabs:
     - prefab: sfx_boar_idle
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 15
   idleSoundChance: 0.5
   pathAgentType: Humanoid
@@ -212,36 +122,28 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: true
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: Boar Skin Valheim piggy
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#000000FF'
-    mainTexture: Boar_valheim_piggy_d
-Drops: 
-Tameable: 
-Procreation: 
+  renderers:
+  - prefab: Poly Art Boar
+    active: true
+    enabled: true
+    materials:
+    - name: Boar Skin Valheim piggy
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Boar_valheim_piggy_d
 GrowUp:
   growTime: 3000
   inheritTame: true
   grownPrefab: Boar
-  altGrownPrefabs: []
-NPCTalk: 
-MovementDamage: 
-Saddle: 

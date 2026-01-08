@@ -2,16 +2,25 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: FallenValkyrie
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_fallenvalkyrie
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: Demon
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
-  defeatSetGlobalKey: ''
   aiSkipTarget: false
   crouchSpeed: 2
   walkSpeed: 10
@@ -45,89 +54,26 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: fx_bat_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: fx_fallenvalkyrie_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_fallenvalkyrie_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 1500
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
-    slash: Normal
-    pierce: Normal
     chop: Ignore
     pickaxe: Ignore
     fire: Resistant
-    frost: Normal
-    lightning: Normal
     poison: Immune
     spirit: Weak
   staggerWhenBlocked: true
@@ -138,42 +84,26 @@ Character:
   - fallenvalkyrie_claws
   - fallenvalkyrie_spin
   - fallenvalkyrie_taunt
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: fallenvalkyrie_spit
+    name: cold ball
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 30
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_poisonbreath
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -186,8 +116,11 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
@@ -199,14 +132,18 @@ Character:
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0
       attackRayWidthCharExtra: 0
@@ -218,69 +155,40 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: fallenvalkyrie_spit_projectile
       projectileRef:
         prefab: fallenvalkyrie_spit_projectile
         type: Magic
-        damage:
-          damage: 0
-          blunt: 0
-          slash: 0
-          pierce: 0
-          chop: 0
-          pickaxe: 0
-          fire: 0
-          frost: 0
-          lightning: 0
-          poison: 0
-          spirit: 0
+        damage: {}
         aoe: 0
         dodgeable: true
         blockable: true
         attackForce: 0
         backstabBonus: 4
-        statusEffect: ''
         healthReturn: 0
         ttl: 10
         hitNoise: 50
         hitEffects:
           effectPrefabs:
           - prefab: fx_FallenValkyrie_projectile_explosion
-            variant: -1
-            attach: false
-            follow: false
-            inheritParentRotation: false
-            inheritParentScale: false
-            multiplyParentVisualScale: false
-            randomRotation: false
-            scale: false
-            childTransform: ''
           - prefab: sfx_fallenvalkyrie_attack_spit_projectile_impact
-            variant: -1
-            attach: false
-            follow: false
-            inheritParentRotation: false
-            inheritParentScale: false
-            multiplyParentVisualScale: false
-            randomRotation: false
-            scale: false
-            childTransform: ''
-        hitWaterEffects: 
+        # Bounce
+        bounce: false
+        bounceOnWater: false
+        # Spawn on Hit
+        respawnItemOnHit: false
         spawnOnTtl: false
         spawnOnHit: FallenValkyrie_projectile_explosion
         spawnOnHitChance: 1
         spawnCount: 1
-        randomSpawnOnHit: 
         randomSpawnOnHitCount: 1
         randomSpawnSkipLava: false
         staticHitOnly: false
         groundHitOnly: false
-        spawnOffset: 
         spawnRandomRotation: false
         spawnFacingRotation: false
-        spawnOnHitEffects: 
+        # Projectile Spawning
         spawnProjectileNewVelocity: false
         spawnProjectileMinVel: 1
         spawnProjectileMaxVel: 5
@@ -291,6 +199,7 @@ Character:
         divideDamageBetweenProjectiles: false
       projectileVel: 14
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -304,33 +213,10 @@ Character:
       burstInterval: 0.9
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
       burstEffect:
         effectPrefabs:
         - prefab: sfx_fallenvalkyrie_attack_spit_projectile
-          variant: -1
-          attach: false
-          follow: false
-          inheritParentRotation: false
-          inheritParentScale: false
-          multiplyParentVisualScale: false
-          randomRotation: false
-          scale: false
-          childTransform: ''
         - prefab: sfx_fallenvalkyrie_attack_spit_vocal
-          variant: -1
-          attach: false
-          follow: false
-          inheritParentRotation: false
-          inheritParentScale: false
-          multiplyParentVisualScale: false
-          randomRotation: false
-          scale: false
-          childTransform: ''
     aiAttackRange: 15
     aiAttackRangeMin: 7
     aiAttackInterval: 10
@@ -338,92 +224,44 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: false
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_fallenvalkyrie_attack_spit_charge
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: vfx_FlameBall_launch
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    trailStartEffect: 
   - prefab: fallenvalkyrie_claws
+    name: Fallen Valkyrie Claws
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 105
       pierce: 55
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 80
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Vertical
       attackAnimation: attack_claws
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -436,27 +274,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 6.04
       attackHeight: -2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 60.2
       attackRayWidth: 1.9
       attackRayWidthCharExtra: 0
@@ -468,12 +312,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -487,12 +329,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 5
     aiAttackRangeMin: 3
     aiAttackInterval: 3
@@ -500,70 +336,40 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0.5
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_clubhit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_wraith_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: fallenvalkyrie_spin
+    name: Fallen Valkyrie Aoe Spin
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
       blunt: 80
-      slash: 0
       pierce: 140
       chop: 100
       pickaxe: 100
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 250
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Area
       attackAnimation: attack_wingspin
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -576,27 +382,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 0
       attackHeight: 0
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 360
       attackRayWidth: 5.67
       attackRayWidthCharExtra: 0
@@ -608,12 +420,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 60
       projectileVelMin: 25
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: true
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -627,34 +437,15 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
       startEffect:
         effectPrefabs:
         - prefab: sfx_fallenvalkyrie_attack_spin_charge
           variant: 0
-          attach: false
           follow: true
-          inheritParentRotation: false
-          inheritParentScale: false
-          multiplyParentVisualScale: false
-          randomRotation: false
-          scale: false
-          childTransform: ''
       triggerEffect:
         effectPrefabs:
         - prefab: fx_fallenfalkyrie_spin
           variant: 0
-          attach: false
-          follow: false
-          inheritParentRotation: false
-          inheritParentScale: false
-          multiplyParentVisualScale: false
-          randomRotation: false
-          scale: false
-          childTransform: ''
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 0
     aiAttackInterval: 10
@@ -662,70 +453,38 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0.5
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_clubhit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_wraith_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: fallenvalkyrie_taunt
+    name: Fallen Valkyrie Claws
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 20
       pierce: 20
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 280
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Vertical
       attackAnimation: taunt
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -738,27 +497,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 4.3
       attackHeight: -2
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 60
       attackRayWidth: 1.65
       attackRayWidthCharExtra: 0
@@ -770,12 +535,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -789,12 +552,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 35
     aiAttackRangeMin: 3
     aiAttackInterval: 30
@@ -802,54 +559,21 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0.5
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: true
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_clubhit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_wraith_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_fallenvalkyrie_alert
-        variant: -1
-        attach: false
         follow: true
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
 AI:
   alertRange: 50
   fleeIfHurtWhenTargetCantBeReached: true
@@ -877,13 +601,10 @@ AI:
   wakeupRange: 5
   noiseWakeup: false
   maxNoiseWakeupRange: 50
-  wakeupEffects: 
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -895,26 +616,12 @@ AI:
     effectPrefabs:
     - prefab: sfx_fallenvalkyrie_alert
       variant: 0
-      attach: false
       follow: true
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSound:
     effectPrefabs:
     - prefab: sfx_fallenvalkyrie_idle
       variant: 0
-      attach: false
       follow: true
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   idleSoundInterval: 10
   idleSoundChance: 0.5
   pathAgentType: HumanoidBig
@@ -944,36 +651,148 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: FallenValkyrie_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#FF0054FF'
-    mainTexture: FallenValkyrie_d
-  - name: FallenValkyrie_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#FF0054FF'
-    mainTexture: FallenValkyrie_d
+  renderers:
+  - prefab: Smoke_local
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Smoke_local
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Smoke_local
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Spores_World
+    active: true
+    enabled: true
+    materials:
+    - name: light_glow_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: Default-Particle
+  - prefab: EyeTrail_L
+    active: true
+    enabled: true
+    materials:
+    - name: light_glow_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: Default-Particle
+    - name: fireworks_trail
+      shader: Particles/Standard Unlit2
+      color: '#E3E3E3FF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework_Trail
+  - prefab: EyeTrail_R
+    active: true
+    enabled: true
+    materials:
+    - name: light_glow_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: Default-Particle
+    - name: fireworks_trail
+      shader: Particles/Standard Unlit2
+      color: '#E3E3E3FF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework_Trail
+  - prefab: Smoke_local
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Smoke_local
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Spores_World
+    active: true
+    enabled: true
+    materials:
+    - name: light_glow_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: Default-Particle
+  - prefab: Smoke_local
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Smoke
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: Valkyrie
+    active: true
+    enabled: true
+    materials:
+    - name: FallenValkyrie_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FF0054FF'
+      mainTexture: FallenValkyrie_d
+    - name: FallenValkyrie_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FF0054FF'
+      mainTexture: FallenValkyrie_d
+  - prefab: Valkyrie.001
+    active: true
+    enabled: true
+    materials:
+    - name: FallenValkyrie_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FF0054FF'
+      mainTexture: FallenValkyrie_d
 Drops:
   drops:
   - prefab: CelestialFeather
@@ -981,7 +800,6 @@ Drops:
     amountMax: 4
     chance: 1
     onePerPlayer: false
-    levelMultiplier: true
     dontScale: false
   - prefab: TrophyFallenValkyrie
     amountMin: 1
@@ -990,10 +808,3 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: false
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
-MovementDamage: 
-Saddle: 

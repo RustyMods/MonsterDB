@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using JetBrains.Annotations;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class ItemDataSharedRef : Reference
 {
     public string m_prefab = "";
+    public string? m_name;
+    public string? m_description;
+    public int? m_maxStackSize;
+    public int? m_maxQuality;
+    public float? m_scaleByQuality;
+    public float? m_weight;
+    public float? m_scaleWeightByQuality;
+    public int? m_value;
+    public bool? m_teleportable;
     public int? m_toolTier;
     public HitData.DamageTypes? m_damages;
     public float? m_attackForce;
@@ -22,6 +32,7 @@ public class ItemDataSharedRef : Reference
     public string? m_spawnOnHit;
     public string? m_spawnOnHitTerrain;
     public AttackRef? m_attack;
+    public AttackRef? m_secondaryAttack;
     public float? m_aiAttackRange;
     public float? m_aiAttackRangeMin;
     public float? m_aiAttackInterval;
@@ -45,6 +56,19 @@ public class ItemDataSharedRef : Reference
     public EffectListRef? m_holdStartEffect ;
     public EffectListRef? m_triggerEffect ;
     public EffectListRef? m_trailStartEffect ;
+
+    public void SetBasicFields(ItemDrop.ItemData.SharedData d)
+    {
+        m_name = d.m_name;
+        m_description = d.m_description;
+        m_maxStackSize = d.m_maxStackSize;
+        m_maxQuality = d.m_maxQuality;
+        m_scaleByQuality = d.m_scaleByQuality;
+        m_weight = d.m_weight;
+        m_scaleWeightByQuality = d.m_scaleWeightByQuality;
+        m_value = d.m_value;
+        m_teleportable = d.m_teleportable;
+    }
 }
 
 public static partial class Extensions

@@ -2,15 +2,25 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: GoblinBruteBros
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_goblinbrute_hildircombined
-  group: ''
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   faction: PlainsMonsters
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
   defeatSetGlobalKey: BossHildir3
   aiSkipTarget: false
   crouchSpeed: 2
@@ -45,110 +55,29 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: vfx_goblinbrute_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: sfx_goblinbrute_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: sfx_goblinbrute_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: vfx_goblinbrute_hildir_death
       variant: 0
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: GoblinBrute_Hildir_ragdoll
       variant: 0
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 4200
   regenAllHPTime: 3600
   damageModifiers:
-    blunt: Normal
-    slash: Normal
-    pierce: Normal
     chop: Ignore
     pickaxe: Ignore
-    fire: Normal
-    frost: Normal
-    lightning: Normal
-    poison: Normal
     spirit: Immune
   staggerWhenBlocked: true
   staggerDamageFactor: 0.3
@@ -161,42 +90,29 @@ Character:
   - GoblinBrute_ShoulderGuard
   - GoblinShaman_attack_fireball_hildir
   - GoblinShaman_attack_protect_hildir
-  randomWeapon: []
-  randomArmor: []
-  randomShield: []
-  randomSets: []
-  randomItems: []
-  consumeItemEffects: 
-  equipEffects: 
-  perfectBlockEffect: 
   attacks:
   - prefab: GoblinBruteBros_Attack
+    name: Brute sword
+    maxStackSize: 1
+    maxQuality: 7
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 2
     damages:
-      damage: 0
       blunt: 150
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 40
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 100
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Horizontal
       attackAnimation: attack
-      chargeAnimationBool: ''
       attackRandomAnimations: 2
       attackChainLevels: 0
       loopingAttack: false
@@ -209,27 +125,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 40
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 4
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 70
       attackRayWidth: 0.8
       attackRayWidthCharExtra: 0
@@ -241,12 +163,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 1
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -260,12 +180,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 3
     aiAttackRangeMin: 0
     aiAttackInterval: 2
@@ -273,114 +187,51 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_goblinbrute_clubhit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: fx_goblinbrute_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
     startEffect:
       effectPrefabs:
       - prefab: sfx_sword_swing
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_swing_camshake
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_goblinbrute_clubswing
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: GoblinBruteBros_RageAttack
+    name: Brute sword
+    maxStackSize: 1
+    maxQuality: 7
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 2
     damages:
-      damage: 0
       blunt: 130
-      slash: 0
-      pierce: 0
       chop: 100
       pickaxe: 40
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 100
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Vertical
       attackAnimation: rageattack
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -393,27 +244,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 40
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 4
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 60
       attackRayWidth: 0.5
       attackRayWidthCharExtra: 0
@@ -425,12 +282,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 1
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -444,12 +299,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 6
     aiAttackRangeMin: 0
     aiAttackInterval: 20
@@ -457,92 +306,44 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: false
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_goblinbrute_clubhit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     hitTerrainEffect:
       effectPrefabs:
       - prefab: fx_goblinbrute_groundslam
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_goblinbrute_clubswing
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: GoblinBrute_Taunt
+    name: Brute taunt
+    maxStackSize: 1
+    maxQuality: 7
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
-      blunt: 0
       slash: 80
-      pierce: 0
       chop: 10
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 50
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: None
       attackAnimation: taunt
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -555,27 +356,33 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 40
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
       recoilPushback: 0
       selfDamage: 0
-      attackOriginJoint: ''
       attackRange: 3.56
       attackHeight: 1.5
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 45
       attackRayWidth: 1
       attackRayWidthCharExtra: 0
@@ -587,12 +394,10 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 1
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -606,12 +411,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 20
     aiAttackRangeMin: 3
     aiAttackInterval: 60
@@ -619,118 +418,30 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: false
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: GoblinBrute_HipCloth
+    name: Iron plate armor
+    description: $item_chest_iron_description
+    maxStackSize: 1
+    maxQuality: 4
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 10
     backstabBonus: 4
     dodgeable: false
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
-    attack:
-      attackType: Horizontal
-      attackAnimation: ''
-      chargeAnimationBool: ''
-      attackRandomAnimations: 0
-      attackChainLevels: 0
-      loopingAttack: false
-      consumeItem: false
-      hitTerrain: true
-      attackHealthReturnHit: 0
-      attackKillsSelf: false
-      speedFactor: 0.2
-      speedFactorRotation: 0.2
-      attackStartNoise: 10
-      attackHitNoise: 30
-      damageMultiplier: 1
-      damageMultiplierPerMissingHP: 0
-      damageMultiplierByTotalHealthMissing: 0
-      staminaReturnPerMissingHP: 0
-      forceMultiplier: 1
-      staggerMultiplier: 1
-      recoilPushback: 0
-      selfDamage: 0
-      attackOriginJoint: ''
-      attackRange: 1.5
-      attackHeight: 0.6
-      attackHeightChar1: 0.6
-      attackHeightChar2: 0.6
-      attackOffset: 0
-      spawnOnTrigger: 
-      toggleFlying: false
-      attach: false
-      cantUseInDungeon: false
-      requiresReload: false
-      reloadAnimation: ''
-      reloadTime: 2
-      drawAnimationState: ''
-      attackAngle: 90
-      attackRayWidth: 0
-      attackRayWidthCharExtra: 0
-      maxYAngle: 0
-      lowerDamagePerHit: true
-      hitPointtype: Closest
-      hitThroughWalls: false
-      multiHit: true
-      pickaxeSpecial: false
-      lastChainDamageMultiplier: 2
-      resetChainIfHit: None
-      spawnOnHit: 
-      spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
-      projectileVel: 10
-      projectileVelMin: 2
-      randomVelocity: false
-      projectileAccuracy: 10
-      projectileAccuracyMin: 20
-      circularProjectileLaunch: false
-      distributeProjectilesAroundCircle: false
-      useCharacterFacing: false
-      useCharacterFacingYAim: false
-      launchAngle: 0
-      projectiles: 1
-      projectileBursts: 1
-      burstInterval: 0
-      destroyPreviousProjectile: false
-      perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 2
     aiAttackRangeMin: 0
     aiAttackInterval: 2
@@ -738,118 +449,30 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: GoblinBrute_ShoulderGuard
+    name: Iron plate armor
+    description: $item_chest_iron_description
+    maxStackSize: 1
+    maxQuality: 4
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 10
     backstabBonus: 4
     dodgeable: false
     blockable: false
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
-    attack:
-      attackType: Horizontal
-      attackAnimation: ''
-      chargeAnimationBool: ''
-      attackRandomAnimations: 0
-      attackChainLevels: 0
-      loopingAttack: false
-      consumeItem: false
-      hitTerrain: true
-      attackHealthReturnHit: 0
-      attackKillsSelf: false
-      speedFactor: 0.2
-      speedFactorRotation: 0.2
-      attackStartNoise: 10
-      attackHitNoise: 30
-      damageMultiplier: 1
-      damageMultiplierPerMissingHP: 0
-      damageMultiplierByTotalHealthMissing: 0
-      staminaReturnPerMissingHP: 0
-      forceMultiplier: 1
-      staggerMultiplier: 1
-      recoilPushback: 0
-      selfDamage: 0
-      attackOriginJoint: ''
-      attackRange: 1.5
-      attackHeight: 0.6
-      attackHeightChar1: 0
-      attackHeightChar2: 0
-      attackOffset: 0
-      spawnOnTrigger: 
-      toggleFlying: false
-      attach: false
-      cantUseInDungeon: false
-      requiresReload: false
-      reloadAnimation: ''
-      reloadTime: 2
-      drawAnimationState: ''
-      attackAngle: 90
-      attackRayWidth: 0
-      attackRayWidthCharExtra: 0
-      maxYAngle: 0
-      lowerDamagePerHit: true
-      hitPointtype: Closest
-      hitThroughWalls: false
-      multiHit: true
-      pickaxeSpecial: false
-      lastChainDamageMultiplier: 2
-      resetChainIfHit: None
-      spawnOnHit: 
-      spawnOnHitChance: 0
-      attackProjectile: 
-      projectileRef: 
-      projectileVel: 10
-      projectileVelMin: 2
-      randomVelocity: false
-      projectileAccuracy: 10
-      projectileAccuracyMin: 20
-      circularProjectileLaunch: false
-      distributeProjectilesAroundCircle: false
-      useCharacterFacing: false
-      useCharacterFacingYAim: false
-      launchAngle: 0
-      projectiles: 1
-      projectileBursts: 1
-      burstInterval: 0
-      destroyPreviousProjectile: false
-      perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 2
     aiAttackRangeMin: 0
     aiAttackInterval: 2
@@ -857,49 +480,34 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
-    hitEffect: 
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
-    triggerEffect: 
-    trailStartEffect: 
   - prefab: GoblinShaman_attack_fireball_hildir
+    name: fireballattack
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
     damages:
-      damage: 0
       blunt: 20
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
       fire: 100
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
     attackForce: 80
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
-    attackStatusEffect: 
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_cast
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -912,8 +520,11 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
@@ -925,14 +536,18 @@ Character:
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0.3
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0
       attackRayWidthCharExtra: 0
@@ -944,59 +559,38 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: GoblinShaman_projectile_fireball
       projectileRef:
         prefab: GoblinShaman_projectile_fireball
         type: Magic, Fire
-        damage:
-          damage: 0
-          blunt: 0
-          slash: 0
-          pierce: 0
-          chop: 0
-          pickaxe: 0
-          fire: 0
-          frost: 0
-          lightning: 0
-          poison: 0
-          spirit: 0
+        damage: {}
         aoe: 3
         dodgeable: true
         blockable: true
         attackForce: 0
         backstabBonus: 4
-        statusEffect: ''
         healthReturn: 0
         ttl: 4
         hitNoise: 50
         hitEffects:
           effectPrefabs:
           - prefab: fx_shaman_fireball_expl
-            variant: -1
-            attach: false
-            follow: false
-            inheritParentRotation: false
-            inheritParentScale: false
-            multiplyParentVisualScale: false
-            randomRotation: false
-            scale: false
-            childTransform: ''
-        hitWaterEffects: 
+        # Bounce
+        bounce: false
+        bounceOnWater: false
+        # Spawn on Hit
+        respawnItemOnHit: false
         spawnOnTtl: false
-        spawnOnHit: 
         spawnOnHitChance: 1
         spawnCount: 1
-        randomSpawnOnHit: 
         randomSpawnOnHitCount: 1
         randomSpawnSkipLava: false
         staticHitOnly: false
         groundHitOnly: false
-        spawnOffset: 
         spawnRandomRotation: false
         spawnFacingRotation: false
-        spawnOnHitEffects: 
+        # Projectile Spawning
         spawnProjectileNewVelocity: false
         spawnProjectileMinVel: 1
         spawnProjectileMaxVel: 5
@@ -1007,6 +601,7 @@ Character:
         divideDamageBetweenProjectiles: false
       projectileVel: 15
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 4
       projectileAccuracyMin: 20
@@ -1020,12 +615,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 20
     aiAttackRangeMin: 3
     aiAttackInterval: 12
@@ -1033,92 +622,43 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: false
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: sfx_GoblinShaman_fireball_launch
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     trailStartEffect:
       effectPrefabs:
       - prefab: sfx_GoblinShaman_fireball_launch
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
   - prefab: GoblinShaman_attack_protect_hildir
+    name: heal
+    maxStackSize: 1
+    maxQuality: 1
+    scaleByQuality: 0
+    weight: 1
+    scaleWeightByQuality: 0
+    value: 0
+    teleportable: true
     toolTier: 0
-    damages:
-      damage: 0
-      blunt: 0
-      slash: 0
-      pierce: 0
-      chop: 0
-      pickaxe: 0
-      fire: 0
-      frost: 0
-      lightning: 0
-      poison: 0
-      spirit: 0
+    damages: {}
     attackForce: 0
     backstabBonus: 4
     dodgeable: true
     blockable: true
     tamedOnly: false
     attackStatusEffect: GoblinShaman_shield
-    attackStatusEffectChance: 1
-    spawnOnHit: 
-    spawnOnHitTerrain: 
     attack:
       attackType: Projectile
       attackAnimation: attack_protect
-      chargeAnimationBool: ''
       attackRandomAnimations: 0
       attackChainLevels: 0
       loopingAttack: false
@@ -1131,8 +671,11 @@ Character:
       attackStartNoise: 10
       attackHitNoise: 30
       damageMultiplier: 1
+      # For each missing health point, increase damage this much.
       damageMultiplierPerMissingHP: 0
+      # At 100% missing HP the damage will increase by this much, and gradually inbetween.
       damageMultiplierByTotalHealthMissing: 0
+      # For each missing health point, return one stamina point.
       staminaReturnPerMissingHP: 0
       forceMultiplier: 1
       staggerMultiplier: 1
@@ -1144,14 +687,18 @@ Character:
       attackHeightChar1: 0
       attackHeightChar2: 0
       attackOffset: 0
-      spawnOnTrigger: 
       toggleFlying: false
       attach: false
       cantUseInDungeon: false
+      # Loading
       requiresReload: false
-      reloadAnimation: ''
       reloadTime: 2
-      drawAnimationState: ''
+      # Draw
+      bowDraw: false
+      drawDurationMin: 0
+      drawStaminaDrain: 0
+      drawEitrDrain: 0
+      # Melee/AOE
       attackAngle: 90
       attackRayWidth: 0.4
       attackRayWidthCharExtra: 0
@@ -1163,12 +710,11 @@ Character:
       pickaxeSpecial: false
       lastChainDamageMultiplier: 2
       resetChainIfHit: None
-      spawnOnHit: 
       spawnOnHitChance: 0
       attackProjectile: GoblinShaman_protect_aoe
-      projectileRef: 
       projectileVel: 10
       projectileVelMin: 2
+      # When not using Draw, randomize velocity between Velocity and Velocity Min
       randomVelocity: false
       projectileAccuracy: 10
       projectileAccuracyMin: 20
@@ -1182,12 +728,6 @@ Character:
       burstInterval: 0
       destroyPreviousProjectile: false
       perBurstResourceUsage: false
-      hitEffect: 
-      hitTerrainEffect: 
-      startEffect: 
-      triggerEffect: 
-      trailStartEffect: 
-      burstEffect: 
     aiAttackRange: 60
     aiAttackRangeMin: 0
     aiAttackInterval: 40
@@ -1195,65 +735,23 @@ Character:
     aiInvertAngleCheck: false
     aiWhenFlying: true
     aiWhenFlyingAltitudeMin: 0
-    aiWhenFlyingAltitudeMax: 999999
     aiWhenWalking: true
     aiWhenSwiming: true
     aiPrioritized: true
     aiInDungeonOnly: false
     aiInMistOnly: false
-    aiMaxHealthPercentage: 1
     aiMinHealthPercentage: 0
     aiTargetType: Enemy
     hitEffect:
       effectPrefabs:
       - prefab: vfx_HitSparks
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
       - prefab: sfx_greydwarf_attack_hit
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-    hitTerrainEffect: 
-    blockEffect: 
-    startEffect: 
-    holdStartEffect: 
     triggerEffect:
       effectPrefabs:
       - prefab: fx_shaman_protect
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
     trailStartEffect:
       effectPrefabs:
       - prefab: fx_shaman_protect
-        variant: -1
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
 AI:
   alertRange: 20
   fleeIfHurtWhenTargetCantBeReached: true
@@ -1281,13 +779,10 @@ AI:
   wakeupRange: 5
   noiseWakeup: false
   maxNoiseWakeupRange: 50
-  wakeupEffects: 
-  sleepEffects: 
   wakeUpDelayMin: 0
   wakeUpDelayMax: 0
   fallAsleepDistance: 0
   avoidLand: false
-  consumeItems: []
   consumeRange: 2
   consumeSearchRange: 5
   consumeSearchInterval: 10
@@ -1298,16 +793,6 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_goblinbrute_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  idleSound: 
   idleSoundInterval: 5
   idleSoundChance: 0.25
   pathAgentType: GoblinBruteSize
@@ -1337,44 +822,119 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: false
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: GoblinBrute_hildir_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0.465
-    saturation: -0.374
-    value: -0.156
-    emissionColor: '#000000FF'
-    mainTexture: GoblinBrute_d
-  - name: GoblinShaman_Hildir_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: -0.184
-    saturation: 0.16
-    value: -0.004
-    emissionColor: '#000000FF'
-    mainTexture: G-Shaman_d
-  - name: GoblinStuff_Hildir_mat
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0.5
-    saturation: -0.345
-    value: 0.015
-    emissionColor: '#000000FF'
-    mainTexture: GoblinStuff_d
+  renderers:
+  - prefab: Eye_R
+    active: true
+    enabled: true
+    materials:
+    - name: skeleton_eye_fire
+      shader: Standard
+      color: '#C31D01FF'
+      emissionColor: '#FF3C00FF'
+  - prefab: Eye_L
+    active: true
+    enabled: true
+    materials:
+    - name: skeleton_eye_fire
+      shader: Standard
+      color: '#C31D01FF'
+      emissionColor: '#FF3C00FF'
+  - prefab: GoblinBrute
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinBrute_hildir_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0.465
+      saturation: -0.374
+      value: -0.156
+      emissionColor: '#000000FF'
+      mainTexture: GoblinBrute_d
+    - name: GoblinShaman_Hildir_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: -0.184
+      saturation: 0.16
+      value: -0.004
+      emissionColor: '#000000FF'
+      mainTexture: G-Shaman_d
+    - name: GoblinStuff_Hildir_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0.5
+      saturation: -0.345
+      value: 0.015
+      emissionColor: '#000000FF'
+      mainTexture: GoblinStuff_d
+  - prefab: ArmGuard
+    active: true
+    enabled: true
+    materials:
+    - name: BruteArmor_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Gear_d
+  - prefab: FeatherStaff
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinStuff_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinStuff_d
+  - prefab: HipCloth
+    active: true
+    enabled: true
+    materials:
+    - name: BruteHipCloth_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: HipCloth_d
+  - prefab: LegBones
+    active: true
+    enabled: true
+    materials:
+    - name: BruteArmor_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Gear_d
+  - prefab: ShoulderGuard
+    active: true
+    enabled: true
+    materials:
+    - name: BruteArmor_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Gear_d
 Drops:
   drops:
   - prefab: GoblinShaman_Hildir
@@ -1391,10 +951,3 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: true
-  dropsEnabled: true
-Tameable: 
-Procreation: 
-GrowUp: 
-NPCTalk: 
-MovementDamage: 
-Saddle: 

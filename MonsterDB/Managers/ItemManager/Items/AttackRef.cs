@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using JetBrains.Annotations;
 using UnityEngine;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -23,8 +24,11 @@ public class AttackRef : Reference
     public float? m_attackStartNoise;
     public float? m_attackHitNoise;
     public float? m_damageMultiplier;
+    [YamlMember(Description = "For each missing health point, increase damage this much.")]
     public float? m_damageMultiplierPerMissingHP;
+    [YamlMember(Description = "At 100% missing HP the damage will increase by this much, and gradually inbetween.")]
     public float? m_damageMultiplierByTotalHealthMissing;
+    [YamlMember(Description = "For each missing health point, return one stamina point.")]
     public float? m_staminaReturnPerMissingHP;
     public float? m_forceMultiplier;
     public float? m_staggerMultiplier;
@@ -40,10 +44,17 @@ public class AttackRef : Reference
     public bool? m_toggleFlying;
     public bool? m_attach;
     public bool? m_cantUseInDungeon;
+    [YamlMember(Description = "Loading")]
     public bool? m_requiresReload;
     public string? m_reloadAnimation;
     public float? m_reloadTime;
+    [YamlMember(Description = "Draw")]
+    public bool? m_bowDraw;
+    public float? m_drawDurationMin;
+    public float? m_drawStaminaDrain;
+    public float? m_drawEitrDrain;
     public string? m_drawAnimationState;
+    [YamlMember(Description = "Melee/AOE")]
     public float? m_attackAngle;
     public float? m_attackRayWidth;
     public float? m_attackRayWidthCharExtra;
@@ -61,6 +72,7 @@ public class AttackRef : Reference
     public ProjectileRef? m_projectileRef;
     public float? m_projectileVel;
     public float? m_projectileVelMin;
+    [YamlMember(Description = "When not using Draw, randomize velocity between Velocity and Velocity Min")]
     public bool? m_randomVelocity;
     public float? m_projectileAccuracy;
     public float? m_projectileAccuracyMin;

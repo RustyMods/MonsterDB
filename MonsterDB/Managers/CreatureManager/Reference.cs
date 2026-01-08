@@ -10,5 +10,4 @@ namespace MonsterDB;
 [Serializable]
 public abstract class Reference
 {
-    
 }

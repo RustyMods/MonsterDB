@@ -74,7 +74,7 @@ public static class Helpers
             else if (TType == typeof(GameObject[]) && 
                      SValue is string[] goNames)
             {
-                targetField.SetValue(target, goNames.FromRef());
+                targetField.SetValue(target, goNames.ToGameObjectArray());
             }
             else if (SType == typeof(Humanoid.ItemSet[]) && 
                      SValue is HumanoidRef.ItemSet[] isa)
@@ -119,13 +119,29 @@ public static class Helpers
             {
                 targetField.SetValue(target, ge.FromRef());
             }
-            else if (TType == typeof(Sprite) && SValue is string sn)
+            else if (TType == typeof(Sprite) &&
+                     SValue is string sn)
             {
                 object? defaultValue = targetField.GetValue(target);
                 if (defaultValue is Sprite sprite)
                 {
                     targetField.SetValue(target, TextureManager.GetSprite(sn, sprite));
                 }
+            }
+            else if (TType == typeof(List<DropTable.DropData>) && 
+                     SValue is List<DropDataRef> dd)
+            {
+                targetField.SetValue(target, dd.FromRef());
+            }
+            else if (TType == typeof(List<Fish.BaitSetting>) &&
+                     SValue is List<BaitSettingRef> bs)
+            {
+                targetField.SetValue(target, bs.FromRef());
+            }
+            else if (TType == typeof(List<RandomAnimation.RandomValue>) &&
+                     SValue is List<RandomAnimationRef.RandomValueRef> rv)
+            {
+                targetField.SetValue(target,rv.FromRef());
             }
         }
     }
@@ -198,6 +214,7 @@ public static class Helpers
                         break;
                     case Attack att when
                         TType == typeof(AttackRef):
+                        if (string.IsNullOrEmpty(att.m_attackAnimation)) break;
                         targetField.SetValue(target, att.ToRef());
                         break;
                     case List<ItemDrop> items when 
@@ -211,6 +228,18 @@ public static class Helpers
                     case List<CharacterDrop.Drop> cd when 
                         TType == typeof(List<DropRef>):
                         targetField.SetValue(target, cd.ToRef());
+                        break;
+                    case List<DropTable.DropData> dd when 
+                        TType == typeof(List<DropTableRef>):
+                        targetField.SetValue(target, dd.ToRef());
+                        break;
+                    case List<Fish.BaitSetting> bs when 
+                        TType == typeof(List<BaitSettingRef>):
+                        targetField.SetValue(target, bs.ToRef());
+                        break;
+                    case List<RandomAnimation.RandomValue> rv when 
+                        TType == typeof(List<RandomAnimationRef.RandomValueRef>):
+                        targetField.SetValue(target, rv.ToRef());
                         break;
                 }
             }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using BepInEx;
 using ServerSync;
 using UnityEngine;
 
@@ -10,45 +8,27 @@ namespace MonsterDB;
 
 public static class SyncManager
 {
-    public static readonly Dictionary<string, Base> originals;
-    public static readonly List<Base> loadList;
+    public static readonly Dictionary<string, Header> originals;
+    public static readonly List<Header> loadList;
     public static Dictionary<string, string> rawFiles;
     private static readonly CustomSyncedValue<string> sync;
     
     static SyncManager()
     {
-        originals = new Dictionary<string, Base>();
-        loadList = new List<Base>();
+        originals = new Dictionary<string, Header>();
+        loadList = new List<Header>();
         rawFiles = new Dictionary<string, string>();
         sync =  new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Files", "");
         sync.ValueChanged += OnSyncChange;
     }
     
-    public static T? GetOriginal<T>(string prefabName) where T : Base =>
-        originals.TryGetValue(prefabName, out Base? baseValue) ? baseValue as T : null;
+    public static T? GetOriginal<T>(string prefabName) where T : Header =>
+        originals.TryGetValue(prefabName, out Header? baseValue) ? baseValue as T : null;
 
-    public static List<string> GetOriginalKeys<T>() where T : Base => originals
+    public static List<string> GetOriginalKeys<T>() where T : Header => originals
         .Where(x => x.Value is T)
         .Select(x => x.Key)
         .ToList();
-
-    private static void SetupFileWatcher()
-    {
-        FileSystemWatcher watcher = new(CreatureManager.ModifiedFolder, "*.yml");
-        watcher.Changed += ReadConfigValues;
-        watcher.Created += ReadConfigValues;
-        watcher.Renamed += ReadConfigValues;
-        watcher.IncludeSubdirectories = true;
-        watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
-        watcher.EnableRaisingEvents = true;
-    }
-
-    private static void ReadConfigValues(object sender, FileSystemEventArgs e)
-    {
-        if (!ZNet.instance || !ZNet.instance.IsServer()) return;
-        string filePath = e.FullPath;
-        CreatureManager.Read(filePath);
-    }
 
     public static void UpdateSync()
     {
@@ -58,7 +38,7 @@ public static class SyncManager
 
     private static void Reset()
     {
-        foreach (Base? og in originals.Values)
+        foreach (Header? og in originals.Values)
         {
             og.Update();
         }
@@ -85,26 +65,26 @@ public static class SyncManager
         {
             try
             {
-                Base header = ConfigManager.Deserialize<Base>(file.Value);
+                Header header = ConfigManager.Deserialize<Header>(file.Value);
                 switch (header.Type)
                 {
-                    case CreatureType.Character:
-                        CharacterCreature character = ConfigManager.Deserialize<CharacterCreature>(file.Value);
+                    case BaseType.Character:
+                        BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(file.Value);
                         loadList.Add(character);
                         break;
-                    case CreatureType.Humanoid:
-                        HumanoidCreature humanoid = ConfigManager.Deserialize<HumanoidCreature>(file.Value);
+                    case BaseType.Humanoid:
+                        BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(file.Value);
                         loadList.Add(humanoid);
                         break;
-                    case CreatureType.Human:
-                        PlayerCreature player = ConfigManager.Deserialize<PlayerCreature>(file.Value);
+                    case BaseType.Human:
+                        BaseHuman player = ConfigManager.Deserialize<BaseHuman>(file.Value);
                         loadList.Add(player);
                         break;
-                    case CreatureType.Egg:
+                    case BaseType.Egg:
                         BaseEgg egg = ConfigManager.Deserialize<BaseEgg>(file.Value);
                         loadList.Add(egg);
                         break;
-                    case CreatureType.Item:
+                    case BaseType.Item:
                         BaseItem item = ConfigManager.Deserialize<BaseItem>(file.Value);
                         loadList.Add(item);
                         break;
@@ -127,42 +107,47 @@ public static class SyncManager
         int players = 0;
         int eggs = 0;
         int items = 0;
+        int fish = 0;
         
         for (int i = 0; i < loadList.Count; ++i)
         {
-            Base? data = loadList[i];
+            Header? data = loadList[i];
             if (data.IsCloned)
             {
                 GameObject? prefab = PrefabManager.GetPrefab(data.ClonedFrom);
                 if (prefab == null) continue;
                 switch (data.Type)
                 {
-                    case CreatureType.Human:
+                    case BaseType.Human:
                         ++players;
                         CreatureManager.Clone(prefab, data.Prefab, false);
                         break;
-                    case CreatureType.Humanoid:
+                    case BaseType.Humanoid:
                         ++humanoids;
                         CreatureManager.Clone(prefab, data.Prefab, false);
                         break;
-                    case CreatureType.Character:
+                    case BaseType.Character:
                         ++characters;
                         CreatureManager.Clone(prefab, data.Prefab, false);
                         break;
-                    case CreatureType.Egg:
+                    case BaseType.Egg:
                         ++eggs;
                         EggManager.Clone(prefab, data.Prefab, false);
                         break;
-                    case CreatureType.Item:
+                    case BaseType.Item:
                         ++items;
                         ItemManager.Clone(prefab, data.Prefab, false);
+                        break;
+                    case BaseType.Fish:
+                        ++fish;
+                        FishManager.Clone(prefab, data.Prefab, false);
                         break;
                 }
             }
         }
 
-        int count = players + humanoids + characters + eggs + items;
-        MonsterDBPlugin.LogInfo($"Loading clones: {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items} (total:{count})");
+        int count = players + humanoids + characters + eggs + items + fish;
+        MonsterDBPlugin.LogInfo($"Loading clones: {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items}, fishes {fish} (total:{count})");
     }
     
     private static void Load()
@@ -172,32 +157,36 @@ public static class SyncManager
         int players = 0;
         int eggs = 0;
         int items = 0;
+        int fish = 0;
         for (int i = 0; i < loadList.Count; ++i)
         {
-            Base data = loadList[i];
-            if (data.Type == CreatureType.None) continue;
+            Header data = loadList[i];
+            if (data.Type == BaseType.None) continue;
             data.Update();
             switch (data.Type)
             {
-                case CreatureType.Character:
+                case BaseType.Character:
                     ++characters;
                     break;
-                case CreatureType.Human:
+                case BaseType.Human:
                     ++players;
                     break;
-                case CreatureType.Humanoid:
+                case BaseType.Humanoid:
                     ++humanoids;
                     break;
-                case CreatureType.Egg:
+                case BaseType.Egg:
                     ++eggs;
                     break;
-                case CreatureType.Item:
+                case BaseType.Item:
                     ++items;
+                    break;
+                case BaseType.Fish:
+                    ++fish;
                     break;
             }
         }
-        int count = characters + humanoids + players + eggs + items;
-        MonsterDBPlugin.LogInfo($"Modified {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items} (total: {count})");
+        int count = characters + humanoids + players + eggs + items + fish;
+        MonsterDBPlugin.LogInfo($"Modified {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items}, fishes {fish} (total: {count})");
     }
 
     public static void Init(ZNet net)
@@ -207,7 +196,7 @@ public static class SyncManager
             LoadClones();
             Load();
             UpdateSync();
-            SetupFileWatcher();
+            FileManager.SetupFileWatcher();
         }
     }
 }

@@ -2,8 +2,38 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Egg
 Prefab: ChickenEgg
-ClonedFrom: ''
-IsCloned: false
+ItemData:
+  name: $item_chicken_egg
+  description: $item_chicken_egg_description
+  maxStackSize: 20
+  maxQuality: 1
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: default
+    active: true
+    enabled: true
+    materials:
+    - name: ChickenEgg_mat
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: ChickenEgg_d
+  - prefab: Not Growing
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
 EggGrow:
   growTime: 1800
   grownPrefab: Chicken
@@ -14,32 +44,6 @@ EggGrow:
   requireCoverPercentige: 0.7
   hatchEffect:
     effectPrefabs:
-      - prefab: fx_chicken_birth
-        variant: 0
-        attach: false
-        follow: false
-        inheritParentRotation: false
-        inheritParentScale: false
-        multiplyParentVisualScale: false
-        randomRotation: false
-        scale: false
-        childTransform: ''
-  growingObject:
+    - prefab: fx_chicken_birth
+      variant: 0
   notGrowingObject: Not Growing
-Visuals:
-  scale:
-    x: 1
-    y: 1
-    z: 1
-  levelSetups:
-  materials:
-    - name: ChickenEgg_mat
-      shader: Standard
-      color: '#FFFFFFFF'
-      hue:
-      saturation:
-      value:
-      emissionColor: '#000000FF'
-      mainTexture: ChickenEgg_d
-name: $item_chicken_egg
-description: $item_chicken_egg_description

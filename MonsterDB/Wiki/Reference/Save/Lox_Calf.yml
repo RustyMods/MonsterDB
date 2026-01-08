@@ -2,16 +2,27 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Humanoid
 Prefab: Lox_Calf
-ClonedFrom: ''
-IsCloned: false
 Character:
   name: $enemy_loxcalf
+  minLavaMaskThreshold: 0.05
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
   group: lox
   faction: PlainsMonsters
   boss: false
   dontHideBossHud: false
-  bossEvent: ''
-  defeatSetGlobalKey: ''
   aiSkipTarget: false
   crouchSpeed: 2
   walkSpeed: 2
@@ -45,90 +56,29 @@ Character:
   hitEffects:
     effectPrefabs:
     - prefab: fx_lox_hit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   critHitEffects:
     effectPrefabs:
     - prefab: fx_crit
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   backstabHitEffects:
     effectPrefabs:
     - prefab: fx_backstab
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   deathEffects:
     effectPrefabs:
     - prefab: fx_loxcalf_death
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
     - prefab: loxcalf_ragdoll
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
   waterEffects:
     effectPrefabs:
     - prefab: vfx_water_surface
-      variant: -1
       attach: true
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  tarEffects: 
-  slideEffects: 
-  jumpEffects: 
-  flyingContinuousEffect: 
-  pheromoneLoveEffect: 
   health: 100
   regenAllHPTime: 3600
   damageModifiers:
     blunt: Resistant
     slash: Resistant
-    pierce: Normal
     chop: Ignore
     pickaxe: Ignore
     fire: Weak
     frost: Resistant
-    lightning: Normal
-    poison: Normal
     spirit: Immune
   staggerWhenBlocked: true
   staggerDamageFactor: 0.3
@@ -142,16 +92,6 @@ AI:
   alertedEffects:
     effectPrefabs:
     - prefab: sfx_loxcalf_alerted
-      variant: -1
-      attach: false
-      follow: false
-      inheritParentRotation: false
-      inheritParentScale: false
-      multiplyParentVisualScale: false
-      randomRotation: false
-      scale: false
-      childTransform: ''
-  idleSound: 
   idleSoundInterval: 15
   idleSoundChance: 0.5
   pathAgentType: HorseSize
@@ -181,36 +121,50 @@ AI:
   avoidLavaFlee: true
   aggravatable: false
   passiveAggresive: true
-  spawnMessage: ''
-  deathMessage: ''
-  alertedMessage: ''
   fleeRange: 25
   fleeAngle: 45
   fleeInterval: 2
-  patrol: 
 Visuals:
   scale:
     x: 1
     y: 1
     z: 1
-  levelSetups: 
-  materials:
-  - name: lox_calf
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#FFFF00FF'
-    mainTexture: Lox_calf_d
-  - name: lox_calf
-    shader: Custom/Creature
-    color: '#FFFFFFFF'
-    hue: 0
-    saturation: 0
-    value: 0
-    emissionColor: '#FFFF00FF'
-    mainTexture: Lox_calf_d
+  renderers:
+  - prefab: Body
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+  - prefab: Furr1
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+  - prefab: Sadel
+    active: false
+    enabled: true
 Drops:
   drops:
   - prefab: LoxMeat
@@ -220,14 +174,7 @@ Drops:
     onePerPlayer: false
     levelMultiplier: false
     dontScale: false
-  dropsEnabled: true
-Tameable: 
-Procreation: 
 GrowUp:
   growTime: 6000
   inheritTame: true
   grownPrefab: Lox
-  altGrownPrefabs: []
-NPCTalk: 
-MovementDamage: 
-Saddle: 

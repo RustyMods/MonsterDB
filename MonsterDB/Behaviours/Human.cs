@@ -35,7 +35,7 @@ public class Human : Humanoid
             {
                 m_hairItem = m_hairs[UnityEngine.Random.Range(0, m_hairs.Length)];
             }
-            if (m_skinColor != null)
+            if (m_skinColors != null)
             {
                 string color = m_skinColors[UnityEngine.Random.Range(0, m_skinColors.Length)];
                 m_skinColor = Utils.ColorToVec3(color.FromHex(Color.white));
@@ -47,6 +47,7 @@ public class Human : Humanoid
             }
             
             m_nview.GetZDO().Set(ZDOVars.s_addedDefaultItems, true);
+            SetupVisEquipment(m_visEquipment, false);
         }
     }
 

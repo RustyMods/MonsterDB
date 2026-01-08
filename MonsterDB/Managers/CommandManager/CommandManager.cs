@@ -10,10 +10,11 @@ namespace MonsterDB;
 public static class CommandManager
 {
     private static readonly string startCommand;
-    public static readonly Dictionary<string, Command> commands = new();
+    public static readonly Dictionary<string, Command> commands;
 
     static CommandManager()
     {
+        commands = new Dictionary<string, Command>();
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         startCommand = MonsterDBPlugin.ModName.ToLower();
 

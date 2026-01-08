@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 namespace MonsterDB;
 
 [Serializable]
-public class CharacterCreature : Creature
+public class BaseCharacter : Base
 {
     [YamlMember(Order = 6)] public CharacterRef? Character;
     [YamlMember(Order = 7)] public AnimalAIRef? AI;
@@ -16,7 +16,7 @@ public class CharacterCreature : Creature
         Character? character = prefab.GetComponent<Character>();
         AnimalAI? ai = prefab.GetComponent<AnimalAI>();
         base.Setup(prefab, isClone, source);
-        Type = CreatureType.Humanoid;
+        Type = BaseType.Humanoid;
         Character = new();
         AI = new();
         Character.ReferenceFrom(character);
@@ -33,10 +33,8 @@ public class CharacterCreature : Creature
         Character? character = prefab.GetComponent<Character>();
         UpdateScale(prefab, character);
         UpdateCharacter(character, prefab.GetComponent<AnimalAI>());
-        UpdateLevelEffects(prefab.GetComponentInChildren<LevelEffects>(), out Renderer? mainRenderer);
-        if (mainRenderer == null && prefab.TryGetComponent(out VisEquipment visEq)) mainRenderer = visEq.m_bodyModel;
-        if (mainRenderer == null) mainRenderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
-        UpdateMaterials(mainRenderer);
+        UpdateLevelEffects(prefab);
+        UpdateVisual(prefab);
         UpdateCharacterDrop(prefab);
         UpdateGrowUp(prefab);
         UpdateTameable(prefab);
@@ -44,6 +42,10 @@ public class CharacterCreature : Creature
         UpdateNpcTalk(prefab);
         UpdateMovementDamage(prefab);
         UpdateSaddle(prefab);
+        UpdateDropProjectile(prefab);
+        UpdateCinderSpawner(prefab);
+        UpdateTimedDestruction(prefab);
+        UpdateRandomAnimation(prefab);
         
         List<Character>? characters = global::Character.GetAllCharacters();
         foreach (Character? c in characters)
@@ -52,10 +54,8 @@ public class CharacterCreature : Creature
             if (prefabName != Prefab) continue;
             UpdateScale(c.gameObject, c);
             UpdateCharacter(c, c.GetBaseAI() as AnimalAI);
-            UpdateLevelEffects(c.GetComponentInChildren<LevelEffects>(), out Renderer? instancedRenderer);
-            if (instancedRenderer == null && c.TryGetComponent(out VisEquipment instanceVisEq)) instancedRenderer = instanceVisEq.m_bodyModel;
-            if (instancedRenderer == null) instancedRenderer = c.GetComponentInChildren<SkinnedMeshRenderer>();
-            UpdateMaterials(instancedRenderer);
+            UpdateLevelEffects(c.gameObject);
+            UpdateVisual(c.gameObject);
             UpdateCharacterDrop(c.gameObject);
             UpdateGrowUp(c.gameObject);
             UpdateTameable(c.gameObject);
@@ -63,6 +63,10 @@ public class CharacterCreature : Creature
             UpdateNpcTalk(c.gameObject);
             UpdateMovementDamage(c.gameObject);
             UpdateSaddle(c.gameObject);
+            UpdateDropProjectile(c.gameObject);
+            UpdateCinderSpawner(c.gameObject);
+            UpdateTimedDestruction(c.gameObject);
+            UpdateRandomAnimation(c.gameObject);
         }
         
         base.Update();

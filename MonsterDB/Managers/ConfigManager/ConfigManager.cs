@@ -12,12 +12,13 @@ public enum Toggle { On = 1, Off = 0 }
 
 public static class ConfigManager
 {
-    public static readonly ISerializer serializer = new SerializerBuilder()
+    private static readonly ISerializer serializer = new SerializerBuilder()
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
         .DisableAliases()
         .WithNamingConvention(StrippedCase.Instance)
         .Build();
-    public static readonly IDeserializer deserializer = new DeserializerBuilder()
+
+    private static readonly IDeserializer deserializer = new DeserializerBuilder()
         .IgnoreUnmatchedProperties()
         .WithNamingConvention(StrippedCase.Instance)
         .Build();
@@ -84,6 +85,7 @@ public static class ConfigManager
     {
         SyncManager.Init(__instance);
         SpawnManager.Init(__instance);
+        LocalizationManager.Init(__instance);
     }
     
     public static void SetupWatcher()
