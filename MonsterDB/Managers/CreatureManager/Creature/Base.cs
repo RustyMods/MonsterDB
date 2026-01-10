@@ -33,14 +33,17 @@ public class Base : Header
     public CinderSpawnerRef? CinderSpawner;
     [YamlMember(Order = 18)] 
     public CharacterTimedDestructionRef? TimedDestruction;
-    [YamlMember(Order = 19)] 
-    public RandomAnimationRef? RandomAnimation;
     [YamlMember(Order = 100)] 
     public MiscComponent? Extra;
     
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         base.Setup(prefab, isClone, source);
+        SetupSharedFields(prefab, isClone, source);
+    }
+
+    protected void SetupSharedFields(GameObject prefab, bool isClone = false, string source = "")
+    {
         Prefab = prefab.name;
         
         if (prefab.TryGetComponent(out CharacterDrop characterDrop))
@@ -117,12 +120,6 @@ public class Base : Header
         {
             TimedDestruction = ctd;
         }
-
-        if (prefab.TryGetComponent(out RandomAnimation ra) && ra.m_values.Count > 0)
-        {
-            RandomAnimation = new RandomAnimationRef();
-            RandomAnimation.ReferenceFrom(ra);
-        }
         
         if (isClone)
         {
@@ -140,6 +137,38 @@ public class Base : Header
             Extra = misc;
         }
     }
+
+    public override void Update()
+    {
+        GameObject? prefab = PrefabManager.GetPrefab(Prefab);
+        if (prefab == null) return;
+        CreatureManager.Save(prefab, IsCloned, ClonedFrom);
+        UpdatePrefab(prefab);
+        List<Character>? characters = Character.GetAllCharacters();
+        for (int i = 0; i < characters.Count; ++i)
+        {
+            Character? character = characters[i];
+            UpdatePrefab(character.gameObject, true);
+        }
+        base.Update();
+    }
+
+    protected virtual void UpdatePrefab(GameObject prefab, bool isInstance = false)
+    {
+        UpdateScale(prefab);
+        UpdateLevelEffects(prefab);
+        UpdateVisual(prefab);
+        UpdateCharacterDrop(prefab);
+        UpdateGrowUp(prefab);
+        UpdateTameable(prefab);
+        UpdateProcreation(prefab);
+        UpdateNpcTalk(prefab);
+        UpdateMovementDamage(prefab);
+        UpdateSaddle(prefab);
+        UpdateDropProjectile(prefab);
+        UpdateCinderSpawner(prefab);
+        UpdateTimedDestruction(prefab);
+    }
     
     protected void UpdateVisual(GameObject prefab)
     {
@@ -149,10 +178,11 @@ public class Base : Header
             Visuals.UpdateLights(prefab);
         }
     }
-    protected void UpdateScale(GameObject prefab, Character character)
+    protected void UpdateScale(GameObject prefab)
     {
         if (Visuals == null || !Visuals.m_scale.HasValue) return;
         prefab.transform.localScale = Visuals.m_scale.Value;
+        var character = prefab.GetComponent<Character>();
         if (character != null && 
             character.m_deathEffects != null && 
             character.m_deathEffects.m_effectPrefabs != null)
@@ -166,12 +196,6 @@ public class Base : Header
                 }
             }
         }
-    }
-
-    protected void UpdateRandomAnimation(GameObject prefab)
-    {
-        if (RandomAnimation == null || !prefab.TryGetComponent(out RandomAnimation ra)) return;
-        ra.SetFieldsFrom(RandomAnimation);
     }
 
     protected void UpdateTimedDestruction(GameObject prefab)
@@ -244,42 +268,6 @@ public class Base : Header
         {
             growUp.SetFieldsFrom(GrowUp);
         }
-    }
-
-    protected Dictionary<string, GameObject> GetDefaultItems(Humanoid humanoid)
-    {
-        Dictionary<string, GameObject> attacks = new();
-        if (humanoid.m_defaultItems != null)
-        {
-            foreach (GameObject? item in humanoid.m_defaultItems)
-            {
-                if (item == null) continue;
-                attacks[item.name] = item;
-            }
-        }
-
-        if (humanoid.m_randomWeapon != null)
-        {
-            foreach (GameObject? item in humanoid.m_randomWeapon)
-            {
-                if (item == null) continue;
-                attacks[item.name] = item;
-            }
-        }
-        
-        if (humanoid.m_randomSets != null)
-        {
-            foreach (Humanoid.ItemSet? set in humanoid.m_randomSets)
-            {
-                foreach (GameObject? item in set.m_items)
-                {
-                    if (item == null) continue;
-                    attacks[item.name] = item;
-                }
-            }
-        }
-
-        return attacks;
     }
     
     protected void UpdateTameable(GameObject prefab)
@@ -386,4 +374,41 @@ public class Base : Header
             !prefab.TryGetComponent(out DropProjectileOverDistance dp)) return;
         dp.SetFieldsFrom(DropProjectileOverDistance);
     }
+    
+    protected Dictionary<string, GameObject> GetDefaultItems(Humanoid humanoid)
+    {
+        Dictionary<string, GameObject> attacks = new();
+        if (humanoid.m_defaultItems != null)
+        {
+            foreach (GameObject? item in humanoid.m_defaultItems)
+            {
+                if (item == null) continue;
+                attacks[item.name] = item;
+            }
+        }
+
+        if (humanoid.m_randomWeapon != null)
+        {
+            foreach (GameObject? item in humanoid.m_randomWeapon)
+            {
+                if (item == null) continue;
+                attacks[item.name] = item;
+            }
+        }
+        
+        if (humanoid.m_randomSets != null)
+        {
+            foreach (Humanoid.ItemSet? set in humanoid.m_randomSets)
+            {
+                foreach (GameObject? item in set.m_items)
+                {
+                    if (item == null) continue;
+                    attacks[item.name] = item;
+                }
+            }
+        }
+
+        return attacks;
+    }
+    
 }

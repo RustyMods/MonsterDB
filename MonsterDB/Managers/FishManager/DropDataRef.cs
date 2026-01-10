@@ -16,7 +16,7 @@ public class DropDataRef : Reference
     public static implicit operator DropDataRef(DropTable.DropData dropData)
     {
         var reference = new DropDataRef();
-        reference.ReferenceFrom(dropData);
+        reference.SetFrom(dropData);
         return reference;
     }
 

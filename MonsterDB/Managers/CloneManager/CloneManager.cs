@@ -5,7 +5,7 @@ namespace MonsterDB;
 
 public static class CloneManager
 {
-    public static GameObject root;
+    private static readonly GameObject root;
     internal static readonly Dictionary<string, GameObject> clones = new();
 
     static CloneManager()

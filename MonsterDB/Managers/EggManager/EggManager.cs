@@ -8,7 +8,6 @@ namespace MonsterDB;
 
 public static class EggManager
 {
-    
     private static readonly List<string> newEggComponentPrefabs;
     private static readonly ConfigEntry<Toggle> _addPercentage;
 
@@ -238,9 +237,14 @@ public static class EggManager
             
         if (!eggGrow.m_nview || !eggGrow.m_nview.IsValid()) return;
 
-        float growTime = eggGrow.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
-        bool isGrowing = growTime > 0.0;
-        float growPercentage = (float)ZNet.instance.GetTimeSeconds() / (growTime + eggGrow.m_growTime) * 100f;
+        float growStart = eggGrow.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
+        bool isGrowing = growStart > 0.0;
+        double growPercentage = 0.0;
+        if (isGrowing)
+        {
+            double timeElapsed = ZNet.instance.GetTimeSeconds() - growStart;
+            growPercentage = Mathf.Clamp01((float)timeElapsed / eggGrow.m_growTime) * 100f;
+        }
 
         string text = __instance.m_itemData.m_stack > 1
             ? "$item_chicken_egg_stacked"
@@ -264,11 +268,16 @@ public static class EggManager
             __result = __instance.m_item.GetHoverText();
             return false;
         }
-            
-        float growTime = __instance.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
-        bool isGrowing = growTime > 0.0;
-        float growPercentage = (float)ZNet.instance.GetTimeSeconds() / (growTime + __instance.m_growTime) * 100f;
-
+        
+        float growStart = __instance.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
+        bool isGrowing = growStart > 0.0;
+        
+        double growPercentage = 0.0;
+        if (isGrowing)
+        {
+            double timeElapsed = ZNet.instance.GetTimeSeconds() - growStart;
+            growPercentage = Mathf.Clamp01((float)timeElapsed / __instance.m_growTime) * 100f;
+        }
         string text = __instance.m_item.m_itemData.m_stack > 1
             ? "$item_chicken_egg_stacked"
             : isGrowing ? 
@@ -281,5 +290,26 @@ public static class EggManager
             : hover;
 
         return false;
+    }
+
+    [HarmonyPatch(typeof(EggGrow), nameof(EggGrow.UpdateEffects))]
+    private static class EggGrow_UpdateEffects
+    {
+        private static void Postfix(EggGrow __instance, float grow)
+        {
+            if (!IsNewEgg(__instance.m_item)) return;
+            var ps = __instance.GetComponent<ParticleSystem>();
+            if (ps == null) return;
+            
+            bool enablePS = grow > 0.0;
+            if (enablePS)
+            {
+                ps.Play();
+            }
+            else
+            {
+                ps.Pause();
+            }
+        }
     }
 }

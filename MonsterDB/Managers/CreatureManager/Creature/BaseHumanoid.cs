@@ -11,76 +11,32 @@ public class BaseHumanoid : Base
     [YamlMember(Order = 6)] public HumanoidRef? Character;
     [YamlMember(Order = 7)] public MonsterAIRef? AI;
 
+    [YamlIgnore, NonSerialized] private bool updateAttacks;
+
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
+        base.Setup(prefab, isClone, source);
         Humanoid? character = prefab.GetComponent<Humanoid>();
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
-        base.Setup(prefab, isClone, source);
         Type = BaseType.Humanoid;
         Character = new HumanoidRef();
         AI = new MonsterAIRef();
-        Character.ReferenceFrom(character);
+        Character.SetFrom(character);
         Character.m_attacks = character.GetAttacks().ToRef();
-        AI.ReferenceFrom(ai);
+        AI.SetFrom(ai);
     }
 
-    public override void Update()
+    protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
-        GameObject? prefab = PrefabManager.GetPrefab(Prefab);
-        if (prefab == null) return;
-        
-        CreatureManager.Save(prefab,IsCloned, ClonedFrom);
-        
-        Humanoid? humanoid = prefab.GetComponent<Humanoid>();
-        UpdateScale(prefab, humanoid);
-        UpdateLevelEffects(prefab);
-        UpdateVisual(prefab);
-        UpdateCharacterDrop(prefab);
-        UpdateGrowUp(prefab);
-        UpdateHumanoid(humanoid, prefab.GetComponent<MonsterAI>(), out bool attacksChanged);
-        UpdateTameable(prefab);
-        UpdateProcreation(prefab);
-        UpdateNpcTalk(prefab);
-        UpdateMovementDamage(prefab);
-        UpdateSaddle(prefab);
-        UpdateDropProjectile(prefab);
-        UpdateCinderSpawner(prefab);
-        UpdateTimedDestruction(prefab);
-        UpdateRandomAnimation(prefab);
-
-        List<Character>? characters = global::Character.GetAllCharacters();
-        foreach (Character? c in characters)
+        if (isInstance)
         {
-            string? prefabName = Utils.GetPrefabName(c.name);
-            if (prefabName != Prefab) continue;
-            if (c is not Humanoid instanceHumanoid) continue;
-            UpdateScale(c.gameObject, instanceHumanoid);
-            UpdateInstanceHumanoid(instanceHumanoid, humanoid, attacksChanged);
-            UpdateLevelEffects(c.gameObject);
-            UpdateVisual(c.gameObject);
-            UpdateCharacterDrop(c.gameObject);
-            UpdateGrowUp(c.gameObject);
-            UpdateTameable(c.gameObject);
-            UpdateProcreation(c.gameObject);
-            UpdateNpcTalk(c.gameObject);
-            UpdateMovementDamage(c.gameObject);
-            UpdateSaddle(c.gameObject);
-            UpdateDropProjectile(c.gameObject);
-            UpdateCinderSpawner(c.gameObject);
-            UpdateTimedDestruction(c.gameObject);
-            UpdateRandomAnimation(c.gameObject);
+            UpdateIHumanoid(prefab);
         }
-        base.Update();
-    }
-    
-    private void UpdateHumanoid(Humanoid humanoid, MonsterAI ai, out bool attacksChanged)
-    {
-        attacksChanged = false;
-        if (humanoid == null || ai == null) return;
-        if (Character != null) humanoid.SetFieldsFrom(Character);
-        if (AI != null) ai.SetFieldsFrom(AI);
-
-        attacksChanged = UpdateAttacks(humanoid);
+        else
+        {
+            UpdateHumanoid(prefab);
+        }
+        base.UpdatePrefab(prefab, isInstance);
     }
 
     private bool UpdateAttacks(Humanoid humanoid)
@@ -106,31 +62,44 @@ public class BaseHumanoid : Base
                     }
                 }
             }
-
             return attacksChanged;
         }
 
         return false;
     }
-    
-    private void UpdateInstanceHumanoid(Humanoid instanceHumanoid,  Humanoid humanoid, bool attacksChanged)
+
+    private void UpdateHumanoid(GameObject prefab)
     {
-        MonsterAI? instanceAI = instanceHumanoid.GetBaseAI() as MonsterAI;
+        Humanoid? humanoid = prefab.GetComponent<Humanoid>();
+        MonsterAI? ai = humanoid.GetComponent<MonsterAI>();
+        if (humanoid == null || ai == null) return;
+        if (Character != null) humanoid.SetFieldsFrom(Character);
+        if (AI != null) ai.SetFieldsFrom(AI);
+        updateAttacks = UpdateAttacks(humanoid);
+    }
+
+    private void UpdateIHumanoid(GameObject prefab)
+    {
+        Humanoid? IHumanoid = prefab.GetComponent<Humanoid>();
+        MonsterAI? ai = IHumanoid.GetBaseAI() as MonsterAI;
         
-        if (instanceHumanoid == null || instanceAI == null) return;
+        if (IHumanoid == null || ai == null) return;
+        if (Character != null) IHumanoid.SetFieldsFrom(Character);
+        if (AI != null) ai.SetFieldsFrom(AI);
 
-        if (Character != null) instanceHumanoid.SetFieldsFrom(Character);
-        if (AI != null) instanceAI.SetFieldsFrom(AI);
-
-        if (attacksChanged)
+        if (updateAttacks)
         {
-            instanceHumanoid.m_defaultItems = humanoid.m_defaultItems;
-            instanceHumanoid.m_randomWeapon = humanoid.m_randomWeapon;
-            instanceHumanoid.m_randomSets = humanoid.m_randomSets;
+            GameObject? source = PrefabManager.GetPrefab(Prefab);
+            if (source == null) return;
+            Humanoid? humanoid = source.GetComponent<Humanoid>();
+            if (humanoid == null) return;
 
-            instanceHumanoid.m_inventory.RemoveAll();
-            instanceHumanoid.GiveDefaultItems();
+            IHumanoid.m_defaultItems = humanoid.m_defaultItems;
+            IHumanoid.m_randomWeapon = humanoid.m_randomWeapon;
+            IHumanoid.m_randomSets = humanoid.m_randomSets;
+
+            IHumanoid.m_inventory.RemoveAll();
+            IHumanoid.Start();
         }
     }
-    
 }

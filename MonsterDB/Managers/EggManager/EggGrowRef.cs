@@ -14,13 +14,11 @@ public class EggGrowRef : Reference
     public bool? m_requireUnderRoof;
     public float? m_requireCoverPercentige;
     public EffectListRef? m_hatchEffect;
-    public string? m_growingObject;
-    public string? m_notGrowingObject;
 
     public static implicit operator EggGrowRef(EggGrow egg)
     {
-        var reference = new EggGrowRef();
-        reference.ReferenceFrom(egg);
+        EggGrowRef reference = new EggGrowRef();
+        reference.SetFrom(egg);
         return reference;
     }
 }

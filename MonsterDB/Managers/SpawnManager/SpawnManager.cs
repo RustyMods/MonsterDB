@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using ServerSync;
 using UnityEngine;
@@ -15,6 +16,7 @@ public static class SpawnManager
     private static Dictionary<string, SpawnDataRef> spawnRefs;
     private static readonly Dictionary<SpawnDataRef, SpawnSystem.SpawnData> map;
     private static readonly CustomSyncedValue<string> sync;
+    private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
     
     static SpawnManager()
     {
@@ -24,8 +26,9 @@ public static class SpawnManager
         sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.SpawnList");
         SpawnList = MonsterDBPlugin.instance.gameObject.AddComponent<SpawnSystemList>();
         if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
-        
         sync.ValueChanged += OnSyncChange;
+        _fileWatcherEnabled = ConfigManager.config("File Watcher", FolderName, Toggle.On,
+            $"If on, YML files under {FolderName} folder will trigger update on changed, created or renamed");
 
         Command create = new Command("setup_spawn",
             "[prefabName]: write new spawn data file and load into spawn system",
@@ -47,6 +50,8 @@ public static class SpawnManager
                 return true;
             }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>, adminOnly: true);
     }
+    
+    private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
 
     private static void Start()
     {
@@ -119,6 +124,8 @@ public static class SpawnManager
 
     private static void ReadConfigValues(object sender, FileSystemEventArgs e)
     {
+        if (!IsFileWatcherEnabled()) return;
+        
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         
         string? filePath = e.FullPath;

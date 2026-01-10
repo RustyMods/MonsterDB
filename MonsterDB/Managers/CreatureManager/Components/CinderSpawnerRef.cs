@@ -32,7 +32,7 @@ public class CinderSpawnerRef : Reference
     public static implicit operator CinderSpawnerRef(CinderSpawner cs)
     {
         CinderSpawnerRef reference = new CinderSpawnerRef();
-        reference.ReferenceFrom(cs);
+        reference.SetFrom(cs);
         if (cs.m_cinderPrefab != null && cs.m_cinderPrefab.TryGetComponent(out Cinder cinder))
         {
             reference.m_cinder = cinder;

@@ -1,0 +1,61 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Neck
+AI:
+  consumeItems:
+  - Dandelion
+  - Thistle
+  - Onion
+  - RawMeat
+  consumeRange: 1
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+# If field removed, will remove component
+Drops:
+Tameable:
+  fedDuration: 600
+  tamingTime: 1800
+  startsTamed: false
+  tamedEffect:
+    effectPrefabs:
+      - prefab: fx_creature_tamed
+  sootheEffect:
+    effectPrefabs:
+      - prefab: vfx_creature_soothed
+  petEffect:
+    effectPrefabs:
+      - prefab: fx_boar_pet
+  commandable: true
+  unsummonDistance: 0
+  unsummonOnOwnerLogoutSeconds: 0
+  levelUpOwnerSkill: None
+  levelUpFactor: 1
+  dropSaddleOnDeath: true
+  dropItemVel: 5
+  tamingSpeedMultiplierRange: 60
+  tamingBoostMultiplier: 2
+  nameBeforeText: true
+  tameText: $hud_tamelove
+# If field removed, will remove component
+Procreation:
+  updateInterval: 30
+  totalCheckRange: 10
+  maxCreatures: 5
+  partnerCheckRange: 3
+  pregnancyChance: 0.33
+  pregnancyDuration: 60
+  requiredLovePoints: 3
+  offspring: NeckEgg
+  minOffspringLevel: 0
+  spawnOffset: 1
+  spawnOffsetMax: 0
+  spawnRandomDirection: false
+  birthEffects:
+    effectPrefabs:
+      - prefab: sfx_boar_birth
+      - prefab: vfx_boar_birth
+  loveEffects:
+    effectPrefabs:
+      - prefab: sfx_boar_love
+      - prefab: vfx_boar_love

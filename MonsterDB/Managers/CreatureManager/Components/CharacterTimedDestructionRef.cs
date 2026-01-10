@@ -9,7 +9,7 @@ public class CharacterTimedDestructionRef : Reference
     public static implicit operator CharacterTimedDestructionRef(CharacterTimedDestruction ctd)
     {
         CharacterTimedDestructionRef reference = new CharacterTimedDestructionRef();
-        reference.ReferenceFrom(ctd);
+        reference.SetFrom(ctd);
         return reference;
     }
 }

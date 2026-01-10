@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using ServerSync;
 
@@ -12,6 +13,7 @@ public static class LocalizationManager
     private static readonly string FolderPath;
     private static readonly Dictionary<string, string[]> localizations;
     private static readonly CustomSyncedValue<string> sync;
+    private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
     
     static LocalizationManager()
     {
@@ -19,12 +21,16 @@ public static class LocalizationManager
         localizations = new Dictionary<string, string[]>();
         sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Localization", "");
         sync.ValueChanged += OnSyncChange;
+        _fileWatcherEnabled = ConfigManager.config("File Watcher", FolderName, Toggle.On,
+            $"If on, YML files under {FolderName} folder will trigger update on changed, created, or renamed", false);
         
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(Localization), nameof(Localization.LoadCSV)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(LocalizationManager),
                 nameof(Patch_Localization_LoadCSV))));
     }
+    
+    private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
 
     public static void Start()
     {
@@ -89,7 +95,7 @@ public static class LocalizationManager
             string line = lines[i];
             if (line.StartsWith("#") || string.IsNullOrEmpty(line)) continue;
             string[] parts = line.Split(':');
-            if (parts.Length != 2) continue;
+            if (parts.Length < 2) continue;
 
             string key = parts[0].Trim();
             string value = parts[1].Trim();
@@ -101,6 +107,7 @@ public static class LocalizationManager
 
     private static void ReadConfigValues(object sender, FileSystemEventArgs e)
     {
+        if (!IsFileWatcherEnabled()) return;
         if (!ZNet.instance || !ZNet.instance.IsServer() || Localization.m_instance == null) return;
         
         string? language = Path.GetFileNameWithoutExtension(e.FullPath);

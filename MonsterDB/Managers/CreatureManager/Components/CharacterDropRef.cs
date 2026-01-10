@@ -14,7 +14,7 @@ public class CharacterDropRef : Reference
     public static implicit operator CharacterDropRef(CharacterDrop characterDrop)
     {
         CharacterDropRef reference = new CharacterDropRef();
-        reference.ReferenceFrom(characterDrop);
+        reference.SetFrom(characterDrop);
         return reference;
     }
 }

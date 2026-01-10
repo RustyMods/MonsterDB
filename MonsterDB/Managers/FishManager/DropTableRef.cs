@@ -13,7 +13,7 @@ public class DropTableRef : Reference
     public static implicit operator DropTableRef(DropTable dropTable)
     {
         DropTableRef reference = new DropTableRef();
-        reference.ReferenceFrom(dropTable);
+        reference.SetFrom(dropTable);
         return reference;
     }
 }

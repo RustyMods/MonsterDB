@@ -135,7 +135,7 @@ public static class ItemManager
     }
     
 
-    private static string? Save(GameObject prefab, bool isClone = false, string source = "")
+    public static string? Save(GameObject prefab, bool isClone = false, string source = "")
     {
         if (!prefab.GetComponent<ItemDrop>()) return null;
 

@@ -12,14 +12,24 @@ public class BaseItem : Header
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
-        if (!prefab.TryGetComponent(out ItemDrop component)) return;
         base.Setup(prefab, isClone, source);
         Type = BaseType.Item;
         Prefab = prefab.name;
         ClonedFrom = source;
         IsCloned = isClone;
+        SetupItem(prefab);
+        SetupVisuals(prefab);
+    }
+
+    protected virtual void SetupItem(GameObject prefab)
+    {
+        if (!prefab.TryGetComponent(out ItemDrop component)) return;
         ItemData = new ItemDataSharedRef();
-        ItemData.ReferenceFrom(component.m_itemData.m_shared);
+        ItemData.SetFrom(component.m_itemData.m_shared);
+    }
+
+    protected virtual void SetupVisuals(GameObject prefab)
+    {
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
         if (renderers.Length > 0)
         {
@@ -33,26 +43,51 @@ public class BaseItem : Header
 
     public override void Update()
     {
-        if (ItemData == null) return;
-        
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
         if (prefab == null) return;
+        SaveDefault(prefab);
+        
+        UpdatePrefab(prefab);
+        
+        base.Update();
+    }
 
+    protected virtual void SaveDefault(GameObject prefab)
+    {
+        ItemManager.Save(prefab, IsCloned, ClonedFrom);
+    }
+
+    protected virtual void UpdatePrefab(GameObject prefab)
+    {
+        UpdateItem(prefab);
+        UpdateVisuals(prefab);
+    }
+
+    protected virtual void UpdateItem(GameObject prefab)
+    {
+        if (ItemData == null) return;
         ItemDrop? item = prefab.GetComponent<ItemDrop>();
         if (item == null) return;
         
         item.m_itemData.m_shared.SetFieldsFrom(ItemData);
+    }
 
+    protected virtual void UpdateVisuals(GameObject prefab)
+    {
         if (Visuals != null)
         {
             if (Visuals.m_scale.HasValue)
             {
-                item.transform.localScale = Visuals.m_scale.Value;
+                Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; ++i)
+                {
+                    Renderer? renderer = renderers[i];
+                    GameObject go = renderer.gameObject;
+                    go.transform.localScale = Visuals.m_scale.Value;
+                }
             }
 
             Visuals.UpdateRenderers(prefab);
         }
-        
-        base.Update();
     }
 }

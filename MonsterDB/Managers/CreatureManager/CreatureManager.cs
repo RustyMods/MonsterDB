@@ -46,7 +46,7 @@ public static class CreatureManager
             return true;
         });
 
-        Command read = new Command("mod", "[fileName]: read creature file from Modified folder and update", args =>
+        Command read = new Command("mod", "[fileName]: read YML file from Import folder and update", args =>
         {
             if (args.Length < 3)
             {
@@ -54,14 +54,14 @@ public static class CreatureManager
                 return true;
             }
             
-            string prefabName = args[2];
-            if (string.IsNullOrEmpty(prefabName))
+            string fileName = args[2];
+            if (string.IsNullOrEmpty(fileName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return true;
             }
             
-            string filePath = Path.Combine(FileManager.ModifiedFolder, prefabName + ".yml");
+            string filePath = Path.Combine(FileManager.ModifiedFolder, fileName + ".yml");
             FileManager.Read(filePath);
             return true;
         }, FileManager.GetModFileNames, adminOnly: true);
@@ -128,7 +128,11 @@ public static class CreatureManager
     {
         Character? character = prefab.GetComponent<Character>();
         BaseAI ai = prefab.GetComponent<BaseAI>();
-        if (character == null || ai == null) return null;
+        if (character == null || ai == null)
+        {
+            MonsterDBPlugin.LogWarning("Invalid prefab, missing Character or AI component");
+            return null;
+        }
 
         string? text = null;
 
@@ -238,8 +242,9 @@ public static class CreatureManager
                 for (int i = 0; i < r.sharedMaterials.Length; ++i)
                 {
                     Material mat = r.sharedMaterials[i];
+                    if (mat == null) continue;
                     string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
-                    if (mats.TryGetValue(name, out var clonedMat))
+                    if (mats.TryGetValue(name, out Material? clonedMat))
                     {
                         newMats.Add(clonedMat);
                     }

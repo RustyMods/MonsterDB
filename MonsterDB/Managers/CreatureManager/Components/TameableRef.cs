@@ -32,7 +32,7 @@ public class TameableRef : Reference
     public static implicit operator TameableRef(Tameable tameable)
     {
         TameableRef reference = new TameableRef();
-        reference.ReferenceFrom(tameable);
+        reference.SetFrom(tameable);
         return reference;
     }
 }

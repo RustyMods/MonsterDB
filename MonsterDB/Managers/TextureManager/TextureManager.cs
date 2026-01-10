@@ -13,8 +13,8 @@ public static class TextureManager
     private static readonly Dictionary<string, Sprite> m_cachedSprites;
     private static readonly Dictionary<string, TextureData> m_customs;
     private static readonly string TextureFolder;
-    private static readonly string CustomFolder;
-    private static readonly string ExportFolder;
+    // private static readonly string CustomFolder;
+    // private static readonly string ExportFolder;
 
     static TextureManager()
     {
@@ -22,11 +22,11 @@ public static class TextureManager
         m_cachedTextures = new Dictionary<string, Texture2D>();
         m_customs = new Dictionary<string, TextureData>();
         TextureFolder = Path.Combine(ConfigManager.DirectoryPath, "Textures");
-        CustomFolder = Path.Combine(TextureFolder, "Customs");
-        ExportFolder = Path.Combine(TextureFolder, "Exports");
+        // CustomFolder = Path.Combine(TextureFolder, "Customs");
+        // ExportFolder = Path.Combine(TextureFolder, "Exports");
         if (!Directory.Exists(TextureFolder)) Directory.CreateDirectory(TextureFolder);
-        if (!Directory.Exists(CustomFolder)) Directory.CreateDirectory(CustomFolder);
-        if (!Directory.Exists(ExportFolder)) Directory.CreateDirectory(ExportFolder);
+        // if (!Directory.Exists(CustomFolder)) Directory.CreateDirectory(CustomFolder);
+        // if (!Directory.Exists(ExportFolder)) Directory.CreateDirectory(ExportFolder);
         
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.Awake)),
@@ -36,7 +36,7 @@ public static class TextureManager
     }
     private static void Start()
     {
-        string[] files = Directory.GetFiles(CustomFolder, "*.png", SearchOption.AllDirectories);
+        string[] files = Directory.GetFiles(FileManager.ModifiedFolder, "*.png", SearchOption.AllDirectories);
         for (int i = 0; i < files.Length; ++i)
         {
             string filePath = files[i];
@@ -78,7 +78,7 @@ public static class TextureManager
             for (int i = 0; i < materials.Length; ++i)
             {
                 Material material = materials[i];
-                Save(material, ExportFolder);
+                Save(material, TextureFolder);
             }
             
             return true;
@@ -96,7 +96,7 @@ public static class TextureManager
                 MonsterDBPlugin.LogWarning("Failed to find texture");
                 return true;
             }
-            Export(texture, ExportFolder);
+            Export(texture, TextureFolder);
             return true;
         }, m_cachedTextures.Keys.ToList);
 

@@ -12,38 +12,28 @@ public class BaseEgg : BaseItem
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
-        if (prefab == null || !prefab.TryGetComponent(out ItemDrop item)) return;
-        GameVersion = Version.GetVersionString();
-        ModVersion = MonsterDBPlugin.ModVersion;
+        SetupVersions();
+        SetupItem(prefab);
+        SetupVisuals(prefab);
         Type = BaseType.Egg;
         Prefab = prefab.name;
         ClonedFrom = source;
         IsCloned = isClone;
-        ItemData = new ItemDataSharedRef();
-        ItemData.SetBasicFields(item.m_itemData.m_shared);
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        Visuals = new VisualRef();
-        Visuals.m_scale = prefab.transform.localScale;
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
         if (prefab.TryGetComponent(out EggGrow component))
         {
             EggGrow = component;
         }
     }
 
-    public override void Update()
+    protected override void SaveDefault(GameObject prefab)
     {
-        GameObject? prefab = PrefabManager.GetPrefab(Prefab);
-        if (prefab == null) return;
-
-        base.Update();
-
         EggManager.Save(prefab, IsCloned, ClonedFrom);
-        
+    }
+
+    protected override void UpdatePrefab(GameObject prefab)
+    {
         UpdateEgg(prefab);
+        base.UpdatePrefab(prefab);
     }
 
     private void UpdateEgg(GameObject prefab)
@@ -67,7 +57,10 @@ public class BaseEgg : BaseItem
         }
 
         if (component == null) return;
-        
-        if (EggGrow != null) component.SetFieldsFrom(EggGrow);
+
+        if (EggGrow != null)
+        {
+            component.SetFieldsFrom(EggGrow);
+        }
     }
 }

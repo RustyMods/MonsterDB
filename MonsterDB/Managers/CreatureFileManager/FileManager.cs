@@ -3,22 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
+using BepInEx.Configuration;
 
 namespace MonsterDB;
 
 public static class FileManager
 {
+    private const string SaveFolderName = "Export";
+    private const string ModifiedFolderName = "Import";
     public static readonly string SaveFolder;
     public static readonly string ModifiedFolder;
+    private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
     
     static FileManager()
     {
-        SaveFolder = Path.Combine(ConfigManager.DirectoryPath, "Save");
-        ModifiedFolder = Path.Combine(ConfigManager.DirectoryPath, "Modified");
+        SaveFolder = Path.Combine(ConfigManager.DirectoryPath, SaveFolderName);
+        ModifiedFolder = Path.Combine(ConfigManager.DirectoryPath, ModifiedFolderName);
+        _fileWatcherEnabled = ConfigManager.config("File Watcher", ModifiedFolderName, Toggle.On,
+            $"If on, YML files under {ModifiedFolderName} folder will trigger to update when changed, created or renamed", false);
 
         if (!Directory.Exists(SaveFolder)) Directory.CreateDirectory(SaveFolder);
         if (!Directory.Exists(ModifiedFolder)) Directory.CreateDirectory(ModifiedFolder);
     }
+
+    private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
     
     public static List<string> GetModFileNames() => Directory
             .GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories)
@@ -92,6 +100,7 @@ public static class FileManager
 
     private static void ReadConfigValues(object sender, FileSystemEventArgs e)
     {
+        if (!IsFileWatcherEnabled()) return;
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
         string filePath = e.FullPath;
         Read(filePath);

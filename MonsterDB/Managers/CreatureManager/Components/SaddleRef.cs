@@ -21,7 +21,7 @@ public class SaddleRef : Reference
     public static implicit operator SaddleRef(Sadle saddle)
     {
         SaddleRef reference = new SaddleRef();
-        reference.ReferenceFrom(saddle);
+        reference.SetFrom(saddle);
         return reference;
     }
 }

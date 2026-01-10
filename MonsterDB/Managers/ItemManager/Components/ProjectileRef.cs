@@ -53,7 +53,7 @@ public class ProjectileRef : Reference
     public static implicit operator ProjectileRef(Projectile pj)
     {
         ProjectileRef projectileRef = new ProjectileRef();
-        projectileRef.ReferenceFrom(pj);
+        projectileRef.SetFrom(pj);
         projectileRef.m_prefab = pj.name;
         return projectileRef;
     }

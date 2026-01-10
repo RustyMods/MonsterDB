@@ -20,7 +20,7 @@ public class CinderRef : Reference
     public static implicit operator CinderRef(Cinder cinder)
     {
         CinderRef reference = new CinderRef();
-        reference.ReferenceFrom(cinder);
+        reference.SetFrom(cinder);
         reference.m_prefab = cinder.name;
         return reference;
     }

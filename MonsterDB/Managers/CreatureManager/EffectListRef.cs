@@ -101,7 +101,7 @@ public static partial class Extensions
         {
             if (effectData.m_prefab == null) continue;
             EffectListRef.EffectDataRef effectRef = new EffectListRef.EffectDataRef();
-            effectRef.ReferenceFrom(effectData);
+            effectRef.SetFrom(effectData);
             effectListRef.Add(effectRef);
         }
 

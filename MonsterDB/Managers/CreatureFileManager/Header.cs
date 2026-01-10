@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -19,8 +20,13 @@ public class Header
     [YamlMember(Order = 3)] public string Prefab = "";
     [YamlMember(Order = 4)] public string ClonedFrom = "";
     [YamlMember(Order = 5)] public bool IsCloned;
-
+    
     public virtual void Setup(GameObject prefab, bool isClone = false, string source = "")
+    {
+        SetupVersions();
+    }
+
+    protected void SetupVersions()
     {
         GameVersion = Version.GetVersionString();
         ModVersion = MonsterDBPlugin.ModVersion;

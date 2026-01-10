@@ -11,33 +11,27 @@ public class BaseFish : BaseItem
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
-        if (prefab == null || !prefab.TryGetComponent(out ItemDrop item)) return;
-        GameVersion = Version.GetVersionString();
-        ModVersion = MonsterDBPlugin.ModVersion;
+        SetupVersions();
+        SetupVisuals(prefab);
+        SetupItem(prefab);
         Type = BaseType.Fish;
         Prefab = prefab.name;
         ClonedFrom = source;
         IsCloned = isClone;
-        ItemData = new ItemDataSharedRef();
-        ItemData.SetBasicFields(item.m_itemData.m_shared);
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        Visuals = new VisualRef();
-        Visuals.m_scale = prefab.transform.localScale;
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
         if (prefab.TryGetComponent(out Fish fish))
         {
             Fish = fish;
         }
     }
 
-    public override void Update()
+    protected override void SaveDefault(GameObject prefab)
     {
-        GameObject? prefab = PrefabManager.GetPrefab(Prefab);
-        if (prefab == null) return;
-        base.Update();
+        FishManager.Save(prefab, IsCloned, ClonedFrom);
+    }
+
+    protected override void UpdatePrefab(GameObject prefab)
+    {
+        base.UpdatePrefab(prefab);
         UpdateFish(prefab);
     }
 

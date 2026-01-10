@@ -99,7 +99,7 @@ public static partial class Extensions
     public static AttackRef ToRef(this Attack att)
     {
         AttackRef attackRef = new AttackRef();
-        attackRef.ReferenceFrom(att);
+        attackRef.SetFrom(att);
         if (att.m_attackProjectile != null && att.m_attackProjectile.TryGetComponent(out Projectile prj))
         {
             attackRef.m_projectileRef = prj;

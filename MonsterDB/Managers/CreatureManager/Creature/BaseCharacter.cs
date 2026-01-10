@@ -19,61 +19,20 @@ public class BaseCharacter : Base
         Type = BaseType.Humanoid;
         Character = new();
         AI = new();
-        Character.ReferenceFrom(character);
-        AI.ReferenceFrom(ai);
+        Character.SetFrom(character);
+        AI.SetFrom(ai);
     }
-    
-    public override void Update()
+
+    protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
-        GameObject? prefab = PrefabManager.GetPrefab(Prefab);
-        if (prefab == null) return;
-        
-        CreatureManager.Save(prefab, IsCloned, ClonedFrom);
-        
+        UpdateCharacter(prefab);
+        base.UpdatePrefab(prefab, isInstance);
+    }
+
+    private void UpdateCharacter(GameObject prefab)
+    {
         Character? character = prefab.GetComponent<Character>();
-        UpdateScale(prefab, character);
-        UpdateCharacter(character, prefab.GetComponent<AnimalAI>());
-        UpdateLevelEffects(prefab);
-        UpdateVisual(prefab);
-        UpdateCharacterDrop(prefab);
-        UpdateGrowUp(prefab);
-        UpdateTameable(prefab);
-        UpdateProcreation(prefab);
-        UpdateNpcTalk(prefab);
-        UpdateMovementDamage(prefab);
-        UpdateSaddle(prefab);
-        UpdateDropProjectile(prefab);
-        UpdateCinderSpawner(prefab);
-        UpdateTimedDestruction(prefab);
-        UpdateRandomAnimation(prefab);
-        
-        List<Character>? characters = global::Character.GetAllCharacters();
-        foreach (Character? c in characters)
-        {
-            string? prefabName = Utils.GetPrefabName(c.name);
-            if (prefabName != Prefab) continue;
-            UpdateScale(c.gameObject, c);
-            UpdateCharacter(c, c.GetBaseAI() as AnimalAI);
-            UpdateLevelEffects(c.gameObject);
-            UpdateVisual(c.gameObject);
-            UpdateCharacterDrop(c.gameObject);
-            UpdateGrowUp(c.gameObject);
-            UpdateTameable(c.gameObject);
-            UpdateProcreation(c.gameObject);
-            UpdateNpcTalk(c.gameObject);
-            UpdateMovementDamage(c.gameObject);
-            UpdateSaddle(c.gameObject);
-            UpdateDropProjectile(c.gameObject);
-            UpdateCinderSpawner(c.gameObject);
-            UpdateTimedDestruction(c.gameObject);
-            UpdateRandomAnimation(c.gameObject);
-        }
-        
-        base.Update();
-    }
-    
-    private void UpdateCharacter(Character character, AnimalAI? ai)
-    {
+        AnimalAI? ai = character.GetComponent<AnimalAI>();
         if (character == null || ai == null) return;
         if (Character != null) character.SetFieldsFrom(Character);
         if (AI != null) ai.SetFieldsFrom(AI);

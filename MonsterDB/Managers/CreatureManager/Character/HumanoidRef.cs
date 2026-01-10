@@ -21,7 +21,7 @@ public class HumanoidRef : CharacterRef
     [YamlMember(Order = 108)] public EffectListRef? m_perfectBlockEffect;
     [YamlMember(Order = 109)] public ItemDataSharedRef[]? m_attacks;
     
-    public override ItemDataSharedRef[]? GetAttacks() => m_attacks;
+    public ItemDataSharedRef[]? GetAttacks() => m_attacks;
 
     [Serializable]
     public class ItemSet
@@ -64,7 +64,7 @@ public static partial class Extensions
             ItemDrop? itemDrop = attack.GetComponent<ItemDrop>();
             if (itemDrop == null) continue;
             ItemDataSharedRef itemDataRef = new ItemDataSharedRef();
-            itemDataRef.ReferenceFrom(itemDrop.m_itemData.m_shared);
+            itemDataRef.SetFrom(itemDrop.m_itemData.m_shared);
             itemDataRef.m_prefab = attack.name;
             attackRefs.Add(itemDataRef);
         }

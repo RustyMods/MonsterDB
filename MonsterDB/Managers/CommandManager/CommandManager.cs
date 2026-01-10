@@ -27,7 +27,6 @@ public static class CommandManager
         harmony.Patch(AccessTools.Method(typeof(Terminal), nameof(Terminal.tabCycle)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(CommandManager),
                 nameof(Patch_Terminal_TabCycle))));
-
     }
 
     private static void Patch_Terminal_Awake()
