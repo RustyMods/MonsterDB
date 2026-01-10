@@ -12,21 +12,12 @@ public static class TextureManager
     private static readonly Dictionary<string, Texture2D> m_cachedTextures;
     private static readonly Dictionary<string, Sprite> m_cachedSprites;
     private static readonly Dictionary<string, TextureData> m_customs;
-    private static readonly string TextureFolder;
-    // private static readonly string CustomFolder;
-    // private static readonly string ExportFolder;
 
     static TextureManager()
     {
         m_cachedSprites =  new Dictionary<string, Sprite>();
         m_cachedTextures = new Dictionary<string, Texture2D>();
         m_customs = new Dictionary<string, TextureData>();
-        TextureFolder = Path.Combine(ConfigManager.DirectoryPath, "Textures");
-        // CustomFolder = Path.Combine(TextureFolder, "Customs");
-        // ExportFolder = Path.Combine(TextureFolder, "Exports");
-        if (!Directory.Exists(TextureFolder)) Directory.CreateDirectory(TextureFolder);
-        // if (!Directory.Exists(CustomFolder)) Directory.CreateDirectory(CustomFolder);
-        // if (!Directory.Exists(ExportFolder)) Directory.CreateDirectory(ExportFolder);
         
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.Awake)),
@@ -36,7 +27,7 @@ public static class TextureManager
     }
     private static void Start()
     {
-        string[] files = Directory.GetFiles(FileManager.ModifiedFolder, "*.png", SearchOption.AllDirectories);
+        string[] files = Directory.GetFiles(FileManager.ImportFolder, "*.png", SearchOption.AllDirectories);
         for (int i = 0; i < files.Length; ++i)
         {
             string filePath = files[i];
@@ -56,29 +47,22 @@ public static class TextureManager
             GameObject? prefab = PrefabManager.GetPrefab(prefabName);
             if (prefab == null) return false;
 
-            Renderer? mainRenderer = null;
-            LevelEffects? lvlEffects = prefab.GetComponentInChildren<LevelEffects>();
-            if (lvlEffects != null) mainRenderer = lvlEffects.m_mainRender;
-            if (mainRenderer == null)
+            Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+            HashSet<Material> materials = new HashSet<Material>();
+            for (int i = 0; i < renderers.Length; ++i)
             {
-                if (prefab.TryGetComponent(out VisEquipment visEq))
+                Renderer? renderer = renderers[i];
+                for (int y = 0; y < renderer.sharedMaterials.Length; ++y)
                 {
-                    mainRenderer = visEq.m_bodyModel;
+                    Material? material = renderer.sharedMaterials[y];
+                    if (material == null) continue;
+                    materials.Add(material);
                 }
             }
 
-            if (mainRenderer == null)
+            foreach (var material in materials)
             {
-                mainRenderer = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
-            }
-
-            if (mainRenderer == null) return false;
-            
-            Material[]? materials = mainRenderer.sharedMaterials;
-            for (int i = 0; i < materials.Length; ++i)
-            {
-                Material material = materials[i];
-                Save(material, TextureFolder);
+                Save(material, FileManager.ExportFolder);
             }
             
             return true;
@@ -96,7 +80,7 @@ public static class TextureManager
                 MonsterDBPlugin.LogWarning("Failed to find texture");
                 return true;
             }
-            Export(texture, TextureFolder);
+            Export(texture, FileManager.ExportFolder);
             return true;
         }, m_cachedTextures.Keys.ToList);
 
@@ -139,13 +123,13 @@ public static class TextureManager
     {
         GetAllTextures();
         string fileName = "Resources.Textures.Names.txt";
-        string filePath = Path.Combine(TextureFolder, fileName);
+        string filePath = Path.Combine(ConfigManager.DirectoryPath, fileName);
         string[] text = m_cachedTextures.Keys.ToArray();
         File.WriteAllLines(filePath, text);
 
         GetAllSprites();
         fileName = "Resources.Sprites.Names.txt";
-        filePath = Path.Combine(TextureFolder, fileName);
+        filePath = Path.Combine(ConfigManager.DirectoryPath, fileName);
         text = m_cachedSprites.Keys.ToArray();
         File.WriteAllLines(filePath, text);
     }

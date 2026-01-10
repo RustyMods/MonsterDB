@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace MonsterDB;
@@ -7,4 +8,8 @@ namespace MonsterDB;
 public class AnimalAIRef : BaseAIRef
 {
     public float? m_timeToSafe;
+    public List<string>? m_consumeItems;
+    public float? m_consumeRange;
+    public float? m_consumeSearchRange;
+    public float? m_consumeSearchInterval;
 }

@@ -126,12 +126,12 @@ public abstract class Reference
 
 public static partial class Extensions
 {
-    public static void SetFieldsFrom<T, V>(this T target, V source) where V : Reference
+    public static void SetFieldsFrom<T, V>(this T target, V source, bool log = true) where V : Reference
     {
         Type T_Type = typeof(T);
         Type V_Type = typeof(V);
         
-        MonsterDBPlugin.LogDebug($"Type of T: {T_Type.FullName}, Type of V: {V_Type.FullName}");
+        if (log) MonsterDBPlugin.LogDebug($"Type of T: {T_Type.FullName}, Type of V: {V_Type.FullName}");
         
         Dictionary<string, FieldInfo> targetFields = T_Type
             .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -150,7 +150,7 @@ public static partial class Extensions
             Type TType = targetField.FieldType;
             Type SType = Nullable.GetUnderlyingType(sourceField.FieldType) ?? sourceField.FieldType;
             
-            MonsterDBPlugin.LogDebug($"Changing field: {targetField.Name}");
+            if (log) MonsterDBPlugin.LogDebug($"Changing field: {targetField.Name}");
             if (TType.IsAssignableFrom(SType))
             {
                 targetField.SetValue(target, SValue);

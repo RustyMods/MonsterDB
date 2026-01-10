@@ -8,7 +8,7 @@ public static class CreatureManager
 {
     public static void Setup()
     {
-        Command save = new Command("write", "[prefabName]: save creature reference to Save folder", args =>
+        Command save = new Command("write", $"[prefabName]: save creature YML to {FileManager.ExportFolder} folder", args =>
         {
             if (args.Length < 3)
             {
@@ -35,7 +35,7 @@ public static class CreatureManager
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>);
         
-        Command saveAll = new Command("write_all", "save all creatures to Save folder", _ =>
+        Command saveAll = new Command("write_all", $"save all creatures YML to {FileManager.ExportFolder} folder", _ =>
         {
             List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
             for (int i = 0; i < prefabs.Count; ++i)
@@ -46,7 +46,7 @@ public static class CreatureManager
             return true;
         });
 
-        Command read = new Command("mod", "[fileName]: read YML file from Import folder and update", args =>
+        Command read = new Command("mod", $"[fileName]: read YML file from {FileManager.ImportFolder} and update", args =>
         {
             if (args.Length < 3)
             {
@@ -61,7 +61,7 @@ public static class CreatureManager
                 return true;
             }
             
-            string filePath = Path.Combine(FileManager.ModifiedFolder, fileName + ".yml");
+            string filePath = Path.Combine(FileManager.ImportFolder, fileName + ".yml");
             FileManager.Read(filePath);
             return true;
         }, FileManager.GetModFileNames, adminOnly: true);
@@ -189,7 +189,7 @@ public static class CreatureManager
 
     private static void Write(GameObject prefab, bool isClone = false, string source = "")
     {
-        string filePath = Path.Combine(FileManager.SaveFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         
         string? text = Save(prefab, isClone, source);
 

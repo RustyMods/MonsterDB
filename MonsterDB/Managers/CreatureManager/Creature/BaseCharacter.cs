@@ -16,7 +16,7 @@ public class BaseCharacter : Base
         Character? character = prefab.GetComponent<Character>();
         AnimalAI? ai = prefab.GetComponent<AnimalAI>();
         base.Setup(prefab, isClone, source);
-        Type = BaseType.Humanoid;
+        Type = BaseType.Character;
         Character = new();
         AI = new();
         Character.SetFrom(character);
@@ -25,8 +25,9 @@ public class BaseCharacter : Base
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
-        UpdateCharacter(prefab);
         base.UpdatePrefab(prefab, isInstance);
+        UpdateCharacter(prefab);
+        UpdateAnimalTameable(prefab);
     }
 
     private void UpdateCharacter(GameObject prefab)
@@ -36,5 +37,25 @@ public class BaseCharacter : Base
         if (character == null || ai == null) return;
         if (Character != null) character.SetFieldsFrom(Character);
         if (AI != null) ai.SetFieldsFrom(AI);
-    } 
+    }
+
+    private void UpdateAnimalTameable(GameObject prefab)
+    {
+        if (AI == null) return;
+        
+        bool hasTameableComponent = prefab.GetComponent<Tameable>();
+
+        if (!hasTameableComponent)
+        {
+            prefab.Remove<AnimalTameable>();
+        }
+        else
+        {
+            if (!prefab.TryGetComponent(out AnimalTameable animalTameable))
+            {
+                animalTameable = prefab.AddComponent<AnimalTameable>();
+            }
+            animalTameable.SetFieldsFrom(AI);
+        }
+    }
 }

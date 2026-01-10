@@ -53,7 +53,7 @@ public class SpawnDataRef : Reference
     public static implicit operator SpawnSystem.SpawnData(SpawnDataRef spawnRef)
     {
         SpawnSystem.SpawnData data = new SpawnSystem.SpawnData();
-        data.SetFieldsFrom(spawnRef);
+        data.SetFieldsFrom(spawnRef, false);
         return data;
     }
 }

@@ -91,6 +91,9 @@
         <Reference Include="UnityEngine">
             <HintPath>$(CorlibPath)\UnityEngine.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.AnimationModule">
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.AssetBundleModule">
           <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
@@ -153,13 +156,14 @@
         <Compile Include="Managers\CreatureManager\Components\ProcreationRef.cs" />
         <Compile Include="Managers\CreatureManager\Components\RandomAnimationRef.cs" />
         <Compile Include="Managers\CreatureManager\Components\SaddleRef.cs" />
-        <Compile Include="Managers\CreatureManager\Components\TameableRef.cs" />
         <Compile Include="Managers\CreatureManager\CreatureManager.cs" />
         <Compile Include="Managers\CreatureManager\Creature\Base.cs" />
         <Compile Include="Managers\CreatureManager\Creature\BaseCharacter.cs" />
         <Compile Include="Managers\CreatureManager\Creature\BaseHumanoid.cs" />
         <Compile Include="Managers\CreatureManager\Creature\BaseHuman.cs" />
         <Compile Include="Managers\CreatureManager\EffectListRef.cs" />
+        <Compile Include="Managers\CreatureManager\Tameable\AnimalTameable.cs" />
+        <Compile Include="Managers\CreatureManager\Tameable\TameableRef.cs" />
         <Compile Include="Managers\CreatureManager\Vector3Ref.cs" />
         <Compile Include="Managers\CreatureManager\Visuals\LevelSetupRef.cs" />
         <Compile Include="Managers\CreatureManager\Visuals\LightRef.cs" />
@@ -330,6 +334,7 @@
         <Content Include="Wiki\Reference\Export\Wolf.yml" />
         <Content Include="Wiki\Reference\Export\Wolf_cub.yml" />
         <Content Include="Wiki\Reference\Export\Wraith.yml" />
+        <Content Include="Wiki\Reference\Import\TameableDeer.yml" />
         <Content Include="Wiki\Reference\Import\TameableNeck\Neck.yml" />
         <Content Include="Wiki\Reference\Import\TameableNeck\NeckEgg.yml" />
         <Content Include="Wiki\Reference\Import\TameableNeck\neckegg_d.png" />

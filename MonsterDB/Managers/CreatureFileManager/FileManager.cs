@@ -9,33 +9,33 @@ namespace MonsterDB;
 
 public static class FileManager
 {
-    private const string SaveFolderName = "Export";
-    private const string ModifiedFolderName = "Import";
-    public static readonly string SaveFolder;
-    public static readonly string ModifiedFolder;
+    public const string ExportFolderName = "Export";
+    public const string ImportFolderName = "Import";
+    public static readonly string ExportFolder;
+    public static readonly string ImportFolder;
     private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
     
     static FileManager()
     {
-        SaveFolder = Path.Combine(ConfigManager.DirectoryPath, SaveFolderName);
-        ModifiedFolder = Path.Combine(ConfigManager.DirectoryPath, ModifiedFolderName);
-        _fileWatcherEnabled = ConfigManager.config("File Watcher", ModifiedFolderName, Toggle.On,
-            $"If on, YML files under {ModifiedFolderName} folder will trigger to update when changed, created or renamed", false);
+        ExportFolder = Path.Combine(ConfigManager.DirectoryPath, ExportFolderName);
+        ImportFolder = Path.Combine(ConfigManager.DirectoryPath, ImportFolderName);
+        _fileWatcherEnabled = ConfigManager.config("File Watcher", ImportFolderName, Toggle.On,
+            $"If on, YML files under {ImportFolderName} folder will trigger to update when changed, created or renamed", false);
 
-        if (!Directory.Exists(SaveFolder)) Directory.CreateDirectory(SaveFolder);
-        if (!Directory.Exists(ModifiedFolder)) Directory.CreateDirectory(ModifiedFolder);
+        if (!Directory.Exists(ExportFolder)) Directory.CreateDirectory(ExportFolder);
+        if (!Directory.Exists(ImportFolder)) Directory.CreateDirectory(ImportFolder);
     }
 
     private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
     
     public static List<string> GetModFileNames() => Directory
-            .GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories)
+            .GetFiles(ImportFolder, "*.yml", SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)
             .ToList();
     
     public static void Start()
     {
-        string[] files =  Directory.GetFiles(ModifiedFolder, "*.yml", SearchOption.AllDirectories);
+        string[] files =  Directory.GetFiles(ImportFolder, "*.yml", SearchOption.AllDirectories);
         for (int i = 0; i < files.Length; ++i)
         {
             string filePath = files[i];
@@ -89,7 +89,7 @@ public static class FileManager
     
     public static void SetupFileWatcher()
     {
-        FileSystemWatcher watcher = new(ModifiedFolder, "*.yml");
+        FileSystemWatcher watcher = new(ImportFolder, "*.yml");
         watcher.Changed += ReadConfigValues;
         watcher.Created += ReadConfigValues;
         watcher.Renamed += ReadConfigValues;

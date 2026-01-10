@@ -28,6 +28,7 @@ public class BaseHumanoid : Base
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
+        base.UpdatePrefab(prefab, isInstance);
         if (isInstance)
         {
             UpdateIHumanoid(prefab);
@@ -36,7 +37,6 @@ public class BaseHumanoid : Base
         {
             UpdateHumanoid(prefab);
         }
-        base.UpdatePrefab(prefab, isInstance);
     }
 
     private bool UpdateAttacks(Humanoid humanoid)

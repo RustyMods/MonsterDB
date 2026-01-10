@@ -8,7 +8,7 @@ public static class FishManager
 {
     public static void Setup()
     {
-        Command save = new Command("write_fish", "[prefabName]: write fish YML to Save folder", args =>
+        Command save = new Command("write_fish", $"[prefabName]: write fish YML to {FileManager.ExportFolder} folder", args =>
         {
             if (args.Length < 3)
             {
@@ -40,7 +40,7 @@ public static class FishManager
             return true;
         });
 
-        Command saveAll = new Command("write_all_fish", "write all fish YML to Save folder", _ =>
+        Command saveAll = new Command("write_all_fish", $"write all fish YML to {FileManager.ExportFolder} folder", _ =>
         {
             List<GameObject> list = PrefabManager.GetAllPrefabs<Fish>();
             foreach (GameObject? fish in list)
@@ -50,7 +50,7 @@ public static class FishManager
             return true;
         });
         
-        Command read = new Command("mod_fish", "[fileName]: read fish reference from Modified folder", args =>
+        Command read = new Command("mod_fish", $"[fileName]: read fish reference from {FileManager.ImportFolder} folder", args =>
         {
             if (args.Length < 3)
             {
@@ -65,7 +65,7 @@ public static class FishManager
                 return true;
             }
             
-            string filePath = Path.Combine(FileManager.ModifiedFolder, prefabName + ".yml");
+            string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
             Read(filePath);
             return true;
         }, FileManager.GetModFileNames, adminOnly: true);
@@ -146,7 +146,7 @@ public static class FishManager
 
     private static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {
-        string filePath = Path.Combine(FileManager.SaveFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);
         if (string.IsNullOrEmpty(text)) return;
         File.WriteAllText(filePath, text);

@@ -7,7 +7,7 @@ public static class ItemManager
 {
     public static void Setup()
     {
-        Command save = new Command("write_item", "[prefabName]: write item YML to Save folder", args =>
+        Command save = new Command("write_item", $"[prefabName]: write item YML to {FileManager.ExportFolder} folder", args =>
         {
             if (args.Length < 3)
             {
@@ -39,7 +39,7 @@ public static class ItemManager
             return true;
         });
         
-        Command read = new Command("mod_item", "[fileName]: read item reference from Modified folder", args =>
+        Command read = new Command("mod_item", $"[fileName]: read item YML from {FileManager.ImportFolder} folder", args =>
         {
             if (args.Length < 3)
             {
@@ -54,7 +54,7 @@ public static class ItemManager
                 return true;
             }
             
-            string filePath = Path.Combine(FileManager.ModifiedFolder, prefabName + ".yml");
+            string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
             Read(filePath);
             return true;
         }, FileManager.GetModFileNames, adminOnly: true);
@@ -149,7 +149,7 @@ public static class ItemManager
 
     private static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {
-        string filePath = Path.Combine(FileManager.SaveFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);
         if (string.IsNullOrEmpty(text)) return;
         File.WriteAllText(filePath, text);

@@ -33,7 +33,7 @@ public static class EggManager
             prefix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_EggGrow_GetHoverText))));
     }
     
-    private static Command save = new Command("write_egg", "[prefabName]: save egg reference to Save folder", args =>
+    private static Command save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder", args =>
     {
         if (args.Length < 3)
         {
@@ -65,7 +65,7 @@ public static class EggManager
         return true;
     }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>);
 
-    private static Command saveAll = new Command("write_all_egg", "save all egg references to Save folder", _ =>
+    private static Command saveAll = new Command("write_all_egg", $"save all egg references to {FileManager.ExportFolder} folder", _ =>
     {
         List<GameObject> prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
         for (int i = 0; i < prefabs.Count; ++i)
@@ -76,7 +76,7 @@ public static class EggManager
         return true;
     });
 
-    private static Command read = new Command("mod_egg", "[fileName]: read egg reference from Modified folder", args =>
+    private static Command read = new Command("mod_egg", $"[fileName]: read egg reference from {FileManager.ImportFolder} folder", args =>
     {
         if (args.Length < 3)
         {
@@ -91,7 +91,7 @@ public static class EggManager
             return true;
         }
         
-        string filePath = Path.Combine(FileManager.ModifiedFolder, prefabName + ".yml");
+        string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
         Read(filePath);
         return true;
     }, FileManager.GetModFileNames, adminOnly: true);
@@ -175,7 +175,7 @@ public static class EggManager
 
     private static void Write(GameObject prefab,  bool isClone = false, string clonedFrom = "")
     {
-        string filePath = Path.Combine(FileManager.SaveFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);
         if (string.IsNullOrEmpty(text)) return;
         File.WriteAllText(filePath, text);
