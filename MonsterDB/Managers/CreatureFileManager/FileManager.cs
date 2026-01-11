@@ -9,8 +9,8 @@ namespace MonsterDB;
 
 public static class FileManager
 {
-    public const string ExportFolderName = "Export";
-    public const string ImportFolderName = "Import";
+    private const string ExportFolderName = "Export";
+    private const string ImportFolderName = "Import";
     public static readonly string ExportFolder;
     public static readonly string ImportFolder;
     private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
@@ -49,16 +49,28 @@ public static class FileManager
                         BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(text);
                         SyncManager.loadList.Add(character);
                         SyncManager.rawFiles[character.Prefab] = text;
+                        if (character.SpawnData != null)
+                        {
+                            RegisterSpawnList(character.SpawnData);
+                        }
                         break;
                     case BaseType.Humanoid:
                         BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(text);
                         SyncManager.loadList.Add(humanoid);
                         SyncManager.rawFiles[humanoid.Prefab] = text;
+                        if (humanoid.SpawnData != null)
+                        {
+                            RegisterSpawnList(humanoid.SpawnData);
+                        }
                         break;
                     case BaseType.Human:
                         BaseHuman player = ConfigManager.Deserialize<BaseHuman>(text);
                         SyncManager.loadList.Add(player);
                         SyncManager.rawFiles[player.Prefab] = text;
+                        if (player.SpawnData != null)
+                        {
+                            RegisterSpawnList(player.SpawnData);
+                        }
                         break;
                     case BaseType.Egg:
                         BaseEgg data = ConfigManager.Deserialize<BaseEgg>(text);
@@ -85,6 +97,15 @@ public static class FileManager
             }
         }
         MonsterDBPlugin.LogInfo($"Loaded {files.Length} modified creature files.");
+    }
+
+    private static void RegisterSpawnList(SpawnDataRef[] list)
+    {
+        for (int i = 0; i < list.Length; ++i)
+        {
+            SpawnDataRef data = list[i];
+            SpawnManager.Add(data);
+        }
     }
     
     public static void SetupFileWatcher()

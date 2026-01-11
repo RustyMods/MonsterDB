@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -39,6 +40,7 @@ public class MonsterAIRef : BaseAIRef
     public float? m_wakeUpDelayMax;
     public float? m_fallAsleepDistance;
     public bool? m_avoidLand;
+    [YamlMember(Description = "Tameable")]
     public List<string>? m_consumeItems;
     public float? m_consumeRange;
     public float? m_consumeSearchRange;

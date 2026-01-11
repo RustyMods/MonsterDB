@@ -169,6 +169,17 @@ public static partial class Extensions
                     {
                         targetField.SetValue(target, prefab);
                     }
+                    else
+                    {
+                        if (target is MonoBehaviour mono)
+                        {
+                            Transform? possibleChild = Utils.FindChild(mono.transform, goName);
+                            if (possibleChild != null)
+                            {
+                                targetField.SetValue(target, possibleChild.gameObject);
+                            }
+                        }
+                    }
                 }
             }
             else if (TType == typeof(GameObject[]) && 

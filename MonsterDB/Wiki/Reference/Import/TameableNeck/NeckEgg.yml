@@ -12,23 +12,16 @@ Visuals:
     x: 0.5
     y: 0.5
     z: 0.5
-#  renderers:
-#  - prefab: default
-#    active: true
-#    enabled: true
-#    materials:
-#    - name: Asksvinegg_mat
-#      shader: Standard
-#      color: '#FFFFFFFF'
-#      emissionColor: '#000000FF'
-#      mainTexture: asksvinegg_d
-#  - prefab: Not Growing
-#    active: true
-#    enabled: true
-#    materials:
-#    - name: item_particle
-#      shader: Legacy Shaders/Particles/Alpha Blended
-#      mainTexture: starspark
+  renderers:
+  - prefab: default
+    active: true
+    enabled: true
+    materials:
+      - name: MDB_NeckEgg_Asksvinegg_mat
+        shader: Standard
+        color: '#FFFFFFFF'
+        emissionColor: '#000000FF'
+        mainTexture: neckegg_d
 
 # If field removed, will remove component
 EggGrow:

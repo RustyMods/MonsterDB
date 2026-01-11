@@ -1,24 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Norsemen;
+namespace MonsterDB;
 
 [Serializable]
 public class Faction
 {
+    public string name = "";
     public bool targetTamed = true;
     public bool targetTameables = true;
     public List<Character.Faction> allies = new();
-    
-    public Faction(){}
 
-    public Faction(string name)
+    public void Setup()
     {
-        FactionManager.customFactions[FactionManager.GetFaction(name)] = this;
+        if (string.IsNullOrEmpty(name)) return;
+        Character.Faction faction = FactionManager.GetFaction(name);
+        if (FactionManager.customFactions.ContainsKey(faction)) return;
+        FactionManager.customFactions.Add(faction, this);
     }
     
     public bool IsEnemy(Character custom, Character other)
     {
+        if (allies.Contains(other.m_faction))
+        {
+            return false;
+        }
+        
         bool isCustomTamed = custom.IsTamed();
         bool isOtherTamed = other.IsTamed();
                 
@@ -31,26 +38,13 @@ public class Faction
         {
             return targetTamed;
         }
-        
-        switch (other.m_faction)
+                
+        bool isCharacterTameable = other.GetComponent<Tameable>();
+                
+        if (isCharacterTameable && !targetTameables)
         {
-            case Character.Faction.Players:
-                return !allies.Contains(Character.Faction.PlayerSpawned);
-            case Character.Faction.PlayerSpawned:
-                return !allies.Contains(Character.Faction.Players) || !allies.Contains(Character.Faction.PlayerSpawned);
-            default:
-                if (allies.Contains(other.m_faction))
-                {
-                    return false;
-                }
-                
-                bool isCharacterTameable = other.GetComponent<Tameable>();
-                
-                if (isCharacterTameable && !targetTameables)
-                {
-                    return false;
-                }
-                return true;
+            return false;
         }
+        return true;
     }
 }

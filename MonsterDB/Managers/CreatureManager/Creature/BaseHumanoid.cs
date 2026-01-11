@@ -81,7 +81,7 @@ public class BaseHumanoid : Base
     private void UpdateIHumanoid(GameObject prefab)
     {
         Humanoid? IHumanoid = prefab.GetComponent<Humanoid>();
-        MonsterAI? ai = IHumanoid.GetBaseAI() as MonsterAI;
+        MonsterAI? ai = IHumanoid.GetComponent<MonsterAI>();
         
         if (IHumanoid == null || ai == null) return;
         if (Character != null) IHumanoid.SetFieldsFrom(Character);

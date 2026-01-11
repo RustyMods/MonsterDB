@@ -372,7 +372,7 @@ public static class CreatureManager
                 Write(prefab, true, source.name);
             }
 
-            SpawnManager.Create(prefab);
+            // SpawnManager.Create(prefab);
         };
 
         c.Create();

@@ -25,6 +25,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
 
         AudioManager.Start();
         TextureManager.Setup();
+        FactionManager.Setup();
         CreatureManager.Setup();
         ItemManager.Setup();
         FishManager.Setup();

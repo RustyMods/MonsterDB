@@ -25,21 +25,19 @@ public class Base : Header
     public NPCTalkRef? NPCTalk;
     [YamlMember(Order = 14, Description = "If field removed, will remove component")] 
     public MovementDamageRef? MovementDamage;
-    [YamlMember(Order = 15)] 
-    public SaddleRef? Saddle;
+    [YamlMember(Order = 15)] public SaddleRef? Saddle;
     [YamlMember(Order = 16, Description = "If field removed, will remove component")] 
     public DropProjectileOverDistanceRef? DropProjectileOverDistance;
-    [YamlMember(Order = 17)] 
-    public CinderSpawnerRef? CinderSpawner;
-    [YamlMember(Order = 18)] 
-    public CharacterTimedDestructionRef? TimedDestruction;
-    [YamlMember(Order = 100)] 
-    public MiscComponent? Extra;
+    [YamlMember(Order = 17)] public CinderSpawnerRef? CinderSpawner;
+    [YamlMember(Order = 18)] public CharacterTimedDestructionRef? TimedDestruction;
+    [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled to false to disable")] public SpawnDataRef[]? SpawnData;
+    [YamlMember(Order = 100)] public MiscComponent? Extra;
     
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         base.Setup(prefab, isClone, source);
         SetupSharedFields(prefab, isClone, source);
+        if (isClone) SetupSpawnData();
     }
 
     protected void SetupSharedFields(GameObject prefab, bool isClone = false, string source = "")
@@ -138,6 +136,15 @@ public class Base : Header
         }
     }
 
+    protected void SetupSpawnData()
+    {
+        SpawnDataRef data = new SpawnDataRef
+        {
+            m_name = $"MDB {Prefab} Spawn Data",
+            m_prefab = Prefab
+        };
+        SpawnData = new[] { data };
+    }
     public override void Update()
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
@@ -149,6 +156,15 @@ public class Base : Header
         {
             Character? character = characters[i];
             UpdatePrefab(character.gameObject, true);
+        }
+
+        if (SpawnData != null)
+        {
+            for (int i = 0; i < SpawnData.Length; ++i)
+            {
+                SpawnDataRef data = SpawnData[i];
+                SpawnManager.Update(data);
+            }
         }
         base.Update();
     }

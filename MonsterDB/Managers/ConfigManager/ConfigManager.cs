@@ -21,6 +21,7 @@ public static class ConfigManager
     private static readonly IDeserializer deserializer = new DeserializerBuilder()
         .IgnoreUnmatchedProperties()
         .WithNamingConvention(StrippedCase.Instance)
+        .WithTypeConverter(FactionYamlConverter.Instance)
         .Build();
     
     public static T Deserialize<T>(string data) => deserializer.Deserialize<T>(data);
@@ -83,6 +84,7 @@ public static class ConfigManager
 
     public static void Patch_ZNet_Awake(ZNet __instance)
     {
+        FactionManager.Init(__instance);
         SyncManager.Init(__instance);
         SpawnManager.Init(__instance);
         LocalizationManager.Init(__instance);

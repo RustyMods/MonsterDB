@@ -19,6 +19,8 @@ public class BaseHuman : BaseHumanoid
         Character.SetFrom(character);
         AI.SetFrom(ai);
         Visuals?.SetDefaultHumanFields();
+        
+        if (isClone) SetupSpawnData();
     }
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)

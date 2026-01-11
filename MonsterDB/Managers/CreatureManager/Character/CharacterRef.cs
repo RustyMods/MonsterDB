@@ -16,7 +16,7 @@ public class CharacterRef : Reference
     [YamlMember(Order = 6)]  public string? m_defeatSetGlobalKey;
     [YamlMember(Order = 7)]  public bool? m_aiSkipTarget;
 
-    [YamlMember(Order = 8)]  public float? m_crouchSpeed;
+    [YamlMember(Order = 8, Description = "Speed")]  public float? m_crouchSpeed;
     [YamlMember(Order = 9)]  public float? m_walkSpeed;
     [YamlMember(Order = 10)] public float? m_speed;
     [YamlMember(Order = 11)] public float? m_turnSpeed;
@@ -24,13 +24,13 @@ public class CharacterRef : Reference
     [YamlMember(Order = 13)] public float? m_runTurnSpeed;
     [YamlMember(Order = 14)] public float? m_acceleration;
 
-    [YamlMember(Order = 15)] public float? m_jumpForce;
+    [YamlMember(Order = 15, Description = "Jumping")] public float? m_jumpForce;
     [YamlMember(Order = 16)] public float? m_jumpForceForward;
     [YamlMember(Order = 17)] public float? m_jumpForceTiredFactor;
     [YamlMember(Order = 18)] public float? m_airControl;
     [YamlMember(Order = 19)] public float? m_jumpStaminaUsage;
 
-    [YamlMember(Order = 20)] public bool? m_flying;
+    [YamlMember(Order = 20, Description = "Flying")] public bool? m_flying;
     [YamlMember(Order = 21)] public float? m_flySlowSpeed;
     [YamlMember(Order = 22)] public float? m_flyFastSpeed;
     [YamlMember(Order = 23)] public float? m_flyTurnSpeed;
@@ -44,14 +44,14 @@ public class CharacterRef : Reference
     [YamlMember(Order = 29)] public Character.GroundTiltType? m_groundTilt;
     [YamlMember(Order = 30)] public float? m_groundTiltSpeed;
 
-    [YamlMember(Order = 31)] public bool? m_disableWhileSleeping;
+    [YamlMember(Order = 31, Description = "Gravity disabled while sleeping")] public bool? m_disableWhileSleeping;
     [YamlMember(Order = 32)] public bool? m_useAltStatusEffectScaling;
     [YamlMember(Order = 33)] public bool? m_tolerateWater;
     [YamlMember(Order = 34)] public bool? m_tolerateFire;
     [YamlMember(Order = 35)] public bool? m_tolerateSmoke;
     [YamlMember(Order = 36)] public bool? m_tolerateTar;
 
-    [YamlMember(Order = 37)] public EffectListRef? m_hitEffects;
+    [YamlMember(Order = 37, Description = "Effects")] public EffectListRef? m_hitEffects;
     [YamlMember(Order = 38)] public EffectListRef? m_critHitEffects;
     [YamlMember(Order = 39)] public EffectListRef? m_backstabHitEffects;
     [YamlMember(Order = 40)] public EffectListRef? m_deathEffects;
@@ -62,14 +62,14 @@ public class CharacterRef : Reference
     [YamlMember(Order = 45)] public EffectListRef? m_flyingContinuousEffect;
     [YamlMember(Order = 46)] public EffectListRef? m_pheromoneLoveEffect;
 
-    [YamlMember(Order = 47)] public float? m_health;
+    [YamlMember(Order = 47, Description = "Base Health")] public float? m_health;
     [YamlMember(Order = 48)] public float? m_regenAllHPTime;
     [YamlMember(Order = 49)] public HitData.DamageModifiers? m_damageModifiers;
     [YamlMember(Order = 50)] public bool? m_staggerWhenBlocked;
     [YamlMember(Order = 51)] public float? m_staggerDamageFactor;
     [YamlMember(Order = 52)] public float? m_enemyAdrenalineMultiplier;
 
-    [YamlMember(Order = 53)] public float? m_minLavaMaskThreshold;
+    [YamlMember(Order = 53, Description = "Lava")] public float? m_minLavaMaskThreshold;
     [YamlMember(Order = 54)] public float? m_heatBuildupBase;
     [YamlMember(Order = 55)] public float? m_heatCooldownBase;
     [YamlMember(Order = 56)] public float? m_heatBuildupWater;

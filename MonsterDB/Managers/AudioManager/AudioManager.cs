@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -7,20 +9,24 @@ namespace MonsterDB;
 
 public static class AudioManager
 {
-    private const string FolderName = "SFX";
-    private static readonly string FolderPath;
     public static readonly Dictionary<string, AudioRef> clips;
 
     static AudioManager()
     {
-        FolderPath = Path.Combine(ConfigManager.DirectoryPath, FolderName);
-        if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
         clips = new Dictionary<string, AudioRef>();
     }
 
     public static void Start()
     {
-        string[] files = Directory.GetFiles(FolderPath, "*", SearchOption.AllDirectories);
+        HashSet<string> audioExtensions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".wav", ".mp3", ".ogg", ".flac", ".aac", ".m4a", ".wma", ".aiff", ".aif"
+        };
+        
+        string[] files = Directory.GetFiles(FileManager.ImportFolder, "*", SearchOption.AllDirectories)    
+            .Where(f => audioExtensions.Contains(Path.GetExtension(f)))
+            .ToArray();
+        
         for (int i = 0; i < files.Length; ++i)
         {
             string filePath = files[i];

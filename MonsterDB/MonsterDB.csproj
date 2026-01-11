@@ -129,6 +129,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Behaviours\AnimalTameable.cs" />
         <Compile Include="Behaviours\Human.cs" />
         <Compile Include="Managers\AudioManager\AudioManager.cs" />
         <Compile Include="Managers\AudioManager\AudioRef.cs" />
@@ -156,14 +157,13 @@
         <Compile Include="Managers\CreatureManager\Components\ProcreationRef.cs" />
         <Compile Include="Managers\CreatureManager\Components\RandomAnimationRef.cs" />
         <Compile Include="Managers\CreatureManager\Components\SaddleRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\TameableRef.cs" />
         <Compile Include="Managers\CreatureManager\CreatureManager.cs" />
         <Compile Include="Managers\CreatureManager\Creature\Base.cs" />
         <Compile Include="Managers\CreatureManager\Creature\BaseCharacter.cs" />
         <Compile Include="Managers\CreatureManager\Creature\BaseHumanoid.cs" />
         <Compile Include="Managers\CreatureManager\Creature\BaseHuman.cs" />
         <Compile Include="Managers\CreatureManager\EffectListRef.cs" />
-        <Compile Include="Managers\CreatureManager\Tameable\AnimalTameable.cs" />
-        <Compile Include="Managers\CreatureManager\Tameable\TameableRef.cs" />
         <Compile Include="Managers\CreatureManager\Vector3Ref.cs" />
         <Compile Include="Managers\CreatureManager\Visuals\LevelSetupRef.cs" />
         <Compile Include="Managers\CreatureManager\Visuals\LightRef.cs" />

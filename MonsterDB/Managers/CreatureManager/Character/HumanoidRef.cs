@@ -50,7 +50,9 @@ public static partial class Extensions
                 .SelectMany(x => x.m_items)
                 .ToArray());
             
-        attacks.RemoveWhere(x => x == null);
+        attacks.RemoveWhere(x => x == null || 
+                                 !x.TryGetComponent(out ItemDrop component) || 
+                                 string.IsNullOrEmpty(component.m_itemData.m_shared.m_attack.m_attackAnimation));
         return attacks;
     }
 
