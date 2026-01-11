@@ -2,6 +2,7 @@
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using MonsterDB.Solution;
 
 namespace MonsterDB;
 
@@ -9,7 +10,7 @@ namespace MonsterDB;
 public class MonsterDBPlugin : BaseUnityPlugin
 {
     internal const string ModName = "MonsterDB";
-    internal const string ModDesc = "";
+    internal const string ModDesc = "Edit Valheim creatures through YML configurations";
     internal const string ModVersion = "0.2.0";
     internal const string Author = "RustyMods";
     public const string ModGUID = Author + "." + ModName;
@@ -23,6 +24,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
     {
         instance = this;
 
+        LegacyManager.Setup();
         AudioManager.Start();
         TextureManager.Setup();
         FactionManager.Setup();

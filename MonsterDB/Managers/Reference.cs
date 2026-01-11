@@ -15,7 +15,108 @@ public abstract class Reference
             .GetFields(FieldBindingFlags)
             .ToDictionary(f => f.Name);
     }
+    
+    public Reference ShallowClone() => (Reference)MemberwiseClone();
 
+    public bool Equals(Reference other)
+    {
+        if (other == null)
+            return false;
+
+        if (ReferenceEquals(this, other))
+            return true;
+
+        FieldInfo[] fields = GetType().GetFields(FieldBindingFlags);
+
+        for (int i = 0; i < fields.Length; ++i)
+        {
+            FieldInfo field = fields[i];
+
+            object? a = field.GetValue(this);
+            object? b = field.GetValue(other);
+
+            // Both null → equal
+            if (a == null && b == null)
+                continue;
+
+            // One null → not equal
+            if (a == null || b == null)
+                return false;
+
+            // Nested Reference → recurse
+            if (a is Reference ar && b is Reference br)
+            {
+                if (!ar.Equals(br))
+                    return false;
+
+                continue;
+            }
+
+            // Value or normal object
+            if (!a.Equals(b))
+                return false;
+        }
+
+        return true;
+    }
+
+    public void Clean(Reference target)
+    {
+        if (target == null)
+            return;
+
+        if (target.GetType() != GetType())
+            return;
+
+        FieldInfo[] fields = GetType().GetFields(FieldBindingFlags);
+
+        for (int i = 0; i < fields.Length; ++i)
+        {
+            FieldInfo field = fields[i];
+
+            object? original = field.GetValue(this);
+            object? incoming = field.GetValue(target);
+
+            // Nothing to clean
+            if (incoming == null)
+                continue;
+
+            // Both null → equal
+            if (original == null && incoming == null)
+                continue;
+
+            // One null → different
+            if (original == null || incoming == null)
+                continue;
+
+            // Nested Reference → recurse or null
+            if (original is Reference oRef && incoming is Reference tRef)
+            {
+                if (oRef.Equals(tRef))
+                {
+                    field.SetValue(target, null);
+                }
+                else
+                {
+                    oRef.Clean(tRef);
+                }
+                continue;
+            }
+
+            // Value / enum / string / struct
+            if (Equals(original, incoming))
+            {
+                // Only null reference or nullable value types
+                if (!field.FieldType.IsValueType ||
+                    Nullable.GetUnderlyingType(field.FieldType) != null)
+                {
+                    field.SetValue(target, null);
+                }
+            }
+        }
+    }
+
+    
     public void SetFrom<V>(V source)
     {
         Dictionary<string, FieldInfo> targetFields = GetFields();

@@ -48,12 +48,114 @@ public class Global
 
         return false;
     }
+
+    public bool GetDamageModifier(string prefabName, out float modifier)
+    {
+        modifier = 1f;
+        if (modifiers.TryGetValue(prefabName, out GlobalModifiers mods) && mods.damage.HasValue)
+        {
+            modifier = mods.damage.Value;
+            return true;
+        }
+
+        if (groups != null)
+        {
+            foreach (KeyValuePair<string, GlobalModifiers> kvp in modifiers)
+            {
+                if (kvp.Value.damage.HasValue && groups.TryGetValue(kvp.Key, out string[] group) &&
+                    group.Contains(prefabName))
+                {
+                    modifier = kvp.Value.damage.Value;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool GetDamageModifiers(string prefabName, out List<HitData.DamageModPair> modifier)
+    {
+        modifier = new List<HitData.DamageModPair>();
+        if (modifiers.TryGetValue(prefabName, out GlobalModifiers mods) && mods.mods != null)
+        {
+            modifier = mods.mods;
+            return true;
+        }
+
+        if (groups != null)
+        {
+            foreach (KeyValuePair<string, GlobalModifiers> kvp in modifiers)
+            {
+                if (kvp.Value.mods != null && groups.TryGetValue(kvp.Key, out string[] group) && group.Contains(prefabName))
+                {
+                    modifier = kvp.Value.mods;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool GetSpeed(string prefabName, out float modifier)
+    {
+        modifier = 1f;
+        if (modifiers.TryGetValue(prefabName, out GlobalModifiers mods) && mods.speed.HasValue)
+        {
+            modifier = mods.speed.Value;
+            return true;
+        }
+
+        if (groups != null)
+        {
+            foreach (KeyValuePair<string, GlobalModifiers> kvp in modifiers)
+            {
+                if (kvp.Value.speed.HasValue && groups.TryGetValue(kvp.Key, out string[] group) &&
+                    group.Contains(prefabName))
+                {
+                    modifier = kvp.Value.speed.Value;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool GetStaggerDamage(string prefabName, out float modifier)
+    {
+        modifier = 1f;
+        if (modifiers.TryGetValue(prefabName, out GlobalModifiers mods) && mods.staggerDamage.HasValue)
+        {
+            modifier = mods.staggerDamage.Value;
+            return true;
+        }
+
+        if (groups != null)
+        {
+            foreach (KeyValuePair<string, GlobalModifiers> kvp in modifiers)
+            {
+                if (kvp.Value.staggerDamage.HasValue && groups.TryGetValue(kvp.Key, out string[] group) &&
+                    group.Contains(prefabName))
+                {
+                    modifier = kvp.Value.staggerDamage.Value;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     
 
     [Serializable]
     public class GlobalModifiers
     {
         public float? health;
-        
+        public float? damage;
+        public List<HitData.DamageModPair>? mods;
+        public float? speed;
+        public float? staggerDamage;
     }
 }

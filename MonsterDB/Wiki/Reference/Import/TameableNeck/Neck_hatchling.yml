@@ -145,17 +145,8 @@ Visuals:
       emissionColor: '#FFFFFFFF'
       mainTexture: neck_d
   - prefab: Lillies
-    active: true
+    active: false
     enabled: true
-#    materials:
-#    - name: MDB_Neck_hatchling_neck
-#      shader: Custom/Creature
-#      color: '#FFFFFFFF'
-#      hue: 0
-#      saturation: 0
-#      value: 0.3
-#      emissionColor: '#FFFFFFFF'
-#      mainTexture: neck_d
 
 # If field removed, will remove component
 #Drops:

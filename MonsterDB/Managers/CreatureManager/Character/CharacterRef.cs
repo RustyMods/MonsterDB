@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class CharacterRef : Reference
 {
     [YamlMember(Order = 0)]  public string? m_name;

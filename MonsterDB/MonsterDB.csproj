@@ -131,6 +131,21 @@
     <ItemGroup>
         <Compile Include="Behaviours\AnimalTameable.cs" />
         <Compile Include="Behaviours\Human.cs" />
+        <Compile Include="Legacy\ComponentData.cs" />
+        <Compile Include="Legacy\CreatureData.cs" />
+        <Compile Include="Legacy\LegacyManager.cs" />
+        <Compile Include="Legacy\Methods\AnimalAIMethods.cs" />
+        <Compile Include="Legacy\Methods\CharacterDropMethods.cs" />
+        <Compile Include="Legacy\Methods\CharacterMethods.cs" />
+        <Compile Include="Legacy\Methods\GrowUpMethods.cs" />
+        <Compile Include="Legacy\Methods\Helpers.cs" />
+        <Compile Include="Legacy\Methods\HumanoidMethods.cs" />
+        <Compile Include="Legacy\Methods\LevelEffectsMethods.cs" />
+        <Compile Include="Legacy\Methods\MonsterAIMethods.cs" />
+        <Compile Include="Legacy\Methods\NPCTalkMethods.cs" />
+        <Compile Include="Legacy\Methods\ProcreationMethods.cs" />
+        <Compile Include="Legacy\Methods\TameableMethods.cs" />
+        <Compile Include="Legacy\Methods\VisualMethods.cs" />
         <Compile Include="Managers\AudioManager\AudioManager.cs" />
         <Compile Include="Managers\AudioManager\AudioRef.cs" />
         <Compile Include="Managers\CloneManager\Clone.cs" />
