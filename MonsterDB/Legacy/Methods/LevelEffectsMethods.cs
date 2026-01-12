@@ -9,12 +9,8 @@ namespace MonsterDB.Solution.Methods;
 
 public static class LevelEffectsMethods
 {
-    private static readonly int Hue = Shader.PropertyToID("_Hue");
-    private static readonly int Saturation = Shader.PropertyToID("_Saturation");
-    private static readonly int Value = Shader.PropertyToID("_Value");
-    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
     
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadLevelEffects(string folderPath, ref CreatureData creatureData)
     {
         var filePath = folderPath + Path.DirectorySeparatorChar + "LevelEffects.yml";
         if (!File.Exists(filePath)) return;

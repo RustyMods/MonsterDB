@@ -6,7 +6,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class GrowUpMethods
 {
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadGrowUp(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "GrowUp.yml";
         if (!File.Exists(filePath)) return;

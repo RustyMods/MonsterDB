@@ -12,7 +12,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class HumanoidMethods
 {
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadHumanoid(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "Character.yml";
         if (!File.Exists(filePath)) return;

@@ -430,6 +430,44 @@ public class ProjectileData
     public bool StaticHitOnly;
     public bool GroundHitOnly;
     public bool SpawnRandomRotation;
+
+    public void Set(ref ProjectileRef? r)
+    {
+        if (r == null) return;
+        r.m_damage = new HitData.DamageTypes()
+        {
+            m_damage = Damage,
+            m_blunt = Blunt,
+            m_slash = Slash,
+            m_pierce = Pierce,
+            m_chop = Chop,
+            m_pickaxe = Pickaxe,
+            m_fire = Fire,
+            m_frost = Frost,
+            m_lightning = Lightning,
+            m_poison = Poison,
+            m_spirit = Spirit,
+        };
+        r.m_aoe = AOE;
+        r.m_dodgeable = Dodgeable;
+        r.m_blockable = Blockable;
+        r.m_attackForce = AttackForce;
+        r.m_backstabBonus = BackstabBonus;
+        r.m_statusEffect =  StatusEffect;
+        r.m_healthReturn = HealthReturn;
+        r.m_bounce = Bounce;
+        r.m_bounceOnWater = BounceOnWater;
+        r.m_respawnItemOnHit =  RespawnItemOnHit;
+        r.m_spawnOnHit = SpawnOnHit;
+        r.m_spawnOnHitChance =  SpawnOnHitChance;
+        r.m_spawnCount = SpawnCount;
+        r.m_randomSpawnOnHit = RandomSpawnOnHit;
+        r.m_randomSpawnOnHitCount = RandomSpawnOnHitCount;
+        r.m_randomSpawnSkipLava = RandomSpawnSkipLava;
+        r.m_staticHitOnly = StaticHitOnly;
+        r.m_groundHitOnly = GroundHitOnly;
+        r.m_spawnRandomRotation = SpawnRandomRotation;
+    }
 }
 
 [Serializable]

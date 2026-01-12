@@ -184,6 +184,21 @@ public static class ItemManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
+            if (p.TryGetComponent(out ItemDrop component))
+            {
+                if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
+                {
+                    Clone pr = new Clone(component.m_itemData.m_shared.m_attack.m_attackProjectile,
+                        $"MDB_{cloneName}_{component.m_itemData.m_shared.m_attack.m_attackProjectile.name}");
+                    pr.OnCreated += projectile =>
+                    {
+                        component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
+                    };
+                    pr.Create();
+                }
+            }
+            
+            
             Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
             Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
             

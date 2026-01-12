@@ -8,7 +8,9 @@ public static class CreatureManager
 {
     public static void Setup()
     {
-        Command save = new Command("write", $"[prefabName]: save creature YML to {FileManager.ExportFolder} folder", args =>
+        Command save = new Command("write", 
+            $"[prefabName]: save creature YML to {FileManager.ExportFolder} folder", 
+            args =>
         {
             if (args.Length < 3)
             {
@@ -35,7 +37,9 @@ public static class CreatureManager
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>);
         
-        Command saveAll = new Command("write_all", $"save all creatures YML to {FileManager.ExportFolder} folder", _ =>
+        Command saveAll = new Command("write_all", 
+            $"save all creatures YML to {FileManager.ExportFolder} folder", 
+            _ =>
         {
             List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
             for (int i = 0; i < prefabs.Count; ++i)
@@ -46,7 +50,9 @@ public static class CreatureManager
             return true;
         });
 
-        Command read = new Command("mod", $"[fileName]: read YML file from {FileManager.ImportFolder} and update", args =>
+        Command read = new Command("mod", 
+            $"[fileName]: read YML file from {FileManager.ImportFolder} and update", 
+            args =>
         {
             if (args.Length < 3)
             {
@@ -66,7 +72,9 @@ public static class CreatureManager
             return true;
         }, FileManager.GetModFileNames, adminOnly: true);
 
-        Command revert = new Command("revert", "[prefabName]: revert creature to factory settings", args =>
+        Command revert = new Command("revert", 
+            "[prefabName]: revert creature to factory settings", 
+            args =>
         {
             if (args.Length < 3)
             {
@@ -93,7 +101,9 @@ public static class CreatureManager
             return true;
         }, SyncManager.GetOriginalKeys<Base>, adminOnly: true);
 
-        Command clone = new Command("clone", "[prefabName][newName]: must be a character", args =>
+        Command clone = new Command("clone", 
+            "[prefabName][newName]: must be a character", 
+            args =>
         {
             if (args.Length < 3)
             {
@@ -371,8 +381,6 @@ public static class CreatureManager
             {
                 Write(prefab, true, source.name);
             }
-
-            // SpawnManager.Create(prefab);
         };
 
         c.Create();

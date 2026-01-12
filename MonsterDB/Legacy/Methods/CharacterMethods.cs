@@ -9,7 +9,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class CharacterMethods
 {
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadCharacter(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "Character.yml";
         if (!File.Exists(filePath)) return;

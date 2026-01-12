@@ -186,7 +186,7 @@
         <Compile Include="Managers\CreatureManager\Visuals\RendererRef.cs" />
         <Compile Include="Managers\CreatureManager\Visuals\ShaderRef.cs" />
         <Compile Include="Managers\CreatureManager\Visuals\VisualRef.cs" />
-        <Compile Include="Managers\CreatureFileManager\FileManager.cs" />
+        <Compile Include="Managers\FileManager\FileManager.cs" />
         <Compile Include="Managers\EggManager\BaseEgg.cs" />
         <Compile Include="Managers\EggManager\EggGrowRef.cs" />
         <Compile Include="Managers\EggManager\EggManager.cs" />
@@ -213,8 +213,8 @@
         <Compile Include="Managers\Reference.cs" />
         <Compile Include="Managers\SpawnManager\SpawnDataRef.cs" />
         <Compile Include="Managers\SpawnManager\SpawnManager.cs" />
-        <Compile Include="Managers\CreatureFileManager\Header.cs" />
-        <Compile Include="Managers\CreatureFileManager\SyncManager.cs" />
+        <Compile Include="Managers\FileManager\Header.cs" />
+        <Compile Include="Managers\FileManager\SyncManager.cs" />
         <Compile Include="Managers\TextureManager\TextureData.cs" />
         <Compile Include="Managers\TextureManager\TextureManager.cs" />
         <Compile Include="Managers\TextureManager\TextureRef.cs" />

@@ -51,17 +51,17 @@ public static class LegacyManager
     private static bool Read(string folderPath)
     {
         CreatureData data = new();
-        VisualMethods.Read(folderPath, ref data);
-        HumanoidMethods.Read(folderPath, ref data);
-        CharacterMethods.Read(folderPath, ref data);
-        MonsterAIMethods.Read(folderPath, ref data);
-        AnimalAIMethods.Read(folderPath, ref data);
-        CharacterDropMethods.Read(folderPath, ref data);
-        TameableMethods.Read(folderPath, ref data);
-        ProcreationMethods.Read(folderPath, ref data);
-        NPCTalkMethods.Read(folderPath, ref data);
-        GrowUpMethods.Read(folderPath, ref data);
-        LevelEffectsMethods.Read(folderPath, ref data);
+        VisualMethods.ReadVisuals(folderPath, ref data);
+        HumanoidMethods.ReadHumanoid(folderPath, ref data);
+        CharacterMethods.ReadCharacter(folderPath, ref data);
+        MonsterAIMethods.ReadMonsterAI(folderPath, ref data);
+        AnimalAIMethods.ReadAnimalAI(folderPath, ref data);
+        CharacterDropMethods.ReadCharacterDrops(folderPath, ref data);
+        TameableMethods.ReadTameable(folderPath, ref data);
+        ProcreationMethods.ReadProcreation(folderPath, ref data);
+        NPCTalkMethods.ReadNPCTalk(folderPath, ref data);
+        GrowUpMethods.ReadGrowUp(folderPath, ref data);
+        LevelEffectsMethods.ReadLevelEffects(folderPath, ref data);
         
         creaturesToConvert.Add(data);
 
@@ -170,8 +170,9 @@ public static class LegacyManager
 
         if (data.IsCloned && data.SpawnData != null)
         {
-            foreach (var spawn in data.SpawnData)
+            foreach (SpawnDataRef spawn in data.SpawnData)
             {
+                spawn.m_name = $"MDB {data.Prefab} Spawn Data";
                 spawn.m_prefab = data.Prefab;
             }
         }
@@ -185,10 +186,12 @@ public static class LegacyManager
         if (data.Procreation != null)
         {
             old.m_procreation.Set(ref data.Procreation);
+            old.m_effects.Set(ref data.Procreation);
         }
         if (data.NPCTalk != null)
         {
             old.m_npcTalk.Set(ref data.NPCTalk);
+            old.m_effects.Set(ref data.NPCTalk);
         }
 
         if (data.GrowUp != null)
@@ -221,6 +224,11 @@ public static class LegacyManager
                     if (old.m_materials.TryGetValue(mat.m_name, out VisualMethods.MaterialData? d))
                     {
                         d.Set(mat);
+                    }
+
+                    if (!string.IsNullOrEmpty(old.m_characterData.ClonedFrom))
+                    {
+                        mat.m_name = $"MDB_{old.m_characterData.PrefabName}_{mat.m_name}";
                     }
                 }
             }
@@ -273,22 +281,7 @@ public static class LegacyManager
                 {
                     GameObject? prefab = PrefabManager.GetPrefab(item.m_attackData.OriginalPrefab);
                     if (prefab == null) continue;
-                    BaseItem reference = new BaseItem();
-                    reference.Setup(prefab, true, item.m_attackData.OriginalPrefab);
-                    if (reference.ItemData != null)
-                    {
-                        item.Set(reference.ItemData);
-                        reference.ItemData.m_prefab = item.m_attackData.Name;
-                    }
-                    reference.ModVersion = "0.1.5";
-                    reference.Prefab = item.m_attackData.Name;
-
-                    string dir = Path.Combine(FileManager.ExportFolder, old.m_characterData.PrefabName + " items");
-                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-                    var filePath = Path.Combine(dir,
-                        $"{item.m_attackData.Name}_Legacy_Converted.yml");
-                    string text = ConfigManager.Serialize(reference);
-                    File.WriteAllText(filePath, text);
+                    ItemManager.Clone(prefab, item.m_attackData.Name);
                 }
             }
 
@@ -301,6 +294,7 @@ public static class LegacyManager
                     if (dict.TryGetValue(item.m_prefab, out ItemAttackData? itemData))
                     {
                         itemData.Set(item);
+                        
                     }
                 }
             }

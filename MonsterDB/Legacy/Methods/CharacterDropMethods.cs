@@ -9,7 +9,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class CharacterDropMethods
 {
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadCharacterDrops(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "CharacterDrop.yml";
         if (!File.Exists(filePath)) return;

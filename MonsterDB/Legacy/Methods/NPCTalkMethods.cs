@@ -8,9 +8,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class NPCTalkMethods
 {
-    private static readonly Dictionary<string, GameObject> m_newNPCTalkers = new();
-
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadNPCTalk(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "NPCTalk.yml";
         if (!File.Exists(filePath)) return;

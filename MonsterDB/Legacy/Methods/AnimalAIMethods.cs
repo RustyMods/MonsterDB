@@ -9,7 +9,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class AnimalAIMethods
 {
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadAnimalAI(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "AnimalAI.yml";
         if (!File.Exists(filePath)) return;

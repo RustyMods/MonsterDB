@@ -9,9 +9,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class ProcreationMethods
 {
-    public static List<string> m_oldProcreators = new();
-    public static List<string> m_removedOldProcreators = new();
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadProcreation(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "Procreation.yml";
         if (!File.Exists(filePath)) return;

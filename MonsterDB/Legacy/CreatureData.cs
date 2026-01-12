@@ -98,6 +98,21 @@ public class CharacterEffects
         r.m_unSummonEffect = ToEffectListRef(m_unSummonEffects);
     }
 
+    public void Set(ref ProcreationRef? r)
+    {
+        if (r == null) return;
+        r.m_birthEffects = ToEffectListRef(m_birthEffects);
+        r.m_loveEffects = ToEffectListRef(m_loveEffects);
+    }
+
+    public void Set(ref NPCTalkRef? r)
+    {
+        if (r == null) return;
+        r.m_randomGreetFX = ToEffectListRef(m_randomGreetFX);
+        r.m_randomGoodbyeFX = ToEffectListRef(m_randomGoodbyeFX);
+        r.m_randomTalkFX = ToEffectListRef(m_randomTalkFX);
+    }
+
     public void Set(ref CharacterRef? reference)
     {
         if (reference == null)

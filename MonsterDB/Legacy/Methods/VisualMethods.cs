@@ -10,17 +10,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class VisualMethods
 {
-    private static readonly Dictionary<string, Shader> m_cachedShaders = new();
-    private static readonly Dictionary<string, Material> m_clonedMaterials = new();
-
-    public static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
-    private static readonly int MainTex = Shader.PropertyToID("_MainTex");
-    public static readonly int Hue = Shader.PropertyToID("_Hue");
-    public static readonly int Saturation = Shader.PropertyToID("_Saturation");
-    public static readonly int Value = Shader.PropertyToID("_Value");
-    
-
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadVisuals(string folderPath, ref CreatureData creatureData)
     {
         string visualFolderPath = folderPath + Path.DirectorySeparatorChar + "Visual";
         if (!Directory.Exists(visualFolderPath)) return;
@@ -141,6 +131,7 @@ public static class VisualMethods
             r.m_hue = _Hue;
             r.m_value = _Value;
             r.m_saturation = _Saturation;
+            r.m_mainTexture = _MainTex;
         }
     }
 

@@ -193,10 +193,14 @@ public static class SyncManager
     {
         if (net.IsServer())
         {
-            LoadClones();
-            Load();
             UpdateSync();
             FileManager.SetupFileWatcher();
         }
+    }
+
+    public static void Start()
+    {
+        LoadClones();
+        Load();
     }
 }

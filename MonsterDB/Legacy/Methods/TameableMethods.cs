@@ -11,13 +11,7 @@ namespace MonsterDB.Solution.Methods;
 
 public static class TameableMethods
 {
-    private static readonly List<string> m_newTames = new();
-    private static readonly List<string> m_newHumanoids = new();
-    private static readonly List<string> m_newMonsterAI = new();
-
-    private static readonly HashSet<string> m_oldTames = new();
-    private static readonly List<string> m_removedOldTames = new();
-    public static void Read(string folderPath, ref CreatureData creatureData)
+    public static void ReadTameable(string folderPath, ref CreatureData creatureData)
     {
         string filePath = folderPath + Path.DirectorySeparatorChar + "Tameable.yml";
         if (!File.Exists(filePath)) return;
