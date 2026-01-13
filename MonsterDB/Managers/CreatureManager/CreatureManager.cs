@@ -170,6 +170,7 @@ public static class CreatureManager
             }
             BaseHumanoid creature = new BaseHumanoid();
             creature.Setup(prefab, isClone, source);
+            
             if (!SyncManager.originals.ContainsKey(prefab.name)) SyncManager.originals.Add(prefab.name, creature);
             text = ConfigManager.Serialize(creature);
             if (isClone && (ZNet.instance?.IsServer() ?? false))
@@ -197,13 +198,22 @@ public static class CreatureManager
         return text;
     }
 
-    private static void Write(GameObject prefab, bool isClone = false, string source = "")
+    private static void Write(GameObject prefab, bool isClone = false, string source = "", string folderPath = "")
     {
-        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
+        string filePath = Path.Combine(string.IsNullOrEmpty(folderPath) ? FileManager.ExportFolder : folderPath, prefab.name + ".yml");
         
         string? text = Save(prefab, isClone, source);
 
         if (string.IsNullOrEmpty(text)) return;
+
+        if (prefab.TryGetComponent(out Humanoid humanoid))
+        {
+            var items = humanoid.GetAttacks();
+            foreach (var item in items)
+            {
+                
+            }
+        }
         
         File.WriteAllText(filePath, text);
         MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
@@ -216,6 +226,8 @@ public static class CreatureManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += prefab =>
         {
+            Dictionary<string, string> serializedItems = new();
+            
             Character? character = prefab.GetComponent<Character>();
             bool isPlayer = false;
             if (character is Player)
@@ -275,22 +287,22 @@ public static class CreatureManager
                 Dictionary<string, GameObject> newItems = new();
                 if (humanoid.m_defaultItems != null)
                 {
-                    humanoid.m_defaultItems = CreateItems(humanoid.m_defaultItems, ref newItems);
+                    humanoid.m_defaultItems = CreateItems(humanoid.m_defaultItems, ref newItems, serializedItems);
                 }
 
                 if (humanoid.m_randomWeapon != null)
                 {
-                    humanoid.m_randomWeapon = CreateItems(humanoid.m_randomWeapon, ref newItems);
+                    humanoid.m_randomWeapon = CreateItems(humanoid.m_randomWeapon, ref newItems, serializedItems);
                 }
 
                 if (humanoid.m_randomArmor != null)
                 {
-                    humanoid.m_randomArmor = CreateItems(humanoid.m_randomArmor, ref newItems);
+                    humanoid.m_randomArmor = CreateItems(humanoid.m_randomArmor, ref newItems, serializedItems);
                 }
 
                 if (humanoid.m_randomShield != null)
                 {
-                    humanoid.m_randomShield = CreateItems(humanoid.m_randomShield, ref newItems);
+                    humanoid.m_randomShield = CreateItems(humanoid.m_randomShield, ref newItems, serializedItems);
                 }
 
                 if (humanoid.m_randomItems != null)
@@ -311,6 +323,15 @@ public static class CreatureManager
                             mock.OnCreated += m =>
                             {
                                 go = m;
+
+                                if (write)
+                                {
+                                    var info = ItemManager.Save(m, true, item.m_prefab.name);
+                                    if (info != null)
+                                    {
+                                        serializedItems[m.name] = info;
+                                    }
+                                }
                             };
                             mock.Create();
                             newItems[newItemName] = go;
@@ -328,7 +349,7 @@ public static class CreatureManager
                     {
                         Humanoid.ItemSet newSet = new Humanoid.ItemSet();
                         newSet.m_name = set.m_name;
-                        newSet.m_items = CreateItems(set.m_items, ref newItems);
+                        newSet.m_items = CreateItems(set.m_items, ref newItems, serializedItems);
                         newRandomSets.Add(newSet);
                     }
                     humanoid.m_randomSets = newRandomSets.ToArray();
@@ -379,7 +400,22 @@ public static class CreatureManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(prefab, true, source.name);
+                string folderPath = Path.Combine(FileManager.ExportFolder, cloneName);
+                if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+                Write(prefab, true, source.name, folderPath);
+                if (serializedItems.Count > 0)
+                {
+                    var itemFolderPath = Path.Combine(folderPath, "items");
+                    if (!Directory.Exists(itemFolderPath)) Directory.CreateDirectory(itemFolderPath);
+                    foreach (var kvp in serializedItems)
+                    {
+                        var itemName = kvp.Key;
+                        var serializedItem = kvp.Value;
+                        var filePath = Path.Combine(itemFolderPath, itemName + ".yml");
+                        File.WriteAllText(filePath, serializedItem);
+                    }
+                }
+
             }
         };
 
@@ -387,7 +423,7 @@ public static class CreatureManager
 
         return;
         
-        GameObject[] CreateItems(GameObject[] list, ref Dictionary<string, GameObject> clones)
+        GameObject[] CreateItems(GameObject[] list, ref Dictionary<string, GameObject> clones, Dictionary<string, string> serializedItems)
         {
             List<GameObject> newItems = new();
             foreach (GameObject item in list)
@@ -439,6 +475,12 @@ public static class CreatureManager
                         {
                             component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
                         }
+                    }
+
+                    var info = ItemManager.Save(prefab, true, item.name);
+                    if (info != null)
+                    {
+                        serializedItems[newItemName] = info;
                     }
                 };
                 
