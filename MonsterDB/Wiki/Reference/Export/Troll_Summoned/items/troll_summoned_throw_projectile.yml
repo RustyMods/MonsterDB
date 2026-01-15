@@ -1,0 +1,73 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: troll_summoned_throw_projectile
+ProjectileData:
+  prefab: troll_summoned_throw_projectile
+  type: Magic
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_rock_destroyed
+    - prefab: fx_lavasplash_large
+    - prefab: sfx_troll_attack_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: default
+    parent: troll_summoned_throw_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: Skeleton_burned
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: -0.18
+      saturation: -0.681
+      value: -0.542
+      emissionColor: '#FFFF0000'
+      mainTexture: Skeleton_d
+  - prefab: flames_world
+    parent: troll_summoned_throw_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook

@@ -60,7 +60,7 @@ public static class TextureManager
                 }
             }
 
-            foreach (var material in materials)
+            foreach (Material? material in materials)
             {
                 Save(material, FileManager.ExportFolder);
             }
@@ -89,7 +89,7 @@ public static class TextureManager
             if (args.Length < 3) return true;
 
             string query = args[2];
-            var names = m_cachedTextures.Keys.ToList();
+            List<string> names = m_cachedTextures.Keys.ToList();
             for (int i = 0; i < names.Count; ++i)
             {
                 var name = names[i];
@@ -99,14 +99,14 @@ public static class TextureManager
                 }
             }
             return true;
-        });
+        }, () => m_cachedTextures.Keys.ToList());
 
         Command searchSprite = new Command("search_sprite", "search sprite names", args =>
         {
             if (args.Length < 3) return true;
 
             string query = args[2];
-            var names = m_cachedSprites.Keys.ToList();
+            List<string> names = m_cachedSprites.Keys.ToList();
             for (int i = 0; i < names.Count; ++i)
             {
                 var name = names[i];
@@ -116,7 +116,23 @@ public static class TextureManager
                 }
             }
             return true;
-        });
+        }, m_cachedSprites.Keys.ToList);
+
+        Command exportSprite = new Command("export_sprite", "[spriteName]: export sprite texture as png", args =>
+        {
+            if (args.Length < 3) return true;
+
+            Sprite? sprite = GetSprite(args[2], null);
+            if (sprite == null)
+            {
+                MonsterDBPlugin.LogWarning($"Failed to find sprite: {args[2]}");
+                return true;
+            }
+            
+            ExportSprite(sprite, FileManager.ExportFolder);
+            
+            return true;
+        }, m_cachedSprites.Keys.ToList);
     }
 
     public static void WriteAll()
@@ -144,6 +160,9 @@ public static class TextureManager
         {
             return data.ToTex(defaultValue as Texture2D);
         }
+        
+        MonsterDBPlugin.LogDebug("Failed to find texture: " + name);
+        
         return defaultValue;
     }
     
@@ -163,6 +182,13 @@ public static class TextureManager
     public static Sprite? GetSprite(string name, Sprite? defaultValue)
     {
         if (GetAllSprites().TryGetValue(name, out Sprite? sprite)) return sprite;
+
+        if (m_customs.TryGetValue(name, out TextureData? data))
+        {
+            return data.ToSprite(defaultValue);
+        }
+        
+        MonsterDBPlugin.LogDebug($"Failed to find sprite: {name}");
         return defaultValue;
     }
 
@@ -205,6 +231,62 @@ public static class TextureManager
         catch
         {
             MonsterDBPlugin.LogWarning("Failed to save texture: " + fileName);
+        }
+    }
+    
+    private static void ExportSprite(Sprite sprite, string path)
+    {
+        if (sprite == null || sprite.texture == null) return;
+    
+        string fileName = sprite.name;
+        string filePath = Path.Combine(path, fileName + ".png");
+        if (File.Exists(filePath)) return;
+    
+        try
+        {
+            Texture2D atlas = sprite.texture;
+            Rect spriteRect = sprite.textureRect;
+            
+            bool coversFullTexture = 
+                spriteRect.x == 0 && 
+                spriteRect.y == 0 && 
+                Mathf.Approximately(spriteRect.width, sprite.texture.width) && 
+                Mathf.Approximately(spriteRect.height, sprite.texture.height);
+
+            if (coversFullTexture)
+            {
+                Export(atlas, path);
+                return;
+            }
+        
+            RenderTexture tmp = RenderTexture.GetTemporary(
+                atlas.width, 
+                atlas.height, 
+                0,
+                RenderTextureFormat.Default, 
+                RenderTextureReadWrite.Linear);
+        
+            Graphics.Blit(atlas, tmp);
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture.active = tmp;
+        
+            Texture2D newTex = new Texture2D(
+                (int)spriteRect.width, 
+                (int)spriteRect.height);
+        
+            newTex.ReadPixels(spriteRect, 0, 0);
+            newTex.Apply();
+        
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(tmp);
+        
+            byte[] encoded = newTex.EncodeToPNG();
+            File.WriteAllBytes(filePath, encoded);
+            MonsterDBPlugin.LogInfo($"Exported sprite: {filePath}");
+        }
+        catch
+        {
+            MonsterDBPlugin.LogWarning("Failed to save sprite: " + fileName);
         }
     }
     

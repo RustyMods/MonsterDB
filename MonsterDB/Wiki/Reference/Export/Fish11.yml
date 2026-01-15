@@ -12,6 +12,27 @@ ItemData:
   scaleWeightByQuality: 1
   value: 0
   teleportable: true
+  toolTier: 0
+  damages: {}
+  attackForce: 30
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
 Visuals:
   scale:
     x: 1
@@ -19,6 +40,8 @@ Visuals:
     z: 1
   renderers:
   - prefab: default
+    parent: attachobj
+    index: 0
     active: true
     enabled: true
     materials:
@@ -27,6 +50,7 @@ Visuals:
       color: '#FFFFFFFF'
       emissionColor: '#00000000'
       mainTexture: fish11_d
+# If field removed, will remove component
 Fish:
   name: $animal_fish11
   swimRange: 10

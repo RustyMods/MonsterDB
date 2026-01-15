@@ -94,7 +94,7 @@ public class EffectListRef
 
 public static partial class Extensions
 {
-    public static EffectListRef ToRef(this EffectList el)
+    public static EffectListRef ToEffectListRef(this EffectList el)
     {
         EffectListRef effectListRef = new EffectListRef();
         foreach (EffectList.EffectData? effectData in el.m_effectPrefabs)

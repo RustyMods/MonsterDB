@@ -31,7 +31,7 @@ public class GrowUpRef : Reference
 
 public static partial class Extensions
 {
-    public static List<GrowUpRef.GrownEntry> ToRef(this List<Growup.GrownEntry> ge)
+    public static List<GrowUpRef.GrownEntry> ToGrowUpRefEntryList(this List<Growup.GrownEntry> ge)
     {
         List<GrowUpRef.GrownEntry> growEntries = ge
             .Where(x => x.m_prefab != null)

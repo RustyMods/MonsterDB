@@ -9,6 +9,7 @@ public class TextureData
     public readonly string m_name;
     public readonly byte[] m_bytes;
     private Texture2D? m_tex;
+    private Sprite? m_sprite;
 
     public TextureData(string filePath)
     {
@@ -26,5 +27,16 @@ public class TextureData
         tex.name = m_name;
         m_tex = tex;
         return tex;
+    }
+
+    public Sprite? ToSprite(Sprite? original)
+    {
+        if (m_sprite != null) return m_sprite;
+        Texture2D? tex = ToTex(original?.texture) as Texture2D;
+        if (tex == null) return original;
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+        sprite.name = m_name;
+        m_sprite = sprite;
+        return sprite;
     }
 }

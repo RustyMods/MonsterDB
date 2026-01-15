@@ -1,0 +1,152 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: SeekerQueen_projectile_spit
+ProjectileData:
+  prefab: SeekerQueen_projectile_spit
+  type: Physical
+  damage: {}
+  aoe: 1.5
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: SeekerQueen_spithit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: SeekerQueen_SpitSpawnAbility
+  spawnOnHitChance: 0.3
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: true
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: blood_decal
+    parent: drops-withdecals
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_blood_splat
+      shader: Custom/Decal
+      color: '#8E8E8EFF'
+      mainTexture: brains
+  - prefab: blob_splat
+    parent: flow
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: puke
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: Sphere
+    parent: SeekerQueen_projectile_spit
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: spit_blob
+      shader: Custom/Blob
+      color: '#C8C8C8FF'
+  - prefab: wetsplsh
+    parent: SeekerQueen_projectile_spit
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: flames
+    parent: SeekerQueen_projectile_spit
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: flow
+    parent: SeekerQueen_projectile_spit
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: barnacle_piece
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: flames_world
+    parent: SeekerQueen_projectile_spit
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: wetsplsh (1)
+    parent: SeekerQueen_projectile_spit
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: queenslime
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#B7B371FF'
+      mainTexture: slime_splash_2
+  - prefab: drops-withdecals
+    parent: SeekerQueen_projectile_spit
+    index: 7
+    active: false
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: drops
+    parent: SeekerQueen_projectile_spit
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'

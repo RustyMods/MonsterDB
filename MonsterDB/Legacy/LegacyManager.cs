@@ -42,7 +42,7 @@ public static class LegacyManager
 
     private static void Load()
     {
-        foreach (var data in creaturesToConvert)
+        foreach (CreatureData? data in creaturesToConvert)
         {
             Convert(data);
         }
@@ -100,9 +100,26 @@ public static class LegacyManager
         }
         MonsterDBPlugin.LogDebug($"Imported {count} creature data files");
     }
+    
+    private static void Update(GameObject critter, CreatureData data)
+    {
+        VisualMethods.Update(critter, data);
+        TameableMethods.Update(critter, data);
+        HumanoidMethods.Update(critter, data);
+        CharacterMethods.Update(critter, data);
+        MonsterAIMethods.Update(critter, data);
+        AnimalAIMethods.Update(critter, data);
+        CharacterDropMethods.Update(critter, data);
+        ProcreationMethods.Update(critter, data);
+        NPCTalkMethods.Update(critter, data);
+        GrowUpMethods.Update(critter, data);
+        LevelEffectsMethods.Update(critter, data);
+    }
 
     private static void Convert(CreatureData data)
     {
+        bool isClone = !string.IsNullOrEmpty(data.m_characterData.ClonedFrom);
+        string cloneFrom = data.m_characterData.ClonedFrom;
         string prefabName = string.IsNullOrEmpty(data.m_characterData.ClonedFrom) ? data.m_characterData.PrefabName : data.m_characterData.ClonedFrom;
         GameObject? prefab = PrefabManager.GetPrefab(prefabName);
         if (prefab == null)
@@ -110,44 +127,43 @@ public static class LegacyManager
             MonsterDBPlugin.LogWarning($"Legacy Conversion: Failed to find prefab: {prefabName}");
             return;
         }
-        
-        Character? c = prefab.GetComponent<Character>();
-        BaseAI ai = prefab.GetComponent<BaseAI>();
-        if (c == null || ai == null)
+
+        if (isClone)
         {
-            MonsterDBPlugin.LogWarning("Invalid prefab, missing Character or AI component");
-            return;
+            CreatureManager.Clone(prefab, data.m_characterData.PrefabName, false);
+            prefab = PrefabManager.GetPrefab(data.m_characterData.PrefabName);
+            
+            string ragdollName = $"MDB_{data.m_characterData.PrefabName}_ragdoll";
+            foreach (EffectInfo? info in data.m_effects.m_deathEffects)
+            {
+                if (info.PrefabName.EndsWith("ragdoll"))
+                {
+                    info.PrefabName = ragdollName;
+                }
+            }
         }
 
-        string filePath = Path.Combine(FileManager.ExportFolder,
-            $"{data.m_characterData.PrefabName}_Legacy_Converted.yml");
+        if (prefab == null) return;
+
+        List<ItemAttackData> items = data.GetAllItems();
+        items.RemoveAll(x => string.IsNullOrEmpty(x.m_attackData.OriginalPrefab));
+
+        foreach (ItemAttackData? item in items)
+        {
+            GameObject? itemPrefab = PrefabManager.GetPrefab(item.m_attackData.OriginalPrefab);
+            if (itemPrefab == null) continue;
+            ItemManager.Clone(itemPrefab, item.m_attackData.Name, false);
+        }
+
+        CreatureManager.TrySave(prefab, out Base? original, isClone, cloneFrom);
+        SyncManager.originals.Remove(prefab.name);
         
-        if (c is Human && ai is MonsterAI)
+        Update(prefab, data);
+        CreatureManager.Write(prefab, isClone, cloneFrom);
+        
+        if (original != null)
         {
-            BaseHuman creature = new BaseHuman();
-            creature.Setup(prefab, !string.IsNullOrEmpty(data.m_characterData.ClonedFrom), data.m_characterData.ClonedFrom);
-            Set(creature, data);
-            var text = ConfigManager.Serialize(creature);
-            File.WriteAllText(filePath, text);
-            MonsterDBPlugin.LogInfo($"Converted Legacy: {creature.Prefab} to {filePath}");
-        }
-        else if (c is Humanoid && ai is MonsterAI)
-        {
-            BaseHumanoid creature = new BaseHumanoid();
-            creature.Setup(prefab, !string.IsNullOrEmpty(data.m_characterData.ClonedFrom), data.m_characterData.ClonedFrom);
-            Set(creature, data);
-            var text = ConfigManager.Serialize(creature);
-            File.WriteAllText(filePath, text);
-            MonsterDBPlugin.LogInfo($"Converted Legacy: {creature.Prefab} to {filePath}");
-        }
-        else if (ai is AnimalAI)
-        {
-            BaseCharacter creature = new BaseCharacter();
-            creature.Setup(prefab, !string.IsNullOrEmpty(data.m_characterData.ClonedFrom), data.m_characterData.ClonedFrom);
-            Set(creature, data);
-            var text = ConfigManager.Serialize(creature);
-            File.WriteAllText(filePath, text);
-            MonsterDBPlugin.LogInfo($"Converted Legacy: {creature.Prefab} to {filePath}");  
+            SyncManager.originals[prefab.name] = original;
         }
     }
 
@@ -282,20 +298,6 @@ public static class LegacyManager
                     GameObject? prefab = PrefabManager.GetPrefab(item.m_attackData.OriginalPrefab);
                     if (prefab == null) continue;
                     ItemManager.Clone(prefab, item.m_attackData.Name);
-                }
-            }
-
-            Dictionary<string, ItemAttackData> dict = items.ToDictionary(f => f.m_attackData.Name);
-
-            if (data.Character.m_attacks != null)
-            {
-                foreach (ItemDataSharedRef item in data.Character.m_attacks)
-                {
-                    if (dict.TryGetValue(item.m_prefab, out ItemAttackData? itemData))
-                    {
-                        itemData.Set(item);
-                        
-                    }
                 }
             }
         }

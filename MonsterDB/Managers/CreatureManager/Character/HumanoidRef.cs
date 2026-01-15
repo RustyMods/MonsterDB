@@ -19,9 +19,6 @@ public class HumanoidRef : CharacterRef
     [YamlMember(Order = 106)] public EffectListRef? m_consumeItemEffects;
     [YamlMember(Order = 107)] public EffectListRef? m_equipEffects;
     [YamlMember(Order = 108)] public EffectListRef? m_perfectBlockEffect;
-    [YamlMember(Order = 109)] public ItemDataSharedRef[]? m_attacks;
-    
-    public ItemDataSharedRef[]? GetAttacks() => m_attacks;
 
     [Serializable]
     public class ItemSet
@@ -56,6 +53,25 @@ public static partial class Extensions
         return attacks;
     }
 
+    public static HashSet<GameObject> GetItems(this Humanoid humanoid)
+    {
+        HashSet<GameObject> attacks = new();
+        if (humanoid.m_defaultItems != null) attacks.AddRange(humanoid.m_defaultItems);
+        if (humanoid.m_randomWeapon != null) attacks.AddRange(humanoid.m_randomWeapon);
+        if (humanoid.m_randomShield != null) attacks.AddRange(humanoid.m_randomShield);
+        if (humanoid.m_randomSets != null)
+            attacks.AddRange(humanoid.m_randomSets
+                .SelectMany(x => x.m_items)
+                .ToArray());
+        if (humanoid.m_randomItems != null) 
+            attacks.AddRange(humanoid.m_randomItems
+            .Select(x => x.m_prefab)
+            .ToArray());
+
+        attacks.RemoveWhere(x => x == null || !x.GetComponent<ItemDrop>());
+        return attacks;
+    }
+
     public static ItemDataSharedRef[] ToRef(this HashSet<GameObject> items)
     {
         List<ItemDataSharedRef> attackRefs = new();
@@ -74,7 +90,7 @@ public static partial class Extensions
         return attackRefs.ToArray();
     }
     
-    public static HumanoidRef.RandomItem[] ToRef(this Humanoid.RandomItem[] ria)
+    public static HumanoidRef.RandomItem[] ToHumanoidRefRandomItemArray(this Humanoid.RandomItem[] ria)
     {
         HumanoidRef.RandomItem[] randomItems = ria
             .Where(x => x != null && x.m_prefab != null)
@@ -101,7 +117,7 @@ public static partial class Extensions
         return randomItems;
     }
     
-    public static HumanoidRef.ItemSet[] ToRef(this Humanoid.ItemSet[] isa)
+    public static HumanoidRef.ItemSet[] ToHumanoidRefItemSetArray(this Humanoid.ItemSet[] isa)
     {
         HumanoidRef.ItemSet[] itemSets = isa
             .Where(x => x != null)
@@ -133,7 +149,7 @@ public static partial class Extensions
             .ToArray();
         return itemSets;
     }
-    public static string[] ToRef(this GameObject[] goa)
+    public static string[] ToGameObjectNameArray(this GameObject[] goa)
     {
         string[] prefabs = goa
             .Where(x => x != null)

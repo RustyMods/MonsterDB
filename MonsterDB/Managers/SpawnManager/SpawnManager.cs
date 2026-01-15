@@ -27,7 +27,7 @@ public static class SpawnManager
         spawnRefs[data.m_name] = data;
     }
 
-    private static void Start()
+    public static void Start()
     {
         foreach (SpawnDataRef? data in spawnRefs.Values)
         {
@@ -41,7 +41,6 @@ public static class SpawnManager
     {
         if (net.IsServer())
         {
-            Start();
             UpdateSync();
         }
     }

@@ -1,0 +1,205 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Character
+Prefab: Lox_Calf
+Character:
+  name: $enemy_loxcalf
+  group: lox
+  faction: PlainsMonsters
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 2
+  speed: 2
+  turnSpeed: 120
+  runSpeed: 6
+  runTurnSpeed: 300
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 2.5
+  swimSpeed: 3
+  swimTurnSpeed: 50
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_lox_hit
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_loxcalf_death
+    - prefab: loxcalf_ragdoll
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 100
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Resistant
+    slash: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Resistant
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  # Lava
+  minLavaMaskThreshold: 0.05
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+AI:
+  timeToSafe: 4
+  viewRange: 15
+  viewAngle: 90
+  hearRange: 15
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_loxcalf_alerted
+  idleSoundInterval: 15
+  idleSoundChance: 0.5
+  pathAgentType: HorseSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 30
+  randomMoveRange: 6
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: true
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Body
+    parent: offset
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+  - prefab: Furr1
+    parent: offset
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+  - prefab: Sadel
+    parent: offset
+    index: 3
+    active: false
+    enabled: true
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: LoxMeat
+    levelMultiplier: false
+# If field removed, will remove component
+GrowUp:
+  growTime: 6000
+  inheritTame: true
+  grownPrefab: Lox
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- footstep
+- idle
+- inWater
+- jump
+- wakeup
+- stagger
+- consume
+- attack_bite
+- attack_stomp

@@ -1,0 +1,301 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: piece_TrainingDummy
+Character:
+  name: $piece_trainingdummy
+  faction: TrainingDummy
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: true
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 0
+  speed: 0
+  turnSpeed: 0
+  runSpeed: 0
+  runTurnSpeed: 300
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 1.3
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_TrainingDummy_hit
+    - prefab: sfx_trainingdummy_light_attack impact
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_TrainingDummy_destruction
+    - prefab: sfx_wood_destroyed
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 2500
+  regenAllHPTime: 30
+  damageModifiers: {}
+  staggerWhenBlocked: true
+  staggerDamageFactor: 100
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - TrainingDummy_attack
+  - TrainingDummy_attack2
+  - TrainingDummy_attack3
+  - TrainingDummy_throw
+AI:
+  alertRange: 10
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 0
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: false
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 5
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 0
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_trainingdummy_alert
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_trainingdummy_idle
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 0
+  randomMoveInterval: 0
+  randomMoveRange: 0
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Axe.001_Cube.002
+    parent: destruction
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe.002_Cube.005
+    parent: destruction
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe.003_Cube.006
+    parent: destruction
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe.004_Cube.007
+    parent: destruction
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe.005_Cube.008
+    parent: destruction
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe.006_Cube.009
+    parent: destruction
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe.007_Cube.010
+    parent: destruction
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Axe
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: Shield
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: TrainingDummy
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+  - prefab: TrainingDummy_Base
+    parent: Visual
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: TrainingDummy
+      shader: Custom/Piece
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: TrainingDummy_d
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- stagger
+- idle
+- attack_light
+- attack_medium
+- attack_heavy
+- attack_throw
+- alert

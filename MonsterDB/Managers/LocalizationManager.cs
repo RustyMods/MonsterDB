@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -45,7 +46,8 @@ public static class LocalizationManager
                 "# Insert key: value translation pairs",
                 "# Name of file without extension dictates language (e.g. English.yml)",
                 "# Any lines that start with # will be ignored",
-                "enemy_human: Human"
+                "enemy_human: Human",
+                "hud_ride: Ride"
             };
             File.WriteAllLines(filePath, defaultLines);
         }

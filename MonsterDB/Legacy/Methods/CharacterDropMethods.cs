@@ -26,4 +26,28 @@ public static class CharacterDropMethods
             LogParseFailure(filePath);
         }
     }
+    
+    public static void Update(GameObject critter, CreatureData creatureData)
+    {
+        if (!critter.TryGetComponent(out CharacterDrop component)) return;
+        var data = creatureData.m_characterDrops;
+        List<CharacterDrop.Drop> list = new();
+        foreach (var info in data)
+        {
+            var prefab = PrefabManager.GetPrefab(info.PrefabName);
+            if (prefab == null) continue;
+            list.Add(new CharacterDrop.Drop
+            {
+                m_prefab = prefab,
+                m_amountMin = info.AmountMin,
+                m_amountMax = info.AmountMax,
+                m_chance = info.Chance,
+                m_onePerPlayer = info.OnePerPlayer,
+                m_levelMultiplier = info.LevelMultiplier,
+                m_dontScale = info.DoNotScale
+            });
+        }
+
+        component.m_drops = list;
+    }
 }

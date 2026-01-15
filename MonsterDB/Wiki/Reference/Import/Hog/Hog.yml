@@ -1,0 +1,95 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Hog
+ClonedFrom: Boar
+IsCloned: true
+Character:
+  name: $enemy_hog
+  # Base Health
+  health: 20
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+    blunt: Resistant
+  defaultItems:
+  - MDB_Hog_boar_base_attack
+
+Visuals:
+  scale:
+    x: 1.5
+    y: 1.5
+    z: 1.5
+  levelSetups:
+  - scale: 1.1
+    hue: 0.05
+    saturation: -0.1
+    enableObject: Fangs 005
+  - scale: 1.2
+    hue: 0.09
+    saturation: -0.5
+    value: -0.05
+    enableObject: Fangs 006
+  renderers:
+  - prefab: Fangs 001
+    parent: Visual
+    index: 1
+    active: true
+  - prefab: Fangs 003
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+  - prefab: Fangs 004
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: RawMeat
+    amountMax: 2
+  - prefab: LeatherScraps
+    amountMax: 2
+  - prefab: TrophyBoar
+    chance: 0.15
+    levelMultiplier: false
+# If field removed, will remove component
+Tameable:
+  commandable: true
+# If field removed, will remove component
+Procreation:
+  offspring: Boar
+# If entries removed, will still be registered, set enabled to false to disable
+SpawnData:
+- name: MDB Hog Spawn Data
+  enabled: true
+  prefab: Hog
+  biome: None
+  # Edge, Median, Everything
+  biomeArea: Everything
+  maxSpawned: 1
+  spawnInterval: 4
+  spawnChance: 100
+  spawnAtNight: true
+  spawnAtDay: true
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- base_attack0
+- base_attack1
+- base_attack2
+- base_attack3
+- idle
+- stagger
+- consume

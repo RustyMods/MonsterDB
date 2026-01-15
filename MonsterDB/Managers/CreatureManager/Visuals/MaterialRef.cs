@@ -14,8 +14,10 @@ public class MaterialRef : Reference
     public float? m_hue;
     public float? m_saturation;
     public float? m_value;
+    public string? m_emissionTexture = "";
     public string? m_emissionColor = "";
     public string? m_mainTexture = "";
+    public string? m_tintColor = "";
 
     public static implicit operator MaterialRef(Material mat)
     {
@@ -29,6 +31,8 @@ public class MaterialRef : Reference
             m_value =  mat.HasProperty(ShaderRef._Value) ? mat.GetFloat(ShaderRef._Value) : null,
             m_emissionColor = mat.HasProperty(ShaderRef._EmissionColor) ? mat.GetColor(ShaderRef._EmissionColor).ToHex() : null,
             m_mainTexture = mat.mainTexture?.name ?? null,
+            m_tintColor = mat.HasProperty(ShaderRef._TintColor) ? mat.GetColor(ShaderRef._TintColor).ToHex() : null,
+            m_emissionTexture = mat.HasProperty(ShaderRef._EmissionMap) ? mat.GetTexture(ShaderRef._EmissionMap)?.name : null
         };
         
         return reference;

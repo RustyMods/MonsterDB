@@ -1,0 +1,243 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Asksvin_hatchling
+Character:
+  name: $enemy_asksvin_hatchling
+  group: asksvin
+  faction: Undead
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 3
+  speed: 7
+  turnSpeed: 95
+  runSpeed: 9
+  runTurnSpeed: 120
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 2.7
+  swimSpeed: 3
+  swimTurnSpeed: 50
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: false
+  tolerateFire: true
+  tolerateSmoke: true
+  tolerateTar: true
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_lox_hit
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: Ragdoll_Asksvin_Hatchling
+    - prefab: sfx_asksvin_death
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 400
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Resistant
+    poison: Resistant
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_creature_consume
+AI:
+  alertRange: 10
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 2
+  circleTargetInterval: 30
+  circleTargetDuration: 3
+  circleTargetDistance: 5
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  # Tameable
+  consumeItems:
+  - Cloudberry
+  - Barley
+  - Flax
+  consumeRange: 4
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+  viewRange: 35
+  viewAngle: 150
+  hearRange: 30
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_asksvin_alert
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_asksvin_idle
+      variant: 0
+  idleSoundInterval: 6
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidBigNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 0.3
+    y: 0.3
+    z: 0.3
+  levelSetups:
+  - scale: 1.1
+    hue: -0.477
+    saturation: -1
+    value: 0.02
+    emissiveColor: '#738E0000'
+  - scale: 1.2
+    hue: 0.5
+    saturation: -0.08
+    value: 0.08
+    emissiveColor: '#00000000'
+  renderers:
+  - prefab: LavaNeck.001
+    parent: Asksvin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: asksvincub_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: asksvincub_d
+    - name: asksvincub_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: asksvincub_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: AskBladder
+    chance: 0.2
+  - prefab: AskHide
+    chance: 0.2
+  - prefab: AsksvinMeat
+    chance: 0.2
+# If field removed, will remove component
+GrowUp:
+  growTime: 3000
+  inheritTame: true
+  grownPrefab: Asksvin
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- footstep
+- idle
+- inWater
+- jump
+- wakeup
+- stagger
+- attack_pounce
+- attack_bite
+- attack_headbutt
+- consume
+- turnaround_l

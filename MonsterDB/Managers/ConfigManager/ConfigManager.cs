@@ -25,7 +25,15 @@ public static class ConfigManager
         .Build();
     
     public static T Deserialize<T>(string data) => deserializer.Deserialize<T>(data);
-    public static string Serialize<T>(T obj) => serializer.Serialize(obj);
+    // public static string Serialize<T>(T obj) => serializer.Serialize(obj);
+
+    public static string Serialize<T>(T obj)
+    {
+        if (obj == null) return "";
+        using var sw = new StringWriter();
+        serializer.Serialize(sw, obj, obj.GetType());
+        return sw.ToString();
+    }
     
     private static readonly ConfigFile Config;
     public static readonly ConfigSync ConfigSync;

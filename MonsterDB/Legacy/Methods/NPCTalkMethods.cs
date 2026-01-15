@@ -32,4 +32,31 @@ public static class NPCTalkMethods
         Helpers.ReadEffectInfo(randomGreetFXPath, ref creatureData.m_effects.m_randomGreetFX);
         Helpers.ReadEffectInfo(randomGoodbyeFXPath, ref creatureData.m_effects.m_randomGoodbyeFX);
     }
+    
+    public static void Update(GameObject critter, CreatureData creatureData)
+    {
+        if (!critter.GetComponent<MonsterAI>() || !critter.TryGetComponent(out NpcTalk component)) return;
+        NPCTalkData data = creatureData.m_npcTalk;
+
+        Vector3 scale = creatureData.m_scale.ToRef();
+        component.m_name = data.Name;
+        component.m_maxRange = data.MaxRange;
+        component.m_greetRange = data.GreetRange;
+        component.m_byeRange = data.ByeRange;
+        component.m_offset = data.Offset;
+        component.m_minTalkInterval = data.MinTalkInterval;
+        component.m_hideDialogDelay = data.HideDialogueDelay;
+        component.m_randomTalkInterval = data.RandomTalkInterval;
+        component.m_randomTalkChance = data.RandomTalkChance;
+        component.m_randomTalk = data.RandomTalk;
+        component.m_randomTalkInFactionBase = data.RandomTalkInFactionBase;
+        component.m_randomGreets = data.RandomGreets;
+        component.m_randomGoodbye = data.RandomGoodbye;
+        component.m_privateAreaAlarm = data.PrivateAreaAlarm;
+        component.m_aggravated = data.Aggravated;
+        
+        Helpers.UpdateEffectList(creatureData.m_effects.m_randomTalkFX, ref component.m_randomTalkFX, scale);
+        Helpers.UpdateEffectList(creatureData.m_effects.m_randomGreetFX, ref component.m_randomGreetFX, scale);
+        Helpers.UpdateEffectList(creatureData.m_effects.m_randomGoodbyeFX, ref component.m_randomGoodbyeFX, scale);
+    }
 }

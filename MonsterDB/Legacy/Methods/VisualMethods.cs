@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BepInEx;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -88,6 +89,37 @@ public static class VisualMethods
         {
             LogParseFailure(particleFilePath);
         }
+    }
+    
+    public static void Update(GameObject critter, CreatureData creatureData)
+    {
+        Vector3 scale =creatureData.m_scale.ToRef();
+        Dictionary<string, MaterialData> materialData = creatureData.m_materials;
+        critter.transform.localScale = scale;
+        SkinnedMeshRenderer[] renderers = critter.GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer renderer in renderers)
+        {
+            Material[] materials = renderer.sharedMaterials;
+            foreach (Material material in materials)
+            {
+                string name = material.name;
+                if (!materialData.TryGetValue(name, out MaterialData data)) continue;
+                material.shader = ShaderRef.GetShader(data.ShaderType, material.shader);
+
+                material.name = name;
+                material.color = GetColor(data._Color);
+                material.mainTexture = TextureManager.GetTexture(data._MainTex, material.mainTexture);
+                if (material.HasProperty(ShaderRef._EmissionColor)) material.SetColor(ShaderRef._EmissionColor, GetColor(data._EmissionColor));
+                if (material.HasProperty(ShaderRef._Hue)) material.SetFloat(ShaderRef._Hue, data._Hue);
+                if (material.HasProperty(ShaderRef._Value)) material.SetFloat(ShaderRef._Value, data._Value);
+                if (material.HasProperty(ShaderRef._Saturation)) material.SetFloat(ShaderRef._Saturation, data._Saturation);
+                
+            }
+
+            renderer.sharedMaterials = materials.ToArray();
+            renderer.materials = materials.ToArray();
+        }
+
     }
 
     public static Color GetColor(ColorData data) => new Color(data.r, data.g, data.b, data.a);

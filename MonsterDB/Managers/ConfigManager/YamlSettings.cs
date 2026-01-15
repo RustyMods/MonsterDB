@@ -26,8 +26,9 @@ public sealed class FactionYamlConverter : IYamlTypeConverter
         return FactionManager.GetFaction(scalar.Value);
     }
 
-    public void WriteYaml(IEmitter emitter, object value, Type type)
+    public void WriteYaml(IEmitter emitter, object? value, Type type)
     {
+        if (value == null) return;
         Character.Faction faction = (Character.Faction)value;
         emitter.Emit(new Scalar(faction.ToString()));
     }

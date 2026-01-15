@@ -1,0 +1,298 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: SeekerQueen
+Character:
+  name: $enemy_seekerqueen
+  faction: Boss
+  boss: true
+  dontHideBossHud: true
+  bossEvent: boss_queen
+  defeatSetGlobalKey: defeated_queen
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 2
+  speed: 4
+  turnSpeed: 50
+  runSpeed: 8
+  runTurnSpeed: 120
+  acceleration: 0.8
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 12
+  flyFastSpeed: 12
+  flyTurnSpeed: 250
+  canSwim: true
+  swimDepth: 4.44
+  swimSpeed: 4
+  swimTurnSpeed: 60
+  swimAcceleration: 0.05
+  groundTilt: PitchRaycast
+  groundTiltSpeed: 100
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_seeker_hurt
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_Queen_Death
+      variant: 0
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  jumpEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_rock_destroyed
+    - prefab: vfx_troll_rock_destroyed
+  # Base Health
+  health: 12500
+  regenAllHPTime: 3600
+  damageModifiers:
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+  staggerWhenBlocked: false
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - SeekerQueen_Teleport
+  - SeekerQueen_Rush
+  - SeekerQueen_Bite
+  - SeekerQueen_Call
+  - SeekerQueen_Spit
+  - SeekerQueen_Slap
+  - SeekerQueen_PierceAOE
+AI:
+  alertRange: 30
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0.5
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 6
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: true
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_HiveQueen_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_HiveQueen_idle
+  idleSoundInterval: 5
+  idleSoundChance: 0.5
+  pathAgentType: SeekerQueen
+  moveMinAngle: 30
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 5
+  randomMoveInterval: 4
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 4
+  takeoffTime: 1
+  flyAltitudeMin: 3
+  flyAltitudeMax: 6
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  deathMessage: $enemy_boss_queen_deathmessage
+  alertedMessage: $enemy_boss_queen_alertmessage
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: blob_splat
+    parent: flow
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: puke
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: flow
+    parent: jaw
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: barnacle_piece
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: drops-withdecals
+    parent: jaw
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: Cube
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_queen
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: SeekerQueen_d
+  - prefab: Plane
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_queen
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: SeekerQueen_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophySeekerQueen
+    levelMultiplier: false
+    dontScale: true
+  - prefab: QueenDrop
+    amountMin: 5
+    amountMax: 5
+    levelMultiplier: false
+    dontScale: true
+MovementDamage:
+  runDamageObject: RunHitDamager
+  areaOfEffect:
+    # Attack (overridden by item)
+    useAttackSettings: true
+    damage:
+      blunt: 200
+      chop: 40
+    backstabBonus: 4
+    groundLavaValue: -1
+    chainStartChanceFalloff: 0.8
+    hitParent: true
+    hitFriendly: true
+    hitEnemy: true
+    hitCharacters: true
+    hitProps: true
+    launchForceUpFactor: 0.5
+    radius: 4
+    ttl: 4
+    hitInterval: 1
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- stagger
+- idle
+- taunt
+- attack_call
+- attack_spit
+- attack_slash1
+- attack_slash2
+- attack_slash3
+- attack_slash4
+- attack_pierce
+- attack_teleport
+- attack_rush
+- attack_bite

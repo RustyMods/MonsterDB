@@ -1,0 +1,284 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Frostling
+ClonedFrom: Surtling
+IsCloned: true
+Character:
+  name: $enemy_frostling
+  faction: Demon
+  defeatSetGlobalKey: ''
+  # Effects
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_ice_hit
+    - prefab: vfx_frostarrow_hit
+    - prefab: sfx_imp_death
+  # Base Health
+  health: 20
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Immune
+    poison: Immune
+    spirit: Immune
+  defaultItems:
+  - MDB_Frostling_imp_fireball_attack
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.1
+    enableObject: flames_world_BLUE
+  - scale: 1.2
+    enableObject: flames_world_Purple
+  renderers:
+  - prefab: Kakari
+    parent: model
+    index: 0
+    materials:
+    - name: MDB_Frostling_imp_mat
+      emissionTexture: frostling_flame_blue
+
+  lights:
+  - prefab: Point light
+    parent: Frostling
+    index: 2
+    color: '#74B1FFFF'
+  particleSystems:
+  - prefab: flames
+    parent: Visual
+    index: 1
+    startColor:
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#8FBCEEFF'
+      colorMax: '#FFFFFFFF'
+    customData:
+      enabled: true
+      custom1:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#E5F0FFFF'   # hot pale core
+          - color: '#2A4A78FF'   # cooled blue edge
+            time: 1
+      custom2:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#6FB8FFFF'   # energetic blue
+          - color: '#1F3F7AFF'   # deep flame blue
+            time: 1
+  - prefab: flames_world
+    parent: Visual
+    index: 2
+    startColor:
+      mode: Color
+      color: '#E5F0FFFF'
+      colorMin: '#00000000'
+      colorMax: '#E5F0FFFF'
+    customData:
+      enabled: true
+      custom1:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#E5F0FFFF'
+          - color: '#2A4A78FF'
+            time: 1
+      custom2:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#6FB8FFFF'
+          - color: '#1F3F7AFF'
+            time: 1
+    colorOverLifetime:
+      mode: Gradient
+      gradient:
+        mode: Blend
+        alphaKeys:
+        - {}
+        - alpha: 1
+          time: 0.2235294
+        - time: 1
+        colorKeys:
+        - color: '#6FB8FFFF'     # early bright blue flame
+        - color: '#E5F0FFFF'     # fade to pale blue-white
+          time: 1
+      gradientMax:
+        mode: Blend
+        alphaKeys:
+        - {}
+        - alpha: 1
+          time: 0.2235294
+        - time: 1
+        colorKeys:
+        - color: '#6FB8FFFF'
+        - color: '#E5F0FFFF'
+          time: 1
+  - prefab: flames_world_Purple
+    parent: Visual
+    index: 3
+    startColor:
+      mode: TwoColors
+      color: '#6FB8FFFF'
+      colorMin: '#FFFFFFFF'
+      colorMax: '#6FB8FFFF'
+    customData:
+      enabled: true
+      custom1:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#8FD6FFFF'   # arcane cyan-blue
+          - color: '#1A2F66FF'   # deep magic blue
+            time: 1
+      custom2:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#BFE9FFFF'
+          - color: '#4FA3FFFF'
+            time: 0.0147097
+          - color: '#1A2F66FF'
+            time: 1
+  - prefab: Purple Sparks
+    parent: flames_world_Purple
+    index: 0
+    startColor:
+      mode: Color
+      color: '#6FB8FFFF'
+      colorMin: '#00000000'
+      colorMax: '#6FB8FFFF'
+    customData:
+      custom1:
+        mode: Color
+        color: '#FFFFFFFF'
+      custom2:
+        mode: Color
+        color: '#FFFFFFFF'
+  - prefab: flames_world_BLUE
+    parent: Visual
+    index: 4
+    startColor:
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#E5F0FFFF'
+      colorMax: '#FFFFFFFF'
+    customData:
+      enabled: true
+      custom1:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#8FBCEEFF'
+            time: 0.0147097
+          - color: '#2A6FD4FF'
+            time: 1
+      custom2:
+        mode: Gradient
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#8FD6FFFF'
+            time: 0.002944991
+          - color: '#1F3F7AFF'
+            time: 1
+  - prefab: Blue Sparks
+    parent: flames_world_BLUE
+    index: 0
+    startColor:
+      mode: Color
+      color: '#4FA3FFFF'
+      colorMin: '#00000000'
+      colorMax: '#4FA3FFFF'
+    customData:
+      custom1:
+        mode: Color
+        color: '#FFFFFFFF'
+      custom2:
+        mode: Color
+        color: '#FFFFFFFF'
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: Coal
+    amountMin: 4
+    amountMax: 5
+  - prefab: Crystal
+    chance: 0.5
+  # - prefab: TrophySurtling
+  #   chance: 0.05
+  #   levelMultiplier: false
+# If entries removed, will still be registered, set enabled to false to disable
+SpawnData:
+- name: MDB Frostling Spawn Data
+  enabled: true
+  prefab: Frostling
+  biome: None
+  # Edge, Median, Everything
+  biomeArea: Everything
+  maxSpawned: 1
+  spawnInterval: 4
+  spawnChance: 100
+  spawnAtNight: true
+  spawnAtDay: true
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- idle
+- attack
+- stagger

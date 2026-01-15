@@ -1,0 +1,281 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Abomination
+Character:
+  name: $enemy_abomination
+  faction: Undead
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 4
+  speed: 2
+  turnSpeed: 20
+  runSpeed: 5
+  runTurnSpeed: 60
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 5
+  swimSpeed: 3
+  swimTurnSpeed: 45
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 20
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_tree_hit_abomination
+    - prefab: vfx_SawDust
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_tree_fall_abomination
+    - prefab: Abomination_ragdoll
+    - prefab: vfx_firetreecut_dead_abomination
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 800
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Resistant
+    pierce: VeryResistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Immune
+    poison: Immune
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.33
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Abomination_attack1
+  - Abomination_attack2
+  - Abomination_attack3
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: true
+  wakeupRange: 20
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects:
+    effectPrefabs:
+    - prefab: fx_Abomination_arise
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 8
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_Abomination_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_Abomination_idle
+  idleSoundInterval: 15
+  idleSoundChance: 0.25
+  pathAgentType: Abomination
+  moveMinAngle: 30
+  smoothMovement: false
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: false
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: flies
+    parent: particles
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_lit_opaque
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: ooz
+    parent: particles
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: wetsplsh
+    parent: particles
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: dirt
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: wetsplsh (1)
+    parent: particles
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: mud particle (1)
+    parent: spine1
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: footstep_mud
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slime_splash
+  - prefab: Abomination
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Abomination_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Rotvalta_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyAbomination
+    chance: 0.5
+    levelMultiplier: false
+  - prefab: Root
+    amountMin: 5
+    amountMax: 5
+    levelMultiplier: false
+  - prefab: Guck
+    amountMin: 3
+    amountMax: 5
+    levelMultiplier: false
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- footstep
+- random
+- idle
+- attack
+- attack2
+- attack3
+- doublesmash
+- stagger
+- sleeping

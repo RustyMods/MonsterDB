@@ -13,15 +13,17 @@ Visuals:
     y: 0.5
     z: 0.5
   renderers:
-  - prefab: default
-    active: true
-    enabled: true
-    materials:
-      - name: MDB_NeckEgg_Asksvinegg_mat
-        shader: Standard
-        color: '#FFFFFFFF'
-        emissionColor: '#000000FF'
-        mainTexture: neckegg_d
+    - prefab: default
+      parent: attach
+      index: 0
+      active: true
+      enabled: true
+      materials:
+        - name: Asksvinegg_mat
+          shader: Standard
+          color: '#FFFFFFFF'
+          emissionColor: '#000000FF'
+          mainTexture: asksvinegg_d
 
 # If field removed, will remove component
 EggGrow:
@@ -34,6 +36,6 @@ EggGrow:
   requireCoverPercentige: 0.7
   hatchEffect:
     effectPrefabs:
-    - prefab: fx_chicken_birth
-      variant: 0
+      - prefab: fx_chicken_birth
+        variant: 0
   notGrowingObject: Not Growing

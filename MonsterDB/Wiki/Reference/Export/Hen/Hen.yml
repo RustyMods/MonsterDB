@@ -1,0 +1,265 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Hen
+Character:
+  name: $enemy_hen
+  group: chicken
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 3
+  speed: 1.5
+  turnSpeed: 100
+  runSpeed: 6
+  runTurnSpeed: 200
+  acceleration: 0.8
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 0.53
+  swimSpeed: 2
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: Pitch
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_boar_hit
+    - prefab: sfx_chicken_hurt
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_hen_death
+    - prefab: sfx_chicken_death
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 10
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - boar_base_attack
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_creature_consume
+AI:
+  alertRange: 6
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: true
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 1
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  # Tameable
+  consumeItems:
+  - Dandelion
+  - Barley
+  - BeechSeeds
+  - BirchSeeds
+  - CarrotSeeds
+  - OnionSeeds
+  - TurnipSeeds
+  consumeRange: 1
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+  viewRange: 20
+  viewAngle: 90
+  hearRange: 20
+  mistVision: false
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_chicken_idle_vocal
+      variant: 0
+      attach: true
+  idleSoundInterval: 15
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 30
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: true
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.1
+    hue: 0.05
+    saturation: -0.1
+  - scale: 1.2
+    hue: 0.09
+    saturation: -0.5
+    value: -0.05
+  renderers:
+  - prefab: Hen
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Material
+      shader: Standard
+      color: '#CCCCCCFF'
+      emissionColor: '#000000FF'
+      mainTexture: Hen_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: ChickenMeat
+  - prefab: Feathers
+    amountMax: 3
+# If field removed, will remove component
+Tameable:
+  fedDuration: 600
+  tamingTime: 1800
+  startsTamed: true
+  tamedEffect:
+    effectPrefabs:
+    - prefab: fx_creature_tamed
+  sootheEffect:
+    effectPrefabs:
+    - prefab: vfx_creature_soothed
+  petEffect:
+    effectPrefabs:
+    - prefab: fx_chicken_pet
+  commandable: false
+  unsummonDistance: 0
+  unsummonOnOwnerLogoutSeconds: 0
+  levelUpOwnerSkill: None
+  levelUpFactor: 1
+  dropSaddleOnDeath: true
+  dropItemVel: 5
+  tamingSpeedMultiplierRange: 60
+  tamingBoostMultiplier: 2
+  nameBeforeText: true
+  tameText: $hud_tamelove
+# If field removed, will remove component
+Procreation:
+  updateInterval: 30
+  totalCheckRange: 10
+  maxCreatures: 10
+  partnerCheckRange: 4
+  pregnancyChance: 0.33
+  pregnancyDuration: 60
+  requiredLovePoints: 3
+  offspring: ChickenEgg
+  minOffspringLevel: 0
+  spawnOffset: 0
+  spawnOffsetMax: 0
+  spawnRandomDirection: false
+  birthEffects:
+    effectPrefabs:
+    - prefab: fx_chicken_lay_egg
+  loveEffects:
+    effectPrefabs:
+    - prefab: fx_hen_love
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- idle

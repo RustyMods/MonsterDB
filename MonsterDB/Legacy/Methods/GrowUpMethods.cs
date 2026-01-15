@@ -23,5 +23,28 @@ public static class GrowUpMethods
         }
     }
 
+    public static void Update(GameObject critter, CreatureData creatureData)
+    {
+        GrowUpData data = creatureData.m_growUp;
+        if (!critter.TryGetComponent(out Growup component)) return;
+        var growUpPrefab = PrefabManager.GetPrefab(data.GrownPrefab);
+        if (growUpPrefab == null) return;
+        
+        component.m_growTime = data.GrowTime;
+        component.m_inheritTame = data.InheritTame;
+        component.m_grownPrefab = growUpPrefab;
+
+        component.m_altGrownPrefabs = new();
+        foreach (var altData in data.AltGrownPrefabs)
+        {
+            var prefab = PrefabManager.GetPrefab(altData.GrownPrefab);
+            if (prefab == null) continue;
+            component.m_altGrownPrefabs.Add(new Growup.GrownEntry()
+            {
+                m_prefab = prefab,
+                m_weight = altData.Weight
+            });
+        }
+    }
     
 }

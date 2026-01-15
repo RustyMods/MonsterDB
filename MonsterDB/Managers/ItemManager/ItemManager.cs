@@ -38,7 +38,7 @@ public static class ItemManager
 
             Write(prefab);
             return true;
-        });
+        }, PrefabManager.GetAllPrefabNames<ItemDrop>);
         
         Command read = new Command("mod_item", $"[fileName]: read item YML from {FileManager.ImportFolder} folder", args =>
         {
@@ -134,27 +134,32 @@ public static class ItemManager
             return true;
         }, () => PrefabManager.SearchCache<ItemDrop>(""));
     }
-    
 
-    public static string? Save(GameObject prefab, bool isClone = false, string source = "")
+    public static bool TrySave(GameObject prefab, out BaseItem item, bool isClone = false, string source = "")
     {
-        if (!prefab.GetComponent<ItemDrop>()) return null;
+        item = SyncManager.GetOriginal<BaseItem>(prefab.name);
+        if (item != null) return true;
 
-        if (SyncManager.GetOriginal<BaseItem>(prefab.name) is { } item) return ConfigManager.Serialize(item);
-        BaseItem reference = new BaseItem();
-        reference.Setup(prefab, isClone, source);
+        if (!prefab.GetComponent<ItemDrop>()) return false;
         
-        SyncManager.originals.Add(prefab.name, reference);
-        return ConfigManager.Serialize(reference);
+        item = new BaseItem();
+        item.Setup(prefab, isClone, source);
+        
+        SyncManager.originals.Add(prefab.name, item);
+
+        return true;
     }
 
     private static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {
         string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
-        string? text = Save(prefab, isClone, clonedFrom);
-        if (string.IsNullOrEmpty(text)) return;
-        File.WriteAllText(filePath, text);
-        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+
+        if (TrySave(prefab, out BaseItem item, isClone, clonedFrom))
+        {
+            string text = ConfigManager.Serialize(item);
+            File.WriteAllText(filePath, text);
+            MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+        }
     }
     
     private static void Read(string filePath)
@@ -184,21 +189,6 @@ public static class ItemManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
-            if (p.TryGetComponent(out ItemDrop component))
-            {
-                if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
-                {
-                    Clone pr = new Clone(component.m_itemData.m_shared.m_attack.m_attackProjectile,
-                        $"MDB_{cloneName}_{component.m_itemData.m_shared.m_attack.m_attackProjectile.name}");
-                    pr.OnCreated += projectile =>
-                    {
-                        component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
-                    };
-                    pr.Create();
-                }
-            }
-            
-            
             Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
             Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
             
@@ -207,6 +197,15 @@ public static class ItemManager
                 Renderer renderer = renderers[i];
                 CloneMaterials(renderer, ref  newMaterials);
             }
+
+
+            MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
+            if (write)
+            {
+                Write(p, true, source.name);
+            }
+
+            return;
 
             void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
             {
@@ -230,13 +229,6 @@ public static class ItemManager
                 }
                 r.sharedMaterials = newMats.ToArray();
                 r.materials = newMats.ToArray();
-            }
-            
-            
-            MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
-            if (write)
-            {
-                Write(p, true, source.name);
             }
         };
         c.Create();

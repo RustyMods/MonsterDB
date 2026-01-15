@@ -69,7 +69,6 @@ public class AttackRef : Reference
     public string? m_spawnOnHit;
     public float? m_spawnOnHitChance;
     public string? m_attackProjectile;
-    public ProjectileRef? m_projectileRef;
     public float? m_projectileVel;
     public float? m_projectileVelMin;
     [YamlMember(Description = "When not using Draw, randomize velocity between Velocity and Velocity Min")]
@@ -96,14 +95,10 @@ public class AttackRef : Reference
 
 public static partial class Extensions
 {
-    public static AttackRef ToRef(this Attack att)
+    public static AttackRef ToAttackRef(this Attack att)
     {
         AttackRef attackRef = new AttackRef();
         attackRef.SetFrom(att);
-        if (att.m_attackProjectile != null && att.m_attackProjectile.TryGetComponent(out Projectile prj))
-        {
-            attackRef.m_projectileRef = prj;
-        }
         return attackRef;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -9,7 +10,7 @@ namespace MonsterDB;
 public class CharacterDropRef : Reference
 {
     public List<DropRef>? m_drops;
-    [DefaultValue(true)] public bool? m_dropsEnabled;
+    [DefaultValue(true)][YamlMember(Description = "Only works if Character Death Effects do not have a ragdoll")] public bool? m_dropsEnabled;
 
     public static implicit operator CharacterDropRef(CharacterDrop characterDrop)
     {
@@ -23,12 +24,12 @@ public class CharacterDropRef : Reference
 public class DropRef : Reference
 {
     public string? m_prefab;
-    public int? m_amountMin;
-    public int? m_amountMax;
-    public float? m_chance;
-    public bool? m_onePerPlayer;
+    [DefaultValue(1)] public int? m_amountMin;
+    [DefaultValue(1)] public int? m_amountMax;
+    [DefaultValue(1f)] public float? m_chance;
+    [DefaultValue(false)] public bool? m_onePerPlayer;
     [DefaultValue(true)] public bool? m_levelMultiplier;
-    public bool? m_dontScale;
+    [DefaultValue(false)] public bool? m_dontScale;
 }
 
 public static partial class Extensions

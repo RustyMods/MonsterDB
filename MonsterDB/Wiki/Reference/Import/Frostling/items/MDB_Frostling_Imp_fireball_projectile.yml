@@ -1,0 +1,154 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: MDB_Frostling_Imp_fireball_projectile
+ClonedFrom: Imp_fireball_projectile
+IsCloned: true
+ProjectileData:
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_ice_hit
+    - prefab: sfx_imp_fireball_explode
+Visuals:
+  renderers:
+  - prefab: Sphere
+    parent: MDB_Frostling_Imp_fireball_projectile
+    index: 0
+    materials:
+    - name: fireball_mat
+      color: '#E5F0FFFF'
+      emissionColor: '#FFFF00FF'
+  lights:
+  - prefab: Point light
+    parent: MDB_Frostling_Imp_fireball_projectile
+    index: 3
+    color: '#E5F0FFFF'
+
+  particleSystems:
+  - prefab: flames
+    parent: MDB_Frostling_Imp_fireball_projectile
+    index: 1
+    startColor:
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#8FBCEEFF'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        mode: Gradient
+        color: '#FF000000'
+        colorMin: '#00000000'
+        colorMax: '#FF000000'
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#E5F0FFFF'
+          - color: '#2A4A78FF'
+            time: 1
+          colorSpace: Uninitialized
+        gradientMax:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#E5F0FFFF'
+          - color: '#2A4A78FF'
+            time: 1
+          colorSpace: Uninitialized
+      custom2:
+        mode: Gradient
+        color: '#FF000000'
+        colorMin: '#00000000'
+        colorMax: '#FF000000'
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#6FB8FFFF'
+          - color: '#1F3F7AFF'
+            time: 1
+          colorSpace: Uninitialized
+        gradientMax:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#6FB8FFFF'
+          - color: '#1F3F7AFF'
+            time: 1
+          colorSpace: Uninitialized
+
+  - prefab: flames_world
+    parent: MDB_Frostling_Imp_fireball_projectile
+    index: 2
+    startColor:
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#8FBCEEFF'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        mode: Gradient
+        color: '#FF000000'
+        colorMin: '#00000000'
+        colorMax: '#FF000000'
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#E5F0FFFF'
+          - color: '#2A4A78FF'
+            time: 1
+          colorSpace: Uninitialized
+        gradientMax:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#E5F0FFFF'
+          - color: '#2A4A78FF'
+            time: 1
+          colorSpace: Uninitialized
+      custom2:
+        mode: Gradient
+        color: '#FF000000'
+        colorMin: '#00000000'
+        colorMax: '#FF000000'
+        gradient:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#6FB8FFFF'
+          - color: '#1F3F7AFF'
+            time: 1
+          colorSpace: Uninitialized
+        gradientMax:
+          mode: Blend
+          alphaKeys:
+          - alpha: 1
+          - alpha: 1
+            time: 1
+          colorKeys:
+          - color: '#6FB8FFFF'
+          - color: '#1F3F7AFF'
+            time: 1
+          colorSpace: Uninitialized

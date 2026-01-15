@@ -1,0 +1,113 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: Ulv_attack1_bite
+ItemData:
+  name: Bite Attack
+  maxStackSize: 1
+  maxQuality: 1
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages:
+    slash: 80
+  attackForce: 30
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attack:
+    attackType: Horizontal
+    attackAnimation: attack_bite
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: false
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0.2
+    speedFactorRotation: 0.5
+    attackStartNoise: 10
+    attackHitNoise: 30
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 2.2
+    attackHeight: 0.89
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 25
+    attackRayWidth: 0.8
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: false
+    hitPointtype: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 10
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+  aiAttackRange: 1.5
+  aiAttackRangeMin: 0
+  aiAttackInterval: 5
+  aiAttackMaxAngle: 20
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_claw_start
+      variant: 0
+  trailStartEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_claw_trailstart
+      variant: 0

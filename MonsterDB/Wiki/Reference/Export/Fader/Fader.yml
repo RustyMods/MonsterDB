@@ -1,0 +1,429 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Fader
+Character:
+  name: $enemy_fader
+  faction: Boss
+  boss: true
+  dontHideBossHud: true
+  bossEvent: boss_fader
+  defeatSetGlobalKey: defeated_fader
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 4
+  speed: 4
+  turnSpeed: 120
+  runSpeed: 8
+  runTurnSpeed: 120
+  acceleration: 0.8
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 12
+  flyFastSpeed: 12
+  flyTurnSpeed: 250
+  canSwim: true
+  swimDepth: 4.44
+  swimSpeed: 4
+  swimTurnSpeed: 60
+  swimAcceleration: 0.05
+  groundTilt: PitchRaycast
+  groundTiltSpeed: 100
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: true
+  tolerateSmoke: false
+  tolerateTar: false
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_Fader_Ragdoll
+    - prefab: sfx_fader_death_start
+    - prefab: sfx_fader_death_explosion
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  jumpEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_rock_destroyed
+    - prefab: vfx_troll_rock_destroyed
+  # Base Health
+  health: 25000
+  regenAllHPTime: 3600
+  damageModifiers:
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Immune
+    spirit: Immune
+  staggerWhenBlocked: false
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Fader_Fissure
+  - Fader_Bite
+  - Fader_Claw_Left
+  - Fader_Claw_Right
+  - Fader_Spin
+  - Fader_Flamebreath
+  - Fader_Meteors
+  - Fader_Roar
+  - Fader_WallOfFire
+  - Fader_Meteors_Intense
+  - Fader_Fissure_Intense
+  - Fader_Roar_Intense
+AI:
+  alertRange: 100
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0.5
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 6
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: true
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_fader_idle
+  idleSoundInterval: 7
+  idleSoundChance: 0.5
+  pathAgentType: HugeSize
+  moveMinAngle: 30
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 5
+  randomMoveInterval: 4
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 4
+  takeoffTime: 1
+  flyAltitudeMin: 3
+  flyAltitudeMax: 6
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: false
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  deathMessage: $enemy_boss_fader_deathmessage
+  alertedMessage: $enemy_boss_fader_alertmessage
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: fx_fader_chestfire
+    parent: chest
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Sparks
+    parent: fx_fader_chestfire
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: Sparks
+    parent: fx_fader_chestfire
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: Sparks
+    parent: fx_fader_chestfire
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: Sparks
+    parent: fx_fader_chestfire
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  - prefab: fx_fader_chestfire
+    parent: neck_1
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: fx_fader_chestfire
+    parent: neck_2
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: fx_fader_chestfire
+    parent: spine_2
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Fader
+    parent: Visual
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: Fader_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#00FFFFFF'
+      mainTexture: Fader_d
+  - prefab: HornsBones
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Fader_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#00FFFFFF'
+      mainTexture: Fader_d
+  - prefab: Wing
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Fader_Mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#00FFFFFF'
+      mainTexture: Fader_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyFader
+    levelMultiplier: false
+    dontScale: true
+  - prefab: FaderDrop
+    amountMin: 5
+    amountMax: 5
+    levelMultiplier: false
+    dontScale: true
+MovementDamage:
+  runDamageObject: RunHitDamager
+  areaOfEffect:
+    # Attack (overridden by item)
+    useAttackSettings: true
+    damage:
+      chop: 300
+      pickaxe: 300
+    backstabBonus: 4
+    groundLavaValue: -1
+    chainStartChanceFalloff: 0.8
+    hitParent: true
+    hitFriendly: true
+    hitEnemy: true
+    hitCharacters: true
+    hitProps: true
+    launchForceUpFactor: 0.5
+    radius: 4
+    ttl: 4
+    hitInterval: 1
+# If field removed, will remove component
+DropProjectileOverDistance:
+  projectilePrefab: Fader_DroppedFire_AOE
+  distancePerProjectile: 5
+  spawnHeight: 1
+  snapToGround: true
+  # If higher than 0, will force a spawn if nothing has spawned in that amount of time.
+  timeToForceSpawn: 10
+  minVelocity: 0
+  maxVelocity: 0
+  projectileAoe:
+    # Attack (overridden by item)
+    useAttackSettings: false
+    damage:
+      fire: 40
+    scaleDamageByDistance: false
+    dodgeable: false
+    blockable: false
+    toolTier: 0
+    attackForce: 0
+    backstabBonus: 4
+    attackForceForward: false
+    hitTerrainOnlyOnce: false
+    spawnOnGroundType: -1
+    groundLavaValue: -1
+    hitNoise: 0
+    placeOnGround: false
+    randomRotation: false
+    maxTargetsFromCenter: 0
+    # Multi Spawn (Lava Bomb)
+    multiSpawnMin: 0
+    multiSpawnMax: 0
+    multiSpawnDistanceMin: 0
+    multiSpawnDistanceMax: 0
+    multiSpawnScaleMin: 0
+    multiSpawnScaleMax: 0
+    multiSpawnSpringDelayMax: 0
+    # Chain Spawn
+    chainStartChance: 0
+    chainStartChanceFalloff: 0.8
+    chainChancePerTarget: 0
+    chainStartDelay: 0
+    chainMinTargets: 0
+    chainMaxTargets: 0
+    chainDelay: 0
+    chainChance: 0
+    damageSelf: 0
+    # Ignore targets
+    hitOwner: false
+    hitParent: true
+    hitSame: false
+    hitFriendly: false
+    hitEnemy: true
+    hitCharacters: true
+    hitProps: true
+    hitTerrain: false
+    launchCharacters: false
+    launchForceUpFactor: 0.5
+    useTriggers: true
+    triggerEnterOnly: false
+    radius: 4
+    # Wait this long before we start doing any damage
+    activationDelay: 0
+    ttl: 20
+    # When set, ttl will be a random value between tll and ttlMax
+    ttlMax: 0
+    hitAfterTtl: false
+    hitInterval: 0.5
+    hitOnEnable: false
+    attachToCaster: false
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- stagger
+- idle
+- taunt
+- attack_flamebreath
+- attack_bite
+- jump_forward
+- jump_right
+- jump_left
+- attack_roar
+- attack_WallOfFire
+- attack_Fissure
+- attack_ClawL
+- attack_ClawR
+- attack_Spin

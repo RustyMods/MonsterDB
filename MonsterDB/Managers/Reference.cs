@@ -115,7 +115,6 @@ public abstract class Reference
             }
         }
     }
-
     
     public void SetFrom<V>(V source)
     {
@@ -150,6 +149,10 @@ public abstract class Reference
                     TType == typeof(string):
                     target.SetValue(this, go.name);
                     break;
+                case ItemDrop id when 
+                    TType == typeof(string):
+                    target.SetValue(this, id.name);
+                    break;
                 case Sprite sp when 
                     TType == typeof(string):
                     target.SetValue(this, sp.name);
@@ -159,27 +162,31 @@ public abstract class Reference
                 {
                     if (el.m_effectPrefabs != null && el.m_effectPrefabs.Length > 0)
                     {
-                        target.SetValue(this, el.ToRef());
+                        target.SetValue(this, el.ToEffectListRef());
                     }
                     break;
                 }
+                case Sprite[] sa when 
+                    TType == typeof(string[]):
+                    target.SetValue(this, sa.ToSpriteNameArray());
+                    break;
                 case List<Growup.GrownEntry> ge when 
                     TType == typeof(List<GrowUpRef.GrownEntry>):
                 {
-                    target.SetValue(this, ge.ToRef());
+                    target.SetValue(this, ge.ToGrowUpRefEntryList());
                     break;
                 }
                 case GameObject[] goa when
                     TType == typeof(string[]):
-                    target.SetValue(this, goa.ToRef());
+                    target.SetValue(this, goa.ToGameObjectNameArray());
                     break;
                 case Humanoid.ItemSet[] isa when
                     TType == typeof(HumanoidRef.ItemSet[]):
-                    target.SetValue(this, isa.ToRef());
+                    target.SetValue(this, isa.ToHumanoidRefItemSetArray());
                     break;
                 case Humanoid.RandomItem[] ria when
                     TType == typeof(HumanoidRef.RandomItem[]):
-                    target.SetValue(this, ria.ToRef());
+                    target.SetValue(this, ria.ToHumanoidRefRandomItemArray());
                     break;
                 case StatusEffect se when
                     TType == typeof(string):
@@ -189,12 +196,12 @@ public abstract class Reference
                     TType == typeof(AttackRef):
                     if (!string.IsNullOrEmpty(att.m_attackAnimation))
                     {
-                        target.SetValue(this, att.ToRef());
+                        target.SetValue(this, att.ToAttackRef());
                     }
                     break;
                 case List<ItemDrop> items when 
                     TType == typeof(List<string>):
-                    target.SetValue(this, items.ToRef());
+                    target.SetValue(this, items.ToItemNameList());
                     break;
                 case List<LevelEffects.LevelSetup> ls when 
                     TType == typeof(List<LevelSetupRef>):
@@ -250,11 +257,13 @@ public static partial class Extensions
             
             Type TType = targetField.FieldType;
             Type SType = Nullable.GetUnderlyingType(sourceField.FieldType) ?? sourceField.FieldType;
+
+            string msg = $"Changing field: {targetField.Name}";
             
-            if (log) MonsterDBPlugin.LogDebug($"Changing field: {targetField.Name}");
             if (TType.IsAssignableFrom(SType))
             {
                 targetField.SetValue(target, SValue);
+                msg += $": {SValue}";
             }
             else if (TType == typeof(GameObject) && 
                      SValue is string goName)
@@ -262,6 +271,7 @@ public static partial class Extensions
                 if (string.IsNullOrEmpty(goName))
                 {
                     targetField.SetValue(target, null);
+                    msg += $": null";
                 }
                 else
                 {
@@ -269,6 +279,7 @@ public static partial class Extensions
                     if (prefab != null)
                     {
                         targetField.SetValue(target, prefab);
+                        msg += $": {prefab.name}";
                     }
                     else
                     {
@@ -278,10 +289,22 @@ public static partial class Extensions
                             if (possibleChild != null)
                             {
                                 targetField.SetValue(target, possibleChild.gameObject);
+                                msg += $": {possibleChild.name} transform";
                             }
                         }
                     }
                 }
+            }
+            else if (TType == typeof(Sprite[]) &&
+                     SValue is string[] spn)
+            {
+                targetField.SetValue(target, spn.ToSpriteArray());
+            }
+            else if (TType == typeof(Vector3) &&
+                     SValue is Vector3Ref vr)
+            {
+                msg += $": {vr.ToString()}";
+                targetField.SetValue(target, vr.ToVector3());
             }
             else if (TType == typeof(GameObject[]) && 
                      SValue is string[] goNames)
@@ -335,9 +358,11 @@ public static partial class Extensions
                      SValue is string sn)
             {
                 object? defaultValue = targetField.GetValue(target);
-                if (defaultValue is Sprite sprite)
+                Sprite? s = TextureManager.GetSprite(sn, defaultValue == null ? null : defaultValue as Sprite);
+                if (s != null)
                 {
-                    targetField.SetValue(target, TextureManager.GetSprite(sn, sprite));
+                    targetField.SetValue(target, s);
+                    msg += $": {s.name}";
                 }
             }
             else if (TType == typeof(List<DropTable.DropData>) && 
@@ -355,6 +380,35 @@ public static partial class Extensions
             {
                 targetField.SetValue(target,rv.FromRef());
             }
+            else if (TType == typeof(Attack) &&
+                     SValue is AttackRef ar)
+            {
+                object? TValue  = targetField.GetValue(target);
+                if (TValue is Attack att)
+                {
+                    att.SetFieldsFrom(ar);
+                }
+            }
+            else if (TType == typeof(Aoe) &&
+                     SValue is AoeRef aor)
+            {
+                object? TValue  = targetField.GetValue(target);
+                if (TValue is Aoe ao)
+                {
+                    ao.SetFieldsFrom(aor);
+                }
+            }
+            else if (TType == typeof(ItemDrop) &&
+                     SValue is string idName)
+            {
+                var item = PrefabManager.GetPrefab(idName);
+                if (item != null && item.TryGetComponent(out ItemDrop id))
+                {
+                    targetField.SetValue(target, id);
+                }
+            }
+            
+            if (log) MonsterDBPlugin.LogDebug(msg);
         }
     }
 }

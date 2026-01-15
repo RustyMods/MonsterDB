@@ -1,0 +1,77 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: GoblinSpear_projectile
+ProjectileData:
+  prefab: GoblinSpear_projectile
+  type: Spear
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 40
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_arrow_hit
+    - prefab: vfx_arrowhit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: trail
+    parent: GoblinSpear_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: trail
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+  - prefab: spear
+    parent: GoblinSpear_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flint
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: flint
+    - name: spear
+      shader: Custom/Creature
+      color: '#C1C1C1FF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Planks1c

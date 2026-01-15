@@ -1,0 +1,83 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: projectile_beam
+ProjectileData:
+  prefab: projectile_beam
+  type: Magic
+  damage: {}
+  aoe: 0
+  dodgeable: true
+  blockable: true
+  attackForce: 40
+  backstabBonus: 1
+  healthReturn: 0
+  ttl: 3
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_goblinking_beam_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Cube
+    parent: projectile_beam
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: Default-Material
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: Particle System
+    parent: projectile_beam
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: beam
+      shader: Particles/Standard Unlit2
+      color: '#000000FF'
+      emissionColor: '#FF119CFF'
+      mainTexture: point2
+    - name: beam
+      shader: Particles/Standard Unlit2
+      color: '#000000FF'
+      emissionColor: '#FF119CFF'
+      mainTexture: point2
+  - prefab: pixel flakes
+    parent: projectile_beam
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: ashrain_cinder
+      shader: Custom/Particle (Unlit)
+      mainTexture: spark 1

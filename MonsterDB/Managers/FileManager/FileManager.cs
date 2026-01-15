@@ -87,6 +87,11 @@ public static class FileManager
                         SyncManager.loadList.Add(fish);
                         SyncManager.rawFiles[fish.Prefab] = text;
                         break;
+                    case BaseType.Projectile:
+                        BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(text);
+                        SyncManager.loadList.Add(projectile);
+                        SyncManager.rawFiles[projectile.Prefab] = text;
+                        break;
                 }
 
             }
@@ -96,7 +101,7 @@ public static class FileManager
                 MonsterDBPlugin.LogDebug(ex.Message);
             }
         }
-        MonsterDBPlugin.LogInfo($"Loaded {files.Length} modified creature files.");
+        MonsterDBPlugin.LogInfo($"Loaded {files.Length} files.");
     }
 
     private static void RegisterSpawnList(SpawnDataRef[] list)
@@ -179,12 +184,19 @@ public static class FileManager
                     SyncManager.rawFiles[fish.Prefab] = text;
                     SyncManager.UpdateSync();
                     break;
+                case BaseType.Projectile:
+                    BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(text);
+                    projectile.Update();
+                    SyncManager.rawFiles[projectile.Prefab] = text;
+                    SyncManager.UpdateSync();
+                    break;
             }
         }
         catch (Exception ex)
         {
-            MonsterDBPlugin.LogWarning($"Failed to deserialize: {Path.GetFileName(filePath)}");
-            MonsterDBPlugin.LogDebug(ex.Message);
+            MonsterDBPlugin.LogWarning($"Failure updating file: {Path.GetFileName(filePath)}");
+            MonsterDBPlugin.LogWarning(ex.Message);
+            MonsterDBPlugin.LogDebug(ex.StackTrace);
         }
     }
 }

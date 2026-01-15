@@ -1,0 +1,63 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: Charred_MageCloths
+ItemData:
+  name: Iron plate armor
+  description: $item_chest_iron_description
+  maxStackSize: 1
+  maxQuality: 4
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages: {}
+  attackForce: 10
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Hood
+    parent: attach_skin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: CharredMelee
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_melee_D
+  - prefab: ChestPiece
+    parent: OLD attach_skin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: CharredMelee
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_melee_D

@@ -30,14 +30,25 @@ public class BaseItem : Header
 
     protected virtual void SetupVisuals(GameObject prefab)
     {
+        Visuals = new VisualRef()
+        {
+            m_scale = prefab.transform.localScale,
+        };
+        
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
         if (renderers.Length > 0)
         {
-            Visuals = new VisualRef
-            {
-                m_scale = prefab.transform.localScale,
-                m_renderers = renderers.ToRef()
-            };
+            Visuals.m_renderers = renderers.ToRef();
+        }
+        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
+        if (particleSystems.Length > 0)
+        {
+            Visuals.m_particleSystems = particleSystems.ToRef();
+        }
+        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
+        if (lights.Length > 0)
+        {
+            Visuals.m_lights = lights.ToRef();
         }
     }
 
@@ -54,7 +65,7 @@ public class BaseItem : Header
 
     protected virtual void SaveDefault(GameObject prefab)
     {
-        ItemManager.Save(prefab, IsCloned, ClonedFrom);
+        ItemManager.TrySave(prefab, out _, IsCloned, ClonedFrom);
     }
 
     protected virtual void UpdatePrefab(GameObject prefab)
@@ -88,6 +99,8 @@ public class BaseItem : Header
             }
 
             Visuals.UpdateRenderers(prefab);
+            Visuals.UpdateParticleSystems(prefab);
+            Visuals.UpdateLights(prefab);
         }
     }
 }

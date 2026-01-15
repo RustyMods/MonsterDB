@@ -4,7 +4,7 @@
         <BepInExPath>$(ValheimGamePath)\BepInEx</BepInExPath>
         <CorlibPath>$(ValheimGamePath)\valheim_Data\Managed</CorlibPath>
         <PublicizedAssembliesPath>$(ValheimGamePath)\valheim_Data\Managed\publicized_assemblies</PublicizedAssembliesPath>
-        <CopyOutputDLLPath>C:\Users\malco\AppData\Roaming\com.kesomannen.gale\valheim\profiles\Default\BepInEx\plugins\RustyMods-MonsterDB</CopyOutputDLLPath>
+        <CopyOutputDLLPath>C:\Users\peima\AppData\Roaming\com.kesomannen.gale\valheim\profiles\tester\BepInEx\plugins\RustyMods-MonsterDB</CopyOutputDLLPath>
         <AfterTargets>ILRepacker</AfterTargets>
     </PropertyGroup>
 </Project>

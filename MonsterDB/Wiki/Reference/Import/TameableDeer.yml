@@ -4,12 +4,12 @@ Type: Character
 Prefab: Deer
 AI:
   consumeItems:
-  - Carrot
-  - Turnip
-  - Onion
-  - Mushroom
-  - Raspberry
-  - Blueberries
+    - Carrot
+    - Turnip
+    - Onion
+    - Mushroom
+    - Raspberry
+    - Blueberries
   consumeRange: 1
   consumeSearchRange: 10
   consumeSearchInterval: 10
@@ -40,3 +40,17 @@ Tameable:
   tamingBoostMultiplier: 2
   nameBeforeText: true
   tameText: $hud_tamelove
+Saddle:
+  maxUseRange: 6
+  attachAnimation: attach_lox
+  maxStamina: 240
+  runStaminaDrain: 1
+  swimStaminaDrain: 5
+  staminaRegen: 0.2
+  staminaRegenHungry: 0.1
+  # If added saddle by MonsterDB, use this to position attach point
+  attachOffset:
+    x: 0
+    y: 1.2
+    z: 0.4
+  mountIcon: TrophyDeer

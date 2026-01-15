@@ -29,6 +29,17 @@ public class CreatureData
     public List<LevelEffectData> m_levelEffects = new();
     public Dictionary<string, bool> m_particles = new();
     public VisualMethods.HumanData m_humanData = new();
+
+    public List<ItemAttackData> GetAllItems()
+    {
+        var list = new List<ItemAttackData>();
+        list.AddRange(m_defaultItems);
+        list.AddRange(m_randomWeapons);
+        list.AddRange(m_randomArmors);
+        list.AddRange(m_randomShields);
+        list.Add(m_randomSets.SelectMany(x => x.m_items).ToArray());
+        return list;
+    }
 }
 
 [Serializable]

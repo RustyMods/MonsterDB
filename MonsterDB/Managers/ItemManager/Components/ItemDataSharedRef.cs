@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using UnityEngine;
 
 namespace MonsterDB;
 
@@ -19,6 +20,7 @@ public class ItemDataSharedRef : Reference
     public int? m_value;
     public bool? m_teleportable;
     public int? m_toolTier;
+    public string[] m_icons;
     public HitData.DamageTypes? m_damages;
     public float? m_attackForce;
     public float? m_backstabBonus;
@@ -66,12 +68,13 @@ public class ItemDataSharedRef : Reference
         m_scaleWeightByQuality = d.m_scaleWeightByQuality;
         m_value = d.m_value;
         m_teleportable = d.m_teleportable;
+        m_icons = d.m_icons.Select(x => x.name).ToArray();
     }
 }
 
 public static partial class Extensions
 {
-    public static List<string> ToRef(this List<ItemDrop> items)
+    public static List<string> ToItemNameList(this List<ItemDrop> items)
     {
         List<string> list = items
             .Where(x => x != null)
@@ -89,5 +92,18 @@ public static partial class Extensions
             .Where(x => x != null)
             .ToList();
         return items;
+    }
+
+    public static string[] ToSpriteNameArray(this Sprite[] icons)
+    {
+        return icons.Select(x => x.name).ToArray();
+    }
+
+    public static Sprite[] ToSpriteArray(this string[] spriteNames)
+    {
+        return spriteNames
+            .Select(x => TextureManager.GetSprite(x, null)!)
+            .Where(x => x != null)
+            .ToArray();
     }
 }

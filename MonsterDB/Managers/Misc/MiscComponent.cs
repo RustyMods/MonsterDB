@@ -81,10 +81,10 @@ public class MiscComponent : Reference
                         info.m_value = sp.name;
                         break;
                     case EffectList el when el.HasEffects():
-                        info.m_value = el.ToRef();
+                        info.m_value = el.ToEffectListRef();
                         break;
                     case GameObject[] goa:
-                        info.m_value = goa.ToRef();
+                        info.m_value = goa.ToGameObjectNameArray();
                         break;
                     case StatusEffect se:
                         info.m_value = se.name;
@@ -96,10 +96,10 @@ public class MiscComponent : Reference
                         info.m_value = sa;
                         break;
                     case Humanoid.ItemSet[] isa:
-                        info.m_value = isa.ToRef();
+                        info.m_value = isa.ToHumanoidRefItemSetArray();
                         break;
                     case Humanoid.RandomItem[] ria:
-                        info.m_value = ria.ToRef();
+                        info.m_value = ria.ToHumanoidRefRandomItemArray();
                         break;
                 }
 

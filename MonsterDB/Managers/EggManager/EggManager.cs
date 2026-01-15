@@ -31,6 +31,8 @@ public static class EggManager
             postfix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_ItemDrop_GetHoverText))));
         harmony.Patch(AccessTools.Method(typeof(EggGrow), nameof(EggGrow.GetHoverText)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_EggGrow_GetHoverText))));
+        harmony.Patch(AccessTools.Method(typeof(EggGrow), nameof(EggGrow.UpdateEffects)),
+            new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_EggGrow_UpdateEffects))));
     }
     
     private static Command save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder", args =>
@@ -326,24 +328,20 @@ public static class EggManager
         return false;
     }
 
-    [HarmonyPatch(typeof(EggGrow), nameof(EggGrow.UpdateEffects))]
-    private static class EggGrow_UpdateEffects
+    private static void Patch_EggGrow_UpdateEffects(EggGrow __instance, float grow)
     {
-        private static void Postfix(EggGrow __instance, float grow)
-        {
-            if (!IsNewEgg(__instance.m_item)) return;
-            var ps = __instance.GetComponent<ParticleSystem>();
-            if (ps == null) return;
+        if (!IsNewEgg(__instance.m_item)) return;
+        var ps = __instance.GetComponent<ParticleSystem>();
+        if (ps == null) return;
             
-            bool enablePS = grow > 0.0;
-            if (enablePS)
-            {
-                ps.Play();
-            }
-            else
-            {
-                ps.Pause();
-            }
+        bool enablePS = grow > 0.0;
+        if (enablePS)
+        {
+            ps.Play();
+        }
+        else
+        {
+            ps.Pause();
         }
     }
 }

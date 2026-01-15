@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace MonsterDB;
 
@@ -49,5 +51,17 @@ public static partial class Extensions
         {
             set.Add(value);
         }
+    }
+    
+    public static Dictionary<TKey,SValue> ToDict<TKey, SValue>(this IEnumerable<SValue> enumerable, Func<SValue, TKey> func)
+    {
+        var dict = new Dictionary<TKey, SValue>();
+        foreach (var e in enumerable)
+        {
+            var k = func(e);
+            dict[k] = e;
+        }
+
+        return dict;
     }
 }

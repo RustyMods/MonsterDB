@@ -1,0 +1,82 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: DvergerStaffFire_fireball_projectile
+ProjectileData:
+  prefab: DvergerStaffFire_fireball_projectile
+  type: Magic, Fire
+  damage: {}
+  aoe: 3
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_DvergerMage_Fire_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: DvergerStaffFire_fire_aoe
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: true
+  spawnRandomRotation: true
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: DvergerStaffFire_fireball_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: dverger_fireball
+      shader: Standard
+      color: '#FFE5E5FF'
+      emissionColor: '#FF2E00FF'
+      mainTexture: iron
+  - prefab: flames
+    parent: DvergerStaffFire_fireball_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: flameball_flipbook
+  - prefab: flames_world
+    parent: DvergerStaffFire_fireball_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flame_large
+      shader: Particles/Standard Unlit2
+      color: '#FF7C37FF'
+      emissionColor: '#FF00FFFF'
+      mainTexture: wildfire06

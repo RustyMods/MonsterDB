@@ -1,0 +1,149 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Stag
+ClonedFrom: Eikthyr
+IsCloned: true
+Character:
+  name: $enemy_stag
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  bossEvent: ''
+  defeatSetGlobalKey: ''
+  # Base Health
+  health: 100
+  defaultItems:
+  - MDB_Stag_Eikthyr_antler
+  - MDB_Stag_Eikthyr_charge
+  - MDB_Stag_Eikthyr_stomp
+AI:
+  alertRange: 50
+  hearRange: 50
+  consumeItems:
+  - Carrot
+  - Turnip
+  - Onion
+  - Mushroom
+  - Raspberry
+  - Blueberries
+  consumeRange: 1
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: BloodDrops
+    parent: Head
+    index: 5
+    active: false
+    enabled: true
+  - prefab: BloodDrops
+    parent: Head
+    index: 5
+    active: false
+    enabled: true
+  - prefab: Sparcs
+    parent: Head
+    index: 6
+    active: false
+    enabled: true
+  - prefab: BloodDrops (1)
+    parent: Head
+    index: 6
+    active: false
+    enabled: true
+  - prefab: Sparcs
+    parent: Head
+    index: 8
+    active: false
+    enabled: true
+  - prefab: Sparcs (1)
+    parent: Head
+    index: 9
+    active: false
+    enabled: true
+  - prefab: chains
+    parent: Visual
+    index: 1
+    active: false
+    enabled: true
+  lights:
+  - prefab: Point light (1)
+    intensity: 0
+  - prefab: Point light
+    intensity: 0
+# If field removed, will remove component
+Drops:
+  drops: []
+Tameable:
+  fedDuration: 600
+  tamingTime: 1800
+  startsTamed: false
+  tamedEffect:
+    effectPrefabs:
+      - prefab: fx_creature_tamed
+  sootheEffect:
+    effectPrefabs:
+      - prefab: vfx_creature_soothed
+  petEffect:
+    effectPrefabs:
+      - prefab: fx_boar_pet
+  commandable: false
+  unsummonDistance: 0
+  unsummonOnOwnerLogoutSeconds: 0
+  levelUpOwnerSkill: None
+  levelUpFactor: 1
+  dropSaddleOnDeath: true
+  dropItemVel: 5
+  tamingSpeedMultiplierRange: 60
+  tamingBoostMultiplier: 2
+  nameBeforeText: true
+  tameText: $hud_tamelove
+Saddle:
+  maxUseRange: 6
+  attachAnimation: attach_lox
+  maxStamina: 240
+  runStaminaDrain: 1
+  swimStaminaDrain: 5
+  staminaRegen: 0.2
+  staminaRegenHungry: 0.1
+  # If added saddle by MonsterDB, use this to position attach point
+  attachOffset:
+    x: 0
+    y: 2.6
+    z: 0.6
+  mountIcon: TrophyEikthyr
+# If entries removed, will still be registered, set enabled to false to disable
+SpawnData:
+- name: MDB Stag Spawn Data
+  enabled: true
+  prefab: Stag
+  biome: None
+  # Edge, Median, Everything
+  biomeArea: Everything
+  maxSpawned: 1
+  spawnInterval: 4
+  spawnChance: 100
+  spawnAtNight: true
+  spawnAtDay: true
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- sleeping
+- footstep
+- random
+- idle
+- attack1
+- attack2
+- attack_flegs
+- stagger
+- attack_stomp

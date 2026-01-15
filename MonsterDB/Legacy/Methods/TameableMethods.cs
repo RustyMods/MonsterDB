@@ -41,4 +41,33 @@ public static class TameableMethods
         ReadEffectInfo(petEffectsPath, ref creatureData.m_effects.m_petEffects);
         ReadEffectInfo(unSummonEffectsPath, ref creatureData.m_effects.m_unSummonEffects);
     }
+    
+    public static void Update(GameObject critter, CreatureData creatureData)
+    {
+        TameableData data = creatureData.m_tameable;
+
+        Vector3 scale = creatureData.m_scale.ToRef();
+        if (!critter.TryGetComponent(out Tameable component))
+        {
+            return;
+        }
+        component.m_fedDuration = data.FedDuration;
+        component.m_tamingTime = data.TamingTime;
+        component.m_startsTamed = data.StartTamed;
+        component.m_commandable = data.Commandable;
+        component.m_unsummonDistance = data.UnsummonDistance;
+        component.m_unsummonOnOwnerLogoutSeconds = data.UnsummonOnOwnerLogoutSeconds;
+        if (Enum.TryParse(data.LevelUpOwnerSkill, out Skills.SkillType skillType))
+        {
+            component.m_levelUpOwnerSkill = skillType;
+        }
+        component.m_levelUpFactor = data.LevelUpFactor;
+        component.m_dropSaddleOnDeath = data.DropSaddleOnDeath;
+        component.m_randomStartingName = data.RandomStartingName;
+        
+        UpdateEffectList(creatureData.m_effects.m_tamedEffects, ref component.m_tamedEffect, scale);
+        UpdateEffectList(creatureData.m_effects.m_soothEffects, ref component.m_sootheEffect, scale);
+        UpdateEffectList(creatureData.m_effects.m_petEffects, ref component.m_petEffect, scale);
+        UpdateEffectList(creatureData.m_effects.m_unSummonEffects, ref component.m_unSummonEffect, scale);
+    }
 }

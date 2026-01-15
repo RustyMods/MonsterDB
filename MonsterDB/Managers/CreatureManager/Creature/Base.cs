@@ -23,7 +23,7 @@ public class Base : Header
     public GrowUpRef? GrowUp;
     [YamlMember(Order = 13, Description = "If field removed, will remove component")] 
     public NPCTalkRef? NPCTalk;
-    [YamlMember(Order = 14, Description = "If field removed, will remove component")] 
+    [YamlMember(Order = 14)] 
     public MovementDamageRef? MovementDamage;
     [YamlMember(Order = 15)] public SaddleRef? Saddle;
     [YamlMember(Order = 16, Description = "If field removed, will remove component")] 
@@ -32,12 +32,27 @@ public class Base : Header
     [YamlMember(Order = 18)] public CharacterTimedDestructionRef? TimedDestruction;
     [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled to false to disable")] public SpawnDataRef[]? SpawnData;
     [YamlMember(Order = 100)] public MiscComponent? Extra;
+    [YamlMember(Order = 101, Description = "Reference only, these are attack animation triggers")] public List<string>? AnimationTriggers;
     
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         base.Setup(prefab, isClone, source);
         SetupSharedFields(prefab, isClone, source);
         if (isClone) SetupSpawnData();
+    }
+
+    protected void SetupAnimationTriggers(GameObject prefab)
+    {
+        if (!prefab.GetComponentInChildren<Animator>()) return;
+        
+        ZNetView.m_forceDisableInit = true;
+        GameObject? instance = UnityEngine.Object.Instantiate(prefab);
+        ZNetView.m_forceDisableInit = false;
+        
+        Animator? animator = instance.GetComponentInChildren<Animator>();
+        AnimationTriggers = animator.parameters.Select(x => x.name).ToList();
+
+        UnityEngine.Object.DestroyImmediate(instance);
     }
 
     protected void SetupSharedFields(GameObject prefab, bool isClone = false, string source = "")
@@ -108,6 +123,12 @@ public class Base : Header
         {
             Visuals.m_lights = lights.ToRef();
         }
+        
+        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
+        if (particleSystems.Length > 0)
+        {
+            Visuals.m_particleSystems = particleSystems.ToRef();
+        }
 
         if (prefab.TryGetComponent(out CinderSpawner cinderSpawner))
         {
@@ -118,6 +139,8 @@ public class Base : Header
         {
             TimedDestruction = ctd;
         }
+        
+        SetupAnimationTriggers(prefab);
         
         if (isClone)
         {
@@ -149,12 +172,15 @@ public class Base : Header
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
         if (prefab == null) return;
-        CreatureManager.Save(prefab, IsCloned, ClonedFrom);
+
+        CreatureManager.TrySave(prefab, out _, IsCloned, ClonedFrom);
+        
         UpdatePrefab(prefab);
         List<Character>? characters = Character.GetAllCharacters();
         for (int i = 0; i < characters.Count; ++i)
         {
             Character? character = characters[i];
+            if (character == null || character.gameObject == null) continue;
             UpdatePrefab(character.gameObject, true);
         }
 
@@ -192,13 +218,13 @@ public class Base : Header
         {
             Visuals.UpdateRenderers(prefab);
             Visuals.UpdateLights(prefab);
+            Visuals.UpdateParticleSystems(prefab);
         }
     }
     protected void UpdateScale(GameObject prefab)
     {
         if (Visuals == null || !Visuals.m_scale.HasValue) return;
-        prefab.transform.localScale = Visuals.m_scale.Value;
-        var character = prefab.GetComponent<Character>();
+        Character? character = prefab.GetComponent<Character>();
         if (character != null && 
             character.m_deathEffects != null && 
             character.m_deathEffects.m_effectPrefabs != null)
@@ -207,11 +233,21 @@ public class Base : Header
             {
                 if (effect.m_prefab != null && effect.m_prefab.GetComponent<Ragdoll>())
                 {
-                    effect.m_prefab.transform.localScale = Visuals.m_scale.Value;
+                    // Gotcha! ragdoll scale is not always the same as prefab, need to multiply modification instead of direct value set
+                    if (effect.m_prefab.transform.localScale == prefab.transform.localScale)
+                    {
+                        effect.m_prefab.transform.localScale = Visuals.m_scale.Value;
+                    }
+                    else
+                    {
+                        effect.m_prefab.transform.localScale = Vector3.Scale(effect.m_prefab.transform.localScale, Visuals.m_scale.Value);
+                    }
                     break;
                 }
             }
         }
+        
+        prefab.transform.localScale = Visuals.m_scale.Value;
     }
 
     protected void UpdateTimedDestruction(GameObject prefab)
@@ -236,7 +272,7 @@ public class Base : Header
         {
             Dictionary<string, Renderer> renderers = prefab
                 .GetComponentsInChildren<Renderer>(true)
-                .ToDictionary(f => f.name);
+                .ToDict(f => f.name);
             List<LevelEffects.LevelSetup> setups = new();
             foreach (LevelSetupRef? levelRef in Visuals.m_levelSetups)
             {
@@ -346,42 +382,39 @@ public class Base : Header
     protected void UpdateSaddle(GameObject prefab)
     {
         Sadle? saddle = prefab.GetComponentInChildren<Sadle>(true);
+        Saddle? custom = null;
+        
+        if (Saddle != null && saddle == null)
+        {
+            custom = prefab.GetComponent<Saddle>();
+            if (custom == null)
+            {
+                custom = prefab.AddComponent<Saddle>();
+            }
+        }
+        else if (Saddle == null)
+        {
+            prefab.Remove<Saddle>();
+            custom = null;
+        }
+
+        if (custom != null && Saddle != null)
+        {
+            custom.SetFieldsFrom(Saddle);
+            if (custom.m_attachPoint != null && Saddle.m_attachOffset.HasValue)
+            {
+                custom.m_attachPoint.localPosition = Saddle.m_attachOffset.Value;
+            }
+        }
+        
         if (saddle == null || Saddle == null) return;
         saddle.SetFieldsFrom(Saddle);
     }
     
     protected void UpdateMovementDamage(GameObject prefab)
     {
-        if (!prefab.TryGetComponent(out MovementDamage? md))
-        {
-            if (MovementDamage != null)
-            {
-                md = prefab.AddComponent<MovementDamage>();
-                md.m_runDamageObject = new GameObject("RunDamageObject", typeof(Aoe));
-            }
-        }
-        else
-        {
-            if (MovementDamage == null)
-            {
-                prefab.Remove<MovementDamage>();
-                md = null;
-            }
-        }
-
-        if (md != null && 
-            md.m_runDamageObject != null && 
-            md.m_runDamageObject.TryGetComponent(out Aoe aoe))
-        {
-            if (MovementDamage == null)
-            {
-                prefab.Remove<MovementDamage>();
-            }
-            else if (MovementDamage.m_areaOfEffect != null)
-            {
-                aoe.SetFieldsFrom(MovementDamage.m_areaOfEffect);
-            }
-        }
+        if (MovementDamage == null || MovementDamage.m_areaOfEffect == null || !prefab.TryGetComponent(out MovementDamage movementDamage)) return;
+        movementDamage.SetFieldsFrom(MovementDamage.m_areaOfEffect);
     }
 
     protected void UpdateDropProjectile(GameObject prefab)

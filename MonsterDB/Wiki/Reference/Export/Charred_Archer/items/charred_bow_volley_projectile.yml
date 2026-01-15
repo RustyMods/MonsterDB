@@ -1,0 +1,75 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: charred_bow_volley_projectile
+ProjectileData:
+  prefab: charred_bow_volley_projectile
+  type: Magic
+  damage:
+    pierce: 120
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  attackForce: 30
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 7
+  hitNoise: 30
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_arrow_hit
+    - prefab: vfx_arrowhit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: polySurface20
+    parent: charred_bow_volley_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: arrow
+      shader: Standard TwoSided
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: arrow_white
+  - prefab: trail
+    parent: charred_bow_volley_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: trail
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+    - name: fireworks_trail
+      shader: Particles/Standard Unlit2
+      color: '#E3E3E3FF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework_Trail

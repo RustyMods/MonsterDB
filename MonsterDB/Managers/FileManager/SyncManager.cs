@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ServerSync;
 using UnityEngine;
 
@@ -88,6 +89,14 @@ public static class SyncManager
                         BaseItem item = ConfigManager.Deserialize<BaseItem>(file.Value);
                         loadList.Add(item);
                         break;
+                    case BaseType.Fish:
+                        BaseFish fish = ConfigManager.Deserialize<BaseFish>(file.Value);
+                        loadList.Add(fish);
+                        break;
+                    case BaseType.Projectile:
+                        BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(file.Value);
+                        loadList.Add(projectile);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -108,6 +117,7 @@ public static class SyncManager
         int eggs = 0;
         int items = 0;
         int fish = 0;
+        int projectiles = 0;
         
         for (int i = 0; i < loadList.Count; ++i)
         {
@@ -142,12 +152,56 @@ public static class SyncManager
                         ++fish;
                         FishManager.Clone(prefab, data.Prefab, false);
                         break;
+                    case BaseType.Projectile:
+                        ++projectiles;
+                        ProjectileManager.Clone(prefab, data.Prefab, false);
+                        break;
                 }
             }
         }
 
-        int count = players + humanoids + characters + eggs + items + fish;
-        MonsterDBPlugin.LogInfo($"Loading clones: {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items}, fishes {fish} (total:{count})");
+        int count = players + humanoids + characters + eggs + items + fish + projectiles;
+
+        StringBuilder sb = new();
+        sb.Append("Loading clones: ");
+        if (characters > 0)
+        {
+            sb.Append($"{characters} characters, ");
+        }
+
+        if (humanoids > 0)
+        {
+            sb.Append($"{humanoids} humanoids, ");
+        }
+
+        if (players > 0)
+        {
+            sb.Append($"{players} humans, ");
+        }
+
+        if (eggs > 0)
+        {
+            sb.Append($"{eggs} eggs, ");
+        }
+
+        if (items > 0)
+        {
+            sb.Append($"{items} items, ");
+        }
+
+        if (fish > 0)
+        {
+            sb.Append($"{fish} fishes, ");
+        }
+
+        if (projectiles > 0)
+        {
+            sb.Append($"{projectiles} projectiles ");
+        }
+
+        sb.Append($"(total: {count})");
+        
+        MonsterDBPlugin.LogInfo(sb.ToString());
     }
     
     private static void Load()
@@ -158,6 +212,7 @@ public static class SyncManager
         int eggs = 0;
         int items = 0;
         int fish = 0;
+        int projectiles = 0;
         for (int i = 0; i < loadList.Count; ++i)
         {
             Header data = loadList[i];
@@ -183,10 +238,54 @@ public static class SyncManager
                 case BaseType.Fish:
                     ++fish;
                     break;
+                case BaseType.Projectile:
+                    ++projectiles;
+                    break;
+                    
             }
         }
-        int count = characters + humanoids + players + eggs + items + fish;
-        MonsterDBPlugin.LogInfo($"Modified {characters} characters, {humanoids} humanoids, {players} humans, {eggs} eggs, items {items}, fishes {fish} (total: {count})");
+        int count = characters + humanoids + players + eggs + items + fish + projectiles;
+        
+        StringBuilder sb = new();
+        sb.Append("Modified: ");
+        if (characters > 0)
+        {
+            sb.Append($"{characters} characters, ");
+        }
+
+        if (humanoids > 0)
+        {
+            sb.Append($"{humanoids} humanoids, ");
+        }
+
+        if (players > 0)
+        {
+            sb.Append($"{players} humans, ");
+        }
+
+        if (eggs > 0)
+        {
+            sb.Append($"{eggs} eggs, ");
+        }
+
+        if (items > 0)
+        {
+            sb.Append($"{items} items, ");
+        }
+
+        if (fish > 0)
+        {
+            sb.Append($"{fish} fishes, ");
+        }
+
+        if (projectiles > 0)
+        {
+            sb.Append($"{projectiles} projectiles ");
+        }
+
+        sb.Append($"(total: {count})");
+        
+        MonsterDBPlugin.LogInfo(sb.ToString());
     }
 
     public static void Init(ZNet net)
@@ -202,5 +301,6 @@ public static class SyncManager
     {
         LoadClones();
         Load();
+        SpawnManager.Start();
     }
 }

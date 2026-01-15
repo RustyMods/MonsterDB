@@ -12,6 +12,7 @@ public class VisualRef : Reference
     public List<LevelSetupRef>? m_levelSetups;
     public RendererRef[]? m_renderers;
     public LightRef[]? m_lights;
+    public ParticleSystemRef[]? m_particleSystems;
     public int[]? m_modelIndex;
     public string[]? m_beards;
     public string[]? m_hairs;
@@ -20,28 +21,95 @@ public class VisualRef : Reference
     public void UpdateRenderers(GameObject prefab)
     {
         if (m_renderers == null) return;
-        Dictionary<string, RendererRef> data = m_renderers.ToDictionary(f => f.m_prefab);
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+        
+        Dictionary<(string m_prefab, string? m_parent, int? m_index), RendererRef> exactMatchLookup = m_renderers
+            .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))
+            .ToDictionary(x => x.Key, x => x.First());
+    
+        Dictionary<string, RendererRef> fallbackLookup = m_renderers
+            .GroupBy(x => x.m_prefab)
+            .ToDictionary(g => g.Key, g => g.First());
 
         for (int index = 0; index < renderers.Length; ++index)
         {
             Renderer renderer = renderers[index];
-            if (!data.TryGetValue(renderer.name, out RendererRef? rendererRef)) continue;
-            rendererRef.Update(renderer);
+            string? parent = renderer.transform.parent?.name;
+            int i = renderer.transform.GetSiblingIndex();
+
+            (string name, string? parent, int i) key = (renderer.name, parent, i);
+            if (exactMatchLookup.TryGetValue(key, out RendererRef reference))
+            {
+                reference.Update(renderer);
+            }
+            else if (fallbackLookup.TryGetValue(renderer.name, out reference))
+            {
+                reference.Update(renderer);
+            }
         }
     }
 
     public void UpdateLights(GameObject prefab)
     {
         if (m_lights == null) return;
-        Dictionary<string, LightRef> data = m_lights.ToDictionary(f => f.m_prefab);
+        
+        Dictionary<(string m_prefab, string? m_parent, int? m_index), LightRef> exactMatchLookup = m_lights
+            .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))
+            .ToDictionary(x => x.Key, x => x.First());
+    
+        Dictionary<string, LightRef> fallbackLookup = m_lights
+            .GroupBy(x => x.m_prefab)
+            .ToDictionary(g => g.Key, g => g.First());
+        
         Light[]? lights = prefab.GetComponentsInChildren<Light>(true);
 
         for (int i = 0; i < lights.Length; ++i)
         {
             Light light = lights[i];
-            if (!data.TryGetValue(light.name, out LightRef lightRef)) continue;
-            lightRef.Update(light);
+            string? parent = light.transform.parent?.name;
+            int index = light.transform.GetSiblingIndex();
+            
+            (string name, string? parent, int i) key = (light.name, parent, index);
+            if (exactMatchLookup.TryGetValue(key, out LightRef reference))
+            {
+                reference.Update(light);
+            }
+            else if (fallbackLookup.TryGetValue(light.name, out reference))
+            {
+                reference.Update(light);
+            }
+        }
+    }
+
+    public void UpdateParticleSystems(GameObject prefab)
+    {
+        if (m_particleSystems == null) return;
+        
+        Dictionary<(string m_prefab, string? m_parent, int? m_index), ParticleSystemRef> exactMatchLookup = m_particleSystems
+            .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))
+            .ToDictionary(x => x.Key, x => x.First());
+    
+        Dictionary<string, ParticleSystemRef> fallbackLookup = m_particleSystems
+            .GroupBy(x => x.m_prefab)
+            .ToDictionary(g => g.Key, g => g.First());
+        
+        ParticleSystem[]? lights = prefab.GetComponentsInChildren<ParticleSystem>(true);
+
+        for (int i = 0; i < lights.Length; ++i)
+        {
+            ParticleSystem ps = lights[i];
+            string? parent = ps.transform.parent?.name;
+            int index = ps.transform.GetSiblingIndex();
+            
+            (string name, string? parent, int i) key = (ps.name, parent, index);
+            if (exactMatchLookup.TryGetValue(key, out ParticleSystemRef reference))
+            {
+                reference.Update(ps);
+            }
+            else if (fallbackLookup.TryGetValue(ps.name, out reference))
+            {
+                reference.Update(ps);
+            }
         }
     }
 
@@ -50,71 +118,22 @@ public class VisualRef : Reference
         m_modelIndex = new [] { 0, 1 };;
         m_hairs = new[]
         {
-            "Hair1",
-            "Hair2",
-            "Hair3",
-            "Hair4",
-            "Hair5",
-            "Hair6",
-            "Hair7",
-            "Hair8",
-            "Hair9",
-            "Hair10",
-            "Hair11",
-            "Hair12",
-            "Hair13",
-            "Hair14",
-            "Hair15",
-            "Hair16",
-            "Hair17",
-            "Hair18",
-            "Hair19",
-            "Hair20",
-            "Hair21",
-            "Hair22",
-            "Hair23",
-            "Hair24",
-            "Hair25",
-            "Hair26",
-            "Hair27",
-            "Hair28",
-            "Hair29",
-            "Hair30",
-            "Hair31",
-            "Hair32",
-            "Hair33",
-            "Hair34",
-            "HairNone"
+            "Hair1", "Hair2", "Hair3", "Hair4", "Hair5", 
+            "Hair6", "Hair7", "Hair8", "Hair9", "Hair10", 
+            "Hair11", "Hair12", "Hair13", "Hair14", "Hair15", 
+            "Hair16", "Hair17", "Hair18", "Hair19", "Hair20", 
+            "Hair21", "Hair22", "Hair23", "Hair24", "Hair25", 
+            "Hair26", "Hair27", "Hair28", "Hair29", "Hair30", 
+            "Hair31", "Hair32", "Hair33", "Hair34", "HairNone"
         };;
         m_beards = new[]
         {
-            "Beard1",
-            "Beard2",
-            "Beard3",
-            "Beard4",
-            "Beard5",
-            "Beard6",
-            "Beard7",
-            "Beard8",
-            "Beard9",
-            "Beard10",
-            "Beard11",
-            "Beard12",
-            "Beard13",
-            "Beard14",
-            "Beard15",
-            "Beard16",
-            "Beard17",
-            "Beard18",
-            "Beard19",
-            "Beard20",
-            "Beard21",
-            "Beard22",
-            "Beard23",
-            "Beard24",
-            "Beard25",
-            "Beard26",
-            "BeardNone"
+            "Beard1", "Beard2", "Beard3", "Beard4", "Beard5",
+            "Beard6", "Beard7", "Beard8", "Beard9", "Beard10",
+            "Beard11", "Beard12", "Beard13", "Beard14", "Beard15",
+            "Beard16", "Beard17", "Beard18", "Beard19", "Beard20",
+            "Beard21", "Beard22", "Beard23", "Beard24", "Beard25",
+            "Beard26", "BeardNone"
         };;
         m_skinColors = new[]
         {

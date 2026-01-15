@@ -1,0 +1,122 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: gjall_spit_projectile
+ProjectileData:
+  prefab: gjall_spit_projectile
+  type: Physical
+  damage: {}
+  aoe: 4
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_hjall_spit_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: true
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: gjall_spit_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: gjall_spit_ball
+      shader: Standard
+      color: '#A4E01FFF'
+      emissionColor: '#FFFF90FF'
+      mainTexture: acacia_trunk01
+  - prefab: flames
+    parent: gjall_spit_projectile
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: sparcs_world
+    parent: gjall_spit_projectile
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: flakes
+    parent: gjall_spit_projectile
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_unlit_red
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FF343BFF'
+  - prefab: wetsplsh
+    parent: gjall_spit_projectile
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: ooz
+    parent: gjall_spit_projectile
+    index: 7
+    active: false
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: wetsplsh (1)
+    parent: gjall_spit_projectile
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash

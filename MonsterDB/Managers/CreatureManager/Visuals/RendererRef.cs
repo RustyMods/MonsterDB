@@ -7,6 +7,8 @@ namespace MonsterDB;
 public class RendererRef : Reference
 {
     public string m_prefab = "";
+    public string? m_parent;
+    public int? m_index;
     public bool? m_active;
     public bool? m_enabled;
     public MaterialRef[]? m_materials;
@@ -28,13 +30,11 @@ public class RendererRef : Reference
             UpdateMaterials(renderer, m_materials);
         }
     }
-
-    private static readonly List<Material> m_cachedMaterials = new();
     
     private static void UpdateMaterials(Renderer renderer, MaterialRef[] materialRefs)
     {
         Dictionary<string, MaterialRef> dict = materialRefs
-                .ToDictionary(f => f.m_name);
+                .ToDict(f => f.m_name);
             
         Material[]? materials = renderer.sharedMaterials;
         for (int i = 0; i < materials.Length; ++i)
@@ -50,16 +50,10 @@ public class RendererRef : Reference
 
             Material newMat = new Material(mat);
             newMat.name = matName;
-            if (m_cachedMaterials.Contains(mat))
-            {
-                m_cachedMaterials.Remove(mat);
-                Object.Destroy(mat);
-            }
-            m_cachedMaterials.Add(newMat);
             
-            if (newMat.shader.name != matRef.m_shader)
+            if (newMat.shader != null && newMat.shader.name != matRef.m_shader && !string.IsNullOrEmpty(matRef.m_shader))
             {
-                newMat.shader = ShaderRef.GetShader(matRef.m_shader, mat.shader);
+                newMat.shader = ShaderRef.GetShader(matRef.m_shader, newMat.shader);
             }
             if (newMat.HasProperty(ShaderRef._Color) && matRef.m_color != null)
             {
@@ -91,6 +85,21 @@ public class RendererRef : Reference
             {
                 newMat.mainTexture = TextureManager.GetTexture(matRef.m_mainTexture, newMat.mainTexture);;
             }
+
+            if (newMat.HasProperty(ShaderRef._TintColor) && matRef.m_tintColor != null)
+            {
+                if (!string.IsNullOrEmpty(matRef.m_tintColor))
+                {
+                    newMat.SetColor(ShaderRef._TintColor, matRef.m_tintColor.FromHex(newMat.GetColor(ShaderRef._TintColor)));
+                }
+            }
+
+            if (matRef.m_emissionTexture != null && !string.IsNullOrEmpty(matRef.m_emissionTexture) &&
+                newMat.HasProperty(ShaderRef._EmissionMap))
+            {
+                newMat.SetTexture(ShaderRef._EmissionMap, TextureManager.GetTexture(matRef.m_emissionTexture, newMat.GetTexture(ShaderRef._EmissionMap)));
+            }
+            
             materials[i] = newMat;
         }
         renderer.materials = materials;
@@ -106,10 +115,14 @@ public partial class Extensions
         .Select(x => new RendererRef()
         {
             m_prefab = x.name,
+            m_parent = x.transform.parent?.name,
+            m_index = x.transform.GetSiblingIndex(),
             m_active = x.gameObject.activeSelf,
             m_enabled = x.enabled,
             m_materials = x.sharedMaterials.ToRef()
         })
+        .OrderBy(x => x.m_parent)
+        .ThenBy(x => x.m_index)
         .ToArray();
         return reference;
     }

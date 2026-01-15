@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -8,7 +7,7 @@ public class Clone
 {
     private GameObject? Source;
     private GameObject? Prefab;
-    private readonly string PrefabName;
+    public readonly string PrefabName;
     private readonly string NewName;
     private bool Loaded;
     
@@ -18,7 +17,7 @@ public class Clone
     {
         PrefabName = prefabName;
         NewName = newName;
-        PrefabManager.Clones.Add(this);
+        PrefabManager.Clones[newName] = this;
     }
 
     public Clone(GameObject prefab, string newName)
@@ -26,6 +25,7 @@ public class Clone
         PrefabName = prefab.name;
         NewName = newName;
         Source = prefab;
+        PrefabManager.Clones[newName] = this;
     }
 
     internal void Create()
