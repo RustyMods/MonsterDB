@@ -10,7 +10,6 @@ namespace MonsterDB;
 public class MonsterDBPlugin : BaseUnityPlugin
 {
     internal const string ModName = "MonsterDB";
-    internal const string ModDesc = "Edit Valheim creatures through YML configurations";
     internal const string ModVersion = "0.2.0";
     internal const string Author = "RustyMods";
     public const string ModGUID = Author + "." + ModName;
@@ -24,7 +23,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
     {
         instance = this;
 
-        ConfigManager.Setup();
+        ConfigManager.Start();
         LegacyManager.Setup();
         AudioManager.Start();
         TextureManager.Setup();
@@ -34,6 +33,8 @@ public class MonsterDBPlugin : BaseUnityPlugin
         FishManager.Setup();
         FileManager.Start();
         EggManager.Setup();
+        ProjectileManager.Setup();
+        SpawnAbilityManager.Setup();
         PrefabManager.Setup();
         SpawnManager.Setup();
         Wiki.Write();

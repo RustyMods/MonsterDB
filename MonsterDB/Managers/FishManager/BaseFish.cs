@@ -27,8 +27,8 @@ public class BaseFish : BaseItem
     public override void Update()
     {
         base.Update();
-        SyncManager.files.PrefabToUpdate = Prefab;
-        SyncManager.files.Add(this);
+        LoadManager.files.PrefabToUpdate = Prefab;
+        LoadManager.files.Add(this);
     }
 
     protected override void SaveDefault(GameObject prefab)

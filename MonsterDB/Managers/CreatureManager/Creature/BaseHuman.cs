@@ -26,8 +26,8 @@ public class BaseHuman : BaseHumanoid
     public override void Update()
     {
         base.Update();
-        SyncManager.files.PrefabToUpdate = Prefab;
-        SyncManager.files.Add(this);
+        LoadManager.files.PrefabToUpdate = Prefab;
+        LoadManager.files.Add(this);
     }
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)

@@ -1,0 +1,81 @@
+﻿using System.IO;
+using UnityEngine;
+
+namespace MonsterDB;
+
+public static class SpawnAbilityManager
+{
+    public static void Setup()
+    {
+        Command write = new Command("write_spawnability", "[prefabName]: write spawn ability YML file", args =>
+        {
+            if (args.Length < 3)
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return true;
+            }
+            
+            string prefabName = args[2];
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return false;
+            }
+            
+            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+
+            if (prefab == null)
+            {
+                return true;
+            }
+
+            if (!prefab.GetComponent<SpawnAbility>())
+            {
+                MonsterDBPlugin.LogWarning("Invalid prefab, missing SpawnAbility component");
+                return true;
+            }
+
+            bool isClone = false;
+            string source = "";
+            if (PrefabManager.Clones.TryGetValue(prefabName, out Clone c))
+            {
+                isClone = true;
+                source = c.PrefabName;
+            }
+
+            Write(prefab, isClone, source);
+
+            return true;
+        }, PrefabManager.GetAllPrefabNames<SpawnAbility>);
+    }
+
+    public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
+    {
+        if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
+        var filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        BaseSpawnAbility spawnAbility = new();
+        spawnAbility.Setup(prefab, isClone, source);
+        var text = ConfigManager.Serialize(spawnAbility);
+        File.WriteAllText(filePath, text);
+    }
+
+    public static bool TryClone(GameObject prefab, string cloneName, out GameObject clone, bool write = true,
+        string dirPath = "")
+    {
+        if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
+        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        
+        Clone c = new Clone(prefab, cloneName);
+        c.OnCreated += p =>
+        {
+            if (write)
+            {
+                Write(p, true, prefab.name, dirPath);
+            }
+            
+            MonsterDBPlugin.LogDebug($"Cloned {prefab.name} as {cloneName}");
+        };
+        clone = c.Create();
+        return clone != null;
+    }
+}

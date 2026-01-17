@@ -19,6 +19,10 @@ public class Human : Humanoid
     public override void Start()
     {
         base.Start();
+        if (m_baseAI is MonsterAI monsterAI)
+        {
+            monsterAI.m_onConsumedItem += OnConsumeItem;
+        }
         if (m_nview.IsValid() && !m_nview.GetZDO().GetBool(ZDOVars.s_addedDefaultItems))
         {
             if (m_models != null)
@@ -49,6 +53,12 @@ public class Human : Humanoid
             m_nview.GetZDO().Set(ZDOVars.s_addedDefaultItems, true);
             SetupVisEquipment(m_visEquipment, false);
         }
+    }
+
+    private void OnConsumeItem(ItemDrop item)
+    {
+        string trigger = item.m_itemData.m_shared.m_isDrink ? "emote_drink" : "eat";
+        m_animator.SetTrigger(trigger);
     }
 
     public override bool StartAttack(Character? target, bool secondaryAttack)
@@ -124,7 +134,7 @@ public class Human : Humanoid
         m_previousAttack = m_currentAttack;
         m_currentAttack = null;
     }
-    
+
     [HarmonyPatch(typeof(Attack), nameof(Attack.HaveAmmo))]
     private static class Attack_HaveAmmo
     {

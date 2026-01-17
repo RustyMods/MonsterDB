@@ -16,73 +16,103 @@ public class BaseAggregate : Header
     [YamlMember(Order = 11)] public Dictionary<string, BaseFish>? fishes;
     [YamlMember(Order = 12)] public Dictionary<string, BaseProjectile>? projectiles;
     [YamlMember(Order = 13)] public Dictionary<string, BaseRagdoll>? ragdolls;
+    [YamlMember(Order = 14)] public Dictionary<string, BaseSpawnAbility>? spawnAbilities;
     [YamlMember(Order = 14)] public Dictionary<string, Dictionary<string, string>>? translations;
 
     public string? PrefabToUpdate;
 
     public bool GetPrefabToUpdate(out Header header)
     {
-        header = null;
+        header = null!;
         if (PrefabToUpdate == null || string.IsNullOrEmpty(PrefabToUpdate)) return false;
-        if (humanoids != null && humanoids.TryGetValue(PrefabToUpdate, out var humanoid))
+        if (humanoids != null && humanoids.TryGetValue(PrefabToUpdate, out BaseHumanoid? humanoid))
         {
             header = humanoid;
             return true;
         }
 
-        if (characters != null && characters.TryGetValue(PrefabToUpdate, out var character))
+        if (characters != null && characters.TryGetValue(PrefabToUpdate, out BaseCharacter? character))
         {
             header = character;
             return true;
         }
 
-        if (humans != null && humans.TryGetValue(PrefabToUpdate, out var human))
+        if (humans != null && humans.TryGetValue(PrefabToUpdate, out BaseHuman? human))
         {
             header = human;
             return true;
         }
 
-        if (eggs != null && eggs.TryGetValue(PrefabToUpdate, out var egg))
+        if (eggs != null && eggs.TryGetValue(PrefabToUpdate, out BaseEgg? egg))
         {
             header = egg;
             return true;
         }
 
-        if (items != null && items.TryGetValue(PrefabToUpdate, out var item))
+        if (items != null && items.TryGetValue(PrefabToUpdate, out BaseItem? item))
         {
             header = item;
             return true;
         }
 
-        if (fishes != null && fishes.TryGetValue(PrefabToUpdate, out var fish))
+        if (fishes != null && fishes.TryGetValue(PrefabToUpdate, out BaseFish? fish))
         {
             header = fish;
             return true;
         }
 
-        if (projectiles != null && projectiles.TryGetValue(PrefabToUpdate, out var projectile))
+        if (projectiles != null && projectiles.TryGetValue(PrefabToUpdate, out BaseProjectile? projectile))
         {
             header = projectile;
             return true;
         }
 
-        if (ragdolls != null && ragdolls.TryGetValue(PrefabToUpdate, out var ragdoll))
+        if (ragdolls != null && ragdolls.TryGetValue(PrefabToUpdate, out BaseRagdoll? ragdoll))
         {
             header = ragdoll;
             return true;
         }
 
+        if (spawnAbilities != null && spawnAbilities.TryGetValue(PrefabToUpdate, out BaseSpawnAbility? spawnability))
+        {
+            header = spawnability;
+            return true;
+        }
+
         return false;
     }
+
+    private void ParseTranslations(string filePath, string fileName)
+    {
+        if (translations == null) translations = new Dictionary<string, Dictionary<string, string>>();
+        string[] parts = fileName.Split('.');
+        if (parts.Length == 2)
+        {
+            string language = parts[1];
+            string[] lines = File.ReadAllLines(filePath);
+            if (lines.Length <= 0) return;
+            translations[language] = new Dictionary<string, string>();
+            for (int y = 0; y < lines.Length; ++y)
+            {
+                string line = lines[y];
+                if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
+                string[] lineParts = line.Split(':');
+                if (lineParts.Length < 2) continue;
+                string key = lineParts[0].Trim();
+                string value = lineParts[1].Trim();
+                translations[language][key] = value;
+            }
+        }
+    }
     
-    public void Init(string dirPath)
+    public void Read(string directoryPath)
     {
         SetupVersions();
         Type = BaseType.All;
 
-        if (!Directory.Exists(dirPath)) return;
+        if (!Directory.Exists(directoryPath)) return;
 
-        string[] files = Directory.GetFiles(dirPath, "*.yml", SearchOption.AllDirectories);
+        string[] files = Directory.GetFiles(directoryPath, "*.yml", SearchOption.AllDirectories);
 
         for (int i = 0; i < files.Length; ++i)
         {
@@ -90,26 +120,7 @@ public class BaseAggregate : Header
             string? fileName = Path.GetFileNameWithoutExtension(filePath);
             if (fileName.StartsWith("translations."))
             {
-                if (translations == null) translations = new Dictionary<string, Dictionary<string, string>>();
-                string[] parts = fileName.Split('.');
-                if (parts.Length == 2)
-                {
-                    string language = parts[1];
-                    string[] lines = File.ReadAllLines(filePath);
-                    if (lines.Length <= 0) continue;
-                    translations[language] = new Dictionary<string, string>();
-                    for (int y = 0; y < lines.Length; ++y)
-                    {
-                        string line = lines[y];
-                        if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
-                        var lineParts = line.Split(':');
-                        if (lineParts.Length < 2) continue;
-                        var key = lineParts[0].Trim();
-                        var value = lineParts[1].Trim();
-                        translations[language][key] = value;
-                    }
-                }
-
+                ParseTranslations(filePath, fileName);
                 continue;
             }
 
@@ -118,19 +129,19 @@ public class BaseAggregate : Header
             switch (header.Type)
             {
                 case BaseType.Humanoid:
-                    var humanoid = ConfigManager.Deserialize<BaseHumanoid>(text);
+                    BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(text);
                     Add(humanoid);
                     break;
                 case BaseType.Character:
-                    var character = ConfigManager.Deserialize<BaseCharacter>(text);
+                    BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(text);
                     Add(character);
                     break;
                 case BaseType.Human:
-                    var human = ConfigManager.Deserialize<BaseHuman>(text);
+                    BaseHuman human = ConfigManager.Deserialize<BaseHuman>(text);
                     Add(human);
                     break;
                 case BaseType.Egg:
-                    var egg = ConfigManager.Deserialize<BaseEgg>(text);
+                    BaseEgg egg = ConfigManager.Deserialize<BaseEgg>(text);
                     Add(egg);
                     break;
                 case BaseType.Item:
@@ -149,17 +160,22 @@ public class BaseAggregate : Header
                     BaseRagdoll ragdoll = ConfigManager.Deserialize<BaseRagdoll>(text);
                     Add(ragdoll);
                     break;
+                case BaseType.SpawnAbility:
+                    BaseSpawnAbility spawnAbility = ConfigManager.Deserialize<BaseSpawnAbility>(text);
+                    Add(spawnAbility);
+                    break;
             }
         }
     }
 
-    public void Load()
+    public List<Header> Load()
     {
+        List<Header> list = new();
         if (humanoids != null)
         {
             foreach (BaseHumanoid? humanoid in humanoids.Values)
             {
-                SyncManager.loadList.Add(humanoid);
+                list.Add(humanoid);
             }
         }
 
@@ -167,7 +183,7 @@ public class BaseAggregate : Header
         {
             foreach (BaseCharacter? character in characters.Values)
             {
-                SyncManager.loadList.Add(character);
+                list.Add(character);
             }
         }
 
@@ -175,7 +191,7 @@ public class BaseAggregate : Header
         {
             foreach (var human in humans.Values)
             {
-                SyncManager.loadList.Add(human);
+                list.Add(human);
             }
         }
 
@@ -183,7 +199,7 @@ public class BaseAggregate : Header
         {
             foreach (BaseEgg? egg in eggs.Values)
             {
-                SyncManager.loadList.Add(egg);
+                list.Add(egg);
             }
         }
 
@@ -191,7 +207,7 @@ public class BaseAggregate : Header
         {
             foreach (BaseItem item in items.Values)
             {
-                SyncManager.loadList.Add(item);
+                list.Add(item);
             }
         }
 
@@ -199,7 +215,7 @@ public class BaseAggregate : Header
         {
             foreach (BaseFish fish in fishes.Values)
             {
-                SyncManager.loadList.Add(fish);
+                list.Add(fish);
             }
         }
 
@@ -207,7 +223,7 @@ public class BaseAggregate : Header
         {
             foreach (BaseProjectile projectile in projectiles.Values)
             {
-                SyncManager.loadList.Add(projectile);
+                list.Add(projectile);
             }
         }
 
@@ -215,7 +231,15 @@ public class BaseAggregate : Header
         {
             foreach (BaseRagdoll ragdoll in ragdolls.Values)
             {
-                SyncManager.loadList.Add(ragdoll);
+                list.Add(ragdoll);
+            }
+        }
+
+        if (spawnAbilities != null)
+        {
+            foreach (BaseSpawnAbility spawnAbility in spawnAbilities.Values)
+            {
+                list.Add(spawnAbility);
             }
         }
 
@@ -226,9 +250,17 @@ public class BaseAggregate : Header
                 string? lang = kvp.Key;
                 Dictionary<string, string>? lines = kvp.Value;
 
-                LocalizationManager.Register(lang, lines);
+                LocalizationManager.AddWords(lang, lines);
             }
         }
+
+        return list;
+    }
+
+    public void Add(BaseSpawnAbility spawnAbility)
+    {
+        if (spawnAbilities == null) spawnAbilities = new();
+        spawnAbilities[spawnAbility.Prefab] = spawnAbility;
     }
 
     public void Add(BaseHumanoid humanoid)
@@ -292,12 +324,12 @@ public class BaseAggregate : Header
 
         for (int i = 0; i < lines.Length; ++i)
         {
-            var line = lines[i];
+            string line = lines[i];
             if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
             var parts = line.Split(':');
             if (parts.Length < 2) continue;
-            var key = parts[0].Trim();
-            var value = parts[1].Trim();
+            string key = parts[0].Trim();
+            string value = parts[1].Trim();
             translation[key] = value;
         }
 
@@ -362,24 +394,33 @@ public class BaseAggregate : Header
             }
         }
 
-        if (fishes != null)
+        if (other.fishes != null)
         {
-            foreach (var fish in fishes.Values)
+            foreach (var fish in other.fishes.Values)
             {
                 Add(fish);
             }
         }
+
+        if (other.spawnAbilities != null)
+        {
+            foreach (var spawnAbility in other.spawnAbilities.Values)
+            {
+                Add(spawnAbility);
+            }
+        }
+        
 
         if (other.translations != null)
         {
             if (translations == null) translations = other.translations;
             else
             {
-                foreach (var kvp in other.translations)
+                foreach (KeyValuePair<string, Dictionary<string, string>> kvp in other.translations)
                 {
                     if (translations.TryGetValue(kvp.Key, out var translation))
                     {
-                        foreach (var dict in kvp.Value)
+                        foreach (KeyValuePair<string, string> dict in kvp.Value)
                         {
                             translation[dict.Key] = dict.Value;
                         }

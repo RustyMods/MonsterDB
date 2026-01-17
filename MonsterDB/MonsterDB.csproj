@@ -209,14 +209,19 @@
         <Compile Include="Managers\ProjectileManager\ProjectileManager.cs" />
         <Compile Include="Managers\ProjectileManager\ProjectileRef.cs" />
         <Compile Include="Managers\ProjectileManager\TeleportAbilityRef.cs" />
+        <Compile Include="Managers\ProjectileManager\TriggerSpawnAbilityRef.cs" />
+        <Compile Include="Managers\ProjectileManager\TriggerSpawnerRef.cs" />
         <Compile Include="Managers\RagdollManager\BaseRagdoll.cs" />
         <Compile Include="Managers\RagdollManager\RagdollManager.cs" />
         <Compile Include="Managers\RagdollManager\RagdollRef.cs" />
         <Compile Include="Managers\Reference.cs" />
+        <Compile Include="Managers\SpawnAbilityManager\BaseSpawnAbility.cs" />
+        <Compile Include="Managers\SpawnAbilityManager\SpawnAbilityRef.cs" />
+        <Compile Include="Managers\SpawnAbilityManager\SpawnAbilityManager.cs" />
         <Compile Include="Managers\SpawnManager\SpawnDataRef.cs" />
         <Compile Include="Managers\SpawnManager\SpawnManager.cs" />
         <Compile Include="Managers\FileManager\Header.cs" />
-        <Compile Include="Managers\FileManager\SyncManager.cs" />
+        <Compile Include="Managers\FileManager\LoadManager.cs" />
         <Compile Include="Managers\TextureManager\TextureData.cs" />
         <Compile Include="Managers\TextureManager\TextureManager.cs" />
         <Compile Include="Managers\TextureManager\TextureRef.cs" />
@@ -237,6 +242,9 @@
         <Compile Include="Wiki\Wiki.cs" />
     </ItemGroup>
     <ItemGroup>
+        <Content Include="..\README.md">
+          <Link>README.md</Link>
+        </Content>
         <Content Include=".gitignore" />
         <Content Include="environment.props" />
         <Content Include="ILRepack.targets" />
@@ -711,10 +719,12 @@
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Call.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_PierceAOE.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_projectile_spit.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_projectile_teleport.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Rush.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Slap.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Spit.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Teleport.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_triggerspawn_ability.yml" />
         <Content Include="Wiki\Reference\Export\SeekerQueen\SeekerQueen.yml" />
         <Content Include="Wiki\Reference\Export\Seeker\items\dragon_ice_projectile.yml" />
         <Content Include="Wiki\Reference\Export\Seeker\items\seeker_claw_left.yml" />
@@ -825,6 +835,7 @@
         <Content Include="Wiki\Reference\Export\Wraith\items\wraith_melee.yml" />
         <Content Include="Wiki\Reference\Export\Wraith\Wraith.yml" />
         <Content Include="Wiki\Reference\Human\Human.yml" />
+        <Content Include="Wiki\Reference\Human\Human_ragdoll.yml" />
         <Content Include="Wiki\Reference\Import\CopperGolem\CopperGolem.yml" />
         <Content Include="Wiki\Reference\Import\CopperGolem\items\MDB_CopperGolem_StoneGolem_clubs.yml" />
         <Content Include="Wiki\Reference\Import\CopperGolem\items\MDB_CopperGolem_StoneGolem_hat.yml" />
@@ -878,9 +889,6 @@
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Wiki\Reference\Export\Player\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 

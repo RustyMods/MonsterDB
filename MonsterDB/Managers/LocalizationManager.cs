@@ -117,10 +117,10 @@ public static class LocalizationManager
     private static void Patch_Localization_LoadCSV(Localization __instance, string language)
     {
         if (!localizations.TryGetValue(language, out string[] lines)) return;
-        Parse(__instance, lines);
+        ParseLines(__instance, lines);
     }
 
-    private static void Parse(Localization instance, string[] lines)
+    private static void ParseLines(Localization instance, string[] lines)
     {
         for (int i = 0; i < lines.Length; ++i)
         {
@@ -137,7 +137,7 @@ public static class LocalizationManager
         }
     }
     
-    public static void UpdateParse(string filePath)
+    public static void UpdateWords(string filePath)
     {
         string? fileName = Path.GetFileNameWithoutExtension(filePath);
         string[] parts = fileName.Split('.');
@@ -178,7 +178,7 @@ public static class LocalizationManager
         Update();
     }
 
-    public static void Register(string language, Dictionary<string, string> translations)
+    public static void AddWords(string language, Dictionary<string, string> translations)
     {
         Dictionary<string, string> lines = new();
         if (localizations.TryGetValue(language, out string[] localization))
@@ -251,7 +251,7 @@ public static class LocalizationManager
         if (Localization.instance == null) return;
         string lang = Localization.instance.GetSelectedLanguage();
         if (!localizations.TryGetValue(lang, out string[] translations)) return;
-        Parse(Localization.instance, translations);
+        ParseLines(Localization.instance, translations);
         Localization.instance.m_cache.EvictAll();
         MonsterDBPlugin.LogDebug($"Updated {lang} localizations");
     }

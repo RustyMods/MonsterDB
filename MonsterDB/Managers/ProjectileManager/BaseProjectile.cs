@@ -9,7 +9,8 @@ public class BaseProjectile : Header
 {
     [YamlMember(Order = 6)] public ProjectileRef? ProjectileData;
     [YamlMember(Order = 7)] public TeleportAbilityRef? TeleportAbility;
-    [YamlMember(Order = 8)] public VisualRef? Visuals;
+    [YamlMember(Order = 8)] public TriggerSpawnAbilityRef? TriggerSpawnAbility;
+    [YamlMember(Order = 9)] public VisualRef? Visuals;
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
@@ -28,6 +29,13 @@ public class BaseProjectile : Header
     {
         if (!prefab.TryGetComponent(out TeleportAbility component)) return;
         TeleportAbility = component;
+    }
+
+    protected virtual void SetupTriggerSpawnAbility(GameObject prefab)
+    {
+        if (!prefab.TryGetComponent(out TriggerSpawnAbility component)) return;
+        TriggerSpawnAbility = new TriggerSpawnAbilityRef();
+        TriggerSpawnAbility.m_range = component.m_range;
     }
 
     protected virtual void SetupProjectile(GameObject prefab)
@@ -69,8 +77,8 @@ public class BaseProjectile : Header
         
         UpdatePrefab(prefab);
         base.Update();
-        SyncManager.files.PrefabToUpdate = Prefab;
-        SyncManager.files.Add(this);
+        LoadManager.files.PrefabToUpdate = Prefab;
+        LoadManager.files.Add(this);
     }
 
     protected virtual void UpdatePrefab(GameObject prefab)
@@ -78,6 +86,17 @@ public class BaseProjectile : Header
         UpdateVisuals(prefab);
         UpdateProjectile(prefab);
         UpdateTeleportAbility(prefab);
+        UpdateTriggerSpawnAbility(prefab);
+    }
+
+    protected void UpdateTriggerSpawnAbility(GameObject prefab)
+    {
+        if (TriggerSpawnAbility == null || !TriggerSpawnAbility.m_range.HasValue || !prefab.TryGetComponent(out TriggerSpawnAbility component)) return;
+        component.m_range = TriggerSpawnAbility.m_range.Value;
+        if (ConfigManager.ShouldLogDetails())
+        {
+            MonsterDBPlugin.LogDebug($"[{prefab.name}] TriggerSpawnAbility.m_range: {component.m_range}");
+        }
     }
 
     protected void UpdateTeleportAbility(GameObject prefab)

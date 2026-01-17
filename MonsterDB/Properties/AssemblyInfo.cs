@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using MonsterDB;
 
 [assembly: AssemblyTitle(MonsterDBPlugin.ModName)]
-[assembly: AssemblyDescription(MonsterDBPlugin.ModDesc)]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(MonsterDBPlugin.Author)]
 [assembly: AssemblyProduct(MonsterDBPlugin.ModName)]

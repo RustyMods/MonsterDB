@@ -8,7 +8,7 @@ public static class RagdollManager
 {
     public static bool TrySave(GameObject prefab, out BaseRagdoll ragdoll, bool isClone = false, string source = "")
     {
-        ragdoll = SyncManager.GetOriginal<BaseRagdoll>(prefab.name);
+        ragdoll = LoadManager.GetOriginal<BaseRagdoll>(prefab.name);
         if (ragdoll != null) return true;
 
         if (!prefab.GetComponent<Ragdoll>()) return false;
@@ -16,7 +16,7 @@ public static class RagdollManager
         ragdoll = new BaseRagdoll();
         ragdoll.Setup(prefab, isClone, source);
         
-        SyncManager.originals.Add(prefab.name, ragdoll);
+        LoadManager.originals.Add(prefab.name, ragdoll);
         return true;
     }
 
@@ -42,7 +42,7 @@ public static class RagdollManager
             if (header.Type != BaseType.Ragdoll) return;
             BaseRagdoll reference = ConfigManager.Deserialize<BaseRagdoll>(text);
             reference.Update();
-            SyncManager.UpdateSync();
+            LoadManager.UpdateSync();
         }
         catch
         {

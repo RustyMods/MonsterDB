@@ -7,7 +7,7 @@ namespace MonsterDB;
 
 public enum BaseType
 {
-    None, Humanoid, Character, Egg, Human, Item, Fish, Projectile, Ragdoll, All
+    None, Humanoid, Character, Egg, Human, Item, Fish, Projectile, Ragdoll, SpawnAbility, All
 }
 
 [Serializable][UsedImplicitly]

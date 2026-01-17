@@ -87,7 +87,7 @@ public static class ConfigManager
         detailedDebugLogs = config("1 - General", "Detailed Debug Logs", Toggle.Off, "If on, debug logs will be detailed");
     }
 
-    public static void Setup()
+    public static void Start()
     {
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ZNet), nameof(ZNet.Awake)),
@@ -98,7 +98,7 @@ public static class ConfigManager
     public static void Patch_ZNet_Awake(ZNet __instance)
     {
         FactionManager.Init(__instance);
-        SyncManager.Init(__instance);
+        LoadManager.Init(__instance);
         SpawnManager.Init(__instance);
         LocalizationManager.Init(__instance);
     }

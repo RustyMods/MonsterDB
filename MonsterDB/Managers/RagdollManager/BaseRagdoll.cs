@@ -50,8 +50,8 @@ public class BaseRagdoll : Header
         if (prefab == null) return;
         UpdatePrefab(prefab);
         base.Update();
-        SyncManager.files.PrefabToUpdate = Prefab;
-        SyncManager.files.Add(this);
+        LoadManager.files.PrefabToUpdate = Prefab;
+        LoadManager.files.Add(this);
     }
 
     private void UpdatePrefab(GameObject prefab)

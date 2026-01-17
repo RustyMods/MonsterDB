@@ -33,7 +33,7 @@ public static class TextureManager
             string filePath = files[i];
             ReadTexture(filePath);
         }
-        MonsterDBPlugin.LogInfo($"Loaded {files.Length} custom textures.");
+        MonsterDBPlugin.LogInfo($"Loaded {files.Length} PNG files");
     }
     public static void Setup()
     {

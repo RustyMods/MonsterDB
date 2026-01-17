@@ -113,17 +113,17 @@ public static class EggManager
             return true;
         }
 
-        if (SyncManager.GetOriginal<BaseEgg>(prefabName) is not {} egg)
+        if (LoadManager.GetOriginal<BaseEgg>(prefabName) is not {} egg)
         {
             MonsterDBPlugin.LogInfo("Original data not found");
             return true;
         }
         
         egg.Update();
-        SyncManager.UpdateSync();
+        LoadManager.UpdateSync();
         
         return true;
-    }, optionsFetcher: SyncManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
+    }, optionsFetcher: LoadManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
 
     private static Command clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
     {
@@ -160,7 +160,7 @@ public static class EggManager
     {
         if (!prefab.GetComponent<ItemDrop>()) return null;
 
-        if (SyncManager.GetOriginal<BaseEgg>(prefab.name) is {} reference)
+        if (LoadManager.GetOriginal<BaseEgg>(prefab.name) is {} reference)
         {
             return ConfigManager.Serialize(reference);
         }
@@ -168,7 +168,7 @@ public static class EggManager
         reference = new BaseEgg();
         reference.Setup(prefab, isClone, clonedFrom);
 
-        SyncManager.originals.Add(prefab.name, reference);
+        LoadManager.originals.Add(prefab.name, reference);
         
         return ConfigManager.Serialize(reference);
     }
@@ -192,7 +192,7 @@ public static class EggManager
             if (header.Type != BaseType.Egg) return;
             BaseEgg reference = ConfigManager.Deserialize<BaseEgg>(text);
             reference.Update();
-            SyncManager.UpdateSync();
+            LoadManager.UpdateSync();
         }
         catch
         {

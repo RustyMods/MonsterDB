@@ -5,29 +5,31 @@ using YamlDotNet.Serialization;
 namespace MonsterDB;
 
 [Serializable]
-public class BaseItem : Header
+public class BaseSpawnAbility : Header
 {
-    [YamlMember(Order = 6)] public ItemDataSharedRef? ItemData;
+    [YamlMember(Order = 6)] public SpawnAbilityRef? SpawnAbility;
     [YamlMember(Order = 7)] public VisualRef? Visuals;
-
+    
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         base.Setup(prefab, isClone, source);
-        Type = BaseType.Item;
+        Type = BaseType.SpawnAbility;
         Prefab = prefab.name;
-        ClonedFrom = source;
         IsCloned = isClone;
-        SetupItem(prefab);
+        ClonedFrom = source;
+
         SetupVisuals(prefab);
+        SetupSpawnAbility(prefab);
     }
 
-    protected virtual void SetupItem(GameObject prefab)
+    private void SetupSpawnAbility(GameObject prefab)
     {
-        if (!prefab.TryGetComponent(out ItemDrop component)) return;
-        ItemData = new ItemDataSharedRef();
-        ItemData.Setup(component.m_itemData.m_shared);
+        if (prefab.TryGetComponent(out SpawnAbility spawnAbility))
+        {
+            SpawnAbility = spawnAbility;
+        }
     }
-
+    
     protected virtual void SetupVisuals(GameObject prefab)
     {
         Visuals = new VisualRef()
@@ -56,8 +58,7 @@ public class BaseItem : Header
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
         if (prefab == null) return;
-        SaveDefault(prefab);
-        
+
         UpdatePrefab(prefab);
         
         base.Update();
@@ -65,44 +66,33 @@ public class BaseItem : Header
         LoadManager.files.Add(this);
     }
 
-    protected virtual void SaveDefault(GameObject prefab)
+    private void UpdatePrefab(GameObject prefab)
     {
-        ItemManager.TrySave(prefab, out _, IsCloned, ClonedFrom);
-    }
-
-    protected virtual void UpdatePrefab(GameObject prefab)
-    {
-        UpdateItem(prefab);
         UpdateVisuals(prefab);
+        UpdateSpawnAbility(prefab);
     }
 
-    protected virtual void UpdateItem(GameObject prefab)
+    private void UpdateSpawnAbility(GameObject prefab)
     {
-        if (ItemData == null) return;
-        ItemDrop? item = prefab.GetComponent<ItemDrop>();
-        if (item == null) return;
-        ItemData.UpdateFields(item.m_itemData.m_shared, prefab.name, true);
+        if (SpawnAbility != null && prefab.TryGetComponent(out SpawnAbility component))
+        {
+            SpawnAbility.UpdateFields(component, prefab.name, true);
+        }
     }
-
+    
     protected virtual void UpdateVisuals(GameObject prefab)
     {
         if (Visuals != null)
         {
             if (Visuals.m_scale.HasValue)
             {
-                Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>();
-                for (int i = 0; i < renderers.Length; ++i)
+                prefab.transform.localScale = Visuals.m_scale.Value;
+                if (ConfigManager.ShouldLogDetails())
                 {
-                    Renderer? renderer = renderers[i];
-                    GameObject go = renderer.gameObject;
-                    go.transform.localScale = Visuals.m_scale.Value;
-                    if (ConfigManager.ShouldLogDetails())
-                    {
-                        MonsterDBPlugin.LogDebug($"[{prefab.name}][{go.name}] m_scale: {go.transform.localScale.ToString()}");
-                    }
+                    MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
                 }
             }
-            
+
             Visuals.Update(prefab, false);
         }
     }

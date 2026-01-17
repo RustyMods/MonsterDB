@@ -75,18 +75,18 @@ public static class ItemManager
                 return true;
             }
 
-            if (SyncManager.GetOriginal<BaseItem>(prefabName) is not {} item)
+            if (LoadManager.GetOriginal<BaseItem>(prefabName) is not {} item)
             {
                 MonsterDBPlugin.LogInfo("Original data not found");
                 return true;
             }
             
             item.Update();
-            SyncManager.files.Add(item);
-            SyncManager.UpdateSync();
+            LoadManager.files.Add(item);
+            LoadManager.UpdateSync();
             
             return true;
-        }, optionsFetcher: SyncManager.GetOriginalKeys<BaseItem>, adminOnly: true);
+        }, optionsFetcher: LoadManager.GetOriginalKeys<BaseItem>, adminOnly: true);
 
         Command clone = new Command("clone_item", "[prefabName][newName]: must be an item", args =>
         {
@@ -136,7 +136,7 @@ public static class ItemManager
 
     public static bool TrySave(GameObject prefab, out BaseItem item, bool isClone = false, string source = "")
     {
-        item = SyncManager.GetOriginal<BaseItem>(prefab.name);
+        item = LoadManager.GetOriginal<BaseItem>(prefab.name);
         if (item != null) return true;
 
         if (!prefab.GetComponent<ItemDrop>()) return false;
@@ -144,7 +144,7 @@ public static class ItemManager
         item = new BaseItem();
         item.Setup(prefab, isClone, source);
         
-        SyncManager.originals.Add(prefab.name, item);
+        LoadManager.originals.Add(prefab.name, item);
 
         return true;
     }
@@ -202,8 +202,8 @@ public static class ItemManager
             if (header.Type != BaseType.Item) return;
             BaseItem reference = ConfigManager.Deserialize<BaseItem>(text);
             reference.Update();
-            SyncManager.files.Add(reference);
-            SyncManager.UpdateSync();
+            LoadManager.files.Add(reference);
+            LoadManager.UpdateSync();
         }
         catch
         {

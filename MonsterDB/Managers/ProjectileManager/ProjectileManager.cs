@@ -44,10 +44,8 @@ public static class ProjectileManager
     
     public static bool TrySave(GameObject prefab, out BaseProjectile data, bool isClone = false, string source = "")
     {
-        data = SyncManager.GetOriginal<BaseProjectile>(prefab.name);
+        data = LoadManager.GetOriginal<BaseProjectile>(prefab.name);
         if (data != null) return true;
-        if (!prefab.GetComponent<Projectile>()) return false;
-
         data = new BaseProjectile();
         data.Setup(prefab, isClone, source);
         return true;
@@ -61,13 +59,25 @@ public static class ProjectileManager
         string text = ConfigManager.Serialize(data);
         File.WriteAllText(filePath, text);
         MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+
+        if (prefab.TryGetComponent(out Projectile component) && component.m_spawnOnHit != null &&
+            component.m_spawnOnHit.GetComponent<SpawnAbility>())
+        {
+            bool isSpawnClone = false;
+            string spawnSource = "";
+            if (PrefabManager.Clones.TryGetValue(component.m_spawnOnHit.name, out Clone c))
+            {
+                isSpawnClone = true;
+                spawnSource = c.PrefabName;
+            }
+            
+            SpawnAbilityManager.Write(component.m_spawnOnHit, isSpawnClone, spawnSource, dirPath);
+        }
     }
 
     public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
     {
         if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
-        if (!source.GetComponent<Projectile>()) return false;
-        
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
@@ -78,6 +88,16 @@ public static class ProjectileManager
             {
                 Renderer renderer = renderers[i];
                 VisualUtils.CloneMaterials(renderer, ref newMaterials);
+            }
+
+            if (p.TryGetComponent(out Projectile projectile) && projectile.m_spawnOnHit != null && projectile.m_spawnOnHit.GetComponent<SpawnAbility>())
+            {
+                string newName = $"MDB_{cloneName}_{projectile.m_spawnOnHit.name}";
+                if (SpawnAbilityManager.TryClone(projectile.m_spawnOnHit, newName, 
+                        out GameObject newSpawnOnHit, false))
+                {
+                    projectile.m_spawnOnHit = newSpawnOnHit;
+                }
             }
             
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");

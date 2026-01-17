@@ -85,17 +85,17 @@ public static class FishManager
                 return true;
             }
 
-            if (SyncManager.GetOriginal<BaseFish>(prefabName) is not {} fish)
+            if (LoadManager.GetOriginal<BaseFish>(prefabName) is not {} fish)
             {
                 MonsterDBPlugin.LogInfo("Original data not found");
                 return true;
             }
             
             fish.Update();
-            SyncManager.UpdateSync();
+            LoadManager.UpdateSync();
             
             return true;
-        }, optionsFetcher: SyncManager.GetOriginalKeys<BaseFish>, adminOnly: true);
+        }, optionsFetcher: LoadManager.GetOriginalKeys<BaseFish>, adminOnly: true);
 
         Command clone = new Command("clone_fish", "[prefabName][newName]: must be a fish", args =>
         {
@@ -134,11 +134,11 @@ public static class FishManager
     {
         if (!prefab.GetComponent<ItemDrop>()) return null;
 
-        if (SyncManager.GetOriginal<BaseFish>(prefab.name) is { } item) return ConfigManager.Serialize(item);
+        if (LoadManager.GetOriginal<BaseFish>(prefab.name) is { } item) return ConfigManager.Serialize(item);
         BaseFish reference = new BaseFish();
         reference.Setup(prefab, isClone, source);
         
-        SyncManager.originals.Add(prefab.name, reference);
+        LoadManager.originals.Add(prefab.name, reference);
         return ConfigManager.Serialize(reference);
     }
 
@@ -161,7 +161,7 @@ public static class FishManager
             if (header.Type != BaseType.Fish) return;
             BaseFish reference = ConfigManager.Deserialize<BaseFish>(text);
             reference.Update();
-            SyncManager.UpdateSync();
+            LoadManager.UpdateSync();
         }
         catch
         {

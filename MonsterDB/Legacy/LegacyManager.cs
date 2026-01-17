@@ -10,18 +10,16 @@ namespace MonsterDB.Solution;
 public static class LegacyManager
 {
     private static readonly string LegacyFolderPath;
-    private static readonly List<CreatureData> creaturesToConvert;
+    private static readonly Dictionary<string, CreatureData> creaturesToConvert;
 
     static LegacyManager()
     {
         LegacyFolderPath = Path.Combine(ConfigManager.DirectoryPath, "Legacy");
-        creaturesToConvert = new List<CreatureData>();
+        creaturesToConvert = new Dictionary<string, CreatureData>();
     }
     
     public static void Setup()
     {
-        if (!Directory.Exists(LegacyFolderPath)) Directory.CreateDirectory(LegacyFolderPath);
-
         ImportDirs();
         ImportFiles();
 
@@ -30,19 +28,49 @@ public static class LegacyManager
             MonsterDBPlugin.LogInfo($"Loaded {creaturesToConvert.Count} legacy files. Use command convert_all, to export to new file structure.");
         }
 
-        Command convert = new Command("convert_all", "", _ =>
+        Command convertAll = new Command("convert_all", "", _ =>
         {
-            if (creaturesToConvert.Count <= 0) return true;
+            if (creaturesToConvert.Count <= 0)
+            {
+                MonsterDBPlugin.LogInfo("No legacy files found.");
+                return true;
+            }
 
             Load();
             
             return true;
         });
+
+        Command convert = new Command("convert", "", args =>
+        {
+            if (args.Length < 3)
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return true;
+            }
+            
+            string prefabName = args[2];
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return false;
+            }
+
+            if (!creaturesToConvert.TryGetValue(prefabName, out CreatureData data))
+            {
+                MonsterDBPlugin.LogWarning($"No legacy creature data found for {prefabName}");
+                return true;
+            }
+
+            Convert(data);
+            
+            return true;
+        }, creaturesToConvert.Keys.ToList);
     }
 
     private static void Load()
     {
-        foreach (CreatureData? data in creaturesToConvert)
+        foreach (CreatureData? data in creaturesToConvert.Values)
         {
             Convert(data);
         }
@@ -62,8 +90,8 @@ public static class LegacyManager
         NPCTalkMethods.ReadNPCTalk(folderPath, ref data);
         GrowUpMethods.ReadGrowUp(folderPath, ref data);
         LevelEffectsMethods.ReadLevelEffects(folderPath, ref data);
-        
-        creaturesToConvert.Add(data);
+
+        creaturesToConvert[data.m_characterData.PrefabName] = data;
 
         return true;
     }
@@ -73,7 +101,7 @@ public static class LegacyManager
         List<string> paths = new();
         string creaturePath = Path.Combine(ConfigManager.DirectoryPath, "Creatures");
         string clonePath = Path.Combine(ConfigManager.DirectoryPath, "Clones");
-        paths.AddRange(Directory.GetDirectories(LegacyFolderPath));
+        if (Directory.Exists(LegacyFolderPath)) paths.AddRange(Directory.GetDirectories(LegacyFolderPath));
         if (Directory.Exists(clonePath)) paths.AddRange(Directory.GetDirectories(clonePath));
         if (Directory.Exists(creaturePath)) paths.AddRange(Directory.GetDirectories(creaturePath));
         foreach (string dir in paths)
@@ -84,7 +112,7 @@ public static class LegacyManager
     
     private static void ImportFiles()
     {
-        if (!Directory.Exists(LegacyFolderPath)) Directory.CreateDirectory(LegacyFolderPath);
+        if (!Directory.Exists(LegacyFolderPath)) return;
         string[] files = Directory.GetFiles(LegacyFolderPath, "*.yml");
         if (files.Length <= 0) return;
         IDeserializer deserializer = new DeserializerBuilder().Build();
@@ -93,9 +121,9 @@ public static class LegacyManager
         {
             try
             {
-                string serial = File.ReadAllText(filePath);
-                CreatureData data = deserializer.Deserialize<CreatureData>(serial);
-                creaturesToConvert.Add(data);
+                string text = File.ReadAllText(filePath);
+                CreatureData data = deserializer.Deserialize<CreatureData>(text);
+                creaturesToConvert[data.m_characterData.PrefabName] = data;
                 ++count;
             }
             catch
@@ -135,8 +163,7 @@ public static class LegacyManager
 
         if (isClone)
         {
-            CreatureManager.Clone(prefab, data.m_characterData.PrefabName, false);
-            prefab = PrefabManager.GetPrefab(data.m_characterData.PrefabName);
+            prefab = CreatureManager.Clone(prefab, data.m_characterData.PrefabName, false);
             
             string ragdollName = $"MDB_{data.m_characterData.PrefabName}_ragdoll";
             foreach (EffectInfo? info in data.m_effects.m_deathEffects)
@@ -150,10 +177,10 @@ public static class LegacyManager
 
         if (prefab == null) return;
 
-        List<ItemAttackData> items = data.GetAllItems();
-        items.RemoveAll(x => string.IsNullOrEmpty(x.m_attackData.OriginalPrefab));
+        List<ItemAttackData> itemsToClone = data.GetAllItems();
+        itemsToClone.RemoveAll(x => string.IsNullOrEmpty(x.m_attackData.OriginalPrefab));
 
-        foreach (ItemAttackData? item in items)
+        foreach (ItemAttackData? item in itemsToClone)
         {
             GameObject? itemPrefab = PrefabManager.GetPrefab(item.m_attackData.OriginalPrefab);
             if (itemPrefab == null) continue;
@@ -161,14 +188,14 @@ public static class LegacyManager
         }
 
         CreatureManager.TrySave(prefab, out Base? original, isClone, cloneFrom);
-        SyncManager.originals.Remove(prefab.name);
+        LoadManager.originals.Remove(prefab.name);
         
         Update(prefab, data);
         CreatureManager.Write(prefab, isClone, cloneFrom);
         
         if (original != null)
         {
-            SyncManager.originals[prefab.name] = original;
+            LoadManager.originals[prefab.name] = original;
         }
     }
 }

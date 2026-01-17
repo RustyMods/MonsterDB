@@ -89,15 +89,15 @@ public static class CreatureManager
                 return true;
             }
 
-            if (SyncManager.GetOriginal<Base>(prefabName) is not { } creature)
+            if (LoadManager.GetOriginal<Base>(prefabName) is not { } creature)
             {
                 MonsterDBPlugin.LogInfo("Original data not found");
                 return true;
             }
             creature.Update();
-            SyncManager.UpdateSync();
+            LoadManager.UpdateSync();
             return true;
-        }, SyncManager.GetOriginalKeys<Base>, adminOnly: true);
+        }, LoadManager.GetOriginalKeys<Base>, adminOnly: true);
 
         Command clone = new Command("clone", 
             "[prefabName][newName]: must be a character", 
@@ -134,7 +134,7 @@ public static class CreatureManager
 
     public static bool TrySave(GameObject prefab, out Base? data, bool isClone = false, string source = "")
     {
-        data = SyncManager.GetOriginal<Base>(prefab.name);
+        data = LoadManager.GetOriginal<Base>(prefab.name);
         if (data != null) return true;
         
         Character? character = prefab.GetComponent<Character>();
@@ -167,7 +167,7 @@ public static class CreatureManager
 
         if (data == null) return false;
         
-        SyncManager.originals.Add(prefab.name, data);
+        LoadManager.originals.Add(prefab.name, data);
         return true;
     }
 
@@ -230,9 +230,9 @@ public static class CreatureManager
         }
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static GameObject? Clone(GameObject source, string cloneName, bool write = true)
     {
-        if (CloneManager.clones.ContainsKey(cloneName)) return;
+        if (CloneManager.clones.TryGetValue(cloneName, out var clone)) return clone;
         
         Clone c = new Clone(source, cloneName);
         c.OnCreated += prefab =>
@@ -345,7 +345,7 @@ public static class CreatureManager
             }
         };
 
-        c.Create();
+        return c.Create();
     }
     
     private static GameObject[] CreateItems(GameObject[] list, string cloneName)
