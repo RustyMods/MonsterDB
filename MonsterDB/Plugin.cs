@@ -24,21 +24,25 @@ public class MonsterDBPlugin : BaseUnityPlugin
         instance = this;
 
         ConfigManager.Start();
-        LegacyManager.Setup();
+        LocalizationManager.Start();
+        
+        LegacyManager.Start();
         AudioManager.Start();
-        TextureManager.Setup();
-        FactionManager.Setup();
+        TextureManager.Start();
+        FactionManager.Start();
+        
         CreatureManager.Setup();
         ItemManager.Setup();
         FishManager.Setup();
-        FileManager.Start();
         EggManager.Setup();
         ProjectileManager.Setup();
         SpawnAbilityManager.Setup();
-        PrefabManager.Setup();
+        
+        FileManager.Start();
+        PrefabManager.Start();
         SpawnManager.Setup();
+        
         Wiki.Write();
-        LocalizationManager.Start();
         
         Assembly assembly = Assembly.GetExecutingAssembly();
         _harmony.PatchAll(assembly); 

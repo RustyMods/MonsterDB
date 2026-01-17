@@ -18,7 +18,7 @@ public static class LegacyManager
         creaturesToConvert = new Dictionary<string, CreatureData>();
     }
     
-    public static void Setup()
+    public static void Start()
     {
         ImportDirs();
         ImportFiles();

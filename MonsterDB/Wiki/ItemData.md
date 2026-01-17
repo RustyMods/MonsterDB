@@ -25,6 +25,16 @@ Advanced users can leverage these fields to precisely control how and when creat
 
 ```yml
 prefab: string              # Prefab ID
+name: string                # Display name
+description: string
+maxStackSize: int
+maxQuality: int
+scaleByQuality: float
+weight: float
+scaleWeightByQuality: float
+value: int                  # Trader value
+teleportable: bool
+icons: string[]             # List of icon names
 toolTier: int               # Can damage rocks/trees of same or lower tool tier
 damages: Damages            # See Damages section below
 attackForce: float          # Pushback force

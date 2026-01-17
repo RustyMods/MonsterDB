@@ -175,7 +175,18 @@ public abstract class Reference
         if (TType.IsAssignableFrom(SType))
         {
             targetField.SetValue(target, SValue);
-            if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {SValue}");
+            if (log)
+            {
+                if (TType == typeof(Character.Faction))
+                {
+                    Character.Faction faction = (Character.Faction)SValue;
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {faction.ToString()}");
+                }
+                else
+                {
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {SValue}");
+                }
+            }
         }
         else if (TType == typeof(GameObject) && 
                  SValue is string goName)

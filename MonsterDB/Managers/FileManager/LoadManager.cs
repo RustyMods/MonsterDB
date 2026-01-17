@@ -20,6 +20,16 @@ public static class LoadManager
         files = new BaseAggregate();
         sync =  new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Files", "");
         sync.ValueChanged += OnSyncChange;
+        
+        Command reload = new Command("reload", "reloads all files in import folder", _ =>
+        {
+            loadList.Clear();
+            FileManager.Start();
+            ResetAll();
+            LoadClones();
+            Load();
+            return true;
+        }, adminOnly: true);
     }
     
     public static T? GetOriginal<T>(string prefabName) where T : Header =>

@@ -23,20 +23,6 @@ public static class TextureManager
         harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.Awake)),
             new HarmonyMethod(AccessTools.Method(typeof(TextureManager), nameof(WriteAll))));
         
-        Start();
-    }
-    private static void Start()
-    {
-        string[] files = Directory.GetFiles(FileManager.ImportFolder, "*.png", SearchOption.AllDirectories);
-        for (int i = 0; i < files.Length; ++i)
-        {
-            string filePath = files[i];
-            ReadTexture(filePath);
-        }
-        MonsterDBPlugin.LogInfo($"Loaded {files.Length} PNG files");
-    }
-    public static void Setup()
-    {
         Command export = new Command("export_main_tex", "[prefabName]: export creature main texture", args =>
         {
             if (args.Length < 3) return false;
@@ -133,6 +119,16 @@ public static class TextureManager
             
             return true;
         }, m_cachedSprites.Keys.ToList);
+    }
+    public static void Start()
+    {
+        string[] files = Directory.GetFiles(FileManager.ImportFolder, "*.png", SearchOption.AllDirectories);
+        for (int i = 0; i < files.Length; ++i)
+        {
+            string filePath = files[i];
+            ReadTexture(filePath);
+        }
+        MonsterDBPlugin.LogInfo($"Loaded {files.Length} PNG files");
     }
 
     public static void WriteAll()

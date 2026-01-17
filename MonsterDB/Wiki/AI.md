@@ -1,7 +1,7 @@
 # BaseAI
 
 `BaseAI` is the base class that defines all creature AI in Valheim.
-Both `AnimalAI` and `MonsterAI` inherit from BaseAI, meaning they include all of the fields below in addition to their own extensions.
+Both `AnimalAI` and `MonsterAI` inherit from BaseAI, meaning they include all the fields below in addition to their own extensions.
 
 ```yml
 # Detection

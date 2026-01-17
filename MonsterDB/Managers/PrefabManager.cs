@@ -23,7 +23,7 @@ public static class PrefabManager
         Clones =  new Dictionary<string, Clone>();
     }
 
-    public static void Setup()
+    public static void Start()
     {
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_FejdStartup))));

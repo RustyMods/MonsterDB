@@ -47,6 +47,49 @@ public static class SpawnAbilityManager
 
             return true;
         }, PrefabManager.GetAllPrefabNames<SpawnAbility>);
+
+        Command clone = new Command("clone_spawnability", "[prefabName]: clone spawn ability YML file", args =>
+        {
+            if (args.Length < 4)
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return true;
+            }
+            
+            string prefabName = args[2];
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return false;
+            }
+            
+            string newName = args[3];
+            if (string.IsNullOrEmpty(newName))
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return false;
+            }
+            
+            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+
+            if (prefab == null)
+            {
+                MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
+                return true;
+            }
+
+
+
+            if (!prefab.GetComponent<SpawnAbility>())
+            {
+                MonsterDBPlugin.LogWarning("Invalid prefab, missing SpawnAbility component");
+                return true;
+            }
+
+            TryClone(prefab, newName, out _, true);
+            
+            return true;
+        }, PrefabManager.GetAllPrefabNames<SpawnAbility>, adminOnly: true);
     }
 
     public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")

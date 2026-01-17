@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -18,6 +19,7 @@ public class FishRef : Reference
     public float? m_avoidSpeedScale;
     public float? m_avoidRange;
     public float? m_height;
+    [YamlMember(Description = "Fishing")]
     public float? m_hookForce;
     public float? m_staminaUse;
     public float? m_escapeStaminaUse;
@@ -33,6 +35,7 @@ public class FishRef : Reference
     public float? m_collisionFleeTimeout;
     public List<BaitSettingRef>? m_baits;
     public DropTableRef? m_extraDrops;
+    [YamlMember(Description = "Jump")]
     public float? m_jumpSpeed;
     public float? m_jumpHeight;
     public float? m_jumpForwardStrength;

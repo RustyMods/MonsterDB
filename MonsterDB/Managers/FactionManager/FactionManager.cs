@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using ServerSync;
 
@@ -10,12 +11,13 @@ namespace MonsterDB;
 
 public static class FactionManager
 {
-    public static readonly Dictionary<Character.Faction, Faction> customFactions;
+    private static readonly Dictionary<Character.Faction, Faction> customFactions;
     private static readonly Dictionary<string, Character.Faction> factions;
     private const string FileName = "Factions.yml";
     private static readonly string FilePath;
     private static string rawFile = "";
     private static readonly CustomSyncedValue<string> sync;
+    private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
 
     static FactionManager()
     {
@@ -24,15 +26,9 @@ public static class FactionManager
         FilePath = Path.Combine(ConfigManager.DirectoryPath, FileName);
         sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Factions", "");
         sync.ValueChanged += OnSyncChange;
-        if (File.Exists(FilePath))
-        {
-            Read(FilePath);
-        }
-        SetupFileWatcher();
-    }
-
-    public static void Setup()
-    {
+        _fileWatcherEnabled = ConfigManager.config("File Watcher", "Faction File", Toggle.On,
+            "If on, Faction.yml changed, renamed or created will trigger update");
+        
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(Enum), nameof(Enum.GetValues)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetValues))));
@@ -40,6 +36,18 @@ public static class FactionManager
             postfix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetNames))));
         harmony.Patch(AccessTools.Method(typeof(BaseAI), nameof(BaseAI.IsEnemy), new Type[]{typeof(Character), typeof(Character)}),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_BaseAI_IsEnemy))));
+        harmony.Patch(AccessTools.Method(typeof(Enum), nameof(Enum.GetName)),
+            prefix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetName))));
+    }
+
+    private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
+
+    public static void Start()
+    {
+        if (File.Exists(FilePath))
+        {
+            Read(FilePath);
+        }
     }
 
     public static void Init(ZNet net)
@@ -47,6 +55,7 @@ public static class FactionManager
         if (net.IsServer())
         {
             UpdateSync();
+            SetupFileWatcher();
         }
     }
 
@@ -89,6 +98,7 @@ public static class FactionManager
 
     private static void ReadConfigValues(object sender, FileSystemEventArgs e)
     {
+        if (!IsFileWatcherEnabled()) return;
         Read(FilePath);
     }
 
@@ -163,19 +173,29 @@ public static class FactionManager
         if (factions.Count == 0) return;
         __result = __result.AddRangeToArray(factions.Keys.ToArray());
     }
-
-    public static Character.Faction GetFaction(string name)
+    private static bool Patch_Enum_GetName(Type enumType, object value, ref string __result)
+    {
+        if (enumType != typeof(Character.Faction)) return true;
+        if (customFactions.TryGetValue((Character.Faction)value, out Faction data))
+        {
+            __result = data.name;
+            return false;
+        }
+        return true;
+    }
+    
+    public static Character.Faction GetFaction(string name, Faction? data = null)
     {
         if (Enum.TryParse(name, true, out Character.Faction faction))
         {
             return faction;
         }
-        
+        // If already registered, return faction
         if (factions.TryGetValue(name, out faction))
         {
             return faction;
         }
-
+        // If external factions already uses name, return external faction
         Dictionary<Character.Faction, string> map = GetFactionMap();
         foreach (KeyValuePair<Character.Faction, string> kvp in map)
         {
@@ -186,9 +206,22 @@ public static class FactionManager
                 return faction;
             }
         }
-
-        faction = (Character.Faction)name.GetStableHashCode();
+        
+        // Create new faction
+        int hash = name.GetStableHashCode();
+        faction = (Character.Faction)hash;
         factions[name] = faction;
+
+        if (data == null && !customFactions.TryGetValue(faction, out data))
+        {
+            data = new Faction()
+            {
+                name = name,
+            };
+        }
+        // Register data
+        customFactions[faction] = data;
+        
         return faction;
     }
 

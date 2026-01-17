@@ -204,6 +204,43 @@ public static class LocalizationManager
         localizations[language] = newLines;
     }
 
+    public static void AddWord(string language, string key, string value, bool replace = true)
+    {
+        if (!localizations.TryGetValue(language, out string[] translations))
+        {
+            localizations[language] = new[] { string.Join(":", key, value) };
+        }
+        else
+        {
+            Dictionary<string, string> words = new();
+            for (int i = 0; i < translations.Length; ++i)
+            {
+                string line = translations[i];
+                if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
+                string[] lineParts = line.Split(':');
+                if (lineParts.Length < 2) continue;
+                string lKey = lineParts[0].Trim();
+                string lValue = lineParts[1].Trim();
+                words[lKey] = lValue;
+            }
+
+            if (replace)
+            {
+                words[key] = value;
+            }
+            else
+            {
+                if (!words.ContainsKey(key))
+                {
+                    words.Add(key, value);
+                }
+            }
+            string[] newLines =  words.Select(f => string.Join(":", f.Key, f.Value)).ToArray();
+            localizations[language] = newLines;
+        }
+        Update();
+    }
+
     private static void ReadConfigValues(object sender, FileSystemEventArgs e)
     {
         if (!IsFileWatcherEnabled()) return;

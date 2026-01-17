@@ -14,9 +14,7 @@ public class Faction
     public void Setup()
     {
         if (string.IsNullOrEmpty(name)) return;
-        Character.Faction faction = FactionManager.GetFaction(name);
-        if (FactionManager.customFactions.ContainsKey(faction)) return;
-        FactionManager.customFactions.Add(faction, this);
+        FactionManager.GetFaction(name, this);
     }
     
     public bool IsEnemy(Character custom, Character other)

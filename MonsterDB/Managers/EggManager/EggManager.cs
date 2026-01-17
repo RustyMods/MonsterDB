@@ -22,10 +22,7 @@ public static class EggManager
         _addPercentage = ConfigManager.config("Eggs", "Growth Percentage", Toggle.On,
             "If on, will add growth percentage to hover text");
         newEggComponentPrefabs = new List<string>();
-    }
-
-    public static void Setup()
-    {
+        
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ItemDrop), nameof(ItemDrop.GetHoverText)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_ItemDrop_GetHoverText))));
@@ -34,127 +31,128 @@ public static class EggManager
         harmony.Patch(AccessTools.Method(typeof(EggGrow), nameof(EggGrow.UpdateEffects)),
             new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_EggGrow_UpdateEffects))));
     }
-    
-    private static Command save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder", args =>
+
+    public static void Setup()
     {
-        if (args.Length < 3)
-        {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
-        }
-        
-        string prefabName = args[2];
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return false;
-        }
-        
-        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        var save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder",
+            args =>
+            {
+                if (args.Length < 3)
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return true;
+                }
 
-        if (prefab == null)
-        {
-            return true;
-        }
+                var prefabName = args[2];
+                if (string.IsNullOrEmpty(prefabName))
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return false;
+                }
 
-        if (!prefab.GetComponent<ItemDrop>())
-        {
-            MonsterDBPlugin.LogWarning("Invalid, missing ItemDrop component");
-            return true;
-        }
+                var prefab = PrefabManager.GetPrefab(prefabName);
 
-        Write(prefab);
-        return true;
-    }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>);
+                if (prefab == null) return true;
 
-    private static Command saveAll = new Command("write_all_egg", $"save all egg references to {FileManager.ExportFolder} folder", _ =>
-    {
-        List<GameObject> prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
-        for (int i = 0; i < prefabs.Count; ++i)
-        {
-            GameObject? prefab = prefabs[i];
-            Write(prefab);
-        }
-        return true;
-    });
+                if (!prefab.GetComponent<ItemDrop>())
+                {
+                    MonsterDBPlugin.LogWarning("Invalid, missing ItemDrop component");
+                    return true;
+                }
 
-    private static Command read = new Command("mod_egg", $"[fileName]: read egg reference from {FileManager.ImportFolder} folder", args =>
-    {
-        if (args.Length < 3)
-        {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
-        }
-        
-        string prefabName = args[2];
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
-        }
-        
-        string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
-        Read(filePath);
-        return true;
-    }, FileManager.GetModFileNames, adminOnly: true);
+                Write(prefab);
+                return true;
+            }, PrefabManager.GetAllPrefabNames<ItemDrop>);
 
-    private static Command revert = new Command("revert_egg", "[prefabName]: revert egg to factory settings", args =>
-    {
-        if (args.Length < 3)
+        var saveAll = new Command("write_all_egg", $"save all egg references to {FileManager.ExportFolder} folder", _ =>
         {
-            MonsterDBPlugin.LogInfo("Invalid parameters");
-            return true;
-        }
-        
-        string prefabName = args[2];
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            MonsterDBPlugin.LogInfo("Invalid prefab");
-            return true;
-        }
+            var prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
+            for (var i = 0; i < prefabs.Count; ++i)
+            {
+                var prefab = prefabs[i];
+                Write(prefab);
+            }
 
-        if (LoadManager.GetOriginal<BaseEgg>(prefabName) is not {} egg)
-        {
-            MonsterDBPlugin.LogInfo("Original data not found");
             return true;
-        }
-        
-        egg.Update();
-        LoadManager.UpdateSync();
-        
-        return true;
-    }, optionsFetcher: LoadManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
+        });
 
-    private static Command clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
-    {
-        if (args.Length < 3)
-        {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
-        }
-        
-        string prefabName = args[2];
-        string newName = args[3];
-        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-        {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
-        }
-        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-        if (prefab == null)
-        {
-            return true;
-        }
+        var read = new Command("mod_egg", $"[fileName]: read egg reference from {FileManager.ImportFolder} folder",
+            args =>
+            {
+                if (args.Length < 3)
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return true;
+                }
 
-        if (!prefab.GetComponent<ItemDrop>())
+                var prefabName = args[2];
+                if (string.IsNullOrEmpty(prefabName))
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return true;
+                }
+
+                var filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
+                Read(filePath);
+                return true;
+            }, FileManager.GetModFileNames, adminOnly: true);
+
+        var revert = new Command("revert_egg", "[prefabName]: revert egg to factory settings", args =>
         {
-            MonsterDBPlugin.LogWarning("Invalid prefab, missing ItemDrop component");
+            if (args.Length < 3)
+            {
+                MonsterDBPlugin.LogInfo("Invalid parameters");
+                return true;
+            }
+
+            var prefabName = args[2];
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                MonsterDBPlugin.LogInfo("Invalid prefab");
+                return true;
+            }
+
+            if (LoadManager.GetOriginal<BaseEgg>(prefabName) is not { } egg)
+            {
+                MonsterDBPlugin.LogInfo("Original data not found");
+                return true;
+            }
+
+            egg.Update();
+            LoadManager.UpdateSync();
+
             return true;
-        }
-        
-        Clone(prefab, newName);
-        return true;
-    }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
+        }, LoadManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
+
+        var clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
+        {
+            if (args.Length < 3)
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return true;
+            }
+
+            var prefabName = args[2];
+            var newName = args[3];
+            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return true;
+            }
+
+            var prefab = PrefabManager.GetPrefab(prefabName);
+            if (prefab == null) return true;
+
+            if (!prefab.GetComponent<ItemDrop>())
+            {
+                MonsterDBPlugin.LogWarning("Invalid prefab, missing ItemDrop component");
+                return true;
+            }
+
+            Clone(prefab, newName);
+            return true;
+        }, PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
+    }
 
     public static string? Save(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {

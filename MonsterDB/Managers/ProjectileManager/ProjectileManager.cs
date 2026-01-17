@@ -40,6 +40,41 @@ public static class ProjectileManager
             
             return true;
         }, PrefabManager.GetAllPrefabNames<Projectile>);
+
+        var clone = new Command("clone_projectile", "[prefabName][newName]: clones projectile and writes YML file",
+            args =>
+            {
+                if (args.Length < 4)
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return true;
+                }
+            
+                string prefabName = args[2];
+                if (string.IsNullOrEmpty(prefabName))
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return false;
+                }
+                
+                string newName = args[3];
+                if (string.IsNullOrEmpty(newName))
+                {
+                    MonsterDBPlugin.LogWarning("Invalid parameters");
+                    return false;
+                }
+            
+                GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+
+                if (prefab == null)
+                {
+                    return true;
+                }
+
+                TryClone(prefab, newName, out _);
+                
+                return true;
+            }, PrefabManager.GetAllPrefabNames<Projectile>, adminOnly: true);
     }
     
     public static bool TrySave(GameObject prefab, out BaseProjectile data, bool isClone = false, string source = "")

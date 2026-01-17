@@ -10,18 +10,18 @@ public class MovementDamageRef : Reference
 
     public static implicit operator MovementDamageRef(MovementDamage md)
     {
-        MovementDamageRef mdRef = new MovementDamageRef();
+        MovementDamageRef reference = new MovementDamageRef();
         if (md.m_runDamageObject != null)
         {
-            mdRef.m_runDamageObject = md.m_runDamageObject.name;
+            reference.m_runDamageObject = md.m_runDamageObject.name;
             Aoe? aoe = md.m_runDamageObject.GetComponent<Aoe>();
             if (aoe != null)
             {
-                mdRef.m_areaOfEffect = new AoeRef();
-                mdRef.m_areaOfEffect.m_damage = aoe.m_damage;
+                reference.m_areaOfEffect = new AoeRef();
+                reference.m_areaOfEffect.m_damage = aoe.m_damage;
             }
         }
 
-        return mdRef;
+        return reference;
     }
 }

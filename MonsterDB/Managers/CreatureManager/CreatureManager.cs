@@ -154,7 +154,7 @@ public static class CreatureManager
         }
         else if (character is Humanoid && ai is MonsterAI)
         {
-            var humanoid = new BaseHumanoid();
+            BaseHumanoid humanoid = new BaseHumanoid();
             humanoid.Setup(prefab, isClone, source);
             data = humanoid;
         }
