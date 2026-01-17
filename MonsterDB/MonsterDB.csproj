@@ -10,7 +10,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>MonsterDB</RootNamespace>
         <AssemblyName>MonsterDB</AssemblyName>
-        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
@@ -70,7 +70,7 @@
             <HintPath>$(PublicizedAssembliesPath)\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-            <HintPath>$(PublicizedAssembliesPath)\assembly_utils_publicized.dll</HintPath>
+          <HintPath>$(PublicizedAssembliesPath)\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
             <HintPath>$(PublicizedAssembliesPath)\assembly_valheim_publicized.dll</HintPath>
@@ -79,7 +79,7 @@
             <HintPath>$(BepInExPath)\core\BepInEx.dll</HintPath>
         </Reference>
         <Reference Include="gui_framework">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\publicized_assemblies\gui_framework_publicized.dll</HintPath>
+          <HintPath>$(PublicizedAssembliesPath)\gui_framework_publicized.dll</HintPath>
         </Reference>
         <Reference Include="ServerSync">
             <HintPath>Libs\ServerSync.dll</HintPath>
@@ -92,108 +92,847 @@
             <HintPath>$(CorlibPath)\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule">
-            <HintPath>$(CorlibPath)\UnityEngine.AssetBundleModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AudioModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.AudioModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>$(CorlibPath)\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ImageConversionModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+          <HintPath>Libs\UnityEngine.ImageConversionModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(CorlibPath)\UnityEngine.IMGUIModule.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.InputLegacyModule">
-            <HintPath>$(CorlibPath)\UnityEngine.InputLegacyModule.dll</HintPath>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(CorlibPath)\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ParticleSystemModule">
-            <HintPath>$(CorlibPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath>
-        </Reference>
-        <Reference Include="Unity.TextMeshPro">
-            <HintPath>$(GamePath)\valheim_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.UnityWebRequestModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Behaviours\AnimalTameable.cs" />
+        <Compile Include="Behaviours\Human.cs" />
+        <Compile Include="Behaviours\Saddle.cs" />
+        <Compile Include="Legacy\ComponentData.cs" />
+        <Compile Include="Legacy\CreatureData.cs" />
+        <Compile Include="Legacy\LegacyManager.cs" />
+        <Compile Include="Legacy\Methods\AnimalAIMethods.cs" />
+        <Compile Include="Legacy\Methods\CharacterDropMethods.cs" />
+        <Compile Include="Legacy\Methods\CharacterMethods.cs" />
+        <Compile Include="Legacy\Methods\GrowUpMethods.cs" />
+        <Compile Include="Legacy\Methods\Helpers.cs" />
+        <Compile Include="Legacy\Methods\HumanoidMethods.cs" />
+        <Compile Include="Legacy\Methods\LevelEffectsMethods.cs" />
+        <Compile Include="Legacy\Methods\MonsterAIMethods.cs" />
+        <Compile Include="Legacy\Methods\NPCTalkMethods.cs" />
+        <Compile Include="Legacy\Methods\ProcreationMethods.cs" />
+        <Compile Include="Legacy\Methods\TameableMethods.cs" />
+        <Compile Include="Legacy\Methods\VisualMethods.cs" />
+        <Compile Include="Managers\AudioManager\AudioManager.cs" />
+        <Compile Include="Managers\AudioManager\AudioRef.cs" />
+        <Compile Include="Managers\CloneManager\Clone.cs" />
+        <Compile Include="Managers\CloneManager\CloneManager.cs" />
+        <Compile Include="Managers\CommandManager\CommandManager.cs" />
+        <Compile Include="Managers\CommandManager\Command.cs" />
+        <Compile Include="Managers\ConfigManager\ConfigManager.cs" />
+        <Compile Include="Managers\ConfigManager\ConfigurationManagerAttributes.cs" />
+        <Compile Include="Managers\ConfigManager\YamlSettings.cs" />
+        <Compile Include="Managers\CreatureManager\AI\AnimalAIRef.cs" />
+        <Compile Include="Managers\CreatureManager\AI\BaseAIRef.cs" />
+        <Compile Include="Managers\CreatureManager\AI\MonsterAIRef.cs" />
+        <Compile Include="Managers\CreatureManager\Character\CharacterRef.cs" />
+        <Compile Include="Managers\CreatureManager\Character\HumanoidRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\AoeRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\CharacterDropRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\CharacterTimedDestructionRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\CinderRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\CinderSpawnerRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\DropProjectileOverDistanceRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\GrowUpRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\MovementDamageRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\NPCTalkRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\ProcreationRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\RandomAnimationRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\SaddleRef.cs" />
+        <Compile Include="Managers\CreatureManager\Components\TameableRef.cs" />
+        <Compile Include="Managers\CreatureManager\CreatureManager.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\Base.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\BaseCharacter.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\BaseHumanoid.cs" />
+        <Compile Include="Managers\CreatureManager\Creature\BaseHuman.cs" />
+        <Compile Include="Managers\CreatureManager\EffectListRef.cs" />
+        <Compile Include="Managers\CreatureManager\Vector3Ref.cs" />
+        <Compile Include="Managers\FileManager\BaseAggregate.cs" />
+        <Compile Include="Managers\FileManager\FileManager.cs" />
+        <Compile Include="Managers\EggManager\BaseEgg.cs" />
+        <Compile Include="Managers\EggManager\EggGrowRef.cs" />
+        <Compile Include="Managers\EggManager\EggManager.cs" />
+        <Compile Include="Managers\Extensions.cs" />
+        <Compile Include="Managers\FactionManager\Faction.cs" />
+        <Compile Include="Managers\FactionManager\FactionManager.cs" />
+        <Compile Include="Managers\FishManager\BaitSettingRef.cs" />
+        <Compile Include="Managers\FishManager\BaseFish.cs" />
+        <Compile Include="Managers\FishManager\DropDataRef.cs" />
+        <Compile Include="Managers\FishManager\DropTableRef.cs" />
+        <Compile Include="Managers\FishManager\FishManager.cs" />
+        <Compile Include="Managers\FishManager\FishRef.cs" />
+        <Compile Include="Managers\GlobalModifiers\Global.cs" />
+        <Compile Include="Managers\GlobalModifiers\GlobalManager.cs" />
+        <Compile Include="Managers\GlobalModifiers\SE_GlobalModifiers.cs" />
+        <Compile Include="Managers\ItemManager\BaseItem.cs" />
+        <Compile Include="Managers\ItemManager\ItemManager.cs" />
+        <Compile Include="Managers\ItemManager\Components\AttackRef.cs" />
+        <Compile Include="Managers\ItemManager\Components\ItemDataSharedRef.cs" />
+        <Compile Include="Managers\LocalizationManager.cs" />
+        <Compile Include="Managers\Misc\MiscComponent.cs" />
+        <Compile Include="Managers\PrefabManager.cs" />
+        <Compile Include="Managers\ProjectileManager\BaseProjectile.cs" />
+        <Compile Include="Managers\ProjectileManager\ProjectileManager.cs" />
+        <Compile Include="Managers\ProjectileManager\ProjectileRef.cs" />
+        <Compile Include="Managers\ProjectileManager\TeleportAbilityRef.cs" />
+        <Compile Include="Managers\ProjectileManager\TriggerSpawnAbilityRef.cs" />
+        <Compile Include="Managers\ProjectileManager\TriggerSpawnerRef.cs" />
+        <Compile Include="Managers\RagdollManager\BaseRagdoll.cs" />
+        <Compile Include="Managers\RagdollManager\RagdollManager.cs" />
+        <Compile Include="Managers\RagdollManager\RagdollRef.cs" />
+        <Compile Include="Managers\Reference.cs" />
+        <Compile Include="Managers\SpawnAbilityManager\BaseSpawnAbility.cs" />
+        <Compile Include="Managers\SpawnAbilityManager\SpawnAbilityRef.cs" />
+        <Compile Include="Managers\SpawnAbilityManager\SpawnAbilityManager.cs" />
+        <Compile Include="Managers\SpawnManager\SpawnDataRef.cs" />
+        <Compile Include="Managers\SpawnManager\SpawnManager.cs" />
+        <Compile Include="Managers\FileManager\Header.cs" />
+        <Compile Include="Managers\FileManager\LoadManager.cs" />
+        <Compile Include="Managers\TextureManager\TextureData.cs" />
+        <Compile Include="Managers\TextureManager\TextureManager.cs" />
+        <Compile Include="Managers\TextureManager\TextureRef.cs" />
+        <Compile Include="Managers\VisualManager\LevelSetupRef.cs" />
+        <Compile Include="Managers\VisualManager\LightRef.cs" />
+        <Compile Include="Managers\VisualManager\Material\MaterialRef.cs" />
+        <Compile Include="Managers\VisualManager\Material\ShaderRef.cs" />
+        <Compile Include="Managers\VisualManager\ParticleSystem\GradientRef.cs" />
+        <Compile Include="Managers\VisualManager\ParticleSystem\MinMaxGradientRef.cs" />
+        <Compile Include="Managers\VisualManager\ParticleSystem\CustomDataModuleRef.cs" />
+        <Compile Include="Managers\VisualManager\ParticleSystem\ParticleSystemRef.cs" />
+        <Compile Include="Managers\VisualManager\RendererRef.cs" />
+        <Compile Include="Managers\VisualManager\VisualRef.cs" />
+        <Compile Include="Managers\VisualManager\VisualUtils.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Solution\AudioManager.cs" />
-        <Compile Include="Solution\Behaviors\Human.cs" />
-        <Compile Include="Solution\Behaviors\HairColors.cs" />
-        <Compile Include="Solution\Behaviors\Visuals.cs" />
-        <Compile Include="Solution\Commands.cs" />
-        <Compile Include="Solution\ComponentData.cs" />
-        <Compile Include="Solution\CreatureData.cs" />
-        <Compile Include="Solution\CreatureManager.cs" />
-        <Compile Include="Solution\DataBase.cs" />
-        <Compile Include="Solution\HumanMan.cs" />
-        <Compile Include="Solution\Initialization.cs" />
-        <Compile Include="Solution\Methods\AnimalAIMethods.cs" />
-        <Compile Include="Solution\Methods\CharacterMethods.cs" />
-        <Compile Include="Solution\Methods\GrowUpMethods.cs" />
-        <Compile Include="Solution\Methods\Helpers.cs" />
-        <Compile Include="Solution\Methods\CharacterDropMethods.cs" />
-        <Compile Include="Solution\Methods\HumanoidMethods.cs" />
-        <Compile Include="Solution\Methods\ItemDataMethods.cs" />
-        <Compile Include="Solution\Methods\LevelEffectsMethods.cs" />
-        <Compile Include="Solution\Methods\MonsterAIMethods.cs" />
-        <Compile Include="Solution\Methods\NPCTalkMethods.cs" />
-        <Compile Include="Solution\Methods\ProcreationMethods.cs" />
-        <Compile Include="Solution\Methods\TameableMethods.cs" />
-        <Compile Include="Solution\Methods\VisualMethods.cs" />
-        <Compile Include="Solution\RRRConverter.cs" />
-        <Compile Include="Solution\SpawnMan.cs" />
-        <Compile Include="Solution\TextureManager.cs" />
-        <Compile Include="Solution\Tutorial.cs" />
         <Compile Include="VersionHandshake.cs" />
+        <Compile Include="Wiki\Wiki.cs" />
     </ItemGroup>
     <ItemGroup>
+        <Content Include="..\README.md">
+          <Link>README.md</Link>
+        </Content>
         <Content Include=".gitignore" />
-        <EmbeddedResource Include="assets\Tutorial.md" />
         <Content Include="environment.props" />
         <Content Include="ILRepack.targets" />
         <Content Include="Libs\ServerSync.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="Libs\UnityEngine.ImageConversionModule.dll" />
+        <Content Include="Thunderstore\icon.png" />
+        <Content Include="Thunderstore\manifest.json" />
         <Content Include="UpdateManifest.ps1" />
+        <Content Include="Wiki\Reference\Export\Abomination\Abomination.yml" />
+        <Content Include="Wiki\Reference\Export\Abomination\Abomination_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Abomination\items\Abomination_attack1.yml" />
+        <Content Include="Wiki\Reference\Export\Abomination\items\Abomination_attack2.yml" />
+        <Content Include="Wiki\Reference\Export\Abomination\items\Abomination_attack3.yml" />
+        <Content Include="Wiki\Reference\Export\AsksvinEgg.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin\Asksvin.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin\items\Asksvin_Bite.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin\items\Asksvin_Headbutt.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin\items\Asksvin_Pounce.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin\Ragdoll_Asksvin.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin_hatchling\Asksvin_hatchling.yml" />
+        <Content Include="Wiki\Reference\Export\Asksvin_hatchling\Ragdoll_Asksvin_Hatchling.yml" />
+        <Content Include="Wiki\Reference\Export\Bat\Bat.yml" />
+        <Content Include="Wiki\Reference\Export\Bat\items\bat_melee.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\Bjorn.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\Bjorn_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\items\bjorn_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\items\bjorn_claws.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\items\bjorn_slam.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\items\bjorn_swipe_combo.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\items\bjorn_swipe_l.yml" />
+        <Content Include="Wiki\Reference\Export\Bjorn\items\bjorn_swipe_r.yml" />
+        <Content Include="Wiki\Reference\Export\BlobElite\BlobElite.yml" />
+        <Content Include="Wiki\Reference\Export\BlobElite\items\blobelite_attack_aoe.yml" />
+        <Content Include="Wiki\Reference\Export\BlobFrost\BlobFrost.yml" />
+        <Content Include="Wiki\Reference\Export\BlobFrost\items\blob_frost_attack_aoe.yml" />
+        <Content Include="Wiki\Reference\Export\BlobLava\BlobLava.yml" />
+        <Content Include="Wiki\Reference\Export\BlobLava\items\blobLava_attack_aoe.yml" />
+        <Content Include="Wiki\Reference\Export\BlobTar\BlobTar.yml" />
+        <Content Include="Wiki\Reference\Export\BlobTar\items\blobtar_attack.yml" />
+        <Content Include="Wiki\Reference\Export\BlobTar\items\blobtar_projectile_tarball.yml" />
+        <Content Include="Wiki\Reference\Export\Blob\Blob.yml" />
+        <Content Include="Wiki\Reference\Export\Blob\items\blob_attack_aoe.yml" />
+        <Content Include="Wiki\Reference\Export\Boar\Boar.yml" />
+        <Content Include="Wiki\Reference\Export\Boar\boar_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Boar\items\boar_base_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Boar_piggy\Boar_piggy.yml" />
+        <Content Include="Wiki\Reference\Export\Boar_piggy\boar_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\BogWitchKvastur\BogWitchKvastur.yml" />
+        <Content Include="Wiki\Reference\Export\BogWitchKvastur\items\BogWitchKvastur_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Bonemass\Bonemass.yml" />
+        <Content Include="Wiki\Reference\Export\Bonemass\items\bonemass_attack_aoe.yml" />
+        <Content Include="Wiki\Reference\Export\Bonemass\items\bonemass_attack_punch.yml" />
+        <Content Include="Wiki\Reference\Export\Bonemass\items\bonemass_attack_throw.yml" />
+        <Content Include="Wiki\Reference\Export\Bonemass\items\bonemass_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\BonemawSerpent\BonemawSerpent.yml" />
+        <Content Include="Wiki\Reference\Export\BonemawSerpent\items\BonemawSerpent_bite.yml" />
+        <Content Include="Wiki\Reference\Export\BonemawSerpent\items\BonemawSerpent_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\BonemawSerpent\items\BonemawSerpent_spit.yml" />
+        <Content Include="Wiki\Reference\Export\BonemawSerpent\items\BonemawSerpent_taunt.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\Charred_Archer.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\charred_bow.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\charred_bow_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\charred_bow_volley.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\charred_bow_volley_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\Charred_Breastplate.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\Charred_Helmet.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer\items\Charred_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\Charred_Archer_Fader.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\charred_bow_Fader.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\charred_bow_Fader_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\charred_bow_volley_Fader.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\charred_bow_volley_Fader_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\Charred_Breastplate.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\Charred_Helmet.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Archer_Fader\items\Charred_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\Charred_Mage.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\items\charred_fireball_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\items\Charred_Helmet.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\items\Charred_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\items\Charred_MageCloths.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\items\charred_magestaff_fire.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Mage\items\charred_magestaff_summon.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\Charred_Melee.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\Charred_Breastplate.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\charred_greatsword_feint.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\charred_greatsword_swing.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\charred_greatsword_thrust.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\charred_greatsword_thrustfeint.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\Charred_Helmet.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee\items\Charred_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\Charred_Melee_Dyrnwyn.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\Charred_Breastplate.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\charred_dyrnwyn_greatsword_feint.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\charred_dyrnwyn_greatsword_swing.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\charred_dyrnwyn_greatsword_thrust.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\charred_dyrnwyn_greatsword_thrustfeint.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\Charred_Helmet.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Dyrnwyn\items\Charred_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\Charred_Melee_Fader.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\Charred_Breastplate.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\charred_fader_greatsword_feint.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\charred_fader_greatsword_swing.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\charred_fader_greatsword_thrust.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\charred_fader_greatsword_thrustfeint.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\Charred_Helmet.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Melee_Fader\items\Charred_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher\Charred_Twitcher.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher\items\charred_twitcher_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher\items\charred_twitcher_scratch_l.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher\items\charred_twitcher_scratch_r.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher\items\charred_twitcher_throw.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher_Summoned\Charred_Twitcher_Summoned.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher_Summoned\items\charred_twitcher_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher_Summoned\items\charred_twitcher_scratch_l.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher_Summoned\items\charred_twitcher_scratch_r.yml" />
+        <Content Include="Wiki\Reference\Export\Charred_Twitcher_Summoned\items\charred_twitcher_throw.yml" />
+        <Content Include="Wiki\Reference\Export\ChickenEgg.yml" />
+        <Content Include="Wiki\Reference\Export\Chicken\Chicken.yml" />
+        <Content Include="Wiki\Reference\Export\Deathsquito\Deathsquito.yml" />
+        <Content Include="Wiki\Reference\Export\Deathsquito\items\Deathsquito_sting.yml" />
+        <Content Include="Wiki\Reference\Export\Deer\Deer.yml" />
+        <Content Include="Wiki\Reference\Export\Deer\deer_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\Dragon.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_claw_left.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_claw_right.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_coldbreath.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_ice_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_spit_shotgun.yml" />
+        <Content Include="Wiki\Reference\Export\Dragon\items\dragon_taunt.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\Draugr.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\Draugr_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\items\draugr_axe.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\items\draugr_bow.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\items\draugr_bow_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\items\ShieldBanded.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Elite\Draugr_Elite.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Elite\Draugr_elite_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Elite\items\draugr_sword.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Ranged\Draugr_Ranged.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Ranged\Draugr_ranged_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Ranged\items\draugr_bow.yml" />
+        <Content Include="Wiki\Reference\Export\Draugr_Ranged\items\draugr_bow_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\DvergerAshlands.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\Dverger_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\DvergerArbalest.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\DvergerArbalest_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\DvergerArbalest_shootAshlands.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\DvergerHairFemale_Redhair.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\DvergerHairMale_Redbeard.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\DvergerSuitArbalest_Ashlands.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerAshlands\items\Dverger_meleeAshlands.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\DvergerMageFire.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\Dverger_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerHairFemale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerHairMale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerStaffFire.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerStaffFire_clusterbomb.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerStaffFire_clusterbomb_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerStaffFire_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerStaffFire_fireball_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\DvergerSuitFire.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageFire\items\Dverger_melee.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\DvergerMageIce.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\Dverger_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerHairFemale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerHairMale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerStaffIce.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerStaffIce_icebolt.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerStaffIce_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerStaffNova.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\DvergerSuitIce.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageIce\items\Dverger_melee.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\DvergerMageSupport.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\Dverger_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerHairFemale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerHairMale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerMistile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerStaffHeal.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerStaffHeal_heal.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerStaffSupport_buff.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMageSupport\items\DvergerSuitSupport.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\DvergerMage.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\Dverger_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerHairFemale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerHairMale.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerMistile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffFire.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffFire_clusterbomb.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffFire_clusterbomb_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffFire_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffFire_fireball_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffHeal.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffHeal_heal.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffIce.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffIce_icebolt.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffIce_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffNova.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerStaffSupport_buff.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerSuitFire.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerSuitIce.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\DvergerSuitSupport.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerMage\items\Dverger_melee.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\DvergerTest.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\GoblinShaman_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_attack_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_attack_poke.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_Headdress_antlers.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_Headdress_feathers.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_projectile_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_Staff_Bones.yml" />
+        <Content Include="Wiki\Reference\Export\DvergerTest\items\GoblinShaman_Staff_Feathers.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\Dverger.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\Dverger_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\DvergerArbalest.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\DvergerArbalest_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\DvergerArbalest_shoot.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\DvergerHairFemale.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\DvergerHairMale.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\DvergerSuitArbalest.yml" />
+        <Content Include="Wiki\Reference\Export\Dverger\items\Dverger_melee.yml" />
+        <Content Include="Wiki\Reference\Export\Eikthyr\Eikthyr.yml" />
+        <Content Include="Wiki\Reference\Export\Eikthyr\eikthyr_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Eikthyr\items\Eikthyr_antler.yml" />
+        <Content Include="Wiki\Reference\Export\Eikthyr\items\Eikthyr_charge.yml" />
+        <Content Include="Wiki\Reference\Export\Eikthyr\items\Eikthyr_stomp.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\Fader.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\fx_Fader_Ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Bite.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Claw_Left.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Claw_Right.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Fissure.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Fissure_Intense.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Flamebreath.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Meteors.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Meteors_Intense.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Roar.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Roar_Intense.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Roar_Projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_Spin.yml" />
+        <Content Include="Wiki\Reference\Export\Fader\items\Fader_WallOfFire.yml" />
+        <Content Include="Wiki\Reference\Export\FallenValkyrie\FallenValkyrie.yml" />
+        <Content Include="Wiki\Reference\Export\FallenValkyrie\items\fallenvalkyrie_claws.yml" />
+        <Content Include="Wiki\Reference\Export\FallenValkyrie\items\fallenvalkyrie_spin.yml" />
+        <Content Include="Wiki\Reference\Export\FallenValkyrie\items\fallenvalkyrie_spit.yml" />
+        <Content Include="Wiki\Reference\Export\FallenValkyrie\items\fallenvalkyrie_spit_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\FallenValkyrie\items\fallenvalkyrie_taunt.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring\Fenring.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring\Fenring_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring\items\Fenring_attack_claw.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring\items\Fenring_attack_jump.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring\items\Fenring_taunt.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist\Fenring_Cultist.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist\Fenring_cultist_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist\items\Fenring_attack_fireclaw.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist\items\Fenring_attack_fireclaw_double.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist\items\Fenring_attack_flames.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir\Fenring_Cultist_Hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir\Fenring_cultist_ragdoll_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir\items\Fenring_attack_frost.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir\items\Fenring_attack_iceclaw.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir\items\Fenring_attack_iceclaw_double.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir\items\Fenring_attack_IceNova.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir_nochest\Fenring_Cultist_Hildir_nochest.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir_nochest\Fenring_cultist_ragdoll_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir_nochest\items\Fenring_attack_frost.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir_nochest\items\Fenring_attack_iceclaw.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir_nochest\items\Fenring_attack_iceclaw_double.yml" />
+        <Content Include="Wiki\Reference\Export\Fenring_Cultist_Hildir_nochest\items\Fenring_attack_IceNova.yml" />
+        <Content Include="Wiki\Reference\Export\Fish1.yml" />
+        <Content Include="Wiki\Reference\Export\Fish10.yml" />
+        <Content Include="Wiki\Reference\Export\Fish11.yml" />
+        <Content Include="Wiki\Reference\Export\Fish12.yml" />
+        <Content Include="Wiki\Reference\Export\Fish2.yml" />
+        <Content Include="Wiki\Reference\Export\Fish3.yml" />
+        <Content Include="Wiki\Reference\Export\Fish4_cave.yml" />
+        <Content Include="Wiki\Reference\Export\Fish5.yml" />
+        <Content Include="Wiki\Reference\Export\Fish6.yml" />
+        <Content Include="Wiki\Reference\Export\Fish7.yml" />
+        <Content Include="Wiki\Reference\Export\Fish8.yml" />
+        <Content Include="Wiki\Reference\Export\Fish9.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\gdking_Ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\gd_king.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\items\gdking_root_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\items\gd_king_rootspawn.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\items\gd_king_scream.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\items\gd_king_shoot.yml" />
+        <Content Include="Wiki\Reference\Export\gd_king\items\gd_king_stomp.yml" />
+        <Content Include="Wiki\Reference\Export\Ghost\Ghost.yml" />
+        <Content Include="Wiki\Reference\Export\Ghost\items\Ghost_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\Gjall.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\items\gjall_attack_egg.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\items\gjall_attack_shake.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\items\gjall_attack_spit.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\items\gjall_attack_taunt.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\items\gjall_egg_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Gjall\items\gjall_spit_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\GoblinArcher.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\Goblin_Dragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinArmband.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinHelmet.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinLegband.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinLoin.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinShoulders.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinSpear.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\GoblinSpear_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinArcher\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\GoblinBruteBros.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\GoblinBrute_Hildir_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinBruteBros_Attack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinBruteBros_RageAttack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinBrute_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinBrute_ShoulderGuard.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinBrute_Taunt.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinShaman_attack_fireball_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinShaman_attack_protect_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros\items\GoblinShaman_projectile_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\GoblinBruteBros_nochest.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\GoblinBrute_Hildir_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinBruteBros_Attack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinBruteBros_RageAttack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinBrute_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinBrute_ShoulderGuard.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinBrute_Taunt.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinShaman_attack_fireball_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinShaman_attack_protect_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBruteBros_nochest\items\GoblinShaman_projectile_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\GoblinBrute.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\GoblinBrute_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_ArmGuard.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_Attack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_Backbones.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_ExecutionerCap.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_LegBones.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_RageAttack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_ShoulderGuard.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute\items\GoblinBrute_Taunt.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\GoblinBrute_Hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\GoblinBrute_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\items\GoblinBrute_Attack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\items\GoblinBrute_HipCloth.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\items\GoblinBrute_RageAttack.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\items\GoblinBrute_ShoulderGuard.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinBrute_Hildir\items\GoblinBrute_Taunt.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\GoblinKing.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\GoblinKing_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\items\GoblinKing_Beam.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\items\GoblinKing_Meteors.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\items\GoblinKing_Nova.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\items\GoblinKing_Taunt.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinKing\items\projectile_beam.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\GoblinShaman.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\GoblinShaman_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_attack_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_attack_poke.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_attack_protect.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_Headdress_antlers.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_Headdress_feathers.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_projectile_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_Staff_Bones.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman\items\GoblinShaman_Staff_Feathers.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\GoblinShaman_Hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\GoblinShaman_Hildir_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\items\GoblinShaman_attack_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\items\GoblinShaman_attack_poke.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\items\GoblinShaman_attack_protect.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\items\GoblinShaman_projectile_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir\items\GoblinShaman_Staff_Hildir.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\GoblinShaman_Hildir_nochest.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\GoblinShaman_Hildir_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\items\GoblinShaman_attack_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\items\GoblinShaman_attack_poke.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\items\GoblinShaman_attack_protect.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\items\GoblinShaman_projectile_fireball.yml" />
+        <Content Include="Wiki\Reference\Export\GoblinShaman_Hildir_nochest\items\GoblinShaman_Staff_Hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\Goblin.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\Goblin_Dragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinArmband.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinClub.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinHelmet.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinLegband.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinLoin.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinShoulders.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinSpear.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinSpear_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinSword.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\GoblinTorch.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin_Gem\Goblin_Dragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Goblin_Gem\Goblin_Gem.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf\Greydwarf.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf\Greydwarf_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf\items\Greydwarf_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf\items\Greydwarf_throw.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf\items\Greydwarf_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Elite\Greydwarf_Elite.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Elite\Greydwarf_elite_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Elite\items\Greydwarf_elite_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Shaman\Greydwarf_Shaman.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Shaman\Greydwarf_Shaman_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Shaman\items\Greydwarf_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Shaman\items\Greydwarf_shaman_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Greydwarf_Shaman\items\Greydwarf_shaman_heal.yml" />
+        <Content Include="Wiki\Reference\Export\Greyling\Greyling.yml" />
+        <Content Include="Wiki\Reference\Export\Greyling\Greyling_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Greyling\items\Greyling_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Hare\Hare.yml" />
+        <Content Include="Wiki\Reference\Export\Hare\Hare_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Hatchling\Hatchling.yml" />
+        <Content Include="Wiki\Reference\Export\Hatchling\Hatchling_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Hatchling\items\hatchling_cold_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Hatchling\items\hatchling_spit_cold.yml" />
+        <Content Include="Wiki\Reference\Export\Hen\Hen.yml" />
+        <Content Include="Wiki\Reference\Export\Hen\items\boar_base_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Hive\Hive.yml" />
+        <Content Include="Wiki\Reference\Export\Hive\items\hive_attack_aoe.yml" />
+        <Content Include="Wiki\Reference\Export\Hive\items\hive_attack_punch.yml" />
+        <Content Include="Wiki\Reference\Export\Hive\items\hive_attack_ranged.yml" />
+        <Content Include="Wiki\Reference\Export\Hive\items\hive_attack_throw.yml" />
+        <Content Include="Wiki\Reference\Export\Hive\items\hive_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Leech\items\Leech_BiteAttack.yml" />
+        <Content Include="Wiki\Reference\Export\Leech\Leech.yml" />
+        <Content Include="Wiki\Reference\Export\Leech_cave\items\Leech_BiteAttack.yml" />
+        <Content Include="Wiki\Reference\Export\Leech_cave\Leech_cave.yml" />
+        <Content Include="Wiki\Reference\Export\Lox\items\lox_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Lox\items\lox_stomp.yml" />
+        <Content Include="Wiki\Reference\Export\Lox\Lox.yml" />
+        <Content Include="Wiki\Reference\Export\Lox\lox_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Lox_Calf\loxcalf_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Lox_Calf\Lox_Calf.yml" />
+        <Content Include="Wiki\Reference\Export\Mistile\items\Mistile_kamikaze.yml" />
+        <Content Include="Wiki\Reference\Export\Mistile\Mistile.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_bodyslam.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_roll_left.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_roll_right.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_swipe_1.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_swipe_2.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_swipe_3.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\items\Morgen_swipe_4.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen\Morgen.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_bodyslam.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_roll_left.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_roll_right.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_swipe_1.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_swipe_2.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_swipe_3.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\items\Morgen_swipe_4.yml" />
+        <Content Include="Wiki\Reference\Export\Morgen_NonSleeping\Morgen_NonSleeping.yml" />
+        <Content Include="Wiki\Reference\Export\Neck\items\Neck_BiteAttack.yml" />
+        <Content Include="Wiki\Reference\Export\Neck\Neck.yml" />
+        <Content Include="Wiki\Reference\Export\Neck\Neck_Ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\piece_TrainingDummy\items\TrainingDummy_attack.yml" />
+        <Content Include="Wiki\Reference\Export\piece_TrainingDummy\items\TrainingDummy_attack2.yml" />
+        <Content Include="Wiki\Reference\Export\piece_TrainingDummy\items\TrainingDummy_attack3.yml" />
+        <Content Include="Wiki\Reference\Export\piece_TrainingDummy\items\TrainingDummy_throw.yml" />
+        <Content Include="Wiki\Reference\Export\piece_TrainingDummy\items\TrainingDummy_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\piece_TrainingDummy\piece_TrainingDummy.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrood\items\babyseeker_attack.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrood\SeekerBrood.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrute\items\SeekerBrute_bite.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrute\items\SeekerBrute_groundslam.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrute\items\SeekerBrute_ram.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrute\items\SeekerBrute_Taunt.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerBrute\SeekerBrute.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Bite.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Call.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_PierceAOE.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_projectile_spit.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_projectile_teleport.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Rush.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Slap.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Spit.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_Teleport.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\items\SeekerQueen_triggerspawn_ability.yml" />
+        <Content Include="Wiki\Reference\Export\SeekerQueen\SeekerQueen.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\dragon_ice_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_claw_left.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_claw_right.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_groundslam.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_groundslam_flying.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_land.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_pincers.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\items\seeker_takeoff.yml" />
+        <Content Include="Wiki\Reference\Export\Seeker\Seeker.yml" />
+        <Content Include="Wiki\Reference\Export\Serpent\items\Serpent_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Serpent\items\Serpent_taunt.yml" />
+        <Content Include="Wiki\Reference\Export\Serpent\Serpent.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton\items\draugr_bow_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton\items\ShieldBronzeBuckler.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton\items\skeleton_bow.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton\items\skeleton_sword.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton\Skeleton.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Friendly\items\draugr_bow_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Friendly\items\ShieldBronzeBuckler.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Friendly\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Friendly\items\skeleton_bow2.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Friendly\items\skeleton_sword2.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Friendly\Skeleton_Friendly.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Hildir\items\skeleton_hildir_firenova.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Hildir\items\skeleton_sword_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Hildir\Skeleton_Hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Hildir_nochest\items\skeleton_hildir_firenova.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Hildir_nochest\items\skeleton_sword_hildir.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Hildir_nochest\Skeleton_Hildir_nochest.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_NoArcher\items\ShieldBronzeBuckler.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_NoArcher\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_NoArcher\items\skeleton_sword.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_NoArcher\Skeleton_NoArcher.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Poison\items\skeleton_mace.yml" />
+        <Content Include="Wiki\Reference\Export\Skeleton_Poison\Skeleton_Poison.yml" />
+        <Content Include="Wiki\Reference\Export\staff_greenroots_tentaroot\items\ShieldBronzeBuckler.yml" />
+        <Content Include="Wiki\Reference\Export\staff_greenroots_tentaroot\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\staff_greenroots_tentaroot\items\staff_greenroots_tentaroot_attack.yml" />
+        <Content Include="Wiki\Reference\Export\staff_greenroots_tentaroot\staff_greenroots_tentaroot.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\stonegolem_attack1_spike.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\stonegolem_attack2_left_groundslam.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\stonegolem_attack3_spikesweep.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\stonegolem_attack_doublesmash.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\StoneGolem_clubs.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\StoneGolem_hat.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\items\StoneGolem_spikes.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\StoneGolem.yml" />
+        <Content Include="Wiki\Reference\Export\StoneGolem\Stonegolem_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Surtling\items\imp_fireball_attack.yml" />
+        <Content Include="Wiki\Reference\Export\Surtling\items\Imp_fireball_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Surtling\Surtling.yml" />
+        <Content Include="Wiki\Reference\Export\TentaRoot\items\ShieldBronzeBuckler.yml" />
+        <Content Include="Wiki\Reference\Export\TentaRoot\items\ShieldWood.yml" />
+        <Content Include="Wiki\Reference\Export\TentaRoot\items\tentaroot_attack.yml" />
+        <Content Include="Wiki\Reference\Export\TentaRoot\TentaRoot.yml" />
+        <Content Include="Wiki\Reference\Export\TheHive\Hatchling_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\TheHive\items\gjall_attack_egg.yml" />
+        <Content Include="Wiki\Reference\Export\TheHive\items\gjall_attack_spit.yml" />
+        <Content Include="Wiki\Reference\Export\TheHive\items\gjall_egg_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\TheHive\items\gjall_spit_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\TheHive\TheHive.yml" />
+        <Content Include="Wiki\Reference\Export\Tick\items\tick_attack_attach.yml" />
+        <Content Include="Wiki\Reference\Export\Tick\Tick.yml" />
+        <Content Include="Wiki\Reference\Export\TrainingDummy\Draugr_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\TrainingDummy\items\TrainingDummy_attack.yml" />
+        <Content Include="Wiki\Reference\Export\TrainingDummy\items\TrainingDummy_throw.yml" />
+        <Content Include="Wiki\Reference\Export\TrainingDummy\items\TrainingDummy_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\TrainingDummy\TrainingDummy.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\items\troll_groundslam.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\items\troll_log_swing_h.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\items\troll_log_swing_v.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\items\troll_punch.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\items\troll_throw.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\items\troll_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\Troll.yml" />
+        <Content Include="Wiki\Reference\Export\Troll\Troll_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\items\troll_summoned_groundslam.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\items\troll_summoned_log_swing_h.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\items\troll_summoned_log_swing_v.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\items\troll_summoned_punch.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\items\troll_summoned_throw.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\items\troll_summoned_throw_projectile.yml" />
+        <Content Include="Wiki\Reference\Export\Troll_Summoned\Troll_Summoned.yml" />
+        <Content Include="Wiki\Reference\Export\Ulv\items\Ulv_attack1_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Ulv\items\Ulv_attack2_slash.yml" />
+        <Content Include="Wiki\Reference\Export\Ulv\Ulv.yml" />
+        <Content Include="Wiki\Reference\Export\Ulv\Ulv_Ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\items\unbjorn_bite.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\items\unbjorn_claws.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\items\unbjorn_slam.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\items\unbjorn_swipe_combo.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\items\unbjorn_swipe_l.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\items\unbjorn_swipe_r.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\Unbjorn.yml" />
+        <Content Include="Wiki\Reference\Export\Unbjorn\Unbjorn_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Volture\items\volture_talons.yml" />
+        <Content Include="Wiki\Reference\Export\Volture\Volture.yml" />
+        <Content Include="Wiki\Reference\Export\Volture\Volture_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf\items\Wolf_Attack1.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf\items\Wolf_Attack2.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf\items\Wolf_Attack3.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf\Wolf.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf\Wolf_Ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf_cub\Wolf_cub.yml" />
+        <Content Include="Wiki\Reference\Export\Wolf_cub\Wolf_Ragdoll.yml" />
+        <Content Include="Wiki\Reference\Export\Wraith\items\wraith_melee.yml" />
+        <Content Include="Wiki\Reference\Export\Wraith\Wraith.yml" />
+        <Content Include="Wiki\Reference\Human\Human.yml" />
+        <Content Include="Wiki\Reference\Human\Human_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\CopperGolem\CopperGolem.yml" />
+        <Content Include="Wiki\Reference\Import\CopperGolem\items\MDB_CopperGolem_StoneGolem_clubs.yml" />
+        <Content Include="Wiki\Reference\Import\CopperGolem\items\MDB_CopperGolem_StoneGolem_hat.yml" />
+        <Content Include="Wiki\Reference\Import\CopperGolem\items\MDB_CopperGolem_StoneGolem_spikes.yml" />
+        <Content Include="Wiki\Reference\Import\CopperGolem\CopperGolem_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\CopperGolem\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\Deer\TameableDeer.yml" />
+        <Content Include="Wiki\Reference\Import\Frostling\Frostling.yml" />
+        <Content Include="Wiki\Reference\Import\Frostling\items\MDB_Frostling_imp_fireball_attack.yml" />
+        <Content Include="Wiki\Reference\Import\Frostling\items\MDB_Frostling_Imp_fireball_projectile.yml" />
+        <Content Include="Wiki\Reference\Import\Frostling\textures\frostling_flame_blue.png" />
+        <Content Include="Wiki\Reference\Import\Frostling\textures\TrophyFrostling.png" />
+        <Content Include="Wiki\Reference\Import\Frostling\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\Frostling\TrophyFrostling.yml" />
+        <Content Include="Wiki\Reference\Import\Hare\TameableHare.yml" />
+        <Content Include="Wiki\Reference\Import\Hog\Hog.yml" />
+        <Content Include="Wiki\Reference\Import\Hog\items\MDB_Hog_boar_base_attack.yml" />
+        <Content Include="Wiki\Reference\Import\Hog\Hog_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\Hog\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\Leech_cave\Leech_cave_spawn.yml" />
+        <Content Include="Wiki\Reference\Import\Leech_cave\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\items\MDB_ObsidianGolem_StoneGolem_clubs.yml" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\items\MDB_ObsidianGolem_StoneGolem_hat.yml" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\items\MDB_ObsidianGolem_StoneGolem_spikes.yml" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\ObsidianGolem_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\ObsidianGolem.yml" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\textures\ObsidianGolemExtraparts_d.png" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\textures\ObsidianGolem_d.png" />
+        <Content Include="Wiki\Reference\Import\ObsidianGolem\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\PolarBjorn.yml" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\PolarBjornHide.yml" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\PolarBjornPaw.yml" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\PolarBjorn_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\textures\Polarbearhide_d.png" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\textures\PolarBjornHide.png" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\textures\PolarBjornPaw.png" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\textures\PolarBjorn_d.png" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\textures\PolarTrophyBjorn.png" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\PolarBjorn\TrophyPolarBjorn.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox\PolarLox.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox\PolarLoxPelt.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox\PolarLox_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox\textures\PolarHalstein_d.png" />
+        <Content Include="Wiki\Reference\Import\PolarLox\textures\Polarloxpelt.png" />
+        <Content Include="Wiki\Reference\Import\PolarLox\textures\Polarrug_fur.png" />
+        <Content Include="Wiki\Reference\Import\PolarLox\textures\Polarrug_fur_top.png" />
+        <Content Include="Wiki\Reference\Import\PolarLox\textures\PolarTrophyLox.png" />
+        <Content Include="Wiki\Reference\Import\PolarLox\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox\TrophyPolarLox.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox_Calf\PolarLox_Calf.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox_Calf\PolarLox_Calf_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\PolarLox_Calf\textures\PolarLox_calf_d.png" />
+        <Content Include="Wiki\Reference\Import\Stag\items\MDB_Stag_Eikthyr_antler.yml" />
+        <Content Include="Wiki\Reference\Import\Stag\items\MDB_Stag_Eikthyr_charge.yml" />
+        <Content Include="Wiki\Reference\Import\Stag\items\MDB_Stag_Eikthyr_stomp.yml" />
+        <Content Include="Wiki\Reference\Import\Stag\Stag_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\Stag\Stag.yml" />
+        <Content Include="Wiki\Reference\Import\Stag\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\TameableNeck\Neck_hatchling_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\TameableNeck\Neck.yml" />
+        <Content Include="Wiki\Reference\Import\TameableNeck\NeckEgg.yml" />
+        <Content Include="Wiki\Reference\Import\TameableNeck\Neck_hatchling.yml" />
+        <Content Include="Wiki\Reference\Import\TameableNeck\translations.English.yml" />
+        <EmbeddedResource Include="Wiki\Base.md" />
+        <Content Include="Thunderstore\CHANGELOG.md" />
+        <Content Include="Thunderstore\README.md" />
+        <EmbeddedResource Include="Wiki\AI.md" />
+        <EmbeddedResource Include="Wiki\Character.md" />
+        <EmbeddedResource Include="Wiki\CharacterDrop.md" />
+        <EmbeddedResource Include="Wiki\EffectList.md" />
+        <EmbeddedResource Include="Wiki\Egg.md" />
+        <EmbeddedResource Include="Wiki\Factions.md" />
+        <EmbeddedResource Include="Wiki\Fish.md" />
+        <EmbeddedResource Include="Wiki\MovementDamage.md" />
+        <EmbeddedResource Include="Wiki\NPCTalk.md" />
+        <EmbeddedResource Include="Wiki\README.md" />
+        <EmbeddedResource Include="Wiki\Saddle.md" />
+        <EmbeddedResource Include="Wiki\SpawnData.md" />
+        <EmbeddedResource Include="Wiki\Tameable.md" />
+        <EmbeddedResource Include="Wiki\ItemData.md" />
+        <EmbeddedResource Include="Wiki\Visuals.md" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
+
     <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" Condition="'$(AfterTargets)' == 'KeyManager'" />
     <Target Name="KeyManager" AfterTargets="ILRepack" Condition="'$(AfterTargets)' == 'KeyManager'">
         <Seal DLL="$(TargetPath)" />
     </Target>
+    
     <Target Name="GetAssemblyVersion" AfterTargets="$(AfterTargets)">
         <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
             <Output TaskParameter="Assemblies" ItemName="Targets" />
@@ -212,76 +951,12 @@
             <PackageDir>$(ProjectDir)\Thunderstore\$(PackageName)</PackageDir>
         </PropertyGroup>
     </Target>
+    
     <Target Name="CopyOutputDLL" AfterTargets="GetAssemblyVersion">
         <Error Text="DLL not found in target directory." Condition="!Exists('$(TargetDir)$(AssemblyName).dll')" />
-        <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath)" OverwriteReadOnlyFiles="true" />
+        <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath)')"/>
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath2)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath2)')" />
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath3)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath3)')" />
     </Target>
-    <Target Name="CopyReadMeToTSFolder" AfterTargets="CopyOutputDLL" Condition=" ('$(Configuration)|$(Platform)' == 'Release|AnyCPU') And ('$(OS)' == 'Windows_NT') ">
-        <Warning Text="README.md not found in project directory. A default README.md file will be created for the Thunderstore package" Condition="!Exists('README.md')" />
-        <WriteLinesToFile File="README.md" Lines="Default Readme file from one of Azumatt's Templates. Replace this with actual content." Overwrite="false" Condition="!Exists('README.md')" />
-        <Copy SourceFiles="README.md" DestinationFolder="$(PackageDir)" OverwriteReadOnlyFiles="true" />
-        <Copy SourceFiles="README.md" DestinationFolder="$(ProjectDir)\Thunderstore" OverwriteReadOnlyFiles="true" />
-    </Target>
-    <UsingTask TaskName="WriteManifestFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-        <ParameterGroup>
-            <ManifestFile ParameterType="System.String" Required="true" />
-            <AssemblyName ParameterType="System.String" Required="true" />
-        </ParameterGroup>
-        <Task>
-            <Code Type="Fragment" Language="cs">
-                <![CDATA[
-if (!System.IO.File.Exists(ManifestFile))
-{
-string content = @"{
-  ""name"": """ + AssemblyName + @""",
-  ""version_number"": ""1.0.0"",
-  ""website_url"": ""https://discord.gg/pdHgy6Bsng"",
-  ""description"": ""Your mod description goes here. Do not forget to replace the icon.png file with your own. Must be 256x256. Your Readme.md file will be copied from the one in your project folder."",
-  ""dependencies"": [
-    ""denikson-BepInExPack_Valheim-5.4.2105""
-]
-}";
-System.IO.File.WriteAllText(ManifestFile, content);
-}
-]]>
-
-            </Code>
-        </Task>
-    </UsingTask>
-    <Target Name="UpdateManifestVersion" AfterTargets="CopyReadmeToTSFolder" Condition=" ('$(Configuration)|$(Platform)' == 'Release|AnyCPU') And ('$(OS)' == 'Windows_NT') ">
-        <WriteManifestFile ManifestFile="$(ProjectDir)Thunderstore\manifest.json" AssemblyName="$(AssemblyName)" />
-        <ItemGroup>
-            <ManifestFile Include="$(ProjectDir)Thunderstore\manifest.json" />
-        </ItemGroup>
-        <Message Text="ManifestFile is @(ManifestFile)" />
-        <Message Text="Updating version number in Thunderstore\manifest.json" Condition="Exists(@(ManifestFile))" />
-        <Exec Command="powershell.exe -ExecutionPolicy Bypass -Command &quot;&amp; { &amp; '$(ProjectDir)UpdateManifest.ps1' -manifestFile '@(ManifestFile)' -versionString '$(PackageVersion)' }&quot;" />
-    </Target>
-    <Target Name="MakeThunderstorePackage" AfterTargets="UpdateManifestVersion" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <Error Text="manifest.json not found in Thunderstore directory." Condition="!Exists('$(ProjectDir)\Thunderstore\manifest.json')" />
-        <Error Text="icon.png not found in Thunderstore directory. Please note that Thunderstore requires this image to be 256x256 in dimension" Condition="!Exists('$(ProjectDir)\Thunderstore\icon.png')" />
-        <ItemGroup>
-            <PackageFiles Include="$(TargetDir)$(AssemblyName).dll" Condition="Exists('$(TargetDir)$(AssemblyName).dll')" />
-            <PackageFiles Include="$(ProjectDir)\Thunderstore\CHANGELOG.md" Condition="Exists('$(ProjectDir)\Thunderstore\CHANGELOG.md')" />
-            <PackageFiles Include="$(ProjectDir)\Thunderstore\manifest.json" Condition="Exists('$(ProjectDir)\Thunderstore\manifest.json')" />
-            <PackageFiles Include="$(ProjectDir)\Thunderstore\icon.png" Condition="Exists('$(ProjectDir)\Thunderstore\icon.png')" />
-        </ItemGroup>
-        <MakeDir Directories="$(PackageDir)" />
-        <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(PackageDir)" />
-        <ZipDirectory SourceDirectory="$(PackageDir)" DestinationFile="Thunderstore\$(PackageName).zip" Overwrite="true" />
-        <RemoveDir Directories="$(PackageDir)" />
-    </Target>
-    <Target Name="MakeNexusPackage" AfterTargets="MakeThunderstorePackage" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <MakeDir Directories="$(ProjectDir)\Nexus" />
-        <ItemGroup>
-            <NexusPackageFiles Include="$(TargetDir)$(AssemblyName).dll;" />
-        </ItemGroup>
-        <MakeDir Directories="$(PackageDir)" />
-        <Copy SourceFiles="@(NexusPackageFiles)" DestinationFolder="$(PackageDir)" />
-        <ZipDirectory SourceDirectory="$(PackageDir)" DestinationFile="Nexus\$(PackageName).zip" Overwrite="true" />
-        <RemoveDir Directories="$(PackageDir)" />
-    </Target>
-
+    
 </Project>

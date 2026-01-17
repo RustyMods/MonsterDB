@@ -1,0 +1,100 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Fish
+Prefab: Fish3
+ItemData:
+  name: $animal_fish3
+  description: $fish3_description
+  maxStackSize: 10
+  maxQuality: 5
+  scaleByQuality: 0.4
+  weight: 2
+  scaleWeightByQuality: 1
+  value: 0
+  teleportable: true
+  toolTier: 0
+  icons:
+  - fish3
+  damages: {}
+  attackForce: 30
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: fi_vil_food_fish01_01
+    parent: attachobj
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: fish3
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: fish2_d
+# If field removed, will remove component
+Fish:
+  name: $animal_fish3
+  swimRange: 20
+  minDepth: 4
+  maxDepth: 999
+  speed: 10
+  acceleration: 0.1
+  turnRate: 80
+  wpDurationMin: 5
+  wpDurationMax: 15
+  avoidSpeedScale: 2
+  avoidRange: 10
+  height: 0.5
+  hookForce: 20
+  staminaUse: 7
+  escapeStaminaUse: 20
+  escapeMin: 0.5
+  escapeMax: 3
+  escapeWaitMin: 1.5
+  escapeWaitMax: 5
+  escapeMaxPerLevel: 1.5
+  baseHookChance: 0.1
+  pickupItemStackSize: 4
+  blockChangeDurationMin: 0.1
+  blockChangeDurationMax: 0.6
+  collisionFleeTimeout: 1.5
+  baits:
+  - bait: FishingBaitOcean
+    chance: 1
+  jumpSpeed: 5
+  jumpHeight: 10
+  jumpForwardStrength: 11
+  jumpHeightLand: 8
+  jumpChance: 0.25
+  jumpOnLandChance: 0.2
+  jumpOnLandDecay: 0.85
+  maxJumpDepthOffset: 0.5
+  jumpFrequencySeconds: 0.3
+  jumpOnLandRotation: 2
+  waveJumpMultiplier: 0.05
+  jumpMaxLevel: 4
+  jumpEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface_fish
+      variant: 0

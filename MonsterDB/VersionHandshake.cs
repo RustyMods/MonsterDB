@@ -14,12 +14,12 @@ namespace MonsterDB
         private static void Prefix(ZNetPeer peer, ref ZNet __instance)
         {
             // Register version check call
-            MonsterDBPlugin.MonsterDBLogger.LogDebug("Registering version RPC handler");
+            MonsterDBPlugin.LogDebug("Registering version RPC handler");
             peer.m_rpc.Register($"{MonsterDBPlugin.ModName}_VersionCheck",
                 new Action<ZRpc, ZPackage>(RpcHandlers.RPC_MonsterDB_Version));
 
             // Make calls to check versions
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Invoking version check");
+            MonsterDBPlugin.LogInfo("Invoking version check");
             ZPackage zpackage = new();
             zpackage.Write(MonsterDBPlugin.ModVersion);
             peer.m_rpc.Invoke($"{MonsterDBPlugin.ModName}_VersionCheck", zpackage);
@@ -33,7 +33,7 @@ namespace MonsterDB
         {
             if (!__instance.IsServer() || RpcHandlers.ValidatedPeers.Contains(rpc)) return true;
             // Disconnect peer if they didn't send mod version at all
-            MonsterDBPlugin.MonsterDBLogger.LogWarning(
+            MonsterDBPlugin.LogWarning(
                 $"Peer ({rpc.m_socket.GetHostName()}) never sent version or couldn't due to previous disconnect, disconnecting");
             rpc.Invoke("Error", 3);
             return false; // Prevent calling underlying method
@@ -68,7 +68,7 @@ namespace MonsterDB
         {
             if (!__instance.IsServer()) return;
             // Remove peer from validated list
-            MonsterDBPlugin.MonsterDBLogger.LogInfo(
+            MonsterDBPlugin.LogInfo(
                 $"Peer ({peer.m_rpc.m_socket.GetHostName()}) disconnected, removing from validated list");
             _ = RpcHandlers.ValidatedPeers.Remove(peer.m_rpc);
         }
@@ -82,7 +82,7 @@ namespace MonsterDB
         {
             string? version = pkg.ReadString();
 
-            MonsterDBPlugin.MonsterDBLogger.LogInfo("Version check, local: " +
+            MonsterDBPlugin.LogInfo("Version check, local: " +
                                                     MonsterDBPlugin.ModVersion +
                                                     ",  remote: " + version);
             if (version != MonsterDBPlugin.ModVersion)
@@ -91,7 +91,7 @@ namespace MonsterDB
                     $"{MonsterDBPlugin.ModName} Installed: {MonsterDBPlugin.ModVersion}\n Needed: {version}";
                 if (!ZNet.instance.IsServer()) return;
                 // Different versions - force disconnect client from server
-                MonsterDBPlugin.MonsterDBLogger.LogWarning(
+                MonsterDBPlugin.LogWarning(
                     $"Peer ({rpc.m_socket.GetHostName()}) has incompatible version, disconnecting...");
                 rpc.Invoke("Error", 3);
             }
@@ -100,12 +100,12 @@ namespace MonsterDB
                 if (!ZNet.instance.IsServer())
                 {
                     // Enable mod on client if versions match
-                    MonsterDBPlugin.MonsterDBLogger.LogInfo("Received same version from server!");
+                    MonsterDBPlugin.LogInfo("Received same version from server!");
                 }
                 else
                 {
                     // Add client to validated list
-                    MonsterDBPlugin.MonsterDBLogger.LogInfo(
+                    MonsterDBPlugin.LogInfo(
                         $"Adding peer ({rpc.m_socket.GetHostName()}) to validated list");
                     ValidatedPeers.Add(rpc);
                 }
