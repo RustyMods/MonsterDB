@@ -19,8 +19,15 @@ public class BaseHumanoid : Base
         Type = BaseType.Humanoid;
         Character = new HumanoidRef();
         AI = new MonsterAIRef();
-        Character.SetFrom(character);
-        AI.SetFrom(ai);
+        Character.Setup(character);
+        AI.Setup(ai);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
     }
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
@@ -41,8 +48,15 @@ public class BaseHumanoid : Base
         Humanoid? humanoid = prefab.GetComponent<Humanoid>();
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
         if (humanoid == null || ai == null) return;
-        if (Character != null) humanoid.SetFieldsFrom(Character);
-        if (AI != null) ai.SetFieldsFrom(AI);
+        if (Character != null)
+        {
+            Character.UpdateFields(humanoid, prefab.name, true);
+        }
+
+        if (AI != null)
+        {
+            AI.UpdateFields(ai, prefab.name, true);
+        }
     }
 
     private void UpdateIHumanoid(GameObject prefab)
@@ -51,8 +65,15 @@ public class BaseHumanoid : Base
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
         
         if (IHumanoid == null || ai == null) return;
-        if (Character != null) IHumanoid.SetFieldsFrom(Character);
-        if (AI != null) ai.SetFieldsFrom(AI);
+        if (Character != null)
+        {
+            Character.UpdateFields(IHumanoid, prefab.name, false);
+        }
+
+        if (AI != null)
+        {
+            AI.UpdateFields(ai, prefab.name, false);
+        }
 
         GameObject? source = PrefabManager.GetPrefab(Prefab);
         if (source == null) return;
@@ -62,6 +83,8 @@ public class BaseHumanoid : Base
         IHumanoid.m_defaultItems = humanoid.m_defaultItems;
         IHumanoid.m_randomWeapon = humanoid.m_randomWeapon;
         IHumanoid.m_randomSets = humanoid.m_randomSets;
+        IHumanoid.m_randomArmor = humanoid.m_randomArmor;
+        IHumanoid.m_randomShield =  humanoid.m_randomShield;
 
         IHumanoid.m_inventory.RemoveAll();
         IHumanoid.Start();

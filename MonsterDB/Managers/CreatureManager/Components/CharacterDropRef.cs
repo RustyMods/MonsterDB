@@ -15,7 +15,7 @@ public class CharacterDropRef : Reference
     public static implicit operator CharacterDropRef(CharacterDrop characterDrop)
     {
         CharacterDropRef reference = new CharacterDropRef();
-        reference.SetFrom(characterDrop);
+        reference.Setup(characterDrop);
         return reference;
     }
 }
@@ -58,7 +58,7 @@ public static partial class Extensions
         foreach (DropRef? dropRef in dr)
         {
             CharacterDrop.Drop drop = new CharacterDrop.Drop();
-            drop.SetFieldsFrom(dropRef);
+            dropRef.UpdateFields(drop, dropRef.m_prefab ?? "Null", log: false);
             drops.Add(drop);
         }
 

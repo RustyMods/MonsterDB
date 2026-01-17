@@ -12,7 +12,7 @@ public static class LocalizationManager
 {
     private const string FolderName = "Localizations";
     private static readonly string FolderPath;
-    private static readonly Dictionary<string, string[]> localizations;
+    private static Dictionary<string, string[]> localizations;
     private static readonly CustomSyncedValue<string> sync;
     private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
     
@@ -57,11 +57,41 @@ public static class LocalizationManager
             {
                 string filePath = files[i];
                 string? fileName = Path.GetFileNameWithoutExtension(filePath);
-                string[] lines = File.ReadAllLines(filePath);
-                if (localizations.ContainsKey(fileName)) continue;
-                localizations.Add(fileName, lines);
+                string[] extraLines = File.ReadAllLines(filePath);
+                List<string> lines = new();
+                if (localizations.TryGetValue(fileName, out string[] translations))
+                {
+                    lines.AddRange(translations);
+                    lines.AddRange(extraLines);
+                }
+                else
+                {
+                    lines.AddRange(extraLines);
+                }
+                localizations[fileName] = lines.ToArray();
+                MonsterDBPlugin.LogInfo($"Loaded {fileName} localizations");
             }
         }
+    }
+
+    public static void Register(string filePath)
+    {
+        string? fileName = Path.GetFileNameWithoutExtension(filePath);
+        string[] parts = fileName.Split('.');
+        if (parts.Length != 2) return;
+        string language = parts[1];
+        string[] extraLines = File.ReadAllLines(filePath);
+        List<string> lines = new();
+        if (localizations.TryGetValue(language, out string[] translations))
+        {
+            lines.AddRange(translations);
+            lines.AddRange(extraLines);
+        }
+        else
+        {
+            lines.AddRange(extraLines);
+        }
+        localizations[language] = lines.ToArray();
     }
 
     public static void Init(ZNet net)
@@ -69,7 +99,7 @@ public static class LocalizationManager
         if (net.IsServer())
         {
             SetupFileWatcher();
-            sync.Value = ConfigManager.Serialize(localizations);
+            UpdateSync();
         }
     }
 
@@ -106,46 +136,148 @@ public static class LocalizationManager
             instance.AddWord(key, value);
         }
     }
+    
+    public static void UpdateParse(string filePath)
+    {
+        string? fileName = Path.GetFileNameWithoutExtension(filePath);
+        string[] parts = fileName.Split('.');
+        if (parts.Length != 2) return;
+        string language = parts[1];
+        string[] extraLines = File.ReadAllLines(filePath);
+        Dictionary<string, string> lines = new();
+
+        if (localizations.TryGetValue(language, out string[] translations))
+        {
+            for (int i = 0; i < translations.Length; ++i)
+            {
+                string line = translations[i];
+                if (string.IsNullOrEmpty(line) || line.StartsWith("$")) continue;
+                var lineParts = line.Split(':');
+                if (lineParts.Length < 2) continue;
+                var key =  lineParts[0].Trim();
+                var value =  lineParts[1].Trim();
+                lines[key] = value;
+            }
+        }
+
+        for (int i = 0; i < extraLines.Length; ++i)
+        {
+            string line = extraLines[i];
+            if (string.IsNullOrEmpty(line) || line.StartsWith("$")) continue;
+            var lineParts = line.Split(':');
+            if (lineParts.Length < 2) continue;
+            var key =  lineParts[0].Trim();
+            var value =  lineParts[1].Trim();
+            lines[key] = value;
+        }
+        
+        string[] newLines = lines.Select(f => string.Join(":", f.Key, f.Value)).ToArray();
+        
+        localizations[language] = newLines;
+        
+        Update();
+    }
+
+    public static void Register(string language, Dictionary<string, string> translations)
+    {
+        Dictionary<string, string> lines = new();
+        if (localizations.TryGetValue(language, out string[] localization))
+        {
+            for (int i = 0; i < localization.Length; ++i)
+            {
+                var line = localization[i];
+                if (string.IsNullOrEmpty(line) || line.StartsWith("$")) continue;
+                var lineParts = line.Split(':');
+                if (lineParts.Length < 2) continue;
+                var key =  lineParts[0].Trim();
+                var value =  lineParts[1].Trim();
+                lines[key] = value;
+            }
+        }
+
+        foreach (var kvp in translations)
+        {
+            lines[kvp.Key] = kvp.Value;
+        }
+        
+        string[] newLines = lines.Select(f => string.Join(":", f.Key, f.Value)).ToArray();
+        localizations[language] = newLines;
+    }
 
     private static void ReadConfigValues(object sender, FileSystemEventArgs e)
     {
         if (!IsFileWatcherEnabled()) return;
-        if (!ZNet.instance || !ZNet.instance.IsServer() || Localization.m_instance == null) return;
+        if (!ZNet.instance || !ZNet.instance.IsServer() || Localization.instance == null) return;
         
         string? language = Path.GetFileNameWithoutExtension(e.FullPath);
         string[] lines = File.ReadAllLines(e.FullPath);
-        localizations[language] = lines;
-        sync.Value = ConfigManager.Serialize(localizations);
+        
+        Dictionary<string, string> dict = new();
 
+        if (localizations.TryGetValue(language, out string[] translations))
+        {
+            for (int i = 0; i < translations.Length; ++i)
+            {
+                string line = translations[i];
+                if (string.IsNullOrEmpty(line) || line.StartsWith("$")) continue;
+                string[] lineParts = line.Split(':');
+                if (lineParts.Length < 2) continue;
+                string key =  lineParts[0].Trim();
+                string value =  lineParts[1].Trim();
+                dict[key] = value;
+            }
+        }
+        
+        for (int i = 0; i < lines.Length; ++i)
+        {
+            string line = lines[i];
+            if (string.IsNullOrEmpty(line) || line.StartsWith("$")) continue;
+            string[] lineParts = line.Split(':');
+            if (lineParts.Length < 2) continue;
+            string key =  lineParts[0].Trim();
+            string value =  lineParts[1].Trim();
+            dict[key] = value;
+        }
+        
+        string[] newLines = dict.Select(f => string.Join(":", f.Key, f.Value)).ToArray();
+        
+        localizations[language] = newLines;
         Update();
     }
 
     private static void Update()
     {
-        string lang = Localization.m_instance.GetSelectedLanguage();
+        UpdateSync();
+        if (Localization.instance == null) return;
+        string lang = Localization.instance.GetSelectedLanguage();
         if (!localizations.TryGetValue(lang, out string[] translations)) return;
-        Parse(Localization.m_instance, translations);
-        
-        Localization.m_instance.m_cache.EvictAll();
+        Parse(Localization.instance, translations);
+        Localization.instance.m_cache.EvictAll();
+        MonsterDBPlugin.LogDebug($"Updated {lang} localizations");
     }
 
     private static void OnSyncChange()
     {
-        if (!ZNet.instance || ZNet.instance.IsServer() || Localization.m_instance == null) return;
+        if (!ZNet.instance || ZNet.instance.IsServer()) return;
         if (string.IsNullOrEmpty(sync.Value)) return;
 
         try
         {
             Dictionary<string, string[]> translations = ConfigManager.Deserialize<Dictionary<string, string[]>>(sync.Value);
-            foreach (KeyValuePair<string, string[]> kvp in translations)
-            {
-                localizations[kvp.Key] = kvp.Value;
-            }
+            localizations = translations;
             Update();
         }
         catch
         {
             MonsterDBPlugin.LogWarning("Failed to deserialize server localization files");
+        }
+    }
+
+    private static void UpdateSync()
+    {
+        if (ZNet.instance && ZNet.instance.IsServer())
+        {
+            sync.Value = ConfigManager.Serialize(localizations);
         }
     }
 }

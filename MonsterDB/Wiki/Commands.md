@@ -4,7 +4,8 @@ all commands begin with: `monsterdb`
 
 use `help` to see this list in-game
 
-- `monsteredb export_main_tex [prefabName]`: export creature main texture
+- `monsterdb export_main_tex [prefabName]`: export creature main texture
+- `monsterdb search_tex [query]`:
 - `monsterdb export_tex [textureName]`: export texture as png
 - `monsterdb write [prefabName]`: write creature YML file to `Save` Folder
 - `monsterdb write_all`: write all creature YML to `Save` Folder
@@ -16,10 +17,11 @@ use `help` to see this list in-game
 - `monsterdb mod_egg [prefabName]`: read egg YML from `Modified` Folder and update
 - `monsterdb revert_egg [prefabName]`: revert egg item to factory settings
 - `monsterdb clone_egg [prefabName][newName]`: clone egg item, must be an item
-- `monsterdb setup_spawn [prefabName]`: write new spawn data YML and load into spawn system
 - `monsterdb write_item [prefabName]`:
 - `mosnterdb mod_item [fileName]`:
 - `monsterdb clone_item [prefabName][newName]`:
 - `monsterdb write_fish [prefabName]`:
 - `monsterdb mod_fish [fileName]`:
 - `monsterdb clone_fish [prefabName][newName]`:
+- `monsterdb export_sprite: [spriteName]`:
+- `monsterdb search_sprite: [query]`:

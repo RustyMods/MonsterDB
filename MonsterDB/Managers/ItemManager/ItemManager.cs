@@ -82,8 +82,7 @@ public static class ItemManager
             }
             
             item.Update();
-            string text = ConfigManager.Serialize(item);
-            SyncManager.rawFiles[item.Prefab] = text;
+            SyncManager.files.Add(item);
             SyncManager.UpdateSync();
             
             return true;
@@ -116,7 +115,7 @@ public static class ItemManager
                 return true;
             }
             
-            Clone(prefab, newName);
+            TryClone(prefab, newName, out _);
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
 
@@ -150,15 +149,46 @@ public static class ItemManager
         return true;
     }
 
-    private static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
+    public static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "", string dirPath = "")
     {
-        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
+        if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
+        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
 
         if (TrySave(prefab, out BaseItem item, isClone, clonedFrom))
         {
             string text = ConfigManager.Serialize(item);
             File.WriteAllText(filePath, text);
             MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+        }
+
+        if (prefab.TryGetComponent(out ItemDrop itemDrop))
+        {
+            var sharedData = itemDrop.m_itemData.m_shared;
+            if (sharedData.m_attack.m_attackProjectile != null)
+            {
+                bool isProjectileClone = false;
+                string projectileSource = "";
+                if (PrefabManager.Clones.TryGetValue(sharedData.m_attack.m_attackProjectile.name, out Clone c))
+                {
+                    isProjectileClone = true;
+                    projectileSource = c.PrefabName;
+                }
+
+                ProjectileManager.Write(sharedData.m_attack.m_attackProjectile, isProjectileClone, projectileSource, dirPath);
+            }
+
+            if (sharedData.m_secondaryAttack.m_attackProjectile != null)
+            {
+                bool isProjectileClone = false;
+                string projectileSource = "";
+                if (PrefabManager.Clones.TryGetValue(sharedData.m_secondaryAttack.m_attackProjectile.name, out Clone c))
+                {
+                    isProjectileClone = true;
+                    projectileSource = c.PrefabName;
+                }
+
+                ProjectileManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone, projectileSource, dirPath);
+            }
         }
     }
     
@@ -172,7 +202,7 @@ public static class ItemManager
             if (header.Type != BaseType.Item) return;
             BaseItem reference = ConfigManager.Deserialize<BaseItem>(text);
             reference.Update();
-            SyncManager.rawFiles[reference.Prefab] = text;
+            SyncManager.files.Add(reference);
             SyncManager.UpdateSync();
         }
         catch
@@ -181,10 +211,10 @@ public static class ItemManager
         }
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
     {
-        if (CloneManager.clones.ContainsKey(cloneName)) return;
-        if  (!source.GetComponent<ItemDrop>()) return;
+        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        if (!source.GetComponent<ItemDrop>()) return false;
         
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
@@ -195,42 +225,31 @@ public static class ItemManager
             for (int i = 0; i < renderers.Length; ++i)
             {
                 Renderer renderer = renderers[i];
-                CloneMaterials(renderer, ref  newMaterials);
+                VisualUtils.CloneMaterials(renderer, ref newMaterials);
             }
 
-
+            ItemDrop? itemDrop = p.GetComponent<ItemDrop>();
+            if (itemDrop != null)
+            {
+                ItemDrop.ItemData.SharedData? sharedData = itemDrop.m_itemData.m_shared;
+                GameObject? projectile = sharedData.m_attack.m_attackProjectile;
+                if (projectile != null)
+                {
+                    string newProjName = $"MDB_{cloneName}_{projectile.name}";
+                    if (ProjectileManager.TryClone(projectile, newProjName, out GameObject newProjectile, false, dirPath))
+                    {
+                        sharedData.m_attack.m_attackProjectile = newProjectile;
+                    }
+                }
+            }
+            
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name);
-            }
-
-            return;
-
-            void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
-            {
-                List<Material> newMats = new();
-                for (int i = 0; i < r.sharedMaterials.Length; ++i)
-                {
-                    Material mat = r.sharedMaterials[i];
-                    if (mat == null) continue;
-                    string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
-                    if (mats.TryGetValue(name, out Material? clonedMat))
-                    {
-                        newMats.Add(clonedMat);
-                    }
-                    else
-                    {
-                        clonedMat = new Material(mat);
-                        clonedMat.name = name;
-                        newMats.Add(clonedMat);
-                        mats.Add(name, clonedMat);
-                    }
-                }
-                r.sharedMaterials = newMats.ToArray();
-                r.materials = newMats.ToArray();
+                Write(p, true, source.name, dirPath);
             }
         };
-        c.Create();
+        clone = c.Create();
+        return clone != null;
     }
 }

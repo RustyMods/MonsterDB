@@ -24,6 +24,13 @@ public class BaseFish : BaseItem
         }
     }
 
+    public override void Update()
+    {
+        base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
+    }
+
     protected override void SaveDefault(GameObject prefab)
     {
         FishManager.Save(prefab, IsCloned, ClonedFrom);
@@ -54,6 +61,6 @@ public class BaseFish : BaseItem
         }
 
         if (component == null || Fish == null) return;
-        component.SetFieldsFrom(Fish);
+        Fish.UpdateFields(component, prefab.name, true);
     }
 }

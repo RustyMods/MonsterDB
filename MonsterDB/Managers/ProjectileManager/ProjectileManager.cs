@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -40,8 +41,7 @@ public static class ProjectileManager
             return true;
         }, PrefabManager.GetAllPrefabNames<Projectile>);
     }
-
-
+    
     public static bool TrySave(GameObject prefab, out BaseProjectile data, bool isClone = false, string source = "")
     {
         data = SyncManager.GetOriginal<BaseProjectile>(prefab.name);
@@ -53,30 +53,40 @@ public static class ProjectileManager
         return true;
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string source = "")
+    public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
     {
         if (!TrySave(prefab, out BaseProjectile data, isClone, source)) return;
-        
-        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
-        var text = ConfigManager.Serialize(data);
+        if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
+        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string text = ConfigManager.Serialize(data);
         File.WriteAllText(filePath, text);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
     {
-        if (CloneManager.clones.ContainsKey(cloneName)) return;
-        if (!source.GetComponent<Projectile>()) return;
-
+        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        if (!source.GetComponent<Projectile>()) return false;
+        
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
+            Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
+            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
+
+            for (int i = 0; i < renderers.Length; ++i)
+            {
+                Renderer renderer = renderers[i];
+                VisualUtils.CloneMaterials(renderer, ref newMaterials);
+            }
+            
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name);
+                Write(p, true, source.name, dirPath);
             }
         };
-        c.Create();
-
+        clone = c.Create();
+        return clone != null;
     }
 }

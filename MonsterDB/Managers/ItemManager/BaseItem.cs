@@ -25,7 +25,7 @@ public class BaseItem : Header
     {
         if (!prefab.TryGetComponent(out ItemDrop component)) return;
         ItemData = new ItemDataSharedRef();
-        ItemData.SetFrom(component.m_itemData.m_shared);
+        ItemData.Setup(component.m_itemData.m_shared);
     }
 
     protected virtual void SetupVisuals(GameObject prefab)
@@ -61,6 +61,8 @@ public class BaseItem : Header
         UpdatePrefab(prefab);
         
         base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
     }
 
     protected virtual void SaveDefault(GameObject prefab)
@@ -79,8 +81,7 @@ public class BaseItem : Header
         if (ItemData == null) return;
         ItemDrop? item = prefab.GetComponent<ItemDrop>();
         if (item == null) return;
-        
-        item.m_itemData.m_shared.SetFieldsFrom(ItemData);
+        ItemData.UpdateFields(item.m_itemData.m_shared, prefab.name, true);
     }
 
     protected virtual void UpdateVisuals(GameObject prefab)
@@ -95,12 +96,14 @@ public class BaseItem : Header
                     Renderer? renderer = renderers[i];
                     GameObject go = renderer.gameObject;
                     go.transform.localScale = Visuals.m_scale.Value;
+                    if (ConfigManager.ShouldLogDetails())
+                    {
+                        MonsterDBPlugin.LogDebug($"[{prefab.name}][{go.name}] m_scale: {go.transform.localScale.ToString()}");
+                    }
                 }
             }
-
-            Visuals.UpdateRenderers(prefab);
-            Visuals.UpdateParticleSystems(prefab);
-            Visuals.UpdateLights(prefab);
+            
+            Visuals.Update(prefab, false);
         }
     }
 }

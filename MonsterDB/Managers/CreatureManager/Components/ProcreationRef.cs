@@ -25,7 +25,7 @@ public class ProcreationRef : Reference
     public static implicit operator ProcreationRef(Procreation procreation)
     {
         ProcreationRef reference = new ProcreationRef();
-        reference.SetFrom(procreation);
+        reference.Setup(procreation);
         return reference;
     }
 }

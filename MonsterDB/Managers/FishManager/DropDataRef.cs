@@ -16,14 +16,14 @@ public class DropDataRef : Reference
     public static implicit operator DropDataRef(DropTable.DropData dropData)
     {
         var reference = new DropDataRef();
-        reference.SetFrom(dropData);
+        reference.Setup(dropData);
         return reference;
     }
 
     public static implicit operator DropTable.DropData(DropDataRef reference)
     {
         DropTable.DropData drop = new DropTable.DropData();
-        drop.SetFieldsFrom(reference);
+        reference.UpdateFields(drop, reference.m_item, log: false);
         return drop;
     }
 }

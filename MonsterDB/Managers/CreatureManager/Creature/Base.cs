@@ -74,7 +74,6 @@ public class Base : Header
             Tameable = tameable;
         }
         
-
         if (prefab.TryGetComponent(out Procreation procreation))
         {
             Procreation = procreation;
@@ -181,6 +180,8 @@ public class Base : Header
         {
             Character? character = characters[i];
             if (character == null || character.gameObject == null) continue;
+            string? prefabName = Utils.GetPrefabName(character.name);
+            if (Prefab != prefabName) continue;
             UpdatePrefab(character.gameObject, true);
         }
 
@@ -197,74 +198,51 @@ public class Base : Header
 
     protected virtual void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
-        UpdateScale(prefab);
-        UpdateLevelEffects(prefab);
-        UpdateVisual(prefab);
-        UpdateCharacterDrop(prefab);
-        UpdateGrowUp(prefab);
-        UpdateTameable(prefab);
-        UpdateProcreation(prefab);
-        UpdateNpcTalk(prefab);
-        UpdateMovementDamage(prefab);
-        UpdateSaddle(prefab);
-        UpdateDropProjectile(prefab);
-        UpdateCinderSpawner(prefab);
-        UpdateTimedDestruction(prefab);
+        UpdateLevelEffects(prefab, isInstance);
+        UpdateVisual(prefab, isInstance);
+        UpdateCharacterDrop(prefab, isInstance);
+        UpdateGrowUp(prefab, isInstance);
+        UpdateTameable(prefab, isInstance);
+        UpdateProcreation(prefab, isInstance);
+        UpdateNpcTalk(prefab, isInstance);
+        UpdateMovementDamage(prefab, isInstance);
+        UpdateSaddle(prefab, isInstance);
+        UpdateDropProjectile(prefab, isInstance);
+        UpdateCinderSpawner(prefab, isInstance);
+        UpdateTimedDestruction(prefab, isInstance);
     }
     
-    protected void UpdateVisual(GameObject prefab)
+    protected virtual void UpdateVisual(GameObject prefab, bool isInstance = false)
     {
         if (Visuals != null)
         {
-            Visuals.UpdateRenderers(prefab);
-            Visuals.UpdateLights(prefab);
-            Visuals.UpdateParticleSystems(prefab);
-        }
-    }
-    protected void UpdateScale(GameObject prefab)
-    {
-        if (Visuals == null || !Visuals.m_scale.HasValue) return;
-        Character? character = prefab.GetComponent<Character>();
-        if (character != null && 
-            character.m_deathEffects != null && 
-            character.m_deathEffects.m_effectPrefabs != null)
-        {
-            foreach (EffectList.EffectData? effect in character.m_deathEffects.m_effectPrefabs)
+            Visuals.Update(prefab, isInstance);
+            if (Visuals.m_scale.HasValue)
             {
-                if (effect.m_prefab != null && effect.m_prefab.GetComponent<Ragdoll>())
+                prefab.transform.localScale = Visuals.m_scale.Value;
+                if (!isInstance && ConfigManager.ShouldLogDetails())
                 {
-                    // Gotcha! ragdoll scale is not always the same as prefab, need to multiply modification instead of direct value set
-                    if (effect.m_prefab.transform.localScale == prefab.transform.localScale)
-                    {
-                        effect.m_prefab.transform.localScale = Visuals.m_scale.Value;
-                    }
-                    else
-                    {
-                        effect.m_prefab.transform.localScale = Vector3.Scale(effect.m_prefab.transform.localScale, Visuals.m_scale.Value);
-                    }
-                    break;
+                    MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
                 }
             }
         }
-        
-        prefab.transform.localScale = Visuals.m_scale.Value;
     }
 
-    protected void UpdateTimedDestruction(GameObject prefab)
+    protected void UpdateTimedDestruction(GameObject prefab, bool isInstance = false)
     {
         if (TimedDestruction == null || !prefab.TryGetComponent(out CharacterTimedDestruction ctd)) return;
-        ctd.SetFieldsFrom(TimedDestruction);
+        TimedDestruction.UpdateFields(ctd, prefab.name, !isInstance);
     }
 
-    protected void UpdateCinderSpawner(GameObject prefab)
+    protected void UpdateCinderSpawner(GameObject prefab, bool isInstance = false)
     {
         if (CinderSpawner != null)
         {
-            CinderSpawner.Update(prefab);
+            CinderSpawner.Update(prefab, isInstance);
         }
     }
     
-    protected void UpdateLevelEffects(GameObject prefab)
+    protected void UpdateLevelEffects(GameObject prefab, bool isInstance = false)
     {
         LevelEffects? levelEffects = prefab.GetComponentInChildren<LevelEffects>();
         if (levelEffects == null) return;
@@ -284,123 +262,141 @@ public class Base : Header
         }
     }
     
-    protected void UpdateCharacterDrop(GameObject prefab)
+    protected void UpdateCharacterDrop(GameObject prefab, bool isInstance = false)
     {
         CharacterDrop? drops = prefab.GetComponent<CharacterDrop>();
-        if (drops == null && Drops != null)
+
+        if (!isInstance)
         {
-            drops = prefab.AddComponent<CharacterDrop>();
-        }
-        else if (drops != null && Drops == null)
-        {
-            prefab.Remove<CharacterDrop>();
-            drops = null;
+            if (drops == null && Drops != null)
+            {
+                drops = prefab.AddComponent<CharacterDrop>();
+            }
+            else if (drops != null && Drops == null)
+            {
+                prefab.Remove<CharacterDrop>();
+                drops = null;
+            }
         }
         
         if (drops != null && Drops != null)
         {
-            drops.SetFieldsFrom(Drops);
+            Drops.UpdateFields(drops, prefab.name, !isInstance);
         }
     }
 
-    protected void UpdateGrowUp(GameObject prefab)
+    protected void UpdateGrowUp(GameObject prefab, bool isInstance = false)
     {
         Growup? growUp = prefab.GetComponent<Growup>();
-        if (growUp == null && GrowUp != null && !string.IsNullOrEmpty(GrowUp.m_grownPrefab))
+
+        if (!isInstance)
         {
-            growUp = prefab.AddComponent<Growup>();
-        }
-        else if (growUp != null && (GrowUp == null || string.IsNullOrEmpty(GrowUp.m_grownPrefab)))
-        {
-            prefab.Remove<Growup>();
-            growUp = null;
-        }
+            if (growUp == null && GrowUp != null && !string.IsNullOrEmpty(GrowUp.m_grownPrefab))
+            {
+                growUp = prefab.AddComponent<Growup>();
+            }
+            else if (growUp != null && (GrowUp == null || string.IsNullOrEmpty(GrowUp.m_grownPrefab)))
+            {
+                prefab.Remove<Growup>();
+                growUp = null;
+            }
+        }        
         
         if (growUp != null && GrowUp != null)
         {
-            growUp.SetFieldsFrom(GrowUp);
+            GrowUp.UpdateFields(growUp, prefab.name, !isInstance);
         }
     }
     
-    protected void UpdateTameable(GameObject prefab)
+    protected void UpdateTameable(GameObject prefab, bool isInstance = false)
     {
         Tameable? tameable = prefab.GetComponent<Tameable>();
-        if (tameable == null && Tameable != null)
+        if (!isInstance)
         {
-            tameable = prefab.AddComponent<Tameable>();
-        }
-        else if (tameable != null && Tameable == null)
-        {
-            prefab.Remove<Tameable>();
-            tameable = null;
+            if (tameable == null && Tameable != null)
+            {
+                tameable = prefab.AddComponent<Tameable>();
+            }
+            else if (tameable != null && Tameable == null)
+            {
+                prefab.Remove<Tameable>();
+                tameable = null;
+            }
         }
         
         if (tameable != null && Tameable != null)
         {
-            tameable.SetFieldsFrom(Tameable);
+            Tameable.UpdateFields(tameable, prefab.name, !isInstance);
         }
     }
 
-    protected void UpdateProcreation(GameObject prefab)
+    protected void UpdateProcreation(GameObject prefab, bool isInstance = false)
     {
         Procreation? procreation = prefab.GetComponent<Procreation>();
-        if (procreation == null && Procreation != null && !string.IsNullOrEmpty(Procreation.m_offspring))
+
+        if (!isInstance)
         {
-            procreation = prefab.AddComponent<Procreation>();
-        }
-        else if (procreation != null && (Procreation == null || string.IsNullOrEmpty(Procreation.m_offspring)))
-        {
-            prefab.Remove<Procreation>();
-            procreation = null;
+            if (procreation == null && Procreation != null && !string.IsNullOrEmpty(Procreation.m_offspring))
+            {
+                procreation = prefab.AddComponent<Procreation>();
+            }
+            else if (procreation != null && (Procreation == null || string.IsNullOrEmpty(Procreation.m_offspring)))
+            {
+                prefab.Remove<Procreation>();
+                procreation = null;
+            }
         }
         
         if (procreation != null && Procreation != null)
         {
-            procreation.SetFieldsFrom(Procreation);
+            Procreation.UpdateFields(procreation, prefab.name, !isInstance);
         }
     }
 
-    protected void UpdateNpcTalk(GameObject prefab)
+    protected void UpdateNpcTalk(GameObject prefab, bool isInstance = false)
     {
         NpcTalk? npcTalk = prefab.GetComponent<NpcTalk>();
-        if (npcTalk == null && NPCTalk != null)
-        {
-            npcTalk = prefab.AddComponent<NpcTalk>();
-        }
-        else if (npcTalk != null && NPCTalk == null)
-        {
-            prefab.Remove<NpcTalk>();
-            npcTalk = null;
-        }
 
+        if (!isInstance)
+        {
+            if (npcTalk == null && NPCTalk != null)
+            {
+                npcTalk = prefab.AddComponent<NpcTalk>();
+            }
+            else if (npcTalk != null && NPCTalk == null)
+            {
+                prefab.Remove<NpcTalk>();
+                npcTalk = null;
+            }
+        }
+        
         if (npcTalk != null && NPCTalk != null)
         {
-            npcTalk.SetFieldsFrom(NPCTalk);
+            NPCTalk.UpdateFields(npcTalk, prefab.name, !isInstance);
         }
     }
 
-    protected void UpdateSaddle(GameObject prefab)
+    protected void UpdateSaddle(GameObject prefab, bool isInstance = false)
     {
         Sadle? saddle = prefab.GetComponentInChildren<Sadle>(true);
-        Saddle? custom = null;
-        
-        if (Saddle != null && saddle == null)
+        Saddle? custom = prefab.GetComponent<Saddle>();
+
+        if (!isInstance)
         {
-            custom = prefab.GetComponent<Saddle>();
-            if (custom == null)
+            if (Saddle != null && saddle == null && custom == null)
             {
                 custom = prefab.AddComponent<Saddle>();
             }
-        }
-        else if (Saddle == null)
-        {
-            prefab.Remove<Saddle>();
-            custom = null;
+            else if (Saddle == null)
+            {
+                prefab.Remove<Saddle>();
+                custom = null;
+            }
         }
 
         if (custom != null && Saddle != null)
         {
-            custom.SetFieldsFrom(Saddle);
+            Saddle.UpdateFields(custom, prefab.name, !isInstance);
             if (custom.m_attachPoint != null && Saddle.m_attachOffset.HasValue)
             {
                 custom.m_attachPoint.localPosition = Saddle.m_attachOffset.Value;
@@ -408,20 +404,20 @@ public class Base : Header
         }
         
         if (saddle == null || Saddle == null) return;
-        saddle.SetFieldsFrom(Saddle);
+        Saddle.UpdateFields(saddle, prefab.name, !isInstance);
     }
     
-    protected void UpdateMovementDamage(GameObject prefab)
+    protected void UpdateMovementDamage(GameObject prefab, bool isInstance = false)
     {
         if (MovementDamage == null || MovementDamage.m_areaOfEffect == null || !prefab.TryGetComponent(out MovementDamage movementDamage)) return;
-        movementDamage.SetFieldsFrom(MovementDamage.m_areaOfEffect);
+        MovementDamage.m_areaOfEffect.UpdateFields(movementDamage, prefab.name, !isInstance);
     }
 
-    protected void UpdateDropProjectile(GameObject prefab)
+    protected void UpdateDropProjectile(GameObject prefab, bool isInstance = false)
     {
         if (DropProjectileOverDistance == null || 
             !prefab.TryGetComponent(out DropProjectileOverDistance dp)) return;
-        dp.SetFieldsFrom(DropProjectileOverDistance);
+        DropProjectileOverDistance.UpdateFields(dp, prefab.name, !isInstance);
     }
     
     protected Dictionary<string, GameObject> GetDefaultItems(Humanoid humanoid)

@@ -18,7 +18,7 @@ public class EggGrowRef : Reference
     public static implicit operator EggGrowRef(EggGrow egg)
     {
         EggGrowRef reference = new EggGrowRef();
-        reference.SetFrom(egg);
+        reference.Setup(egg);
         return reference;
     }
 }

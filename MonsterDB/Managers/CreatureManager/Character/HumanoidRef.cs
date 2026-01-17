@@ -55,21 +55,22 @@ public static partial class Extensions
 
     public static HashSet<GameObject> GetItems(this Humanoid humanoid)
     {
-        HashSet<GameObject> attacks = new();
-        if (humanoid.m_defaultItems != null) attacks.AddRange(humanoid.m_defaultItems);
-        if (humanoid.m_randomWeapon != null) attacks.AddRange(humanoid.m_randomWeapon);
-        if (humanoid.m_randomShield != null) attacks.AddRange(humanoid.m_randomShield);
+        HashSet<GameObject> items = new();
+        if (humanoid.m_defaultItems != null) items.AddRange(humanoid.m_defaultItems);
+        if (humanoid.m_randomWeapon != null) items.AddRange(humanoid.m_randomWeapon);
+        if (humanoid.m_randomShield != null) items.AddRange(humanoid.m_randomShield);
+        if (humanoid.m_randomArmor != null) items.AddRange(humanoid.m_randomArmor);
         if (humanoid.m_randomSets != null)
-            attacks.AddRange(humanoid.m_randomSets
+            items.AddRange(humanoid.m_randomSets
                 .SelectMany(x => x.m_items)
                 .ToArray());
         if (humanoid.m_randomItems != null) 
-            attacks.AddRange(humanoid.m_randomItems
+            items.AddRange(humanoid.m_randomItems
             .Select(x => x.m_prefab)
             .ToArray());
 
-        attacks.RemoveWhere(x => x == null || !x.GetComponent<ItemDrop>());
-        return attacks;
+        items.RemoveWhere(x => x == null || !x.GetComponent<ItemDrop>());
+        return items;
     }
 
     public static ItemDataSharedRef[] ToRef(this HashSet<GameObject> items)
@@ -82,7 +83,7 @@ public static partial class Extensions
             ItemDrop? itemDrop = attack.GetComponent<ItemDrop>();
             if (itemDrop == null) continue;
             ItemDataSharedRef itemDataRef = new ItemDataSharedRef();
-            itemDataRef.SetFrom(itemDrop.m_itemData.m_shared);
+            itemDataRef.Setup(itemDrop.m_itemData.m_shared);
             itemDataRef.m_prefab = attack.name;
             attackRefs.Add(itemDataRef);
         }

@@ -28,13 +28,13 @@ public class Clone
         PrefabManager.Clones[newName] = this;
     }
 
-    internal void Create()
+    internal GameObject? Create()
     {
-        if (Loaded) return;
+        if (Loaded) return Prefab;
 
         if (Source == null)
         {
-            if (PrefabManager.GetPrefab(PrefabName) is not { } prefab) return;
+            if (PrefabManager.GetPrefab(PrefabName) is not { } prefab) return Prefab;
             Source = prefab;
         }
         
@@ -44,5 +44,6 @@ public class Clone
         OnCreated?.Invoke(Prefab);
         CloneManager.clones[Prefab.name] = Prefab;
         Loaded = true;
+        return Prefab;
     }
 }

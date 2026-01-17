@@ -20,14 +20,14 @@ public class CinderRef : Reference
     public static implicit operator CinderRef(Cinder cinder)
     {
         CinderRef reference = new CinderRef();
-        reference.SetFrom(cinder);
+        reference.Setup(cinder);
         reference.m_prefab = cinder.name;
         return reference;
     }
 
-    public void Update(GameObject prefab)
+    public void Update(GameObject prefab, bool isInstance)
     {
         if (!prefab.TryGetComponent(out Cinder cinder)) return;
-        cinder.SetFieldsFrom(this);
+        UpdateFields(cinder, prefab.name, !isInstance);
     }
 }

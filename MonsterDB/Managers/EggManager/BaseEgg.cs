@@ -25,6 +25,13 @@ public class BaseEgg : BaseItem
         }
     }
 
+    public override void Update()
+    {
+        base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
+    }
+
     protected override void SaveDefault(GameObject prefab)
     {
         EggManager.Save(prefab, IsCloned, ClonedFrom);
@@ -60,7 +67,7 @@ public class BaseEgg : BaseItem
 
         if (EggGrow != null)
         {
-            component.SetFieldsFrom(EggGrow);
+            EggGrow.UpdateFields(component, prefab.name, true);
         }
     }
 }

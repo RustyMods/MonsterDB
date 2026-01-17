@@ -11,14 +11,13 @@ public static class SyncManager
 {
     public static readonly Dictionary<string, Header> originals;
     public static readonly List<Header> loadList;
-    public static Dictionary<string, string> rawFiles;
     private static readonly CustomSyncedValue<string> sync;
-    
+    public static readonly BaseAggregate files = new BaseAggregate();
+
     static SyncManager()
     {
         originals = new Dictionary<string, Header>();
         loadList = new List<Header>();
-        rawFiles = new Dictionary<string, string>();
         sync =  new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Files", "");
         sync.ValueChanged += OnSyncChange;
     }
@@ -34,7 +33,7 @@ public static class SyncManager
     public static void UpdateSync()
     {
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
-        sync.Value = ConfigManager.Serialize(rawFiles);
+        sync.Value = ConfigManager.Serialize(files);
     }
 
     private static void Reset()
@@ -51,62 +50,35 @@ public static class SyncManager
         if (string.IsNullOrEmpty(sync.Value)) return;
         try
         {
-            rawFiles = ConfigManager.Deserialize<Dictionary<string, string>>(sync.Value);
-            MonsterDBPlugin.LogInfo($"Received {rawFiles.Count} files from server, reloading");
+            BaseAggregate data = ConfigManager.Deserialize<BaseAggregate>(sync.Value);
+            if (string.IsNullOrEmpty(data.PrefabToUpdate))
+            {
+                loadList.Clear();
+                data.Load();
+                Reset();
+                LoadClones();
+                Load();
+            }
+            else
+            {
+                if (data.GetPrefabToUpdate(out Header header))
+                {
+                    header.Update();
+                }
+            }
+
+            if (data.translations != null)
+            {
+                foreach (var kvp in data.translations)
+                {
+                    LocalizationManager.Register(kvp.Key, kvp.Value);
+                }
+            }
         }
         catch
         {
-            MonsterDBPlugin.LogError("Server Sync Data invalid");
-            return;
+            MonsterDBPlugin.LogWarning("Failed to deserialize server files");
         }
-        
-        loadList.Clear();
-        Reset();
-        foreach (KeyValuePair<string, string> file in rawFiles)
-        {
-            try
-            {
-                Header header = ConfigManager.Deserialize<Header>(file.Value);
-                switch (header.Type)
-                {
-                    case BaseType.Character:
-                        BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(file.Value);
-                        loadList.Add(character);
-                        break;
-                    case BaseType.Humanoid:
-                        BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(file.Value);
-                        loadList.Add(humanoid);
-                        break;
-                    case BaseType.Human:
-                        BaseHuman player = ConfigManager.Deserialize<BaseHuman>(file.Value);
-                        loadList.Add(player);
-                        break;
-                    case BaseType.Egg:
-                        BaseEgg egg = ConfigManager.Deserialize<BaseEgg>(file.Value);
-                        loadList.Add(egg);
-                        break;
-                    case BaseType.Item:
-                        BaseItem item = ConfigManager.Deserialize<BaseItem>(file.Value);
-                        loadList.Add(item);
-                        break;
-                    case BaseType.Fish:
-                        BaseFish fish = ConfigManager.Deserialize<BaseFish>(file.Value);
-                        loadList.Add(fish);
-                        break;
-                    case BaseType.Projectile:
-                        BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(file.Value);
-                        loadList.Add(projectile);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MonsterDBPlugin.LogError($"Failed to deserialize server prefab data: {file.Key}");
-                MonsterDBPlugin.LogDebug(ex.Message);
-            }
-        }
-        LoadClones();
-        Load();
     }
     
     private static void LoadClones()
@@ -118,6 +90,7 @@ public static class SyncManager
         int items = 0;
         int fish = 0;
         int projectiles = 0;
+        int ragdolls = 0;
         
         for (int i = 0; i < loadList.Count; ++i)
         {
@@ -146,7 +119,7 @@ public static class SyncManager
                         break;
                     case BaseType.Item:
                         ++items;
-                        ItemManager.Clone(prefab, data.Prefab, false);
+                        ItemManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                     case BaseType.Fish:
                         ++fish;
@@ -154,13 +127,17 @@ public static class SyncManager
                         break;
                     case BaseType.Projectile:
                         ++projectiles;
-                        ProjectileManager.Clone(prefab, data.Prefab, false);
+                        ProjectileManager.TryClone(prefab, data.Prefab, out _, false);
+                        break;
+                    case BaseType.Ragdoll:
+                        ++ragdolls;
+                        RagdollManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                 }
             }
         }
 
-        int count = players + humanoids + characters + eggs + items + fish + projectiles;
+        int count = players + humanoids + characters + eggs + items + fish + projectiles + ragdolls;
 
         StringBuilder sb = new();
         sb.Append("Loading clones: ");
@@ -196,7 +173,12 @@ public static class SyncManager
 
         if (projectiles > 0)
         {
-            sb.Append($"{projectiles} projectiles ");
+            sb.Append($"{projectiles} projectiles, ");
+        }
+
+        if (ragdolls > 0)
+        {
+            sb.Append($"{ragdolls} ragdolls ");
         }
 
         sb.Append($"(total: {count})");
@@ -206,6 +188,11 @@ public static class SyncManager
     
     private static void Load()
     {
+        List<Header> ordered = loadList
+            .OrderBy(x => x.Type is not BaseType.Projectile)
+            .ThenBy(x => x.Type is not BaseType.Item)
+            .ToList();
+        
         int characters = 0;
         int humanoids = 0;
         int players = 0;
@@ -213,9 +200,10 @@ public static class SyncManager
         int items = 0;
         int fish = 0;
         int projectiles = 0;
-        for (int i = 0; i < loadList.Count; ++i)
+        int ragdoll = 0;
+        for (int i = 0; i < ordered.Count; ++i)
         {
-            Header data = loadList[i];
+            Header data = ordered[i];
             if (data.Type == BaseType.None) continue;
             data.Update();
             switch (data.Type)
@@ -241,10 +229,13 @@ public static class SyncManager
                 case BaseType.Projectile:
                     ++projectiles;
                     break;
+                case BaseType.Ragdoll:
+                    ++ragdoll;
+                    break;
                     
             }
         }
-        int count = characters + humanoids + players + eggs + items + fish + projectiles;
+        int count = characters + humanoids + players + eggs + items + fish + projectiles + ragdoll;
         
         StringBuilder sb = new();
         sb.Append("Modified: ");
@@ -280,9 +271,13 @@ public static class SyncManager
 
         if (projectiles > 0)
         {
-            sb.Append($"{projectiles} projectiles ");
+            sb.Append($"{projectiles} projectiles, ");
         }
 
+        if (ragdoll > 0)
+        {
+            sb.Append($"{ragdoll} ragdolls ");
+        }
         sb.Append($"(total: {count})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());

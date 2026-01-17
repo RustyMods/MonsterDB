@@ -120,8 +120,6 @@ public static class EggManager
         }
         
         egg.Update();
-        string text = ConfigManager.Serialize(egg);
-        SyncManager.rawFiles[egg.Prefab] = text;
         SyncManager.UpdateSync();
         
         return true;
@@ -194,7 +192,6 @@ public static class EggManager
             if (header.Type != BaseType.Egg) return;
             BaseEgg reference = ConfigManager.Deserialize<BaseEgg>(text);
             reference.Update();
-            SyncManager.rawFiles[reference.Prefab] = text;
             SyncManager.UpdateSync();
         }
         catch

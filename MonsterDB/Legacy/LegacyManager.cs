@@ -70,8 +70,13 @@ public static class LegacyManager
 
     private static void ImportDirs()
     {
-        string[] dirs = Directory.GetDirectories(LegacyFolderPath);
-        foreach (string dir in dirs)
+        List<string> paths = new();
+        string creaturePath = Path.Combine(ConfigManager.DirectoryPath, "Creatures");
+        string clonePath = Path.Combine(ConfigManager.DirectoryPath, "Clones");
+        paths.AddRange(Directory.GetDirectories(LegacyFolderPath));
+        if (Directory.Exists(clonePath)) paths.AddRange(Directory.GetDirectories(clonePath));
+        if (Directory.Exists(creaturePath)) paths.AddRange(Directory.GetDirectories(creaturePath));
+        foreach (string dir in paths)
         {
             Read(dir);
         }
@@ -152,7 +157,7 @@ public static class LegacyManager
         {
             GameObject? itemPrefab = PrefabManager.GetPrefab(item.m_attackData.OriginalPrefab);
             if (itemPrefab == null) continue;
-            ItemManager.Clone(itemPrefab, item.m_attackData.Name, false);
+            ItemManager.TryClone(itemPrefab, item.m_attackData.Name, out _, false);
         }
 
         CreatureManager.TrySave(prefab, out Base? original, isClone, cloneFrom);
@@ -165,162 +170,5 @@ public static class LegacyManager
         {
             SyncManager.originals[prefab.name] = original;
         }
-    }
-
-    private static void Set(BaseCharacter data, CreatureData old)
-    {
-        old.m_characterData.Set(ref data.Character);
-        old.m_animalAIData.Set(ref data.AI);
-        old.m_effects.Set(ref data.Character);
-
-        SetBase(data, old);
-    }
-
-    private static void SetBase(Base data, CreatureData old)
-    {
-        data.GameVersion = Version.GetVersionString();
-        data.ModVersion = "0.1.5";
-        data.Prefab = old.m_characterData.PrefabName;
-        data.ClonedFrom = old.m_characterData.ClonedFrom;
-        data.IsCloned = !string.IsNullOrEmpty(old.m_characterData.ClonedFrom);
-
-        if (data.IsCloned && data.SpawnData != null)
-        {
-            foreach (SpawnDataRef spawn in data.SpawnData)
-            {
-                spawn.m_name = $"MDB {data.Prefab} Spawn Data";
-                spawn.m_prefab = data.Prefab;
-            }
-        }
-        
-        old.m_tameable.Set(ref data.Tameable);
-        old.m_effects.Set(ref data.Tameable);
-        if (data.Drops != null && old.m_characterDrops.Count != 0)
-        {
-            data.Drops.m_drops = old.m_characterDrops.Select(x => x.ToRef()).ToList();
-        }
-        if (data.Procreation != null)
-        {
-            old.m_procreation.Set(ref data.Procreation);
-            old.m_effects.Set(ref data.Procreation);
-        }
-        if (data.NPCTalk != null)
-        {
-            old.m_npcTalk.Set(ref data.NPCTalk);
-            old.m_effects.Set(ref data.NPCTalk);
-        }
-
-        if (data.GrowUp != null)
-        {
-            old.m_growUp.Set(ref data.GrowUp);
-        }
-
-        if (data.Visuals != null)
-        {
-            if (old.m_levelEffects.Count != 0)
-            {
-                data.Visuals.m_levelSetups = old.m_levelEffects.Select(x => x.ToRef()).ToList();
-            }
-
-            data.Visuals.m_scale = old.m_scale.ToRef();
-        }
-        
-        SetMaterials(data, old);
-    }
-
-    private static void SetMaterials(Base data, CreatureData old)
-    {
-        if (data.Visuals == null || data.Visuals.m_renderers == null) return;
-        foreach (RendererRef renderer in data.Visuals.m_renderers)
-        {
-            if (renderer.m_materials != null)
-            {
-                foreach (MaterialRef mat in renderer.m_materials)
-                {
-                    if (old.m_materials.TryGetValue(mat.m_name, out VisualMethods.MaterialData? d))
-                    {
-                        d.Set(mat);
-                    }
-
-                    if (!string.IsNullOrEmpty(old.m_characterData.ClonedFrom))
-                    {
-                        mat.m_name = $"MDB_{old.m_characterData.PrefabName}_{mat.m_name}";
-                    }
-                }
-            }
-        }
-    }
-
-    private static void SetBaseHumanoid(BaseHumanoid data, CreatureData old)
-    {
-        if (data.Character != null)
-        {
-            List<ItemAttackData> items = new();
-            if (old.m_defaultItems.Count != 0)
-            {
-                data.Character.m_defaultItems = old.m_defaultItems.Select(x => x.m_attackData.Name).ToArray();
-                items.AddRange(old.m_defaultItems);
-            }
-
-            if (old.m_randomWeapons.Count != 0)
-            {
-                data.Character.m_randomWeapon = old.m_randomWeapons.Select(x => x.m_attackData.Name).ToArray();
-                items.AddRange(old.m_randomWeapons);
-            }
-
-            if (old.m_randomArmors.Count != 0)
-            {
-                data.Character.m_randomArmor = old.m_randomArmors.Select(x => x.m_attackData.Name).ToArray();
-                items.AddRange(old.m_randomArmors);
-            }
-
-            if (old.m_randomShields.Count != 0)
-            {
-                data.Character.m_randomShield = old.m_randomShields.Select(x => x.m_attackData.Name).ToArray();
-                items.AddRange(old.m_randomShields);
-            }
-
-            if (old.m_randomItems.Count != 0)
-            {
-                data.Character.m_randomItems = old.m_randomItems.Select(x => x.ToRef()).ToArray();
-            }
-
-            if (old.m_randomSets.Count != 0)
-            {
-                data.Character.m_randomSets = old.m_randomSets.Select(x => x.ToRef()).ToArray();
-                items.Add(old.m_randomSets.SelectMany(i => i.m_items).ToArray());
-            }
-
-            foreach (ItemAttackData? item in items)
-            {
-                if (!string.IsNullOrEmpty(item.m_attackData.OriginalPrefab))
-                {
-                    GameObject? prefab = PrefabManager.GetPrefab(item.m_attackData.OriginalPrefab);
-                    if (prefab == null) continue;
-                    ItemManager.Clone(prefab, item.m_attackData.Name);
-                }
-            }
-        }
-    }
-
-    private static void Set(BaseHuman data, CreatureData old)
-    {
-        old.m_characterData.Set(ref data.Character);
-        old.m_monsterAIData.Set(ref data.AI);
-        old.m_effects.Set(ref data.Character);
-        old.m_effects.Set(ref data.AI);
-        SetBase(data, old);
-        SetBaseHumanoid(data, old);
-    }
-
-    private static void Set(BaseHumanoid data, CreatureData old)
-    {
-        old.m_characterData.Set(ref data.Character);
-        old.m_monsterAIData.Set(ref data.AI);
-        old.m_effects.Set(ref data.Character);
-        old.m_effects.Set(ref data.AI);
-
-        SetBase(data, old);
-        SetBaseHumanoid(data, old);
     }
 }

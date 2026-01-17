@@ -13,6 +13,8 @@ ItemData:
   value: 0
   teleportable: true
   toolTier: 0
+  icons:
+  - fish6
   damages: {}
   attackForce: 30
   backstabBonus: 4

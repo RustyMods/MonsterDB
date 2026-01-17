@@ -1,6 +1,6 @@
 # Saddle
 
-`Saddle` is limited to creatures that have a saddle, such as Lox and Asksvin.
+`Saddle` can be added to creatures that do not have one already using a custom MonsterDB.Saddle script. Simply add the field `Saddle` to any creature and modify the fields.
 
 ```yml
 hoverText: string

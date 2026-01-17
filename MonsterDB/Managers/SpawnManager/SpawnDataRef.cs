@@ -13,8 +13,10 @@ public class SpawnDataRef : Reference
     public bool m_enabled = true;
     public bool m_devDisabled;
     public string m_prefab = "";
-    [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)] public Heightmap.Biome m_biome = Heightmap.Biome.None;
-    [YamlMember(Description = "Edge, Median, Everything")] public Heightmap.BiomeArea m_biomeArea = Heightmap.BiomeArea.Everything;
+    [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)] 
+    public Heightmap.Biome m_biome = Heightmap.Biome.None;
+    [YamlMember(Description = "Edge, Median, Everything")] 
+    public Heightmap.BiomeArea m_biomeArea = Heightmap.BiomeArea.Everything;
     public int m_maxSpawned = 1;
     public float m_spawnInterval = 4f;
     public float m_spawnChance = 100f;
@@ -54,7 +56,7 @@ public class SpawnDataRef : Reference
     public static implicit operator SpawnSystem.SpawnData(SpawnDataRef spawnRef)
     {
         SpawnSystem.SpawnData data = new SpawnSystem.SpawnData();
-        data.SetFieldsFrom(spawnRef, false);
+        spawnRef.UpdateFields(data, spawnRef.m_name, log: false);
         return data;
     }
 }

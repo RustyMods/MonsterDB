@@ -20,7 +20,7 @@ public class DropProjectileOverDistanceRef : Reference
     public static implicit operator DropProjectileOverDistanceRef(DropProjectileOverDistance dpod)
     {
         DropProjectileOverDistanceRef reference = new DropProjectileOverDistanceRef();
-        reference.SetFrom(dpod);
+        reference.Setup(dpod);
         if (dpod.m_projectilePrefab != null)
         {
             if (dpod.m_projectilePrefab.TryGetComponent(out Projectile projectile))

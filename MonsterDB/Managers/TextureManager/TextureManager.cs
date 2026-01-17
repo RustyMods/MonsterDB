@@ -92,7 +92,7 @@ public static class TextureManager
             List<string> names = m_cachedTextures.Keys.ToList();
             for (int i = 0; i < names.Count; ++i)
             {
-                var name = names[i];
+                string? name = names[i];
                 if (name.ToLower().Contains(query.ToLower()))
                 {
                     MonsterDBPlugin.LogInfo(name);
@@ -152,6 +152,8 @@ public static class TextureManager
 
     public static Texture? GetTexture(string name, Texture? defaultValue)
     {
+        if (string.IsNullOrEmpty(name)) return defaultValue;
+        
         if (m_cachedTextures.TryGetValue(name, out Texture2D? texture))
         {
             return texture;
@@ -181,6 +183,8 @@ public static class TextureManager
 
     public static Sprite? GetSprite(string name, Sprite? defaultValue)
     {
+        if (string.IsNullOrEmpty(name)) return defaultValue;
+        
         if (GetAllSprites().TryGetValue(name, out Sprite? sprite)) return sprite;
 
         if (m_customs.TryGetValue(name, out TextureData? data))

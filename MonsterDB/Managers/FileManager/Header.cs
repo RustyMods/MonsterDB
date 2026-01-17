@@ -7,7 +7,7 @@ namespace MonsterDB;
 
 public enum BaseType
 {
-    None, Humanoid, Character, Egg, Human, Item, Fish, Projectile
+    None, Humanoid, Character, Egg, Human, Item, Fish, Projectile, Ragdoll, All
 }
 
 [Serializable][UsedImplicitly]
@@ -33,6 +33,6 @@ public class Header
 
     public virtual void Update()
     {
-        MonsterDBPlugin.LogDebug($"Updated {Prefab}");
+        MonsterDBPlugin.LogInfo($"Updated {Prefab}");
     }
 }

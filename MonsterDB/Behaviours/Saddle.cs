@@ -91,7 +91,6 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         attach.transform.localPosition = m_attachOffset;
         attach.transform.localRotation = Quaternion.identity;
         m_attachPoint = attach.transform;
-        
     }
 
     public bool IsValid()

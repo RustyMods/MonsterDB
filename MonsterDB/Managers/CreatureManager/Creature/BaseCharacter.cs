@@ -19,27 +19,41 @@ public class BaseCharacter : Base
         Type = BaseType.Character;
         Character = new();
         AI = new();
-        Character.SetFrom(character);
-        AI.SetFrom(ai);
+        Character.Setup(character);
+        AI.Setup(ai);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
     }
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
         base.UpdatePrefab(prefab, isInstance);
-        UpdateCharacter(prefab);
-        UpdateAnimalTameable(prefab);
+        UpdateCharacter(prefab, isInstance);
+        UpdateAnimalTameable(prefab, isInstance);
     }
 
-    private void UpdateCharacter(GameObject prefab)
+    private void UpdateCharacter(GameObject prefab, bool isInstance = false)
     {
         Character? character = prefab.GetComponent<Character>();
         AnimalAI? ai = character.GetComponent<AnimalAI>();
         if (character == null || ai == null) return;
-        if (Character != null) character.SetFieldsFrom(Character);
-        if (AI != null) ai.SetFieldsFrom(AI);
+        if (Character != null)
+        {
+            Character.UpdateFields(character, prefab.name, !isInstance);
+        }
+
+        if (AI != null)
+        {
+            AI.UpdateFields(ai, prefab.name, !isInstance);
+        }
     }
 
-    private void UpdateAnimalTameable(GameObject prefab)
+    private void UpdateAnimalTameable(GameObject prefab, bool isInstance = false)
     {
         if (AI == null) return;
         
@@ -55,7 +69,7 @@ public class BaseCharacter : Base
             {
                 animalTameable = prefab.AddComponent<AnimalTameable>();
             }
-            animalTameable.SetFieldsFrom(AI);
+            AI.UpdateFields(animalTameable, prefab.name, !isInstance);
         }
     }
 }

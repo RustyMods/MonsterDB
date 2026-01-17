@@ -25,8 +25,6 @@ public static class ConfigManager
         .Build();
     
     public static T Deserialize<T>(string data) => deserializer.Deserialize<T>(data);
-    // public static string Serialize<T>(T obj) => serializer.Serialize(obj);
-
     public static string Serialize<T>(T obj)
     {
         if (obj == null) return "";
@@ -54,11 +52,14 @@ public static class ConfigManager
     }
 
     private static readonly ConfigEntry<LogLevel> logLevels;
+    private static readonly ConfigEntry<Toggle> detailedDebugLogs;
 
     public static bool ShouldLog(LogLevel type)
     {
         return logLevels.Value.HasFlag(type);
     }
+
+    public static bool ShouldLogDetails() => detailedDebugLogs.Value is Toggle.On;
     
     static ConfigManager()
     {
@@ -83,7 +84,11 @@ public static class ConfigManager
         _ = ConfigSync.AddLockingConfigEntry(serverConfigLocked);
 
         logLevels = config("1 - General", "Log Levels", LogLevel.All, "Set log levels", false);
-        
+        detailedDebugLogs = config("1 - General", "Detailed Debug Logs", Toggle.Off, "If on, debug logs will be detailed");
+    }
+
+    public static void Setup()
+    {
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ZNet), nameof(ZNet.Awake)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(ConfigManager), 

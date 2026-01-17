@@ -50,7 +50,7 @@ public class FishRef : Reference
     public static implicit operator FishRef(Fish fish)
     {
         FishRef reference = new FishRef();
-        reference.SetFrom(fish);
+        reference.Setup(fish);
         return reference;
     }
 }

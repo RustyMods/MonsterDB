@@ -92,8 +92,6 @@ public static class FishManager
             }
             
             fish.Update();
-            string text = ConfigManager.Serialize(fish);
-            SyncManager.rawFiles[fish.Prefab] = text;
             SyncManager.UpdateSync();
             
             return true;
@@ -163,7 +161,6 @@ public static class FishManager
             if (header.Type != BaseType.Fish) return;
             BaseFish reference = ConfigManager.Deserialize<BaseFish>(text);
             reference.Update();
-            SyncManager.rawFiles[reference.Prefab] = text;
             SyncManager.UpdateSync();
         }
         catch
@@ -192,31 +189,7 @@ public static class FishManager
             for (int i = 0; i < renderers.Length; ++i)
             {
                 Renderer renderer = renderers[i];
-                CloneMaterials(renderer, ref  newMaterials);
-            }
-
-            void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
-            {
-                List<Material> newMats = new();
-                for (int i = 0; i < r.sharedMaterials.Length; ++i)
-                {
-                    Material mat = r.sharedMaterials[i];
-                    if (mat == null) continue;
-                    string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
-                    if (mats.TryGetValue(name, out Material? clonedMat))
-                    {
-                        newMats.Add(clonedMat);
-                    }
-                    else
-                    {
-                        clonedMat = new Material(mat);
-                        clonedMat.name = name;
-                        newMats.Add(clonedMat);
-                        mats.Add(name, clonedMat);
-                    }
-                }
-                r.sharedMaterials = newMats.ToArray();
-                r.materials = newMats.ToArray();
+                VisualUtils.CloneMaterials(renderer, ref  newMaterials);
             }
             
             if (write)

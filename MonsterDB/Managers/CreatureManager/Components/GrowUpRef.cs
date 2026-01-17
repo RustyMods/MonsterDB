@@ -16,7 +16,7 @@ public class GrowUpRef : Reference
     public static implicit operator GrowUpRef(Growup growUp)
     {
         GrowUpRef reference = new GrowUpRef();
-        reference.SetFrom(growUp);
+        reference.Setup(growUp);
         return reference;
     }
 

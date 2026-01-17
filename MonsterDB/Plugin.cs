@@ -24,6 +24,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
     {
         instance = this;
 
+        ConfigManager.Setup();
         LegacyManager.Setup();
         AudioManager.Start();
         TextureManager.Setup();

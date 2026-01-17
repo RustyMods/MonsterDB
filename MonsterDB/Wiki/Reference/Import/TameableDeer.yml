@@ -4,12 +4,12 @@ Type: Character
 Prefab: Deer
 AI:
   consumeItems:
-    - Carrot
-    - Turnip
-    - Onion
-    - Mushroom
-    - Raspberry
-    - Blueberries
+  - Carrot
+  - Turnip
+  - Onion
+  - Mushroom
+  - Raspberry
+  - Blueberries
   consumeRange: 1
   consumeSearchRange: 10
   consumeSearchInterval: 10
@@ -34,6 +34,7 @@ Tameable:
   unsummonOnOwnerLogoutSeconds: 0
   levelUpOwnerSkill: None
   levelUpFactor: 1
+  # saddleItem: Carrot
   dropSaddleOnDeath: true
   dropItemVel: 5
   tamingSpeedMultiplierRange: 60
@@ -48,7 +49,6 @@ Saddle:
   swimStaminaDrain: 5
   staminaRegen: 0.2
   staminaRegenHungry: 0.1
-  # If added saddle by MonsterDB, use this to position attach point
   attachOffset:
     x: 0
     y: 1.2

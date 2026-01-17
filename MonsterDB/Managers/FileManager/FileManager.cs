@@ -24,6 +24,12 @@ public static class FileManager
 
         if (!Directory.Exists(ExportFolder)) Directory.CreateDirectory(ExportFolder);
         if (!Directory.Exists(ImportFolder)) Directory.CreateDirectory(ImportFolder);
+
+        Command export = new Command("export_all", "exports all files in import folder into a single file", _ =>
+        {
+            Export(ImportFolder);
+            return true;
+        });
     }
 
     private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
@@ -39,6 +45,14 @@ public static class FileManager
         for (int i = 0; i < files.Length; ++i)
         {
             string filePath = files[i];
+
+            string? fileName = Path.GetFileNameWithoutExtension(filePath);
+            if (fileName.StartsWith("translations."))
+            {
+                LocalizationManager.Register(filePath);
+                continue;
+            }
+            
             string text = File.ReadAllText(filePath);
             try
             {
@@ -48,49 +62,50 @@ public static class FileManager
                     case BaseType.Character:
                         BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(text);
                         SyncManager.loadList.Add(character);
-                        SyncManager.rawFiles[character.Prefab] = text;
-                        if (character.SpawnData != null)
-                        {
-                            RegisterSpawnList(character.SpawnData);
-                        }
+                        RegisterSpawnList(character.SpawnData);
+                        SyncManager.files.Add(character);
                         break;
                     case BaseType.Humanoid:
                         BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(text);
                         SyncManager.loadList.Add(humanoid);
-                        SyncManager.rawFiles[humanoid.Prefab] = text;
-                        if (humanoid.SpawnData != null)
-                        {
-                            RegisterSpawnList(humanoid.SpawnData);
-                        }
+                        RegisterSpawnList(humanoid.SpawnData);
+                        SyncManager.files.Add(humanoid);
                         break;
                     case BaseType.Human:
                         BaseHuman player = ConfigManager.Deserialize<BaseHuman>(text);
                         SyncManager.loadList.Add(player);
-                        SyncManager.rawFiles[player.Prefab] = text;
-                        if (player.SpawnData != null)
-                        {
-                            RegisterSpawnList(player.SpawnData);
-                        }
+                        RegisterSpawnList(player.SpawnData);
+                        SyncManager.files.Add(player);
                         break;
                     case BaseType.Egg:
                         BaseEgg data = ConfigManager.Deserialize<BaseEgg>(text);
                         SyncManager.loadList.Add(data);
-                        SyncManager.rawFiles[data.Prefab] = text;
+                        SyncManager.files.Add(data);
                         break;
                     case BaseType.Item:
                         BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
                         SyncManager.loadList.Add(item);
-                        SyncManager.rawFiles[item.Prefab] = text;
+                        SyncManager.files.Add(item);
                         break;
                     case BaseType.Fish:
                         BaseFish fish = ConfigManager.Deserialize<BaseFish>(text);
                         SyncManager.loadList.Add(fish);
-                        SyncManager.rawFiles[fish.Prefab] = text;
+                        SyncManager.files.Add(fish);
                         break;
                     case BaseType.Projectile:
                         BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(text);
                         SyncManager.loadList.Add(projectile);
-                        SyncManager.rawFiles[projectile.Prefab] = text;
+                        SyncManager.files.Add(projectile);
+                        break;
+                    case BaseType.Ragdoll:
+                        BaseRagdoll ragdoll = ConfigManager.Deserialize<BaseRagdoll>(text);
+                        SyncManager.loadList.Add(ragdoll);
+                        SyncManager.files.Add(ragdoll);
+                        break;
+                    case BaseType.All:
+                        BaseAggregate all = ConfigManager.Deserialize<BaseAggregate>(text);
+                        all.Load();
+                        SyncManager.files.Add(all);
                         break;
                 }
 
@@ -104,8 +119,9 @@ public static class FileManager
         MonsterDBPlugin.LogInfo($"Loaded {files.Length} files.");
     }
 
-    private static void RegisterSpawnList(SpawnDataRef[] list)
+    private static void RegisterSpawnList(SpawnDataRef[]? list)
     {
+        if (list == null) return;
         for (int i = 0; i < list.Length; ++i)
         {
             SpawnDataRef data = list[i];
@@ -135,6 +151,13 @@ public static class FileManager
     public static void Read(string filePath)
     {
         if (!File.Exists(filePath)) return;
+
+        string? fileName = Path.GetFileNameWithoutExtension(filePath);
+        if (fileName.StartsWith("translations."))
+        {
+            LocalizationManager.UpdateParse(filePath);
+            return;
+        }
         
         string text = File.ReadAllText(filePath);
         try
@@ -143,51 +166,43 @@ public static class FileManager
             switch (header.Type)
             {
                 case BaseType.Humanoid:
-                {
-                    BaseHumanoid data = ConfigManager.Deserialize<BaseHumanoid>(text);
-                    data.Update();
-                    SyncManager.rawFiles[data.Prefab] = text;
+                    BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(text);
+                    humanoid.Update();
                     SyncManager.UpdateSync();
                     break;
-                }
                 case BaseType.Character:
-                {
-                    BaseCharacter data = ConfigManager.Deserialize<BaseCharacter>(text);
-                    data.Update();
-                    SyncManager.rawFiles[data.Prefab] = text;
+                    BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(text);
+                    character.Update();
                     SyncManager.UpdateSync();
                     break;
-                }
                 case BaseType.Human:
-                {
-                    BaseHuman data = ConfigManager.Deserialize<BaseHuman>(text);
-                    data.Update();
-                    SyncManager.rawFiles[data.Prefab] = text;
+                    BaseHuman human = ConfigManager.Deserialize<BaseHuman>(text);
+                    human.Update();
                     SyncManager.UpdateSync();
                     break;
-                }
                 case BaseType.Egg:
-                    BaseEgg reference = ConfigManager.Deserialize<BaseEgg>(text);
-                    reference.Update();
-                    SyncManager.rawFiles[reference.Prefab] = text;
+                    BaseEgg egg = ConfigManager.Deserialize<BaseEgg>(text);
+                    egg.Update();
                     SyncManager.UpdateSync();
                     break;
                 case BaseType.Item:
                     BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
                     item.Update();
-                    SyncManager.rawFiles[item.Prefab] = text;
                     SyncManager.UpdateSync();
                     break;
                 case BaseType.Fish:
                     BaseFish fish = ConfigManager.Deserialize<BaseFish>(text);
                     fish.Update();
-                    SyncManager.rawFiles[fish.Prefab] = text;
                     SyncManager.UpdateSync();
                     break;
                 case BaseType.Projectile:
                     BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(text);
                     projectile.Update();
-                    SyncManager.rawFiles[projectile.Prefab] = text;
+                    SyncManager.UpdateSync();
+                    break;
+                case BaseType.Ragdoll:
+                    BaseRagdoll ragdoll = ConfigManager.Deserialize<BaseRagdoll>(text);
+                    ragdoll.Update();
                     SyncManager.UpdateSync();
                     break;
             }
@@ -198,5 +213,14 @@ public static class FileManager
             MonsterDBPlugin.LogWarning(ex.Message);
             MonsterDBPlugin.LogDebug(ex.StackTrace);
         }
+    }
+
+    public static void Export(string dirPath)
+    {
+        BaseAggregate export = new BaseAggregate();
+        export.Init(dirPath);
+        string data = ConfigManager.Serialize(export);
+        string filePath = Path.Combine(ExportFolder, "All.yml");
+        File.WriteAllText(filePath, data);
     }
 }

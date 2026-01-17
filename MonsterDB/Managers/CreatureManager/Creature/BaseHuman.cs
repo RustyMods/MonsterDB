@@ -16,11 +16,18 @@ public class BaseHuman : BaseHumanoid
         Type = BaseType.Human;
         Character = new HumanoidRef();
         AI = new MonsterAIRef();
-        Character.SetFrom(character);
-        AI.SetFrom(ai);
+        Character.Setup(character);
+        AI.Setup(ai);
         Visuals?.SetDefaultHumanFields();
         
         if (isClone) SetupSpawnData();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
     }
 
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)

@@ -18,21 +18,21 @@ public class CinderSpawnerRef : Reference
     [YamlMember(Description = "Will affect all new cinderPrefab instances, including cinderPrefab from other components")]
     public CinderRef? m_cinder;
 
-    public void Update(GameObject prefab)
+    public void Update(GameObject prefab, bool isInstance = false)
     {
         if (!prefab.TryGetComponent(out CinderSpawner cs)) return;
-        cs.SetFieldsFrom(this);
+        UpdateFields(cs, prefab.name, !isInstance);
         if (m_cinder != null && cs.m_cinderPrefab != null && 
             cs.m_cinderPrefab.name == m_cinder.m_prefab)
         {
-            m_cinder.Update(cs.m_cinderPrefab);
+            m_cinder.Update(cs.m_cinderPrefab, isInstance);
         }
     }
 
     public static implicit operator CinderSpawnerRef(CinderSpawner cs)
     {
         CinderSpawnerRef reference = new CinderSpawnerRef();
-        reference.SetFrom(cs);
+        reference.Setup(cs);
         if (cs.m_cinderPrefab != null && cs.m_cinderPrefab.TryGetComponent(out Cinder cinder))
         {
             reference.m_cinder = cinder;

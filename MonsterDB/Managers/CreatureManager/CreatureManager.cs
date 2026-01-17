@@ -95,8 +95,6 @@ public static class CreatureManager
                 return true;
             }
             creature.Update();
-            string text = ConfigManager.Serialize(creature);
-            SyncManager.rawFiles[creature.Prefab] = text;
             SyncManager.UpdateSync();
             return true;
         }, SyncManager.GetOriginalKeys<Base>, adminOnly: true);
@@ -149,31 +147,27 @@ public static class CreatureManager
         
         if (character is Human && ai is MonsterAI)
         {
-            data = new BaseHuman();
-            data.Setup(prefab, isClone, source);
+            BaseHuman human = new BaseHuman();
+            human.Setup(prefab, isClone, source);
+            data = human;
 
         }
         else if (character is Humanoid && ai is MonsterAI)
         {
-            data = new BaseHumanoid();
-            data.Setup(prefab, isClone, source);
+            var humanoid = new BaseHumanoid();
+            humanoid.Setup(prefab, isClone, source);
+            data = humanoid;
         }
         else if (ai is AnimalAI)
         {
-            data = new BaseCharacter();
-            data.Setup(prefab,  isClone, source);
+            var chara = new BaseCharacter();
+            chara.Setup(prefab,  isClone, source);
+            data = chara;
         }
 
         if (data == null) return false;
         
         SyncManager.originals.Add(prefab.name, data);
-
-        if (isClone && ZNet.instance && ZNet.instance.IsServer())
-        {
-            SyncManager.rawFiles[data.Prefab] = ConfigManager.Serialize(data);
-            SyncManager.UpdateSync();
-        }
-
         return true;
     }
 
@@ -186,79 +180,54 @@ public static class CreatureManager
         if (!TrySave(prefab, out Base? data, isClone, source)) return;
         
         string text = ConfigManager.Serialize(data);
+        File.WriteAllText(filePath, text);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
         
-        if (prefab.TryGetComponent(out Humanoid humanoid) && humanoid is not Human)
+        Character? character = prefab.GetComponent<Character>();
+        if (character != null)
         {
-            HashSet<GameObject> items = humanoid.GetItems();
-            if (items.Count > 0)
+            if (character.m_deathEffects != null && character.m_deathEffects.m_effectPrefabs != null)
             {
-                string itemFolder = Path.Combine(folder, "items");
-                if (!Directory.Exists(itemFolder)) Directory.CreateDirectory(itemFolder);
-                foreach (GameObject? item in items)
+                for (int i = 0; i < character.m_deathEffects.m_effectPrefabs.Length; ++i)
                 {
-                    bool isItemClone = false;
-                    string itemSource = "";
-                    
-                    if (PrefabManager.Clones.TryGetValue(item.name, out Clone d))
+                    EffectList.EffectData? effect = character.m_deathEffects.m_effectPrefabs[i];
+                    if (effect.m_prefab != null && effect.m_prefab.GetComponent<Ragdoll>())
                     {
-                        isItemClone = true;
-                        itemSource = d.PrefabName;
-                    }
-
-                    if (ItemManager.TrySave(item, out BaseItem baseItem, isItemClone, itemSource))
-                    {
-                        string info = ConfigManager.Serialize(baseItem);
-                        string itemPath = Path.Combine(itemFolder, item.name + ".yml");
-                        File.WriteAllText(itemPath, info);
-                    }
-
-                    if (item.TryGetComponent(out ItemDrop component))
-                    {
-                        if (component.m_itemData.m_shared.m_attack.m_attackProjectile != null)
+                        bool isRagdollClone = false;
+                        string ragdollSource = "";
+                        if (PrefabManager.Clones.TryGetValue(effect.m_prefab.name, out Clone ragdollClone))
                         {
-                            string pName = component.m_itemData.m_shared.m_attack.m_attackProjectile.name;
-                            bool isProjectileClone = false;
-                            string projectileSource = "";
-
-                            if (PrefabManager.Clones.TryGetValue(pName, out Clone pD))
-                            {
-                                isProjectileClone = true;
-                                projectileSource = pD.PrefabName;
-                            }
-                            
-                            if (ProjectileManager.TrySave(component.m_itemData.m_shared.m_attack.m_attackProjectile, out BaseProjectile bp, isProjectileClone, projectileSource))
-                            {
-                                string pInfo = ConfigManager.Serialize(bp);
-                                string pPath = Path.Combine(itemFolder, pName + ".yml");
-                                File.WriteAllText(pPath, pInfo);
-                            }
+                            isRagdollClone = true;
+                            ragdollSource = ragdollClone.PrefabName;
+                        }
+                        RagdollManager.Write(effect.m_prefab, isRagdollClone, ragdollSource, folder);
+                    }
+                }
+            }
+            
+            if (character is Humanoid humanoid and not Human)
+            {
+                HashSet<GameObject> items = humanoid.GetItems();
+                if (items.Count > 0)
+                {
+                    string itemFolder = Path.Combine(folder, "items");
+                    if (!Directory.Exists(itemFolder)) Directory.CreateDirectory(itemFolder);
+                    foreach (GameObject? item in items)
+                    {
+                        bool isItemClone = false;
+                        string itemSource = "";
+                        
+                        if (PrefabManager.Clones.TryGetValue(item.name, out Clone d))
+                        {
+                            isItemClone = true;
+                            itemSource = d.PrefabName;
                         }
 
-                        if (component.m_itemData.m_shared.m_secondaryAttack.m_attackProjectile != null)
-                        {
-                            string pName = component.m_itemData.m_shared.m_secondaryAttack.m_attackProjectile.name;
-                            bool isProjectileClone = false;
-                            string projectileSource = "";
-
-                            if (PrefabManager.Clones.TryGetValue(pName, out Clone pD))
-                            {
-                                isProjectileClone = true;
-                                projectileSource = pD.PrefabName;
-                            }
-                            
-                            if (ProjectileManager.TrySave(component.m_itemData.m_shared.m_secondaryAttack.m_attackProjectile, out BaseProjectile bp, isProjectileClone, projectileSource))
-                            {
-                                string pInfo = ConfigManager.Serialize(bp);
-                                string pPath = Path.Combine(itemFolder, pName + ".yml");
-                                File.WriteAllText(pPath, pInfo);
-                            }
-                        }
+                        ItemManager.Write(item, isItemClone, itemSource, itemFolder);
                     }
                 }
             }
         }
-        File.WriteAllText(filePath, text);
-        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
     }
 
     public static void Clone(GameObject source, string cloneName, bool write = true)
@@ -295,30 +264,29 @@ public static class CreatureManager
             for (int i = 0; i < renderers.Length; ++i)
             {
                 Renderer renderer = renderers[i];
-                CloneMaterials(renderer, ref  newMaterials);
+                VisualUtils.CloneMaterials(renderer, ref  newMaterials);
             }
 
             if (write && !isPlayer && character is Humanoid humanoid)
             {
-                Dictionary<string, GameObject> newItems = new();
                 if (humanoid.m_defaultItems != null)
                 {
-                    humanoid.m_defaultItems = CreateItems(humanoid.m_defaultItems, ref newItems);
+                    humanoid.m_defaultItems = CreateItems(humanoid.m_defaultItems, cloneName);
                 }
 
                 if (humanoid.m_randomWeapon != null)
                 {
-                    humanoid.m_randomWeapon = CreateItems(humanoid.m_randomWeapon, ref newItems);
+                    humanoid.m_randomWeapon = CreateItems(humanoid.m_randomWeapon, cloneName);
                 }
 
                 if (humanoid.m_randomArmor != null)
                 {
-                    humanoid.m_randomArmor = CreateItems(humanoid.m_randomArmor, ref newItems);
+                    humanoid.m_randomArmor = CreateItems(humanoid.m_randomArmor, cloneName);
                 }
 
                 if (humanoid.m_randomShield != null)
                 {
-                    humanoid.m_randomShield = CreateItems(humanoid.m_randomShield, ref newItems);
+                    humanoid.m_randomShield = CreateItems(humanoid.m_randomShield, cloneName);
                 }
 
                 if (humanoid.m_randomItems != null)
@@ -326,7 +294,8 @@ public static class CreatureManager
                     List<Humanoid.RandomItem> newRandomItems = new();
                     foreach (Humanoid.RandomItem? item in humanoid.m_randomItems)
                     {
-                        if (TryCreateItem(item.m_prefab, out GameObject? newItem, ref newItems) && newItem != null)
+                        string newItemName = $"MDB_{cloneName}_{item.m_prefab.name}";
+                        if (ItemManager.TryClone(item.m_prefab, newItemName, out GameObject newItem, false))
                         {
                             Humanoid.RandomItem newRandomItem = new Humanoid.RandomItem();
                             newRandomItem.m_chance = item.m_chance;
@@ -345,14 +314,14 @@ public static class CreatureManager
                     {
                         Humanoid.ItemSet newSet = new Humanoid.ItemSet();
                         newSet.m_name = set.m_name;
-                        newSet.m_items = CreateItems(set.m_items, ref newItems);
+                        newSet.m_items = CreateItems(set.m_items, cloneName);
                         newRandomSets.Add(newSet);
                     }
                     humanoid.m_randomSets = newRandomSets.ToArray();
                 }
             }
 
-            if (character.m_deathEffects != null)
+            if (write && character.m_deathEffects != null)
             {
                 EffectList.EffectData[]? deathEffects = character.m_deathEffects.m_effectPrefabs;
                 for (int index = 0; index < deathEffects.Length; index++)
@@ -360,42 +329,10 @@ public static class CreatureManager
                     EffectList.EffectData effect = deathEffects[index];
                     if (effect.m_prefab != null && effect.m_prefab.GetComponent<Ragdoll>())
                     {
-                        string newRagdollName = $"MDB_{cloneName}_ragdoll";
-                        if (CloneManager.clones.TryGetValue(newRagdollName, out GameObject cl))
+                        string newRagdollName = $"{cloneName}_ragdoll";
+                        if (RagdollManager.TryClone(effect.m_prefab, newRagdollName, out GameObject newRagdoll, false))
                         {
-                            effect.m_prefab = cl;
-                        }
-                        else
-                        {
-                            Clone newRagdoll = new Clone(effect.m_prefab, newRagdollName);
-                            newRagdoll.OnCreated += p =>
-                            {
-                                if (p.TryGetComponent(out Ragdoll rag))
-                                {
-                                    List<Material> mats = new();
-                                    if (rag.m_mainModel != null)
-                                    {
-                                        for (int i = 0; i < rag.m_mainModel.sharedMaterials.Length; ++i)
-                                        {
-                                            Material? mat = rag.m_mainModel.sharedMaterials[i];
-                                            if (mat == null) continue;
-                                            string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
-                                            if (!newMaterials.TryGetValue(name, out var material))
-                                            {
-                                                mats.Add(mat);
-                                            }
-                                            else
-                                            {
-                                                mats.Add(material);
-                                            }
-                                        }
-                                        rag.m_mainModel.sharedMaterials = mats.ToArray();
-                                        rag.m_mainModel.materials = mats.ToArray();
-                                    }
-                                }
-                                effect.m_prefab = p;
-                            };
-                            newRagdoll.Create();
+                            effect.m_prefab = newRagdoll;
                         }
                         break;
                     }
@@ -406,116 +343,25 @@ public static class CreatureManager
             {
                 Write(prefab, true, source.name);
             }
-
-            return;
-
-            void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
-            {
-                List<Material> newMats = new();
-                for (int i = 0; i < r.sharedMaterials.Length; ++i)
-                {
-                    Material mat = r.sharedMaterials[i];
-                    if (mat == null) continue;
-                    string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
-                    if (mats.TryGetValue(name, out Material? clonedMat))
-                    {
-                        newMats.Add(clonedMat);
-                    }
-                    else
-                    {
-                        clonedMat = new Material(mat);
-                        clonedMat.name = name;
-                        newMats.Add(clonedMat);
-                        mats.Add(name, clonedMat);
-                    }
-                }
-                r.sharedMaterials = newMats.ToArray();
-                r.materials = newMats.ToArray();
-            }
         };
 
         c.Create();
-
-        return;
-
-        bool TryCreateItem(GameObject item, out GameObject? newItem, ref Dictionary<string, GameObject> clones)
+    }
+    
+    private static GameObject[] CreateItems(GameObject[] list, string cloneName)
+    {
+        List<GameObject> newItems = new();
+        foreach (GameObject item in list)
         {
+            if (item == null) continue;
+                
             string newItemName = $"MDB_{cloneName}_{item.name}";
-            if (clones.TryGetValue(newItemName, out newItem)) return newItem;
-            if (CloneManager.clones.TryGetValue(newItemName, out GameObject cl))
+            if (ItemManager.TryClone(item, newItemName, out GameObject newItem, false))
             {
-                newItem = cl;
-                clones[newItemName] = cl;
-                return true;
+                newItems.Add(newItem);
             }
-            
-            GameObject? projectile = null;
-                
-            if (item.TryGetComponent(out ItemDrop id))
-            {
-                if (id.m_itemData.m_shared.m_attack.m_attackProjectile != null)
-                {
-                    string projName = $"MDB_{cloneName}_{id.m_itemData.m_shared.m_attack.m_attackProjectile.name}";
-                    if (clones.TryGetValue(projName, out GameObject proj) || CloneManager.clones.TryGetValue(projName, out proj))
-                    {
-                        projectile = proj;
-                    }
-                    else
-                    {
-                        Clone mockProjectile = new Clone(id.m_itemData.m_shared.m_attack.m_attackProjectile, projName);
-                        mockProjectile.OnCreated += p =>
-                        {
-                            projectile = p;
-                        };
-                        mockProjectile.Create();
-                        if (projectile != null)
-                        {
-                            clones[projName] = projectile;
-                        }
-                    }
-                }
-            }
-
-            Clone mock = new Clone(item, newItemName);
-            GameObject? clone = null;
-                
-            mock.OnCreated += prefab =>
-            {
-                clone = prefab;
-                if (prefab.TryGetComponent(out ItemDrop component))
-                {
-                    if (projectile != null)
-                    {
-                        component.m_itemData.m_shared.m_attack.m_attackProjectile = projectile;
-                    }
-                }
-            };
-                
-            mock.Create();
-
-            newItem = clone;
-            if (newItem != null)
-            {
-                clones[newItemName] = newItem;
-            }
-
-            return newItem != null;
         }
-        
-        GameObject[] CreateItems(GameObject[] list, ref Dictionary<string, GameObject> clones)
-        {
-            List<GameObject> newItems = new();
-            foreach (GameObject item in list)
-            {
-                if (item == null) continue;
-                if (TryCreateItem(item, out GameObject? newItem, ref clones) && newItem != null)
-                {
-                    newItems.Add(newItem);
-                    clones[newItem.name] = newItem;
-                }
-            }
 
-            return newItems.ToArray();
-        }
+        return newItems.ToArray();
     }
 }

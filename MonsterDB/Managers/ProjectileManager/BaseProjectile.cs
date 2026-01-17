@@ -8,7 +8,8 @@ namespace MonsterDB;
 public class BaseProjectile : Header
 {
     [YamlMember(Order = 6)] public ProjectileRef? ProjectileData;
-    [YamlMember(Order = 7)] public VisualRef? Visuals;
+    [YamlMember(Order = 7)] public TeleportAbilityRef? TeleportAbility;
+    [YamlMember(Order = 8)] public VisualRef? Visuals;
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
@@ -19,7 +20,14 @@ public class BaseProjectile : Header
         IsCloned = isClone;
 
         SetupProjectile(prefab);
+        SetupTeleportAbility(prefab);
         SetupVisuals(prefab);
+    }
+
+    protected virtual void SetupTeleportAbility(GameObject prefab)
+    {
+        if (!prefab.TryGetComponent(out TeleportAbility component)) return;
+        TeleportAbility = component;
     }
 
     protected virtual void SetupProjectile(GameObject prefab)
@@ -61,18 +69,27 @@ public class BaseProjectile : Header
         
         UpdatePrefab(prefab);
         base.Update();
+        SyncManager.files.PrefabToUpdate = Prefab;
+        SyncManager.files.Add(this);
     }
 
     protected virtual void UpdatePrefab(GameObject prefab)
     {
         UpdateVisuals(prefab);
         UpdateProjectile(prefab);
+        UpdateTeleportAbility(prefab);
+    }
+
+    protected void UpdateTeleportAbility(GameObject prefab)
+    {
+        if (TeleportAbility == null || !prefab.TryGetComponent(out TeleportAbility component)) return;
+        TeleportAbility.Update(component, prefab.name);
     }
 
     protected void UpdateProjectile(GameObject prefab)
     {
         if (ProjectileData == null || !prefab.TryGetComponent(out Projectile component)) return;
-        component.SetFieldsFrom(ProjectileData);
+        ProjectileData.UpdateFields(component, prefab.name, true);
     }
     
     protected virtual void UpdateVisuals(GameObject prefab)
@@ -82,11 +99,13 @@ public class BaseProjectile : Header
             if (Visuals.m_scale.HasValue)
             {
                 prefab.transform.localScale = Visuals.m_scale.Value;
+                if (ConfigManager.ShouldLogDetails())
+                {
+                    MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
+                }
             }
 
-            Visuals.UpdateRenderers(prefab);
-            Visuals.UpdateParticleSystems(prefab);
-            Visuals.UpdateLights(prefab);
+            Visuals.Update(prefab, false);
         }
     }
 }

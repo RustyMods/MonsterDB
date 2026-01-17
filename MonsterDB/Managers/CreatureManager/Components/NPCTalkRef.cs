@@ -29,7 +29,7 @@ public class NPCTalkRef : Reference
     public static implicit operator NPCTalkRef(NpcTalk npcTalk)
     {
         NPCTalkRef reference = new NPCTalkRef();
-        reference.SetFrom(npcTalk);
+        reference.Setup(npcTalk);
         return reference;
     }
 }

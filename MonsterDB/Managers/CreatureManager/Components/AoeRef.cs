@@ -80,7 +80,7 @@ public static partial class Extensions
     public static AoeRef ToRef(this Aoe aoe)
     {
         AoeRef aoeRef = new AoeRef();
-        aoeRef.SetFrom(aoe);
+        aoeRef.Setup(aoe);
         return aoeRef;
     }
 }

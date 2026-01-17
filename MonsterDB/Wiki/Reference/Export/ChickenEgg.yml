@@ -13,6 +13,8 @@ ItemData:
   value: 0
   teleportable: true
   toolTier: 0
+  icons:
+  - egg
   damages: {}
   attackForce: 50
   backstabBonus: 4
@@ -59,6 +61,57 @@ Visuals:
     - name: item_particle
       shader: Legacy Shaders/Particles/Alpha Blended
       mainTexture: starspark
+      tintColor: '#FFFFFFFF'
+  particleSystems:
+  - prefab: Not Growing
+    parent: ChickenEgg
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FF6565FF'
+      colorMin: '#FFE240FF'
+      colorMax: '#FF6565FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF6565FF'
+      colorMin: '#000040FF'
+      colorMax: '#FF6565FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
 # If field removed, will remove component
 EggGrow:
   growTime: 1800

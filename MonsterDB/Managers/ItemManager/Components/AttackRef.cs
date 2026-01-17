@@ -98,7 +98,7 @@ public static partial class Extensions
     public static AttackRef ToAttackRef(this Attack att)
     {
         AttackRef attackRef = new AttackRef();
-        attackRef.SetFrom(att);
+        attackRef.Setup(att);
         return attackRef;
     }
 }
