@@ -107,6 +107,11 @@ public static class FileManager
                         LoadManager.loadList.Add(spawnAbility);
                         LoadManager.files.Add(spawnAbility);
                         break;
+                    case BaseType.Visual:
+                        BaseVisual visual = ConfigManager.Deserialize<BaseVisual>(text);
+                        LoadManager.loadList.Add(visual);
+                        LoadManager.files.Add(visual);
+                        break;
                     case BaseType.All:
                         BaseAggregate all = ConfigManager.Deserialize<BaseAggregate>(text);
                         LoadManager.loadList.AddRange(all.Load());
@@ -213,6 +218,11 @@ public static class FileManager
                 case BaseType.SpawnAbility:
                     BaseSpawnAbility spawnAbility = ConfigManager.Deserialize<BaseSpawnAbility>(text);
                     spawnAbility.Update();
+                    LoadManager.UpdateSync();
+                    break;
+                case BaseType.Visual:
+                    BaseVisual visual = ConfigManager.Deserialize<BaseVisual>(text);
+                    visual.Update();
                     LoadManager.UpdateSync();
                     break;
             }

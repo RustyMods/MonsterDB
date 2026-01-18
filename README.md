@@ -58,6 +58,8 @@ Visit MonsterDB Github for curated examples
 - Make `Neck` tameable and procreate `NeckEgg` which hatches into `Neck_hatchling` and grows up into a `Neck`
 - Make `Player` into a `Human` NPC
 
+Visit: https://github.com/RustyMods/MonsterDB/tree/main/MonsterDB/Wiki/Reference/Import
+
 ### Server sync
 
 1. Game load, plugin starts, reads all files from `Import` folder

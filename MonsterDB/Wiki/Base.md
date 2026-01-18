@@ -14,6 +14,7 @@ Fish
 Projectile
 Ragdoll
 SpawnAbility
+Visual
 All
 ```
 
@@ -58,6 +59,10 @@ Ragdoll is a prefab with component `Ragdoll`
 ### SpawnAbility
 
 SpawnAbility is a prefab with component `SpawnAbility`
+
+### Visual
+
+Visual is a prefab renderer, particle system and light data. Use this if you wish to modify just the visual of a prefab. Useful for targeting effect prefabs.
 
 ### All
 

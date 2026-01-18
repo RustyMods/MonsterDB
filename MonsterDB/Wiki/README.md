@@ -91,6 +91,7 @@ Once registered, you can reference a PNG by its filename **without** the `.png` 
 When modifying the visuals on a creature, you will need to do the same to it's ragdoll, if they have one, if you wish the ragdoll to look appropriate. Ragdoll scale is not always the same as the creature scale.
 (e.g. Neck scale: 1, 1, 1 while Neck_ragdoll scale: 0.3, 0.3, 0.3, so if you want to half their scale, Neck: 0.5, 0.5, 0.5 while Neck_ragdoll: 0.15, 0.15, 0.15)
 
+You can use the command `write_visual` or `clone_visual` to export a prefab YML with just the Visual data, to create custom FX prefabs. Useful when modifying a creature appearance, to also target their effect prefabs.
 
 ```yml
 ItemData:
@@ -121,7 +122,6 @@ hitEffects:
   - prefab: myAudioFileNameWithoutExtension 
 ```
 
-
 ### Commands
 
 all commands begin with: `monsterdb`
@@ -147,5 +147,11 @@ use `help` to see this list in-game
 - `monsterdb write_fish [prefabName]`: export fish YML file
 - `monsterdb mod_fish [fileName]`: read fish YML file and update
 - `monsterdb clone_fish [prefabName][newName]`: clone fish and export YML file
-- `monsterdb export_sprite: [spriteName]`: export sprite texture as PNG
-- `monsterdb search_sprite: [query]`: search cached sprites
+- `monsterdb export_sprite [spriteName]`: export sprite texture as PNG
+- `monsterdb search_sprite [query]`: search cached sprites
+- `monsterdb write_visual [prefabName]`: export prefab visual YML
+- `monsterdb clone_visual [prefabName][newName]`: clone prefab and export visual YML
+
+### Examples
+
+Visit: https://github.com/RustyMods/MonsterDB/tree/main/MonsterDB/Wiki/Reference/Import

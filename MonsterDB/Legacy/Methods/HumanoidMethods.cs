@@ -451,7 +451,7 @@ public static class HumanoidMethods
     {
         statusEffect = null!;
         if (effectName.IsNullOrWhiteSpace()) return false;
-        statusEffect = PrefabManager.GetStatusEffect(effectName);
+        statusEffect = PrefabManager.GetStatusEffect(effectName)!;
         return statusEffect != null;
     }
     

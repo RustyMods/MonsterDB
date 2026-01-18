@@ -17,7 +17,8 @@ public class BaseAggregate : Header
     [YamlMember(Order = 12)] public Dictionary<string, BaseProjectile>? projectiles;
     [YamlMember(Order = 13)] public Dictionary<string, BaseRagdoll>? ragdolls;
     [YamlMember(Order = 14)] public Dictionary<string, BaseSpawnAbility>? spawnAbilities;
-    [YamlMember(Order = 14)] public Dictionary<string, Dictionary<string, string>>? translations;
+    [YamlMember(Order = 15)] public Dictionary<string, BaseVisual>? visuals;
+    [YamlMember(Order = 16)] public Dictionary<string, Dictionary<string, string>>? translations;
 
     public string? PrefabToUpdate;
 
@@ -76,6 +77,12 @@ public class BaseAggregate : Header
         if (spawnAbilities != null && spawnAbilities.TryGetValue(PrefabToUpdate, out BaseSpawnAbility? spawnability))
         {
             header = spawnability;
+            return true;
+        }
+
+        if (visuals != null && visuals.TryGetValue(PrefabToUpdate, out BaseVisual? visual))
+        {
+            header = visual;
             return true;
         }
 
@@ -164,6 +171,10 @@ public class BaseAggregate : Header
                     BaseSpawnAbility spawnAbility = ConfigManager.Deserialize<BaseSpawnAbility>(text);
                     Add(spawnAbility);
                     break;
+                case BaseType.Visual:
+                    BaseVisual visual = ConfigManager.Deserialize<BaseVisual>(text);
+                    Add(visual);
+                    break;
             }
         }
     }
@@ -243,6 +254,14 @@ public class BaseAggregate : Header
             }
         }
 
+        if (visuals != null)
+        {
+            foreach (BaseVisual visual in visuals.Values)
+            {
+                list.Add(visual);
+            }
+        }
+
         if (translations != null)
         {
             foreach (KeyValuePair<string, Dictionary<string, string>> kvp in translations)
@@ -255,6 +274,12 @@ public class BaseAggregate : Header
         }
 
         return list;
+    }
+
+    public void Add(BaseVisual visual)
+    {
+        if (visuals == null) visuals = new();
+        visuals[visual.Prefab] = visual;
     }
 
     public void Add(BaseSpawnAbility spawnAbility)

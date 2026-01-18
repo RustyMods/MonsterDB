@@ -52,15 +52,28 @@ public static class EggManager
 
                 var prefab = PrefabManager.GetPrefab(prefabName);
 
-                if (prefab == null) return true;
+                if (prefab == null)
+                {
+                    MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
+                    return true;
+                }
 
                 if (!prefab.GetComponent<ItemDrop>())
                 {
                     MonsterDBPlugin.LogWarning("Invalid, missing ItemDrop component");
                     return true;
                 }
+                
+                bool isClone = false;
+                string source = "";
 
-                Write(prefab);
+                if (PrefabManager.Clones.TryGetValue(prefabName, out Clone c))
+                {
+                    isClone = true;
+                    source = c.PrefabName;
+                }
+
+                Write(prefab, isClone, source);
                 return true;
             }, PrefabManager.GetAllPrefabNames<ItemDrop>);
 
@@ -126,7 +139,7 @@ public static class EggManager
 
         var clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
         {
-            if (args.Length < 3)
+            if (args.Length < 4)
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return true;
@@ -141,7 +154,11 @@ public static class EggManager
             }
 
             var prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null) return true;
+            if (prefab == null)
+            {
+                MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
+                return true;
+            }
 
             if (!prefab.GetComponent<ItemDrop>())
             {

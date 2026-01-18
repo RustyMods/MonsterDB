@@ -20,7 +20,7 @@ public class ItemDataSharedRef : Reference
     public int? m_value;
     public bool? m_teleportable;
     public int? m_toolTier;
-    public string[] m_icons;
+    public string[]? m_icons;
     public HitData.DamageTypes? m_damages;
     public float? m_attackForce;
     public float? m_backstabBonus;

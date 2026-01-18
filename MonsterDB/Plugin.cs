@@ -35,6 +35,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
         ItemManager.Setup();
         FishManager.Setup();
         EggManager.Setup();
+        VisualManager.Setup();
         ProjectileManager.Setup();
         SpawnAbilityManager.Setup();
         
