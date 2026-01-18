@@ -1,0 +1,17 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: MDB_Stag_Eikthyr_charge
+ClonedFrom: Eikthyr_charge
+IsCloned: true
+ItemData:
+  damages:
+    pierce: 15
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_HitSparks
+    - prefab: sfx_wolf_attack_hit
+  startEffect:
+    effectPrefabs: []
+  triggerEffect:
+    effectPrefabs: []

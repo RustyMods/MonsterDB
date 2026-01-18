@@ -1,0 +1,122 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Unbjorn_ragdoll
+Ragdoll:
+  ttl: 4
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+  float: true
+  floatOffset: 0.2
+Visuals:
+  scale:
+    x: 1.3
+    y: 1.3
+    z: 1.3
+  renderers:
+  - prefab: Asora
+    parent: Unbjorn_ragdoll
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Cube.001
+    parent: Unbjorn_ragdoll
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Cube.002
+    parent: Unbjorn_ragdoll
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Cube.002 (1)
+    parent: Unbjorn_ragdoll
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Plane
+    parent: Unbjorn_ragdoll
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Sphere
+    parent: Unbjorn_ragdoll
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Sphere (1)
+    parent: Unbjorn_ragdoll
+    index: 7
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d

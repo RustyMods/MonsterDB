@@ -1,0 +1,260 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: DvergerStaffIce_projectile
+ProjectileData:
+  prefab: DvergerStaffIce_projectile
+  type: Magic, Frost
+  damage: {}
+  aoe: 3
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_DvergerMage_Ice_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: DvergerStaffIce_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: coldball
+      shader: Standard
+      color: '#E5F2FFFF'
+      emissionTexture: flint
+      emissionColor: '#00FFFFFF'
+      mainTexture: iron
+  - prefab: smoke
+    parent: DvergerStaffIce_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: flames
+    parent: smoke
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: sparcs_world
+    parent: smoke
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  lights:
+  - prefab: Point light
+    parent: DvergerStaffIce_projectile
+    index: 1
+    active: true
+    color: '#74D7FFFF'
+    type: Point
+    intensity: 2
+    range: 3
+  particleSystems:
+  - prefab: smoke
+    parent: DvergerStaffIce_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#8BD4FF79'
+      colorMin: '#FF00FF00'
+      colorMax: '#8BD4FF79'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#8BD4FF79'
+      colorMin: '#0000FF00'
+      colorMax: '#8BD4FF79'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.02352941
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.02352941
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames
+    parent: smoke
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000FF00'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: sparcs_world
+    parent: smoke
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000FF00'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

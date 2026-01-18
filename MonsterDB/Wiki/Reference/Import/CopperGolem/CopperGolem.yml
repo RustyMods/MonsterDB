@@ -1,0 +1,79 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: CopperGolem
+ClonedFrom: StoneGolem
+IsCloned: true
+Character:
+  name: $enemy_coppergolem
+  faction: ForestMonsters
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_stonegolem_death
+    - prefab: CopperGolem_ragdoll
+    - prefab: vfx_stonegolem_death
+  randomArmor:
+  - MDB_CopperGolem_StoneGolem_hat
+  randomSets:
+  - name: Spike
+    items:
+    - stonegolem_attack1_spike
+    - stonegolem_attack3_spikesweep
+    - MDB_CopperGolem_StoneGolem_spikes
+  - name: Sledge
+    items:
+    - stonegolem_attack2_left_groundslam
+    - stonegolem_attack_doublesmash
+    - MDB_CopperGolem_StoneGolem_clubs
+Visuals:
+  renderers:
+  - prefab: Cube.001
+    parent: Visual
+    index: 1
+    materials:
+    - name: MountainGolem_mat
+      mainTexture: copper_ore_big_d
+
+# If field removed, will remove component
+Drops:
+  drops:
+  # - prefab: TrophySGolem
+  #   chance: 0.05
+  #   levelMultiplier: false
+  - prefab: Stone
+    amountMin: 5
+    amountMax: 10
+  - prefab: CopperOre
+    amountMin: 8
+    amountMax: 12
+# If entries removed, will still be registered, set enabled to false to disable
+SpawnData:
+- name: MDB CopperGolem Spawn Data
+  enabled: true
+  prefab: CopperGolem
+  biome: None
+  # Edge, Median, Everything
+  biomeArea: Everything
+  maxSpawned: 1
+  spawnInterval: 4
+  spawnChance: 100
+  spawnAtNight: true
+  spawnAtDay: true
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- footstep
+- random
+- idle
+- attack
+- attack2
+- attack3
+- doublesmash
+- sonicboom
+- stagger
+- sleeping

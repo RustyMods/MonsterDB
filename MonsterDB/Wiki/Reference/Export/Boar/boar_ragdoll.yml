@@ -1,0 +1,98 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: boar_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: -0.2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Fangs 001
+    parent: boar_ragdoll
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Boar Brown
+  - prefab: Fangs 002
+    parent: boar_ragdoll
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Boar Brown
+  - prefab: Fangs 003
+    parent: boar_ragdoll
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Boar Brown
+  - prefab: Fangs 004
+    parent: boar_ragdoll
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Boar Brown
+  - prefab: Fangs 005
+    parent: boar_ragdoll
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Boar Brown
+  - prefab: Fangs 006
+    parent: boar_ragdoll
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Boar Brown
+  - prefab: Poly Art Boar
+    parent: boar_ragdoll
+    index: 7
+    active: true
+    enabled: true
+    materials:
+    - name: Boar Skin Valheim
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Boar_valheim_d

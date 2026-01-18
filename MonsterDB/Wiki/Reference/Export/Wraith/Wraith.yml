@@ -1,0 +1,658 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Wraith
+Character:
+  name: $enemy_wraith
+  faction: Undead
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 2.5
+  turnSpeed: 200
+  runSpeed: 5
+  runTurnSpeed: 200
+  acceleration: 0.1
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: true
+  flySlowSpeed: 2.5
+  flyFastSpeed: 5
+  flyTurnSpeed: 200
+  canSwim: false
+  swimDepth: 2
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_wraith_hit
+    - prefab: sfx_wraith_hit
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_wraith_death
+    - prefab: sfx_wraith_death
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 100
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Resistant
+    slash: Resistant
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Immune
+    poison: Immune
+    spirit: Weak
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - wraith_melee
+AI:
+  alertRange: 30
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: false
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 40
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_wraith_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_wraith_idle
+  idleSoundInterval: 8
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 60
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 10
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 0
+  flyAltitudeMax: 16
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: evil_smoke _bottom (1)
+    parent: head
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: wraith_smoke
+      shader: Custom/LitParticles
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: wildfire06
+  - prefab: evil_smoke _bottom (1)
+    parent: l_hand
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: wraith_smoke
+      shader: Custom/LitParticles
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: wildfire06
+  - prefab: evil_smoke _bottom (1)
+    parent: r_hand
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: wraith_smoke
+      shader: Custom/LitParticles
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: wildfire06
+  - prefab: evil_smoke _local
+    parent: spine3
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: wraith_smoke
+      shader: Custom/LitParticles
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: wildfire06
+  - prefab: evil_smoke _world
+    parent: Visual
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: wraith_smoke
+      shader: Custom/LitParticles
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: wildfire06
+  - prefab: evil_smoke _bottom
+    parent: Visual
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: wraith_smoke
+      shader: Custom/LitParticles
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: wildfire06
+  - prefab: chain
+    parent: wraith
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: wraith
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: wraith_d
+  - prefab: RagPlanes
+    parent: wraith
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: wraith
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: wraith_d
+  - prefab: wraith
+    parent: wraith
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: wraith
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: wraith_d
+  lights:
+  - prefab: Point light
+    parent: head
+    index: 1
+    active: true
+    color: '#69AEFFFF'
+    type: Point
+    intensity: 2
+    range: 10
+  particleSystems:
+  - prefab: evil_smoke _bottom (1)
+    parent: l_hand
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#000000FF'
+      colorMin: '#060606FF'
+      colorMax: '#000000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#000000FF'
+      colorMin: '#000006FF'
+      colorMax: '#000000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke _bottom (1)
+    parent: head
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#000000FF'
+      colorMin: '#060606FF'
+      colorMax: '#000000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#000000FF'
+      colorMin: '#000006FF'
+      colorMax: '#000000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke _bottom (1)
+    parent: r_hand
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#000000FF'
+      colorMin: '#060606FF'
+      colorMax: '#000000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#000000FF'
+      colorMin: '#000006FF'
+      colorMax: '#000000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke _local
+    parent: spine3
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#020202CE'
+      colorMin: '#FF00FF00'
+      colorMax: '#020202CE'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#020202CE'
+      colorMin: '#0000FF00'
+      colorMax: '#020202CE'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.07058824
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.07058824
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke _world
+    parent: Visual
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#000000FF'
+      colorMin: '#060606FF'
+      colorMax: '#000000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#000000FF'
+      colorMin: '#000006FF'
+      colorMax: '#000000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke _bottom
+    parent: Visual
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#000000FF'
+      colorMin: '#060606FF'
+      colorMax: '#000000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#000000FF'
+      colorMin: '#000006FF'
+      colorMax: '#000000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 1
+          time: 0.5000076
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyWraith
+    chance: 0.05
+    levelMultiplier: false
+  - prefab: Chain
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- idle
+- attack
+- stagger

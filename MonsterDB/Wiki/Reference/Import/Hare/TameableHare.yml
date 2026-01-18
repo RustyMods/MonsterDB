@@ -1,0 +1,37 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Character
+Prefab: Hare
+AI:
+  consumeItems:
+  - Carrot
+  consumeRange: 1
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+# If field removed, will remove component
+Drops: {}
+Tameable:
+  fedDuration: 600
+  tamingTime: 1800
+  startsTamed: false
+  tamedEffect:
+    effectPrefabs:
+      - prefab: fx_creature_tamed
+  sootheEffect:
+    effectPrefabs:
+      - prefab: vfx_creature_soothed
+  petEffect:
+    effectPrefabs:
+      - prefab: fx_boar_pet
+  commandable: false
+  unsummonDistance: 0
+  unsummonOnOwnerLogoutSeconds: 0
+  levelUpOwnerSkill: None
+  levelUpFactor: 1
+  # saddleItem: Carrot
+  dropSaddleOnDeath: true
+  dropItemVel: 5
+  tamingSpeedMultiplierRange: 60
+  tamingBoostMultiplier: 2
+  nameBeforeText: true
+  tameText: $hud_tamelove

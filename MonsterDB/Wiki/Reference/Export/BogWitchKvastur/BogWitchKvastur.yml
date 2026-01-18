@@ -1,0 +1,206 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: BogWitchKvastur
+Character:
+  name: $enemy_kvastur
+  faction: Dverger
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 2
+  turnSpeed: 200
+  runSpeed: 6
+  runTurnSpeed: 200
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 1.6
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_shrub_2_hit
+    - prefab: sfx_wood_blocked
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_barrle_destroyed
+    - prefab: sfx_kvastur_death
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 700
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Weak
+    pickaxe: Ignore
+    fire: VeryWeak
+    poison: Immune
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - BogWitchKvastur_attack
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 1
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 30
+  minAttackInterval: 0
+  circleTargetInterval: 20
+  circleTargetDuration: 2
+  circleTargetDistance: 8
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 10
+  viewAngle: 360
+  hearRange: 20
+  mistVision: false
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_BogwitchKvastur_idle
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 15
+  randomMoveInterval: 30
+  randomMoveRange: 3
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: true
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Cube
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Kvastur_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: BogWitch_e
+      emissionColor: '#00FFFFFF'
+      mainTexture: Kvastur_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: Wood
+  - prefab: Resin
+  - prefab: TrophyKvastur
+    levelMultiplier: false
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- idle
+- attack
+- stagger

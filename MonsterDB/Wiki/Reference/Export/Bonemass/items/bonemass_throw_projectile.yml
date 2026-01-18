@@ -1,0 +1,260 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: bonemass_throw_projectile
+ProjectileData:
+  prefab: bonemass_throw_projectile
+  type: Physical
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_ProjectileHit
+    - prefab: vfx_ProjectileHit
+    - prefab: sfx_troll_attack_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: bonemass_spawn
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: default
+    parent: bonemass_throw_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: mud_projectile
+      shader: Custom/Bonemass
+      color: '#FFFFFFFF'
+      mainTexture: bonemass_flow_d
+  - prefab: wetsplsh
+    parent: particles
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: slime_green
+      shader: Lux Lit Particles/ Bumped
+      color: '#8EB362FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: flies
+    parent: particles
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Default-Particle
+      shader: Legacy Shaders/Particles/Alpha Blended Premultiply
+      mainTexture: Default-Particle
+  - prefab: ooz
+    parent: particles
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  particleSystems:
+  - prefab: wetsplsh
+    parent: particles
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#6F5F1FFF'
+      colorMin: '#576D24FF'
+      colorMax: '#6F5F1FFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#6F5F1FFF'
+      colorMin: '#000024FF'
+      colorMax: '#6F5F1FFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flies
+    parent: particles
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#B8AD7EFF'
+      colorMin: '#A1A078FF'
+      colorMax: '#B8AD7EFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#B8AD7EFF'
+      colorMin: '#000078FF'
+      colorMax: '#B8AD7EFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.08529793
+        - alpha: 1
+          time: 0.9294118
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.08529793
+        - alpha: 1
+          time: 0.9294118
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: ooz
+    parent: particles
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#B9FF804F'
+      colorMin: '#F4FF8E4A'
+      colorMax: '#B9FF804F'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#B9FF804F'
+      colorMin: '#00008E4A'
+      colorMax: '#B9FF804F'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

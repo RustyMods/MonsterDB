@@ -1,0 +1,130 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: ShieldWood
+ItemData:
+  name: $item_shield_wood
+  description: $item_shield_wood_description
+  maxStackSize: 1
+  maxQuality: 3
+  scaleByQuality: 0
+  weight: 4
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  icons:
+  - shield_wood0
+  - shield_wood1
+  - shield_wood2
+  - shield_wood3
+  damages: {}
+  attackForce: 40
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_clubhit
+    - prefab: sfx_club_hit
+  blockEffect:
+    effectPrefabs:
+    - prefab: sfx_wood_blocked
+    - prefab: vfx_blocked
+    - prefab: fx_block_camshake
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_club_swing
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: ShieldWood
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: '#FFFFFFFF'
+  - prefab: model
+    parent: attach
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: shieldwood
+      shader: Custom/Creature
+      color: '#E8E8E8FF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: shieldwood_d
+  particleSystems:
+  - prefab: ShieldWood
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FF6565FF'
+      colorMin: '#FFE240FF'
+      colorMax: '#FF6565FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF6565FF'
+      colorMin: '#000040FF'
+      colorMax: '#FF6565FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

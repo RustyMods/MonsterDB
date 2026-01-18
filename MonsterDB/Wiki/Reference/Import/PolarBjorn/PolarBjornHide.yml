@@ -1,0 +1,19 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: PolarBjornHide
+ClonedFrom: BjornHide
+IsCloned: true
+ItemData:
+  name: $item_polarbjornhide
+  description: $item_polarbjornhide_description
+  icons:
+  - PolarBjornHide
+Visuals:
+  renderers:
+  - prefab: model
+    parent: PolarBjornHide
+    index: 0
+    materials:
+    - name: bearhide_mat
+      mainTexture: Polarbearhide_d

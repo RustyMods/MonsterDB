@@ -1,0 +1,22 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Leech_cave
+Character:
+  name: $enemy_leech_cave
+# If field removed, will remove component
+Drops: {}
+# If entries removed, will still be registered, set enabled to false to disable
+SpawnData:
+- name: Leech_cave SpawnData
+  enabled: true
+  prefab: Leech_cave
+  biome: DeepNorth
+  # Edge, Median, Everything
+  biomeArea: Everything
+  maxSpawned: 1
+  maxAltitude: 0
+  spawnInterval: 4
+  spawnChance: 100
+  spawnAtNight: true
+  spawnAtDay: true

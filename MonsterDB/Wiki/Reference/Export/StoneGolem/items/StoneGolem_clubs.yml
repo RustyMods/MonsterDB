@@ -1,0 +1,50 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: StoneGolem_clubs
+ItemData:
+  maxStackSize: 1
+  maxQuality: 1
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages: {}
+  attackForce: 30
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Cube.002
+    parent: Mountain_Golem_dualSledge
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: MountainGolem_ExtraParts_Mat
+      shader: Standard
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: GolemExtraparts_d

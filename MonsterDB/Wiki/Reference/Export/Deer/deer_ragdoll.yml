@@ -1,0 +1,32 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: deer_ragdoll
+Ragdoll:
+  velMultiplier: 1.4
+  ttl: 4
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: -0.1
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Deer 003
+    parent: deer_ragdoll
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Deer 2
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Deer Pixel

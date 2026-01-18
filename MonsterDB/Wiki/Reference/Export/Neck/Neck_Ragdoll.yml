@@ -1,0 +1,48 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Neck_Ragdoll
+Ragdoll:
+  velMultiplier: 2
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: -0.2
+Visuals:
+  scale:
+    x: 0.3
+    y: 0.3
+    z: 0.3
+  renderers:
+  - prefab: Body
+    parent: Neck_Ragdoll
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: neck
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: neck_emission
+      emissionColor: '#FFFFFFFF'
+      mainTexture: neck_d
+  - prefab: Lillies
+    parent: Neck_Ragdoll
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: neck
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: neck_emission
+      emissionColor: '#FFFFFFFF'
+      mainTexture: neck_d

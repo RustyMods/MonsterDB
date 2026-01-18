@@ -1,0 +1,37 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: PolarLoxPelt
+ClonedFrom: LoxPelt
+IsCloned: true
+ItemData:
+  name: $item_polarloxpelt
+  description: $item_polarloxpelt_description
+  icons:
+  - Polarloxpelt
+Visuals:
+  renderers:
+  - prefab: model
+    parent: PolarLoxPelt
+    index: 0
+    materials:
+    - name: loxpelt
+      mainTexture: Polarrug_fur
+  - prefab: top1
+    parent: PolarLoxPelt
+    index: 1
+    materials:
+    - name: loxpelt_top
+      mainTexture: Polarrug_fur_top
+  - prefab: top1 (2)
+    parent: PolarLoxPelt
+    index: 2
+    materials:
+    - name: loxpelt_top
+      mainTexture: Polarrug_fur_top
+  - prefab: top1 (1)
+    parent: PolarLoxPelt
+    index: 3
+    materials:
+    - name: loxpelt_top
+      mainTexture: Polarrug_fur_top

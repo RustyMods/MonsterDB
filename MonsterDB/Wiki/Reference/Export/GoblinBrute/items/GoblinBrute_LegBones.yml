@@ -1,0 +1,55 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: GoblinBrute_LegBones
+ItemData:
+  name: Iron plate armor
+  description: $item_chest_iron_description
+  maxStackSize: 1
+  maxQuality: 4
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages: {}
+  attackForce: 10
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: attach_skin
+    parent: GoblinBrute_LegBones
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: BruteArmor_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Gear_d

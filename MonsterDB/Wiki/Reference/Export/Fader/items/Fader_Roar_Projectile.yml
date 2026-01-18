@@ -1,0 +1,478 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: Fader_Roar_Projectile
+ProjectileData:
+  prefab: Fader_Roar_Projectile
+  type: Magic
+  damage: {}
+  aoe: 3
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 20
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_Fader_Roar_Projectile_Hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: Fader_Roar_Spawn
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: Fader_Roar_Projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: slime_green
+      shader: Lux Lit Particles/ Bumped
+      color: '#8EB362FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: flames
+    parent: Fader_Roar_Projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: flames_world
+    parent: Fader_Roar_Projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+    - name: fireworks_trail_strong
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework_Trail
+  - prefab: Spores_World
+    parent: Fader_Roar_Projectile
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+  lights:
+  - prefab: Point light
+    parent: Fader_Roar_Projectile
+    index: 3
+    active: true
+    color: '#7DFF4DFF'
+    type: Point
+    intensity: 3
+    range: 4
+  particleSystems:
+  - prefab: flames
+    parent: Fader_Roar_Projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#55FF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#55FF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#078000FF'
+            time: 0
+          - color: '#7D1300FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#078000FF'
+            time: 0
+          - color: '#7D1300FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_world
+    parent: Fader_Roar_Projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#00FF192F'
+      colorMin: '#FF00FF00'
+      colorMax: '#00FF192F'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#56FF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#56FF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#71FF5DFF'
+            time: 0
+          - color: '#000000FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#71FF5DFF'
+            time: 0
+          - color: '#000000FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Spores_World
+    parent: Fader_Roar_Projectile
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#12FF1991'
+      colorMin: '#00FF5BFF'
+      colorMax: '#12FF1991'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FFFFFF'
+            time: 0
+          - color: '#00FFFFFF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FFFFFF'
+            time: 0
+          - color: '#00FFFFFF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FFFFFF'
+            time: 0
+          - color: '#000000FF'
+            time: 0.602945
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FFFFFF'
+            time: 0
+          - color: '#000000FF'
+            time: 0.602945
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.04705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.04705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma

@@ -1,0 +1,107 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Bjorn_ragdoll
+Ragdoll:
+  ttl: 4
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+  float: true
+  floatOffset: 0.2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: arrow
+    parent: Bjorn_ragdoll
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d
+  - prefab: Asora
+    parent: Bjorn_ragdoll
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d
+  - prefab: Cube.001
+    parent: Bjorn_ragdoll
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d
+  - prefab: Cube.002
+    parent: Bjorn_ragdoll
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d
+  - prefab: Plane
+    parent: Bjorn_ragdoll
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d
+  - prefab: Sphere
+    parent: Bjorn_ragdoll
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d

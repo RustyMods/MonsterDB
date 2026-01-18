@@ -1,0 +1,78 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Hatchling_ragdoll
+Ragdoll:
+  velMultiplier: 4
+  ttl: 3
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: -0.2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: eyes
+    parent: Hatchling_mountain
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Hatchling
+    parent: Hatchling_mountain
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Hatchling.001
+    parent: Hatchling_mountain
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Horns
+    parent: Hatchling_mountain
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D

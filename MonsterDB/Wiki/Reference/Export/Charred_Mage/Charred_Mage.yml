@@ -1,0 +1,670 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Charred_Mage
+Character:
+  name: $enemy_charred_mage
+  faction: Demon
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 1.5
+  speed: 1.5
+  turnSpeed: 400
+  runSpeed: 4
+  runTurnSpeed: 300
+  acceleration: 1
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 1.3
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: true
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_charred_hit
+    - prefab: sfx_charred_hurt
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_charred_death
+    - prefab: sfx_charred_death
+      follow: true
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 600
+  regenAllHPTime: 3600
+  damageModifiers:
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: VeryResistant
+    frost: Resistant
+    poison: Immune
+    spirit: Weak
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Charred_HipCloth
+  - charred_magestaff_fire
+  - Charred_MageCloths
+  - charred_magestaff_summon
+  randomItems:
+  - prefab: Charred_Helmet
+    chance: 0.5
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 60
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 2
+  circleTargetDistance: 4
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_charred_alert
+      follow: true
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_charred_idle
+      follow: true
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: false
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 5
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.1
+    emissiveColor: '#00000000'
+    enableObject: 1-Star FX
+  - scale: 1.2
+    emissiveColor: '#00000000'
+    enableObject: 2-Star FX
+  renderers:
+  - prefab: 1-Star FX
+    parent: 2-Star FX
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: fireworks_poof
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework
+  - prefab: EyeGlow
+    parent: Head
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: '#FFFFFFFF'
+  - prefab: EyeGlow (1)
+    parent: Head
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: '#FFFFFFFF'
+  - prefab: fx_charred_chestglow
+    parent: Spine2
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: glow
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: point
+      tintColor: '#FFFFFF80'
+  - prefab: 1-Star FX
+    parent: Spine2
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: fireworks_poof
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework
+  - prefab: 2-Star FX
+    parent: Spine2
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: fireworks_poof
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework
+  - prefab: Body
+    parent: TheCharred
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Charred_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Charred_e
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_d
+  - prefab: Eyes
+    parent: TheCharred
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Charred_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Charred_e
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_d
+  - prefab: Sinew
+    parent: TheCharred
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Charred_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Charred_e
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_d
+  - prefab: Skull
+    parent: TheCharred
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Charred_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Charred_e
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_d
+  particleSystems:
+  - prefab: EyeGlow
+    parent: Head
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF0000FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF0000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF0000FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF0000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: EyeGlow (1)
+    parent: Head
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF0000FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF0000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF0000FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF0000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: fx_charred_chestglow
+    parent: Spine2
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#F10E01FF'
+      colorMin: '#0000FF00'
+      colorMax: '#F10E01FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#F10E01FF'
+      colorMin: '#0000FF00'
+      colorMax: '#F10E01FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4764782
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4764782
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: 1-Star FX
+    parent: Spine2
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF00001D'
+      colorMin: '#0000FF00'
+      colorMax: '#FF00001D'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF00001D'
+      colorMin: '#0000FF00'
+      colorMax: '#FF00001D'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+  - prefab: 2-Star FX
+    parent: Spine2
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF9E001D'
+      colorMin: '#0000FF00'
+      colorMax: '#FF9E001D'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF9E001D'
+      colorMin: '#0000FF00'
+      colorMax: '#FF9E001D'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+  - prefab: 1-Star FX
+    parent: 2-Star FX
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF00001D'
+      colorMin: '#0000FF00'
+      colorMax: '#FF00001D'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF00001D'
+      colorMin: '#0000FF00'
+      colorMax: '#FF00001D'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: CharredBone
+    amountMax: 3
+  - prefab: TrophyCharredMage
+    chance: 0.05
+    levelMultiplier: false
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- footstep
+- idle
+- inWater
+- dead
+- wakeup
+- jump
+- attack_swing
+- attack_bow
+- stagger
+- attack_thrust
+- attack_swingfeint
+- statef
+- statei
+- attack_volley
+- attack_thrustfeint
+- attack_bolt
+- attack_fireaoe
+- attack_beam
+- attack_beamloop
+- block
+- taunt
+- attack_throw
+- attack_scratch_l
+- attack_scratch_r

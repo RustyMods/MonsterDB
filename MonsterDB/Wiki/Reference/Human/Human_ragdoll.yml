@@ -1,0 +1,41 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Human_ragdoll
+ClonedFrom: Player_ragdoll
+IsCloned: true
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 60
+  float: true
+  floatOffset: -0.3
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: PlayerCharacter_01
+    parent: Human_ragdoll
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: PlayerMaterial
+      shader: Custom/Player
+      mainTexture: PlayerCharacter_01
+    - name: PlayerHair
+      shader: Custom/Player
+      mainTexture: Hair_01_bw
+  - prefab: body
+    parent: player_male
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: PlayerMaterial
+      shader: Custom/Player
+      mainTexture: PlayerCharacter_01
+    - name: PlayerHair
+      shader: Custom/Player
+      mainTexture: Hair_01_bw

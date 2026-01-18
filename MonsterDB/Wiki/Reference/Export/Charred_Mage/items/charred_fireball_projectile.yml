@@ -1,0 +1,299 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: charred_fireball_projectile
+ProjectileData:
+  prefab: charred_fireball_projectile
+  type: Magic
+  damage: {}
+  aoe: 0
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 20
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_fireball_staff_explosion
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: charred_fireball_aoe
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: charred_fireball_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: dverger_fireball_green
+      shader: Standard
+      color: '#FFE5E5FF'
+      emissionTexture: flint
+      emissionColor: '#00FFFFFF'
+      mainTexture: iron
+  - prefab: flames
+    parent: charred_fireball_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: flames_world
+    parent: charred_fireball_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: ring_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: water_ring
+  lights:
+  - prefab: Point light
+    parent: charred_fireball_projectile
+    index: 3
+    active: true
+    color: '#4DFFA4FF'
+    type: Point
+    intensity: 3
+    range: 4
+  particleSystems:
+  - prefab: flames
+    parent: charred_fireball_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#419549FF'
+            time: 0
+          - color: '#317138FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#419549FF'
+            time: 0
+          - color: '#317138FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FF5DFF'
+            time: 0
+          - color: '#0A9C77FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FF5DFF'
+            time: 0
+          - color: '#0A9C77FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+  - prefab: flames_world
+    parent: charred_fireball_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#419549FF'
+            time: 0
+          - color: '#317138FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#419549FF'
+            time: 0
+          - color: '#317138FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FF5DFF'
+            time: 0
+          - color: '#0A9C77FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#00FF5DFF'
+            time: 0
+          - color: '#0A9C77FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      colorMin: '#0000FF00'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

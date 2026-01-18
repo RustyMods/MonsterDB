@@ -1,0 +1,33 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Fenring_ragdoll
+Ragdoll:
+  velMultiplier: 2
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: -0.1
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Fenring.001
+    parent: Fenring_ragdoll
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: fenring
+      shader: Custom/Creature
+      color: '#ACACACFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Fenring_e
+      emissionColor: '#FF5F00FF'
+      mainTexture: Fenring_d

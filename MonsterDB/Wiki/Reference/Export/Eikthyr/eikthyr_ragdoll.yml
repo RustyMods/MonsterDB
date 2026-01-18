@@ -1,0 +1,88 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: eikthyr_ragdoll
+Ragdoll:
+  ttl: 8
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+  float: true
+  floatOffset: -0.2
+Visuals:
+  scale:
+    x: 2
+    y: 2
+    z: 2
+  renderers:
+  - prefab: chains
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: '#FF0000FF'
+      mainTexture: NewEikthyr_d
+  - prefab: Deer
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: '#FF0000FF'
+      mainTexture: NewEikthyr_d
+  - prefab: extrafur
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: '#FF0000FF'
+      mainTexture: NewEikthyr_d
+  - prefab: mane
+    parent: Visual
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: '#FF0000FF'
+      mainTexture: NewEikthyr_d
+  - prefab: Shedding
+    parent: Visual
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_shedding
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: NewEikthyr_d

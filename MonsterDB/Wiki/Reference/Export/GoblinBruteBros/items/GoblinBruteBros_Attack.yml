@@ -1,0 +1,201 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: GoblinBruteBros_Attack
+ItemData:
+  name: Brute sword
+  maxStackSize: 1
+  maxQuality: 7
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 2
+  damages:
+    blunt: 150
+    chop: 100
+    pickaxe: 40
+  attackForce: 100
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attack:
+    attackType: Horizontal
+    attackAnimation: attack
+    attackRandomAnimations: 2
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0
+    speedFactorRotation: 1
+    attackStartNoise: 10
+    attackHitNoise: 40
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 4
+    attackHeight: 1.5
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 70
+    attackRayWidth: 0.8
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: false
+    hitPointtype: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 1
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 10
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+  aiAttackRange: 3
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 45
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_HitSparks
+    - prefab: sfx_goblinbrute_clubhit
+  hitTerrainEffect:
+    effectPrefabs:
+    - prefab: fx_goblinbrute_groundslam
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_sword_swing
+  triggerEffect:
+    effectPrefabs:
+    - prefab: fx_swing_camshake
+  trailStartEffect:
+    effectPrefabs:
+    - prefab: sfx_goblinbrute_clubswing
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: GoblinBruteBros_Attack
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: '#FFFFFFFF'
+  - prefab: mace
+    parent: attach
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: SavageMace_Mat
+      shader: Custom/Creature
+      color: '#D8C8A0FF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: SavageMace_d
+  particleSystems:
+  - prefab: GoblinBruteBros_Attack
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FF6565FF'
+      colorMin: '#FFE240FF'
+      colorMax: '#FF6565FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF6565FF'
+      colorMin: '#000040FF'
+      colorMax: '#FF6565FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

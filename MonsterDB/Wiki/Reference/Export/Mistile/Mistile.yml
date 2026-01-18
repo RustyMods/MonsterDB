@@ -1,0 +1,700 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Mistile
+Character:
+  name: $enemy_mistile
+  faction: Dverger
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 4
+  speed: 2.5
+  turnSpeed: 200
+  runSpeed: 4
+  runTurnSpeed: 200
+  acceleration: 0.1
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: true
+  flySlowSpeed: 5
+  flyFastSpeed: 5
+  flyTurnSpeed: 500
+  canSwim: false
+  swimDepth: 0.5
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: true
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_DvergerMage_Mistile_attack
+      variant: 0
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_DvergerMage_Mistile_die
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 1
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Mistile_kamikaze
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: true
+  enableHuntPlayer: false
+  attackPlayerObjects: false
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 30
+  mistVision: false
+  idleSoundInterval: 8
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 60
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 8
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 0.6
+  flyAltitudeMax: 12
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: true
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: flames
+    parent: flame
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: '#FFFFFFFF'
+  - prefab: smoke (1)
+    parent: flame
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: fog
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dirt
+  - prefab: flames_local
+    parent: flame
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: '#FFFFFFFF'
+  - prefab: flare
+    parent: flame
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: light_glow
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: point
+      tintColor: '#FFFFFF80'
+  - prefab: embers
+    parent: flame
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: Mistile_sparks
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FF0000FF'
+  - prefab: distortiion
+    parent: flame
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: demister
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+      mainTexture: demister_d
+  - prefab: energy
+    parent: flame
+    index: 6
+    active: false
+    enabled: true
+    materials:
+    - name: demister
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FFFFFFFF'
+      mainTexture: demister_d
+  - prefab: sparks
+    parent: flame
+    index: 7
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_unlit_red
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FF343BFF'
+  - prefab: Cube
+    parent: Visual
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: Deathsquito_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Deathsquito_e
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Deathsquito_d
+  lights:
+  - prefab: Point light
+    parent: effects
+    index: 1
+    active: true
+    color: '#EE433EFF'
+    type: Point
+    intensity: 1.5
+    range: 10
+  particleSystems:
+  - prefab: flames
+    parent: flame
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#9F9F9FFF'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#00009FFF'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2441138
+        - alpha: 1
+          time: 0.5147021
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFA9F7FF'
+          time: 0
+        - color: '#FC1CFFFF'
+          time: 0.1353018
+        - color: '#FF0300FF'
+          time: 0.3235371
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2441138
+        - alpha: 1
+          time: 0.5147021
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFA9F7FF'
+          time: 0
+        - color: '#FC1CFFFF'
+          time: 0.1353018
+        - color: '#FF0300FF'
+          time: 0.3235371
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: smoke (1)
+    parent: flame
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#5A5A5A80'
+      colorMin: '#A5A5A5AB'
+      colorMax: '#5A5A5A80'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#5A5A5A80'
+      colorMin: '#0000A5AB'
+      colorMax: '#5A5A5A80'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4794079
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFD800FF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 0.4705882
+        - color: '#838383FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4794079
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFD800FF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 0.4705882
+        - color: '#838383FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_local
+    parent: flame
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#D4D4D4FF'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000D4FF'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FF38F7FF'
+          time: 0
+        - color: '#FF0202FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FF38F7FF'
+          time: 0
+        - color: '#FF0202FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flare
+    parent: flame
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF383619'
+      colorMin: '#0000FF00'
+      colorMax: '#FF383619'
+  - prefab: embers
+    parent: flame
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF1100FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF1100FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF1100FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF1100FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFF138FF'
+          time: 0
+        - color: '#FF8332FF'
+          time: 0.1117723
+        - color: '#FF0202FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFF138FF'
+          time: 0
+        - color: '#FF8332FF'
+          time: 0.1117723
+        - color: '#FF0202FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: distortiion
+    parent: flame
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFD0'
+      colorMin: '#0000FF00'
+      colorMax: '#FFFFFFD0'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFD0'
+      colorMin: '#0000FF00'
+      colorMax: '#FFFFFFD0'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.09117266
+        - alpha: 1
+          time: 0.3294118
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.09117266
+        - alpha: 1
+          time: 0.3294118
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: energy
+    parent: flame
+    index: 6
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#5C03DB35'
+      colorMin: '#2B7BAD2B'
+      colorMax: '#5C03DB35'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#5C03DB35'
+      colorMin: '#0000AD2B'
+      colorMax: '#5C03DB35'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.09117266
+        - alpha: 1
+          time: 0.4852979
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.09117266
+        - alpha: 1
+          time: 0.4852979
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: sparks
+    parent: flame
+    index: 7
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#ABC6CAFF'
+      colorMin: '#9DB9BEFF'
+      colorMax: '#ABC6CAFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#ABC6CAFF'
+      colorMin: '#0000BEFF'
+      colorMax: '#ABC6CAFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0.9735294
+          time: 0.2235294
+        - alpha: 1
+          time: 0.7911803
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0.9735294
+          time: 0.2235294
+        - alpha: 1
+          time: 0.7911803
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+TimedDestruction:
+  timeoutMin: 20
+  timeoutMax: 25
+  triggerOnAwake: true
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- idle
+- attack
+- flying
+- fly_takeoff
+- fly_land

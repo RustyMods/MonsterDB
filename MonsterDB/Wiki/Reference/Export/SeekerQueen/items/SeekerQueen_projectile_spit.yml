@@ -1,0 +1,654 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: SeekerQueen_projectile_spit
+ProjectileData:
+  prefab: SeekerQueen_projectile_spit
+  type: Physical
+  damage: {}
+  aoe: 1.5
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: SeekerQueen_spithit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: SeekerQueen_SpitSpawnAbility
+  spawnOnHitChance: 0.3
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: true
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: blood_decal
+    parent: drops-withdecals
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_blood_splat
+      shader: Custom/Decal
+      color: '#8E8E8EFF'
+      mainTexture: brains
+  - prefab: blob_splat
+    parent: flow
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: puke
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: Sphere
+    parent: SeekerQueen_projectile_spit
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: spit_blob
+      shader: Custom/Blob
+      color: '#C8C8C8FF'
+  - prefab: wetsplsh
+    parent: SeekerQueen_projectile_spit
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: flames
+    parent: SeekerQueen_projectile_spit
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: flow
+    parent: SeekerQueen_projectile_spit
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: barnacle_piece
+      shader: Custom/AlphaParticle
+      color: '#FFFFFFFF'
+      mainTexture: water_foam
+  - prefab: flames_world
+    parent: SeekerQueen_projectile_spit
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: wetsplsh (1)
+    parent: SeekerQueen_projectile_spit
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: queenslime
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#B7B371FF'
+      mainTexture: slime_splash_2
+  - prefab: drops-withdecals
+    parent: SeekerQueen_projectile_spit
+    index: 7
+    active: false
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: drops
+    parent: SeekerQueen_projectile_spit
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  particleSystems:
+  - prefab: wetsplsh
+    parent: SeekerQueen_projectile_spit
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#86FF00FF'
+      colorMin: '#FF00FF00'
+      colorMax: '#86FF00FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#86FF00FF'
+      colorMin: '#0000FF00'
+      colorMax: '#86FF00FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames
+    parent: SeekerQueen_projectile_spit
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#000000FF'
+      colorMin: '#FF00FF00'
+      colorMax: '#000000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#000000FF'
+      colorMin: '#0000FF00'
+      colorMax: '#000000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flow
+    parent: SeekerQueen_projectile_spit
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#508000FF'
+      colorMin: '#8B9500FF'
+      colorMax: '#508000FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#508000FF'
+      colorMin: '#000000FF'
+      colorMax: '#508000FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0.9967049
+          time: 0.2323491
+        - alpha: 0.9735294
+          time: 0.7088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0.9967049
+          time: 0.2323491
+        - alpha: 0.9735294
+          time: 0.7088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: blob_splat
+    parent: flow
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#0E0E0EFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#0E0E0EFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#0E0E0EFF'
+      colorMin: '#0000FF00'
+      colorMax: '#0E0E0EFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.4352941
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#000000FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.4352941
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#000000FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_world
+    parent: SeekerQueen_projectile_spit
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#6B9500FF'
+      colorMin: '#FFF706FF'
+      colorMax: '#6B9500FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#6B9500FF'
+      colorMin: '#000006FF'
+      colorMax: '#6B9500FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1029374
+        - alpha: 0.9508156
+          time: 0.6676432
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1029374
+        - alpha: 0.9508156
+          time: 0.6676432
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh (1)
+    parent: SeekerQueen_projectile_spit
+    index: 6
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#E7DC8DFF'
+      colorMin: '#FFCA5AFF'
+      colorMax: '#E7DC8DFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#E7DC8DFF'
+      colorMin: '#00005AFF'
+      colorMax: '#E7DC8DFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: drops-withdecals
+    parent: SeekerQueen_projectile_spit
+    index: 7
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#FFF4817D'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000817D'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: blood_decal
+    parent: drops-withdecals
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#D9CE96FF'
+      colorMin: '#FFF370FF'
+      colorMax: '#D9CE96FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#D9CE96FF'
+      colorMin: '#000070FF'
+      colorMax: '#D9CE96FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.8147097
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.8147097
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: drops
+    parent: SeekerQueen_projectile_spit
+    index: 8
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#FFF4817D'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000817D'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

@@ -1,0 +1,132 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: charred_twitcher_projectile
+ProjectileData:
+  prefab: charred_twitcher_projectile
+  type: Magic
+  damage:
+    blunt: 95
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  attackForce: 30
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 40
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_charred_twitcher_throw_impact
+    - prefab: vfx_arrowhit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: trail
+    parent: charred_twitcher_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: trail
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: '#FFFFFFFF'
+    - name: fireworks_trail
+      shader: Particles/Standard Unlit2
+      color: '#E3E3E3FF'
+      emissionColor: '#000000FF'
+      mainTexture: Firework_Trail
+  - prefab: model
+    parent: charred_twitcher_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Charred_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Charred_e
+      emissionColor: '#FFFFFFFF'
+      mainTexture: Charred_d
+  particleSystems:
+  - prefab: trail
+    parent: charred_twitcher_projectile
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#BE0D00FF'
+      colorMax: '#BE0D00FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#BE0D00FF'
+      colorMax: '#BE0D00FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

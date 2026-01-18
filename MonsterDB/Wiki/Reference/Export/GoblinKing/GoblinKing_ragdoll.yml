@@ -1,0 +1,129 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: GoblinKing_ragdoll
+Ragdoll:
+  ttl: 3
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_large
+  float: true
+  floatOffset: 0
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: default
+    parent: Jaw
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: LowerArmHandLeft
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKingHair_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: LowerArmHandRight
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKingHair_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: Ribcage
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: ShoulderLeft
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: ShoulderRight
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: Skull
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d
+  - prefab: default
+    parent: Spine
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinKing_d

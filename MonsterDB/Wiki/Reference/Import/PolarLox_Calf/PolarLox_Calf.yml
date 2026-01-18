@@ -1,0 +1,33 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Character
+Prefab: PolarLox_Calf
+ClonedFrom: Lox_Calf
+IsCloned: true
+Character:
+  name: $enemy_polarloxcalf
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_loxcalf_death
+    - prefab: PolarLox_Calf_ragdoll
+Visuals:
+  renderers:
+  - prefab: Body
+    parent: offset
+    index: 1
+    materials:
+    - name: lox_calf
+      mainTexture: PolarLox_calf_d
+    - name: lox_calf
+      mainTexture: PolarLox_calf_d
+  - prefab: Furr1
+    parent: offset
+    index: 2
+    materials:
+    - name: lox_calf
+      mainTexture: PolarLox_calf_d
+# If field removed, will remove component
+Drops: {}
+# If field removed, will remove component
+GrowUp:
+  grownPrefab: PolarLox

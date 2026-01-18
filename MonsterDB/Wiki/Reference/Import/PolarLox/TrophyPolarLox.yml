@@ -1,0 +1,19 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: TrophyPolarLox
+ClonedFrom: TrophyLox
+IsCloned: true
+ItemData:
+  name: $item_trophy_polarlox
+  description: $item_trophy_polarlox_description
+  icons:
+  - PolarTrophyLox
+Visuals:
+  renderers:
+  - prefab: model
+    parent: attach
+    index: 0
+    materials:
+    - name: lox
+      mainTexture: PolarHalstein_d

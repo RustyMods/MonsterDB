@@ -1,0 +1,16 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Neck_hatchling_ragdoll
+ClonedFrom: Neck_Ragdoll
+IsCloned: true
+Visuals:
+  scale:
+    x: 0.15
+    y: 0.15
+    z: 0.15
+  renderers:
+  - prefab: Lillies
+    parent: Neck_hatchling_ragdoll
+    index: 2
+    active: false

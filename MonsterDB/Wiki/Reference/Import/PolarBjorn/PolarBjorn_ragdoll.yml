@@ -1,0 +1,45 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: PolarBjorn_ragdoll
+ClonedFrom: Bjorn_ragdoll
+IsCloned: true
+Visuals:
+  renderers:
+  - prefab: arrow
+    parent: PolarBjorn_ragdoll
+    index: 1
+    active: true
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d
+  - prefab: Asora
+    parent: PolarBjorn_ragdoll
+    index: 2
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d
+  - prefab: Cube.001
+    parent: PolarBjorn_ragdoll
+    index: 3
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d
+  - prefab: Cube.002
+    parent: PolarBjorn_ragdoll
+    index: 4
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d
+  - prefab: Plane
+    parent: PolarBjorn_ragdoll
+    index: 5
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d
+  - prefab: Sphere
+    parent: PolarBjorn_ragdoll
+    index: 6
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d

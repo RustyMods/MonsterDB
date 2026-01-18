@@ -1,0 +1,627 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Human
+Prefab: Human
+ClonedFrom: Player
+IsCloned: true
+Character:
+  name: Human
+  faction: Players
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 1.6
+  speed: 4
+  turnSpeed: 300
+  runSpeed: 7
+  runTurnSpeed: 300
+  acceleration: 0.8
+  # Jumping
+  jumpForce: 8
+  jumpForceForward: 2
+  jumpForceTiredFactor: 0.6
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 1.5
+  swimSpeed: 2
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_player_hit
+    - prefab: sfx_hit
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_player_death
+    - prefab: Human_ragdoll
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  tarEffects:
+    effectPrefabs:
+    - prefab: vfx_tar_surface
+      attach: true
+  slideEffects:
+    effectPrefabs:
+    - prefab: fx_slide
+      attach: true
+  jumpEffects:
+    effectPrefabs:
+    - prefab: sfx_jump
+  # Base Health
+  health: 100
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Immune
+    pickaxe: Immune
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.4
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 2.5
+  heatCooldownBase: 1
+  heatBuildupWater: 0.025
+  heatWaterTouchMultiplier: 0.1
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 60
+  lavaAirDamageHeight: 2.2
+  dayHeatGainRunning: 0
+  dayHeatGainStill: -0.1
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.8
+  lavaSlowHeight: 0.8
+  lavaHeatEffects:
+    effectPrefabs:
+    - prefab: fx_HotGround
+      variant: 0
+      attach: true
+  defaultItems:
+  - Torch
+  - ArmorRagsChest
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_eat
+  equipEffects:
+    effectPrefabs:
+    - prefab: sfx_equip
+  perfectBlockEffect:
+    effectPrefabs:
+    - prefab: vfx_perfectblock
+    - prefab: sfx_perfectblock
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 5
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 300
+  minAttackInterval: 0
+  circleTargetInterval: 15
+  circleTargetDuration: 6
+  circleTargetDistance: 20
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 40
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_dverger_vo_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_dverger_vo_idle
+      variant: 0
+  idleSoundInterval: 20
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 30
+  randomMoveRange: 3
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: true
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Particle System
+    parent: DevEffects
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: dev_smoke
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: dirt
+      tintColor: '#FFFFFFFF'
+  - prefab: Particle System_local
+    parent: DevEffects
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: dev_smoke
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: dirt
+      tintColor: '#FFFFFFFF'
+  - prefab: body
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: PlayerMaterial
+      shader: Custom/Player
+      mainTexture: PlayerCharacter_01
+    - name: PlayerHair
+      shader: Custom/Player
+      mainTexture: Hair_01_bw
+  lights:
+  - prefab: Point light
+    parent: DevEffects
+    index: 2
+    active: false
+    color: '#FF00F8FF'
+    type: Point
+    intensity: 1
+    range: 3
+  particleSystems:
+  - prefab: Particle System
+    parent: DevEffects
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#2B2B2BFF'
+      colorMin: '#FF000000'
+      colorMax: '#2B2B2BFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      colorMin: '#FF000000'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2411841
+        - alpha: 1
+          time: 0.6176547
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#810068FF'
+          time: 0.2529488
+        - color: '#0B0B0BFF'
+          time: 0.4911726
+        - color: '#7A0071FF'
+          time: 0.7353017
+        - color: '#585858FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2411841
+        - alpha: 1
+          time: 0.6176547
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#810068FF'
+          time: 0.2529488
+        - color: '#0B0B0BFF'
+          time: 0.4911726
+        - color: '#7A0071FF'
+          time: 0.7353017
+        - color: '#585858FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Particle System_local
+    parent: DevEffects
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#2B2B2BFF'
+      colorMax: '#2B2B2BFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#2B2B2BFF'
+      colorMax: '#2B2B2BFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2411841
+        - alpha: 1
+          time: 0.6176547
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#810068FF'
+          time: 0.2529488
+        - color: '#0B0B0BFF'
+          time: 0.4911726
+        - color: '#7A0071FF'
+          time: 0.7353017
+        - color: '#585858FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2411841
+        - alpha: 1
+          time: 0.6176547
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#810068FF'
+          time: 0.2529488
+        - color: '#0B0B0BFF'
+          time: 0.4911726
+        - color: '#7A0071FF'
+          time: 0.7353017
+        - color: '#585858FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  modelIndex:
+  - 0
+  - 1
+  beards:
+  - Beard1
+  - Beard2
+  - Beard3
+  - Beard4
+  - Beard5
+  - Beard6
+  - Beard7
+  - Beard8
+  - Beard9
+  - Beard10
+  - Beard11
+  - Beard12
+  - Beard13
+  - Beard14
+  - Beard15
+  - Beard16
+  - Beard17
+  - Beard18
+  - Beard19
+  - Beard20
+  - Beard21
+  - Beard22
+  - Beard23
+  - Beard24
+  - Beard25
+  - Beard26
+  - BeardNone
+  hairs:
+  - Hair1
+  - Hair2
+  - Hair3
+  - Hair4
+  - Hair5
+  - Hair6
+  - Hair7
+  - Hair8
+  - Hair9
+  - Hair10
+  - Hair11
+  - Hair12
+  - Hair13
+  - Hair14
+  - Hair15
+  - Hair16
+  - Hair17
+  - Hair18
+  - Hair19
+  - Hair20
+  - Hair21
+  - Hair22
+  - Hair23
+  - Hair24
+  - Hair25
+  - Hair26
+  - Hair27
+  - Hair28
+  - Hair29
+  - Hair30
+  - Hair31
+  - Hair32
+  - Hair33
+  - Hair34
+  - HairNone
+  hairColors:
+  - '#000000'
+  - '#FAF0BF'
+  - '#A15C00'
+  - '#26140D'
+  - '#594026'
+  - '#8C7359'
+  - '#F2DE82'
+  - '#D9BF73'
+  - '#B8A685'
+  - '#732E14'
+  - '#8C1F0D'
+  - '#B8401F'
+  - '#666666'
+  - '#A6A6A6'
+  - '#E0E0E6'
+  - '#404047'
+  skinColors:
+  - '#FFFFFF'
+  - '#FFF2EB'
+  - '#FFEBDB'
+  - '#FFF0E0'
+  - '#FFE6D1'
+  - '#FFE0C7'
+  - '#FAD9B8'
+  - '#F2D1AD'
+  - '#EBC79E'
+  - '#E0B88F'
+  - '#D9AD85'
+  - '#C79E7A'
+  - '#FFE0BF'
+  - '#FAE6CC'
+  - '#F2DBC2'
+# If field removed, will remove component
+Drops: {}
+# If entries removed, will still be registered, set enabled to false to disable
+SpawnData:
+- name: MDB Human Spawn Data
+  enabled: true
+  prefab: Human
+  biome: None
+  # Edge, Median, Everything
+  biomeArea: Everything
+  maxSpawned: 1
+  spawnInterval: 4
+  spawnChance: 100
+  spawnAtNight: true
+  spawnAtDay: true
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- footstep
+- slope_angle
+- inWater
+- onGround
+- falling
+- crafting
+- blocking
+- intro
+- crouching
+- equipping
+- encumbered
+- lying_down
+- attach_bed
+- attach_chair
+- attach_throne
+- attach_sitship
+- attach_dragon
+- attach_mast
+- attach_lox
+- attach_asksvin
+- wakeup
+- statef
+- statei
+- equip_head
+- equip_hip
+- unequip_hip
+- eat
+- interact
+- jump
+- stagger
+- gpower
+- knockdown
+- dodge
+- swing_axe
+- swing_axe0
+- swing_axe1
+- swing_axe2
+- axe_secondary
+- swing_pickaxe
+- swing_longsword0
+- swing_longsword1
+- swing_longsword2
+- sword_secondary
+- mace_secondary
+- swing_sledge
+- swing_hammer
+- swing_hoe
+- bow_fire
+- bow_aim
+- atgeir_attack0
+- atgeir_attack1
+- atgeir_attack2
+- atgeir_secondary
+- battleaxe_attack0
+- battleaxe_attack1
+- battleaxe_attack2
+- battleaxe_secondary
+- spear_throw
+- spear_poke
+- unarmed_attack0
+- unarmed_attack1
+- unarmed_kick
+- throw_bomb
+- knife_stab
+- knife_stab0
+- knife_stab1
+- knife_stab2
+- knife_secondary
+- death0
+- death1
+- death2
+- emote_stop
+- emote_wave
+- emote_sit
+- emote_sitchair
+- emote_drink
+- emote_challenge
+- emote_cheer
+- emote_nonono
+- emote_thumbsup
+- emote_point
+- fishingrod_throw
+- fishingrod_charge
+- crossbow_fire
+- reload_crossbow
+- reload_crossbow_done
+- dual_knives
+- dual_knives0
+- dual_knives1
+- dual_knives2
+- dual_knives_secondary
+- staff_fireball0
+- staff_fireball1
+- staff_rapidfire
+- staff_shield
+- staff_summon
+- staff_charging
+- staff_charge_attack
+- attack_abort
+- greatsword
+- greatsword0
+- greatsword1
+- greatsword2
+- greatsword_secondary
+- emote_blowkiss
+- emote_bow
+- emote_cower
+- emote_cry
+- emote_despair
+- emote_flex
+- emote_comehere
+- emote_kneel
+- emote_laugh
+- emote_roar
+- emote_shrug
+- emote_headbang
+- emote_dance
+- random
+- drawpercent
+- dualaxes0
+- dualaxes1
+- dualaxes2
+- dualaxes3
+- dualaxes_secondary
+- recharge_lightningstaff_done
+- recharge_lightningstaff
+- staff_lightningshot
+- staff_trollsummon
+- place_feast
+- scything
+- attach_divan
+- emote_toast
+- emote_rest
+- emote_relax

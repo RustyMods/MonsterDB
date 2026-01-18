@@ -1,0 +1,16 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: MDB_ObsidianGolem_StoneGolem_spikes
+ClonedFrom: StoneGolem_spikes
+IsCloned: true
+Visuals:
+  renderers:
+  - prefab: Cube.003
+    parent: Mountain_Golem_Spike_Arm
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: MountainGolem_mat
+      mainTexture: ObsidianGolem_d

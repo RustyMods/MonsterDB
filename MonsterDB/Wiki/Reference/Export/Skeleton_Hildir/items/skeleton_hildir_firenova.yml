@@ -1,0 +1,562 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: skeleton_hildir_firenova
+ItemData:
+  name: Fire Skeleton Sword
+  maxStackSize: 1
+  maxQuality: 1
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages:
+    fire: 75
+  attackForce: 40
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attack:
+    attackType: Projectile
+    attackAnimation: attack_fire
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0
+    speedFactorRotation: 0
+    attackStartNoise: 10
+    attackHitNoise: 40
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackOriginJoint: Hips
+    attackRange: 0.7
+    attackHeight: 0.5
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0.3
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 90
+    attackRayWidth: 0.6
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: true
+    hitPointtype: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    attackProjectile: skeleton_firenova_aoe
+    projectileVel: 0
+    projectileVelMin: 0
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 1
+    projectileAccuracyMin: 10
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+  aiAttackRange: 3
+  aiAttackRangeMin: 0
+  aiAttackInterval: 10
+  aiAttackMaxAngle: 360
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_skeleton_attack
+    - prefab: fx_fireskeleton_nova
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Krom
+    parent: attach
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: Skeleton_Sword_Hildir_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: -0.054
+      saturation: 0.177
+      value: 0.038
+      emissionTexture: krom_m
+      emissionColor: '#FF1E00FF'
+      mainTexture: krom_d
+  - prefab: flare
+    parent: fx_Torch_Carried
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: light_glow
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: point
+      tintColor: '#FFFFFF80'
+  - prefab: Local Flames
+    parent: fx_Torch_Carried
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: Smoke
+    parent: fx_Torch_Carried
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: fog
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dirt
+  - prefab: Embers
+    parent: fx_Torch_Carried
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: embers
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#16FFFFFF'
+      mainTexture: spark 1
+  - prefab: fx_Torch_Carried
+    parent: Krom
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  particleSystems:
+  - prefab: fx_Torch_Carried
+    parent: Krom
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#9F9F9FFF'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FFFF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FFFF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF0000FF'
+            time: 0
+          - color: '#FF4C00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF0000FF'
+            time: 0
+          - color: '#FF4C00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      colorMin: '#0000FF00'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1499962
+        - alpha: 0.9696894
+          time: 0.6441138
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1499962
+        - alpha: 0.9696894
+          time: 0.6441138
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flare
+    parent: fx_Torch_Carried
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF7D3619'
+      colorMin: '#FF00FF00'
+      colorMax: '#FF7D3619'
+  - prefab: Local Flames
+    parent: fx_Torch_Carried
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FFFFFFFF'
+      colorMin: '#9F9F9FFF'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FFFF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FFFF00FF'
+            time: 0
+          - color: '#402A00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF0000FF'
+            time: 0
+          - color: '#FF4C00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF0000FF'
+            time: 0
+          - color: '#FF4C00FF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Uninitialized
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      colorMin: '#0000FF00'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1499962
+        - alpha: 0.9696894
+          time: 0.6441138
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1499962
+        - alpha: 0.9696894
+          time: 0.6441138
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Smoke
+    parent: fx_Torch_Carried
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#5A5A5A36'
+      colorMin: '#A5A5A521'
+      colorMax: '#5A5A5A36'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#5A5A5A36'
+      colorMin: '#0000A521'
+      colorMax: '#5A5A5A36'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FF9A2DFF'
+          time: 0
+        - color: '#A5A5A5FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FF9A2DFF'
+          time: 0
+        - color: '#A5A5A5FF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Embers
+    parent: fx_Torch_Carried
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FF5B00FF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FF5B00FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF5B00FF'
+      colorMin: '#0000FF00'
+      colorMax: '#FF5B00FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 0.2117647
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#000000FF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 0.2117647
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

@@ -1,0 +1,19 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: TrophyPolarBjorn
+ClonedFrom: TrophyBjorn
+IsCloned: true
+ItemData:
+  name: $item_trophy_polarbjorn
+  description: $item_trophy_polarbjorn_description
+  icons:
+  - PolarTrophyBjorn
+Visuals:
+  renderers:
+  - prefab: default
+    parent: attach
+    index: 0
+    materials:
+    - name: Bjorn_mat
+      mainTexture: PolarBjorn_d

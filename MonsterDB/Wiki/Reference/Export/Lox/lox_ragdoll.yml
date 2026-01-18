@@ -1,0 +1,61 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: lox_ragdoll
+Ragdoll:
+  ttl: 4
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+  float: true
+  floatOffset: 1
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Body
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: lox
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: '#FFFF00FF'
+      mainTexture: Halstein_d
+    - name: lox
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: '#FFFF00FF'
+      mainTexture: Halstein_d
+  - prefab: Furr1
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: lox
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: '#FFFF00FF'
+      mainTexture: Halstein_d
+  - prefab: Sadel
+    parent: Visual
+    index: 3
+    active: false
+    enabled: true

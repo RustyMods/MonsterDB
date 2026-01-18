@@ -1,0 +1,210 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: fallenvalkyrie_spit_projectile
+ProjectileData:
+  prefab: fallenvalkyrie_spit_projectile
+  type: Magic
+  damage: {}
+  aoe: 0
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_FallenValkyrie_projectile_explosion
+    - prefab: sfx_fallenvalkyrie_attack_spit_projectile_impact
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: FallenValkyrie_projectile_explosion
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: fallenvalkyrie_spit_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: shaman_prupleball
+      shader: Standard
+      color: '#FFE5E5FF'
+      emissionTexture: flint
+      emissionColor: '#FF00FFFF'
+      mainTexture: iron
+  - prefab: fire
+    parent: fallenvalkyrie_spit_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  lights:
+  - prefab: Point light
+    parent: fallenvalkyrie_spit_projectile
+    index: 1
+    active: true
+    color: '#FF3BD0FF'
+    type: Point
+    intensity: 2
+    range: 3
+  particleSystems:
+  - prefab: fire
+    parent: fallenvalkyrie_spit_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF00E1FF'
+            time: 0
+          - color: '#40001DFF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF00E1FF'
+            time: 0
+          - color: '#40001DFF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF007CFF'
+            time: 0
+          - color: '#33160AFF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: '#FF007CFF'
+            time: 0
+          - color: '#33160AFF'
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1029374
+        - alpha: 0.9735294
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1029374
+        - alpha: 0.9735294
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

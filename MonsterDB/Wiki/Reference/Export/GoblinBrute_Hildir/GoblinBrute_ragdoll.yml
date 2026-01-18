@@ -1,0 +1,31 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: GoblinBrute_ragdoll
+Ragdoll:
+  ttl: 5
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+  float: true
+  floatOffset: -0.3
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: GoblinBrute
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinBrute_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: -0.1
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: GoblinBrute_d

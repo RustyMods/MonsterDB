@@ -1,0 +1,14 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: MDB_CopperGolem_StoneGolem_clubs
+ClonedFrom: StoneGolem_clubs
+IsCloned: true
+Visuals:
+  renderers:
+  - prefab: Cube.002
+    parent: Mountain_Golem_dualSledge
+    index: 1
+    materials:
+    - name: MountainGolem_ExtraParts_Mat
+      mainTexture: copper_ore_big_d

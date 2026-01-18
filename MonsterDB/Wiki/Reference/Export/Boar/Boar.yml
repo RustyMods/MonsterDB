@@ -1,0 +1,330 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Boar
+Character:
+  name: $enemy_boar
+  group: boar
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 1.5
+  turnSpeed: 100
+  runSpeed: 8
+  runTurnSpeed: 200
+  acceleration: 0.8
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 0.81
+  swimSpeed: 2
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: Pitch
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_boar_hit
+    - prefab: sfx_boar_hit
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_boar_death
+    - prefab: boar_ragdoll
+    - prefab: sfx_boar_death
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 10
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - boar_base_attack
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_creature_consume
+AI:
+  alertRange: 6
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: true
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 1
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  # Tameable
+  consumeItems:
+  - Carrot
+  - Turnip
+  - Onion
+  - Mushroom
+  - Raspberry
+  - Blueberries
+  consumeRange: 1
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+  viewRange: 20
+  viewAngle: 90
+  hearRange: 20
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_boar_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_boar_idle
+  idleSoundInterval: 15
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 30
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: true
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.1
+    hue: 0.05
+    saturation: -0.1
+    enableObject: Fangs 005
+  - scale: 1.2
+    hue: 0.09
+    saturation: -0.5
+    value: -0.05
+    enableObject: Fangs 006
+  renderers:
+  - prefab: Fangs 001
+    parent: Visual
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: Tusk White
+      shader: Standard
+      color: '#DADADAFF'
+      emissionColor: '#000000FF'
+  - prefab: Fangs 003
+    parent: Visual
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: Tusk White
+      shader: Standard
+      color: '#DADADAFF'
+      emissionColor: '#000000FF'
+  - prefab: Fangs 004
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Tusk White
+      shader: Standard
+      color: '#DADADAFF'
+      emissionColor: '#000000FF'
+  - prefab: Fangs 005
+    parent: Visual
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: Tusk White
+      shader: Standard
+      color: '#DADADAFF'
+      emissionColor: '#000000FF'
+  - prefab: Fangs 006
+    parent: Visual
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: Tusk White
+      shader: Standard
+      color: '#DADADAFF'
+      emissionColor: '#000000FF'
+  - prefab: Poly Art Boar
+    parent: Visual
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: Boar Skin Valheim
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Boar_valheim_d
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: RawMeat
+  - prefab: LeatherScraps
+  - prefab: TrophyBoar
+    chance: 0.15
+    levelMultiplier: false
+# If field removed, will remove component
+Tameable:
+  fedDuration: 600
+  tamingTime: 1800
+  startsTamed: false
+  tamedEffect:
+    effectPrefabs:
+    - prefab: fx_creature_tamed
+  sootheEffect:
+    effectPrefabs:
+    - prefab: vfx_creature_soothed
+  petEffect:
+    effectPrefabs:
+    - prefab: fx_boar_pet
+  commandable: false
+  unsummonDistance: 0
+  unsummonOnOwnerLogoutSeconds: 0
+  levelUpOwnerSkill: None
+  levelUpFactor: 1
+  dropSaddleOnDeath: true
+  dropItemVel: 5
+  tamingSpeedMultiplierRange: 60
+  tamingBoostMultiplier: 2
+  nameBeforeText: true
+  tameText: $hud_tamelove
+# If field removed, will remove component
+Procreation:
+  updateInterval: 30
+  totalCheckRange: 10
+  maxCreatures: 5
+  partnerCheckRange: 3
+  pregnancyChance: 0.33
+  pregnancyDuration: 60
+  requiredLovePoints: 3
+  offspring: Boar_piggy
+  minOffspringLevel: 0
+  spawnOffset: 1
+  spawnOffsetMax: 0
+  spawnRandomDirection: false
+  birthEffects:
+    effectPrefabs:
+    - prefab: sfx_boar_birth
+    - prefab: vfx_boar_birth
+  loveEffects:
+    effectPrefabs:
+    - prefab: sfx_boar_love
+    - prefab: vfx_boar_love
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- base_attack0
+- base_attack1
+- base_attack2
+- base_attack3
+- idle
+- stagger
+- consume

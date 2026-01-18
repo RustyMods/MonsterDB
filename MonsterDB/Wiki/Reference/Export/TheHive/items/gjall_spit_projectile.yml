@@ -1,0 +1,463 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: gjall_spit_projectile
+ProjectileData:
+  prefab: gjall_spit_projectile
+  type: Physical
+  damage: {}
+  aoe: 4
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_hjall_spit_hit
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: true
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Sphere
+    parent: gjall_spit_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: gjall_spit_ball
+      shader: Standard
+      color: '#A4E01FFF'
+      emissionTexture: acacia_trunk01
+      emissionColor: '#FFFF90FF'
+      mainTexture: acacia_trunk01
+  - prefab: flames
+    parent: gjall_spit_projectile
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: sparcs_world
+    parent: gjall_spit_projectile
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: flakes
+    parent: gjall_spit_projectile
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_unlit_red
+      shader: Particles/Standard Unlit2
+      color: '#FFFFFFFF'
+      emissionColor: '#FF343BFF'
+  - prefab: wetsplsh
+    parent: gjall_spit_projectile
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  - prefab: ooz
+    parent: gjall_spit_projectile
+    index: 7
+    active: false
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: dust01_bw
+  - prefab: wetsplsh (1)
+    parent: gjall_spit_projectile
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: '#B2B2B2FF'
+      emissionColor: '#212B15FF'
+      mainTexture: slime_splash
+  lights:
+  - prefab: Point light
+    parent: gjall_spit_projectile
+    index: 3
+    active: true
+    color: '#FF8D00FF'
+    type: Point
+    intensity: 3
+    range: 5
+  particleSystems:
+  - prefab: flames
+    parent: gjall_spit_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#00FF90FF'
+      colorMin: '#FF00FF00'
+      colorMax: '#00FF90FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#00FF90FF'
+      colorMin: '#0000FF00'
+      colorMax: '#00FF90FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: sparcs_world
+    parent: gjall_spit_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#00FF90FF'
+      colorMin: '#FF00FF00'
+      colorMax: '#00FF90FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#00FF90FF'
+      colorMin: '#0000FF00'
+      colorMax: '#00FF90FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flakes
+    parent: gjall_spit_projectile
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#26FF00FF'
+      colorMin: '#D13705FF'
+      colorMax: '#26FF00FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#26FF00FF'
+      colorMin: '#000005FF'
+      colorMax: '#26FF00FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.08529793
+        - alpha: 1
+          time: 0.9294118
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.08529793
+        - alpha: 1
+          time: 0.9294118
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh
+    parent: gjall_spit_projectile
+    index: 6
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#6F5F1FFF'
+      colorMin: '#576D24FF'
+      colorMax: '#6F5F1FFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#6F5F1FFF'
+      colorMin: '#000024FF'
+      colorMax: '#6F5F1FFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: ooz
+    parent: gjall_spit_projectile
+    index: 7
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#B9FF804F'
+      colorMin: '#FFAE404A'
+      colorMax: '#B9FF804F'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#B9FF804F'
+      colorMin: '#0000404A'
+      colorMax: '#B9FF804F'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh (1)
+    parent: gjall_spit_projectile
+    index: 8
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#6F5F1FFF'
+      colorMin: '#576D24FF'
+      colorMax: '#6F5F1FFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#6F5F1FFF'
+      colorMin: '#000024FF'
+      colorMax: '#6F5F1FFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

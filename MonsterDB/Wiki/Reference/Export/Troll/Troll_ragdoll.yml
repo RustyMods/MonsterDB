@@ -1,0 +1,53 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Troll_ragdoll
+Ragdoll:
+  ttl: 8
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+  float: true
+  floatOffset: 0.2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Body
+    parent: troll_base_2
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: troll
+      shader: Custom/Creature
+      color: '#E1E1E1FF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: troll_diffuse
+  - prefab: Hair
+    parent: troll_base_2
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: troll
+      shader: Custom/Creature
+      color: '#E1E1E1FF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: troll_diffuse
+    - name: troll
+      shader: Custom/Creature
+      color: '#E1E1E1FF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: troll_diffuse

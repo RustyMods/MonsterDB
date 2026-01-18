@@ -1,0 +1,46 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Volture_ragdoll
+Ragdoll:
+  velMultiplier: 0.31
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: false
+  floatOffset: -0.1
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Feathers
+    parent: Volture
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Volture_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Volture_d
+  - prefab: Rooster
+    parent: Volture
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Volture_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: Volture_d

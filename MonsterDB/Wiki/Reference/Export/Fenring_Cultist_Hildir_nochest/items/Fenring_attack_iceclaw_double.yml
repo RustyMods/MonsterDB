@@ -1,0 +1,128 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: Fenring_attack_iceclaw_double
+ItemData:
+  name: claw
+  maxStackSize: 1
+  maxQuality: 1
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages:
+    slash: 60
+    frost: 70
+  attackForce: 60
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attack:
+    attackType: Horizontal
+    attackAnimation: attack_claw_double
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0.5
+    speedFactorRotation: 0.3
+    attackStartNoise: 10
+    attackHitNoise: 30
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 3
+    attackHeight: 1.5
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 90
+    attackRayWidth: 0.88
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: false
+    hitPointtype: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 10
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+  aiAttackRange: 1.5
+  aiAttackRangeMin: 0
+  aiAttackInterval: 10
+  aiAttackMaxAngle: 35
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_HitSparks
+    - prefab: sfx_fenring_claw_hit
+  startEffect:
+    effectPrefabs:
+    - prefab: fx_fenring_frost_hand
+      variant: 0
+      follow: true
+      childTransform: LeftHand
+    - prefab: fx_fenring_frost_hand
+      variant: 0
+      follow: true
+      childTransform: RightHand
+  trailStartEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_fireclaw
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1

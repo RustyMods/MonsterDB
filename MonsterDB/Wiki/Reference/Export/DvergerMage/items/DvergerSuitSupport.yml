@@ -1,0 +1,113 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Item
+Prefab: DvergerSuitSupport
+ItemData:
+  name: Iron plate armor
+  description: $item_chest_iron_description
+  maxStackSize: 1
+  maxQuality: 4
+  scaleByQuality: 0
+  weight: 1
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  toolTier: 0
+  damages: {}
+  attackForce: 10
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: DvergerSuitSupport
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: '#FFFFFFFF'
+  - prefab: SupportMageDress
+    parent: attach_skin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: DvergerMageSupport_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: DvergerMageSupport_d
+  particleSystems:
+  - prefab: DvergerSuitSupport
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#FF6565FF'
+      colorMin: '#FFE240FF'
+      colorMax: '#FF6565FF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FF6565FF'
+      colorMin: '#000040FF'
+      colorMax: '#FF6565FF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

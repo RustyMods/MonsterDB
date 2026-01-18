@@ -1,0 +1,583 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: TheHive
+Character:
+  name: $enemy_thehive
+  faction: MistlandsMonsters
+  boss: true
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 3
+  turnSpeed: 1
+  runSpeed: 3
+  runTurnSpeed: 300
+  acceleration: 0.05
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: true
+  flySlowSpeed: 1
+  flyFastSpeed: 1
+  flyTurnSpeed: 0
+  canSwim: false
+  swimDepth: 2
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_hatchling_hurt
+    - prefab: sfx_hatcling_hurt
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_hatchling_death
+    - prefab: sfx_hatchling_death
+    - prefab: Hatchling_ragdoll
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 5000
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Immune
+    slash: Immune
+    pierce: Immune
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Immune
+    frost: Immune
+    lightning: Immune
+    poison: Immune
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - gjall_attack_spit
+  - gjall_attack_egg
+AI:
+  alertRange: 50
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 200
+  minAttackInterval: 0
+  circleTargetInterval: 30
+  circleTargetDuration: 10
+  circleTargetDistance: 20
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 100
+  viewAngle: 360
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_hatchling_alerted
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_hatchling_idle
+  idleSoundInterval: 15
+  idleSoundChance: 0.5
+  pathAgentType: Humanoid
+  moveMinAngle: 360
+  smoothMovement: false
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 5
+  randomMoveInterval: 10
+  randomMoveRange: 30
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 5
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: eyes
+    parent: Hatchling_mountain
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Hatchling
+    parent: Hatchling_mountain
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Hatchling.001
+    parent: Hatchling_mountain
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Horns
+    parent: Hatchling_mountain
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Hatchling_mountain_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Hatchling_E
+      emissionColor: '#00FFFFFF'
+      mainTexture: Hatchling_D
+  - prefab: Capsule
+    parent: Visual
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: altar
+      shader: Custom/StaticRock
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: altar_d
+  - prefab: Sphere
+    parent: Visual
+    index: 2
+    active: false
+    enabled: false
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (1)
+    parent: Visual
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (2)
+    parent: Visual
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (4)
+    parent: Visual
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (5)
+    parent: Visual
+    index: 7
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (6)
+    parent: Visual
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (7)
+    parent: Visual
+    index: 9
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (8)
+    parent: Visual
+    index: 10
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (9)
+    parent: Visual
+    index: 11
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (10)
+    parent: Visual
+    index: 12
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (11)
+    parent: Visual
+    index: 13
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Cube (12)
+    parent: Visual
+    index: 14
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat_legs
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#000000FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low
+    parent: Visual
+    index: 15
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low (1)
+    parent: Visual
+    index: 16
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low (2)
+    parent: Visual
+    index: 17
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low (3)
+    parent: Visual
+    index: 18
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low (4)
+    parent: Visual
+    index: 19
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low (5)
+    parent: Visual
+    index: 20
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: low (6)
+    parent: Visual
+    index: 21
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Mat
+      shader: Custom/Vegetation
+      color: '#FFD375FF'
+      emissionColor: '#3AFF00FF'
+      mainTexture: olivetree_trunk01
+  - prefab: Pine_tree_lod0
+    parent: Visual
+    index: 22
+    active: true
+    enabled: true
+    materials:
+    - name: PineTree_01
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: PineTree_01
+  - prefab: Pine_tree_lod0 (1)
+    parent: Visual
+    index: 23
+    active: true
+    enabled: true
+    materials:
+    - name: PineTree_01
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: PineTree_01
+  - prefab: Pine_tree_lod0 (2)
+    parent: Visual
+    index: 24
+    active: true
+    enabled: true
+    materials:
+    - name: PineTree_01
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: PineTree_01
+  - prefab: Pine_tree_lod0 (3)
+    parent: Visual
+    index: 25
+    active: true
+    enabled: true
+    materials:
+    - name: PineTree_01
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: PineTree_01
+  - prefab: Pine_tree_lod0 (4)
+    parent: Visual
+    index: 26
+    active: true
+    enabled: true
+    materials:
+    - name: PineTree_01
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: PineTree_01
+  - prefab: Pine_tree_lod0 (5)
+    parent: Visual
+    index: 27
+    active: true
+    enabled: true
+    materials:
+    - name: PineTree_01
+      shader: Custom/Vegetation
+      color: '#FFFFFFFF'
+      emissionColor: '#00000000'
+      mainTexture: PineTree_01
+  - prefab: EYE
+    parent: Visual
+    index: 28
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Eye
+      shader: Standard
+      color: '#FFD375FF'
+      emissionColor: '#FF0019FF'
+      mainTexture: (Wood 26) tree bark seamless texture 2048x2048
+  - prefab: EYE (1)
+    parent: Visual
+    index: 29
+    active: true
+    enabled: true
+    materials:
+    - name: TheHive_Eye
+      shader: Standard
+      color: '#FFD375FF'
+      emissionColor: '#FF0019FF'
+      mainTexture: (Wood 26) tree bark seamless texture 2048x2048
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyHatchling
+    chance: 0.1
+    levelMultiplier: false
+  - prefab: FreezeGland
+    amountMax: 2
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- idle
+- attack
+- flying
+- fly_takeoff
+- fly_land

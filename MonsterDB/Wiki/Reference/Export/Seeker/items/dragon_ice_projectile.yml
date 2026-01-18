@@ -1,0 +1,198 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Projectile
+Prefab: dragon_ice_projectile
+ProjectileData:
+  prefab: dragon_ice_projectile
+  type: Magic, Frost
+  damage: {}
+  aoe: 0
+  dodgeable: true
+  blockable: true
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_dragon_ice_hit
+    - prefab: sfx_dragon_coldball_explode
+  # Bounce
+  bounce: false
+  bounceOnWater: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: IceBlocker
+  spawnOnHitChance: 1
+  spawnCount: 1
+  randomSpawnOnHitCount: 1
+  randomSpawnSkipLava: false
+  staticHitOnly: true
+  groundHitOnly: false
+  spawnRandomRotation: true
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: default
+    parent: dragon_ice_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: coldball
+      shader: Standard
+      color: '#E5F2FFFF'
+      emissionTexture: flint
+      emissionColor: '#00FFFFFF'
+      mainTexture: iron
+  - prefab: flames
+    parent: dragon_ice_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  - prefab: sparcs_world
+    parent: dragon_ice_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: '#F5FFFFFF'
+      emissionColor: '#000000FF'
+  lights:
+  - prefab: Point light
+    parent: dragon_ice_projectile
+    index: 3
+    active: true
+    color: '#74D7FFFF'
+    type: Point
+    intensity: 2
+    range: 3
+  particleSystems:
+  - prefab: flames
+    parent: dragon_ice_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000FF00'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: sparcs_world
+    parent: dragon_ice_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#FFFFFFFF'
+      colorMin: '#FF00FF00'
+      colorMax: '#FFFFFFFF'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#FFFFFFFF'
+      colorMin: '#0000FF00'
+      colorMax: '#FFFFFFFF'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

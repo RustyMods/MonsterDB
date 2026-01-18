@@ -1,0 +1,57 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: loxcalf_ragdoll
+Ragdoll:
+  velMultiplier: 2
+  ttl: 3
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: 0.1
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Body
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d
+  - prefab: Furr1
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: '#FFFF00FF'
+      mainTexture: Lox_calf_d

@@ -1,0 +1,173 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Greydwarf_elite_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+  float: true
+  floatOffset: -0.2
+Visuals:
+  scale:
+    x: 0.7550797
+    y: 0.7550797
+    z: 0.7550797
+  renderers:
+  - prefab: Cube
+    parent: Greydwarf_elite_ragdoll
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_elite
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: greydrawrf_diffuse
+  - prefab: Cube.001
+    parent: Greydwarf_elite_ragdoll
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_elite
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: '#000000FF'
+      mainTexture: greydrawrf_diffuse
+  - prefab: evil_smoke (1)
+    parent: mixamorig:Spine2
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: evileyes_particles
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: dirt
+      tintColor: '#FFFFFFFF'
+  - prefab: evil_smoke (2)
+    parent: mixamorig:Spine2
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: evileyes_particles
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: dirt
+      tintColor: '#FFFFFFFF'
+  particleSystems:
+  - prefab: evil_smoke (1)
+    parent: mixamorig:Spine2
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#314ABF1C'
+      colorMin: '#FF00FF00'
+      colorMax: '#314ABF1C'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#314ABF1C'
+      colorMin: '#0000FF00'
+      colorMax: '#314ABF1C'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke (2)
+    parent: mixamorig:Spine2
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#314ABF1C'
+      colorMin: '#FF00FF00'
+      colorMax: '#314ABF1C'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#314ABF1C'
+      colorMin: '#0000FF00'
+      colorMax: '#314ABF1C'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

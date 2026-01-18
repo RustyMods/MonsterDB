@@ -1,0 +1,12 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: Stag_ragdoll
+ClonedFrom: eikthyr_ragdoll
+IsCloned: true
+Visuals:
+  renderers:
+  - prefab: chains
+    parent: Visual
+    index: 1
+    active: false

@@ -1,0 +1,441 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Humanoid
+Prefab: Unbjorn
+Character:
+  name: $enemy_unbjorn
+  group: bjorn
+  faction: PlainsMonsters
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 1.5
+  speed: 3.33
+  turnSpeed: 80
+  runSpeed: 7
+  runTurnSpeed: 100
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 1.7
+  swimSpeed: 3
+  swimTurnSpeed: 50
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: true
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_bjorn_hit
+    - prefab: sfx_unbjorn_hurt
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_bjorn_death
+    - prefab: Unbjorn_ragdoll
+    - prefab: sfx_unbjorn_death
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      attach: true
+  # Base Health
+  health: 1200
+  regenAllHPTime: 3000
+  damageModifiers:
+    blunt: Resistant
+    slash: Resistant
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Resistant
+    poison: Immune
+    spirit: Weak
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - unbjorn_bite
+  - unbjorn_claws
+  - unbjorn_swipe_l
+  - unbjorn_swipe_r
+  - unbjorn_swipe_combo
+  - unbjorn_slam
+  consumeItemEffects:
+    effectPrefabs:
+    - prefab: sfx_creature_consume
+AI:
+  alertRange: 6
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerTreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 1.5
+  circleTargetInterval: 9
+  circleTargetDuration: 2
+  circleTargetDistance: 20
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  # Tameable
+  consumeItems:
+  - Blueberries
+  consumeRange: 4
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+  viewRange: 25
+  viewAngle: 90
+  hearRange: 15
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_unbjorn_idle
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_unbjorn_idle
+      variant: 0
+  idleSoundInterval: 15
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidBigNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 8
+  randomMoveInterval: 60
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: true
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggresive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  levelSetups:
+  - scale: 1.3
+    hue: -0.027
+    saturation: 0.24
+    value: -0.06
+    setEmissiveColor: true
+    emissiveColor: '#FFEC0000'
+  - scale: 1.5
+    hue: 0.107
+    saturation: -0.63
+    value: -0.09
+    emissiveColor: '#FF00FF00'
+  renderers:
+  - prefab: Stinky Clouds
+    parent: Flies
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+      mainTexture: slowwispysmokeloop
+  - prefab: arrow
+    parent: Visual
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: Bjorn_d
+  - prefab: Asora
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Cube.001
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Cube.002
+    parent: Visual
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Cube.002 (1)
+    parent: Visual
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Plane
+    parent: Visual
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Sphere
+    parent: Visual
+    index: 7
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Sphere (1)
+    parent: Visual
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_undead_mat
+      shader: Custom/Creature
+      color: '#D3EAEEFF'
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: '#404040FF'
+      mainTexture: undeadbjorn_d
+  - prefab: Flies
+    parent: Visual
+    index: 10
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_lit_opaque
+      shader: Particles/Standard Surface2
+      color: '#FFFFFFFF'
+      emissionColor: '#000000FF'
+  particleSystems:
+  - prefab: Flies
+    parent: Visual
+    index: 10
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: '#131313FF'
+      colorMin: '#FF00FF00'
+      colorMax: '#131313FF'
+  - prefab: Stinky Clouds
+    parent: Flies
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: '#B0848B96'
+      colorMin: '#241E1F7B'
+      colorMax: '#B0848B96'
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: '#B0848B96'
+      colorMin: '#00001F7B'
+      colorMax: '#B0848B96'
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4764782
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4764782
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: '#FFFFFFFF'
+          time: 0
+        - color: '#FFFFFFFF'
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyBjornUndead
+    chance: 0.1
+  - prefab: BjornMeat
+    amountMin: 2
+    amountMax: 3
+  - prefab: RottenMeat
+    amountMax: 2
+    chance: 0.8
+  - prefab: UndeadBjornRibcage
+    amountMax: 3
+  - prefab: BjornHide
+    amountMax: 2
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- footstep
+- idle
+- inWater
+- jump
+- wakeup
+- stagger
+- consume
+- attack_bite
+- attack_claws
+- attack_taunt
+- attack_swipe_r
+- attack_swipe_l
+- attack_swipe_combo
+- attack_slam

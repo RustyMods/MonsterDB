@@ -1,0 +1,41 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.0
+Type: Ragdoll
+Prefab: GoblinShaman_Hildir_ragdoll
+Ragdoll:
+  velMultiplier: 4
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      inheritParentRotation: true
+  float: true
+  floatOffset: -0.2
+Visuals:
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  renderers:
+  - prefab: Shaman
+    parent: Visual (1)
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinShaman_Hildir_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: -0.184
+      saturation: 0.16
+      value: -0.004
+      emissionColor: '#000000FF'
+      mainTexture: G-Shaman_d
+    - name: GoblinStuff_Hildir_mat
+      shader: Custom/Creature
+      color: '#FFFFFFFF'
+      hue: 0.5
+      saturation: -0.345
+      value: 0.015
+      emissionColor: '#000000FF'
+      mainTexture: GoblinStuff_d
