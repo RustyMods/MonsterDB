@@ -103,15 +103,6 @@ public static class VisualManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
-            Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
-            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
-
-            for (int i = 0; i < renderers.Length; ++i)
-            {
-                Renderer renderer = renderers[i];
-                VisualUtils.CloneMaterials(renderer, ref newMaterials);
-            }
-
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {

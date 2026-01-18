@@ -12,7 +12,7 @@ public static class PrefabManager
 {
     internal static ZNetScene? _ZNetScene;
     internal static ObjectDB? _ObjectDB;
-    private static readonly Dictionary<string, GameObject> _prefabs;
+    internal static readonly Dictionary<string, GameObject> _prefabs;
     internal static List<GameObject> PrefabsToRegister;
     internal static Dictionary<string, Clone> Clones;
 

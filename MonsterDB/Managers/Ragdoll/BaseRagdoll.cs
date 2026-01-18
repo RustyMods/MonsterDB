@@ -23,6 +23,14 @@ public class BaseRagdoll : Header
         SetupVisuals(prefab);
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseRagdoll originalRagdoll) return;
+        if (Ragdoll != null && originalRagdoll.Ragdoll != null) Ragdoll.ResetTo(originalRagdoll.Ragdoll);
+        if (Visuals != null && originalRagdoll.Visuals != null) Visuals.ResetTo(originalRagdoll.Visuals);
+    }
+
     private void SetupVisuals(GameObject prefab)
     {
         Visuals = new  VisualRef();

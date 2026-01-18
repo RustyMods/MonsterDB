@@ -24,6 +24,14 @@ public class BaseFish : BaseItem
         }
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseFish originalFish) return;
+        if (originalFish.Fish == null) Fish = null;
+        if (Fish != null && originalFish.Fish != null) Fish.ResetTo(originalFish.Fish);
+    }
+
     public override void Update()
     {
         base.Update();

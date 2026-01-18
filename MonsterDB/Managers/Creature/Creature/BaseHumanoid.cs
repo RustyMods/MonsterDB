@@ -22,6 +22,14 @@ public class BaseHumanoid : Base
         Character.Setup(character);
         AI.Setup(ai);
     }
+    
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseHumanoid originalCharacter) return;
+        if (Character != null && originalCharacter.Character != null) Character.ResetTo(originalCharacter.Character);
+        if (AI != null && originalCharacter.AI != null) AI.ResetTo(originalCharacter.AI);
+    }
 
     public override void Update()
     {

@@ -229,39 +229,6 @@ public static class EggManager
                 RegisterHoverOverride(p.name);
             }
             
-            Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
-            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
-            
-            for (int i = 0; i < renderers.Length; ++i)
-            {
-                Renderer renderer = renderers[i];
-                CloneMaterials(renderer, ref  newMaterials);
-            }
-
-            void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
-            {
-                List<Material> newMats = new();
-                for (int i = 0; i < r.sharedMaterials.Length; ++i)
-                {
-                    Material mat = r.sharedMaterials[i];
-                    if (mat == null) continue;
-                    string name = $"MDB_{cloneName}_{mat.name.Replace("(Instance)", string.Empty)}";
-                    if (mats.TryGetValue(name, out Material? clonedMat))
-                    {
-                        newMats.Add(clonedMat);
-                    }
-                    else
-                    {
-                        clonedMat = new Material(mat);
-                        clonedMat.name = name;
-                        newMats.Add(clonedMat);
-                        mats.Add(name, clonedMat);
-                    }
-                }
-                r.sharedMaterials = newMats.ToArray();
-                r.materials = newMats.ToArray();
-            }
-            
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {

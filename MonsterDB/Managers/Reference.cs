@@ -10,6 +10,87 @@ namespace MonsterDB;
 public abstract class Reference
 {
     public const BindingFlags FieldBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+    public void ResetTo(Reference source)
+    {
+        if (source.GetType() != GetType())
+        {
+            MonsterDBPlugin.LogWarning($"[ResetTo] Type mismatch: target={GetType().Name} != source={source.GetType().Name}");
+            return;
+        }
+        
+        FieldInfo[] fields = GetType().GetFields(FieldBindingFlags);
+        
+        for (int i = 0; i < fields.Length; ++i)
+        {
+            FieldInfo field = fields[i];
+            
+            object? currentValue = field.GetValue(this);
+            if (currentValue == null) continue;
+            object? sourceValue = field.GetValue(source);
+            if (sourceValue == null) continue;
+
+            if (currentValue is Reference reference && 
+                sourceValue is Reference otherReference)
+            {
+                reference.ResetTo(otherReference);
+            }
+            else if (currentValue is RendererRef[] rendererArray && sourceValue is RendererRef[] otherRendererArray)
+            {
+                Dictionary<(string m_prefab, string? m_parent, int? m_index), RendererRef> exactMatchLookup = otherRendererArray
+                        .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))
+                        .ToDictionary(x => x.Key, x => x.First());
+                
+                for (int y = 0; y < rendererArray.Length; ++y)
+                {
+                    RendererRef currentRenderer = rendererArray[y];
+                    (string m_prefab, string? m_parent, int? m_index) key = (currentRenderer.m_prefab, currentRenderer.m_parent, currentRenderer.m_index);
+                    if (exactMatchLookup.TryGetValue(key, out RendererRef otherRenderer))
+                    {
+                        currentRenderer.ResetTo(otherRenderer);
+                    }
+                }
+            }
+            else if (currentValue is LightRef[] lightArray && sourceValue is LightRef[] otherLightArray)
+            {
+                
+                Dictionary<(string m_prefab, string? m_parent, int? m_index), LightRef> exactMatchLookup = otherLightArray
+                    .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))
+                    .ToDictionary(x => x.Key, x => x.First());
+                
+                for (int y = 0; y < lightArray.Length; ++y)
+                {
+                    LightRef currentLight = lightArray[y];
+                    (string m_prefab, string? m_parent, int? m_index) key = (currentLight.m_prefab, currentLight.m_parent, currentLight.m_index);
+                    if (exactMatchLookup.TryGetValue(key, out LightRef otherLight))
+                    {
+                        currentLight.ResetTo(otherLight);
+                    }
+                }
+            }
+            else if (currentValue is ParticleSystemRef[] particleSystemArray &&
+                     sourceValue is ParticleSystemRef[] otherParticleSystemArray)
+            {
+                Dictionary<(string m_prefab, string? m_parent, int? m_index), ParticleSystemRef> exactMatchLookup = otherParticleSystemArray
+                    .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))
+                    .ToDictionary(x => x.Key, x => x.First());
+                
+                for (int y = 0; y < particleSystemArray.Length; ++y)
+                {
+                    ParticleSystemRef currentParticleSystem = particleSystemArray[y];
+                    (string m_prefab, string? m_parent, int? m_index) key = (currentParticleSystem.m_prefab, currentParticleSystem.m_parent, currentParticleSystem.m_index);
+                    if (exactMatchLookup.TryGetValue(key, out ParticleSystemRef otherParticleSystem))
+                    {
+                        currentParticleSystem.ResetTo(otherParticleSystem);
+                    }
+                }
+            }
+            else
+            {
+                field.SetValue(this, sourceValue);
+            }
+        }
+    }
     
     public void Setup<V>(V source)
     {
@@ -140,7 +221,14 @@ public abstract class Reference
 
         if (log)
         {
-            MonsterDBPlugin.LogDebug($"[{targetName}] Updating {targetType.FullName}");
+            if (LoadManager.resetting)
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}] Resetting {targetType.FullName}");
+            }
+            else
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}] Updating {targetType.FullName}");
+            }
         }
 
         log &= ConfigManager.ShouldLogDetails();
@@ -285,7 +373,7 @@ public abstract class Reference
         }
     }
 
-    private void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName, bool log)
+    protected virtual void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName, bool log)
     {
         if (string.IsNullOrEmpty(goName))
         {

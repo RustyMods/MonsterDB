@@ -146,6 +146,8 @@ public static class TextureManager
         File.WriteAllLines(filePath, text);
     }
 
+    public static Dictionary<string, TextureData> GetTextureData() => m_customs;
+
     public static Texture? GetTexture(string name, Texture? defaultValue)
     {
         if (string.IsNullOrEmpty(name)) return defaultValue;
@@ -305,6 +307,11 @@ public static class TextureManager
     {
         if (!File.Exists(filePath)) return;
         TextureData data = new(filePath);
+        m_customs[data.m_name] = data;
+    }
+
+    public static void Add(TextureData data)
+    {
         m_customs[data.m_name] = data;
     }
 }

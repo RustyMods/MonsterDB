@@ -219,14 +219,14 @@ public static class ItemManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
-            Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
-            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
-            
-            for (int i = 0; i < renderers.Length; ++i)
-            {
-                Renderer renderer = renderers[i];
-                VisualUtils.CloneMaterials(renderer, ref newMaterials);
-            }
+            // Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
+            // Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
+            //
+            // for (int i = 0; i < renderers.Length; ++i)
+            // {
+            //     Renderer renderer = renderers[i];
+            //     VisualUtils.CloneMaterials(renderer, ref newMaterials);
+            // }
 
             ItemDrop? itemDrop = p.GetComponent<ItemDrop>();
             if (itemDrop != null)

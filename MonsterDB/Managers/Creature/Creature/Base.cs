@@ -41,6 +41,31 @@ public class Base : Header
         if (isClone) SetupSpawnData();
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not Base originalBase) return;
+        if (Visuals != null && originalBase.Visuals != null) Visuals.ResetTo(originalBase.Visuals);
+
+        if (originalBase.Drops == null) Drops = null;
+        if (originalBase.Tameable == null) Tameable = null;
+        if (originalBase.Procreation == null) Procreation = null;
+        if (originalBase.GrowUp == null)  GrowUp = null;
+        if (originalBase.NPCTalk == null) NPCTalk = null;
+        if (originalBase.Saddle == null) Saddle = null;
+        
+        if (Drops != null && originalBase.Drops != null) Drops.ResetTo(originalBase.Drops);
+        if (Tameable != null  && originalBase.Tameable != null) Tameable.ResetTo(originalBase.Tameable);
+        if (Procreation != null && originalBase.Procreation != null) Procreation.ResetTo(originalBase.Procreation);
+        if (GrowUp != null &&  originalBase.GrowUp != null) GrowUp.ResetTo(originalBase.GrowUp);
+        if (NPCTalk != null && originalBase.NPCTalk != null)  NPCTalk.ResetTo(originalBase.NPCTalk);
+        if (MovementDamage != null && originalBase.MovementDamage != null)  MovementDamage.ResetTo(originalBase.MovementDamage);
+        if (Saddle != null && originalBase.Saddle != null)  Saddle.ResetTo(originalBase.Saddle);
+        if (DropProjectileOverDistance != null && originalBase.DropProjectileOverDistance != null) DropProjectileOverDistance.ResetTo(originalBase.DropProjectileOverDistance);
+        if (CinderSpawner != null && originalBase.CinderSpawner != null)  CinderSpawner.ResetTo(originalBase.CinderSpawner);
+        if (TimedDestruction != null && originalBase.TimedDestruction != null)  TimedDestruction.ResetTo(originalBase.TimedDestruction);
+    }
+
     protected void SetupAnimationTriggers(GameObject prefab)
     {
         if (!prefab.GetComponentInChildren<Animator>()) return;

@@ -101,6 +101,7 @@ public static class ConfigManager
         LoadManager.Init(__instance);
         SpawnManager.Init(__instance);
         LocalizationManager.Init(__instance);
+        // TransferManager.Init(__instance);
     }
     
     public static void SetupWatcher()

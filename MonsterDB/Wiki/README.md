@@ -79,9 +79,6 @@ The prefab is converted to use the custom MonsterDB `Human` component, which inh
 
 Any `.png` files placed in the `Import` folder are automatically registered by MonsterDB.
 
-- These files are **not synced** with the server.
-- You must distribute them manually to all players.
-
 Once registered, you can reference a PNG by its filename **without** the `.png` extension.
 
 ### Notes

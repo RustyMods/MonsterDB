@@ -25,6 +25,14 @@ public class BaseEgg : BaseItem
         }
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseEgg originalEgg) return;
+        if (originalEgg.EggGrow == null) EggGrow = null;
+        if (EggGrow != null && originalEgg.EggGrow != null) EggGrow.ResetTo(originalEgg.EggGrow);
+    }
+
     public override void Update()
     {
         base.Update();

@@ -87,6 +87,12 @@
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Net.Sockets">
+          <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Net.Sockets.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Net.WebSockets.Client">
+          <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Net.WebSockets.Client.dll</HintPath>
+        </Reference>
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
             <HintPath>$(CorlibPath)\UnityEngine.dll</HintPath>
@@ -225,6 +231,7 @@
         <Compile Include="Managers\Texture\TextureData.cs" />
         <Compile Include="Managers\Texture\TextureManager.cs" />
         <Compile Include="Managers\Texture\TextureRef.cs" />
+        <Compile Include="Managers\Transfer\ImageTransfer.cs" />
         <Compile Include="Managers\Visual\BaseVisual.cs" />
         <Compile Include="Managers\Visual\LevelSetupRef.cs" />
         <Compile Include="Managers\Visual\LightRef.cs" />

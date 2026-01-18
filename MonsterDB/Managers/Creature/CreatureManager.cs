@@ -258,15 +258,6 @@ public static class CreatureManager
                 isPlayer = true;
             }
 
-            Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
-            
-            for (int i = 0; i < renderers.Length; ++i)
-            {
-                Renderer renderer = renderers[i];
-                VisualUtils.CloneMaterials(renderer, ref  newMaterials);
-            }
-
             if (write && !isPlayer && character is Humanoid humanoid)
             {
                 if (humanoid.m_defaultItems != null)

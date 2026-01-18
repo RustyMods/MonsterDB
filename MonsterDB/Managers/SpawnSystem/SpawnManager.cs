@@ -37,6 +37,12 @@ public static class SpawnManager
         MonsterDBPlugin.LogInfo($"Loaded {spawnRefs.Count} spawn files");
     }
 
+    public static void Clear()
+    {
+        SpawnList.m_spawners.Clear();
+        spawnRefs.Clear();
+    }
+
     public static void Init(ZNet net)
     {
         if (net.IsServer())

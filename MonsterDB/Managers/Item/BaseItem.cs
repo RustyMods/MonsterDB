@@ -21,6 +21,14 @@ public class BaseItem : Header
         SetupVisuals(prefab);
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseItem originalItem) return;
+        if (ItemData != null && originalItem.ItemData != null) ItemData.ResetTo(originalItem.ItemData);
+        if (Visuals != null && originalItem.Visuals != null) Visuals.ResetTo(originalItem.Visuals);
+    }
+
     protected virtual void SetupItem(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out ItemDrop component)) return;

@@ -10,16 +10,10 @@ namespace MonsterDB;
 public static partial class Extensions
 {
     public static void Add<T>(this List<T> list, params T[] values) => list.AddRange(values);
-
-    public static void AddRange<T, V>(this Dictionary<T, V> dict, Dictionary<T, V> other)
-    {
-        foreach (KeyValuePair<T, V> kvp in other)
-        {
-            dict[kvp.Key] = kvp.Value;
-        }
-    }
     
-    public static void CopyFrom<T, V>(this T target, V source)
+    public static void CopyFrom<T, V>(this T target, V source) 
+        where T : MonoBehaviour 
+        where V : MonoBehaviour
     {
         Dictionary<string, FieldInfo> targetFields = typeof(T)
             .GetFields(Reference.FieldBindingFlags)
@@ -55,10 +49,10 @@ public static partial class Extensions
     
     public static Dictionary<TKey,SValue> ToDict<TKey, SValue>(this IEnumerable<SValue> enumerable, Func<SValue, TKey> func)
     {
-        var dict = new Dictionary<TKey, SValue>();
-        foreach (var e in enumerable)
+        Dictionary<TKey, SValue> dict = new Dictionary<TKey, SValue>();
+        foreach (SValue e in enumerable)
         {
-            var k = func(e);
+            TKey? k = func(e);
             dict[k] = e;
         }
 

@@ -17,8 +17,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
     public readonly Harmony _harmony = new(ModGUID);
     private static readonly ManualLogSource MonsterDBLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
     public static MonsterDBPlugin instance = null!;
-
-        
+    
     public void Awake()
     {
         instance = this;

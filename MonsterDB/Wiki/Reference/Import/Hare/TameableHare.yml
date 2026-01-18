@@ -28,7 +28,6 @@ Tameable:
   unsummonOnOwnerLogoutSeconds: 0
   levelUpOwnerSkill: None
   levelUpFactor: 1
-  # saddleItem: Carrot
   dropSaddleOnDeath: true
   dropItemVel: 5
   tamingSpeedMultiplierRange: 60

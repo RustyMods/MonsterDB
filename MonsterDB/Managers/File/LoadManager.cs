@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HarmonyLib;
 using ServerSync;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public static class LoadManager
     public static readonly Dictionary<string, Header> originals;
     public static readonly List<Header> loadList;
     private static readonly CustomSyncedValue<string> sync;
-    public static readonly BaseAggregate files;
+    public static BaseAggregate files;
+    public static bool resetting;
 
     static LoadManager()
     {
@@ -23,15 +25,34 @@ public static class LoadManager
         
         Command reload = new Command("reload", "reloads all files in import folder", _ =>
         {
-            loadList.Clear();
-            FileManager.Start();
             ResetAll();
+            loadList.Clear();
+            SpawnManager.Clear();
+            CloneManager.Clear();
+            FileManager.Start();
             LoadClones();
             Load();
             return true;
         }, adminOnly: true);
+
+        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        harmony.Patch(AccessTools.Method(typeof(Game), nameof(Game.Logout)),
+            new HarmonyMethod(AccessTools.Method(typeof(LoadManager), nameof(Patch_Game_Logout))));
+        harmony.Patch(AccessTools.Method(typeof(FejdStartup), nameof(FejdStartup.OnStartGame)),
+            new HarmonyMethod(AccessTools.Method(typeof(FileManager), nameof(FileManager.Start))));
+
     }
-    
+
+    private static void Patch_Game_Logout()
+    {
+        files = new BaseAggregate();
+        ResetAll();
+        loadList.Clear();
+        SpawnManager.Clear();
+        CloneManager.Clear();
+        FileManager.started = false;
+    }
+
     public static T? GetOriginal<T>(string prefabName) where T : Header =>
         originals.TryGetValue(prefabName, out Header? baseValue) ? baseValue as T : null;
 
@@ -48,10 +69,19 @@ public static class LoadManager
 
     private static void ResetAll()
     {
-        foreach (Header original in originals.Values)
+        if (loadList.Count <= 0 || originals.Count <= 0) return;
+        
+        MonsterDBPlugin.LogInfo("Starting reset");
+        resetting = true;
+
+        foreach (Header? data in loadList)
         {
-            original.Update();
+            if (!originals.TryGetValue(data.Prefab, out Header? original)) continue;
+            
+            data.CopyFields(original);
+            data.Update();
         }
+        resetting = false;
     }
     
     private static void OnSyncChange()
@@ -63,9 +93,9 @@ public static class LoadManager
             BaseAggregate data = ConfigManager.Deserialize<BaseAggregate>(sync.Value);
             if (string.IsNullOrEmpty(data.PrefabToUpdate))
             {
-                loadList.Clear();
-                data.Load();
                 ResetAll();
+                loadList.Clear();
+                loadList.AddRange(data.Load());
                 LoadClones();
                 Load();
             }

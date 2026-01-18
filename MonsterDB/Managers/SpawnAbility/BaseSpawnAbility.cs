@@ -22,6 +22,14 @@ public class BaseSpawnAbility : Header
         SetupSpawnAbility(prefab);
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseSpawnAbility originalAbility) return;
+        if (SpawnAbility != null && originalAbility.SpawnAbility != null) SpawnAbility.ResetTo(originalAbility.SpawnAbility);
+        if (Visuals != null && originalAbility.Visuals != null) Visuals.ResetTo(originalAbility.Visuals);
+    }
+
     private void SetupSpawnAbility(GameObject prefab)
     {
         if (prefab.TryGetComponent(out SpawnAbility spawnAbility))

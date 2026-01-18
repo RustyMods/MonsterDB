@@ -33,6 +33,20 @@ public class Header
 
     public virtual void Update()
     {
-        MonsterDBPlugin.LogInfo($"Updated {Prefab}");
+        if (LoadManager.resetting)
+        {
+            MonsterDBPlugin.LogInfo($"Reset {Prefab}");
+        }
+        else
+        {
+            MonsterDBPlugin.LogInfo($"Updated {Prefab}");
+
+        }
+    }
+
+    
+    public virtual void CopyFields(Header original)
+    {
+        
     }
 }

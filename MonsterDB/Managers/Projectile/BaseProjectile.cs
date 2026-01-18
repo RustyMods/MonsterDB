@@ -25,6 +25,16 @@ public class BaseProjectile : Header
         SetupVisuals(prefab);
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseProjectile originalProjectile) return;
+        if (ProjectileData != null && originalProjectile.ProjectileData != null)  ProjectileData.ResetTo(originalProjectile.ProjectileData);
+        if (TeleportAbility != null && originalProjectile.TeleportAbility != null)  TeleportAbility.ResetTo(originalProjectile.TeleportAbility);
+        if (TriggerSpawnAbility != null && originalProjectile.TriggerSpawnAbility != null)TriggerSpawnAbility.ResetTo(originalProjectile.TriggerSpawnAbility);
+        if (Visuals != null && originalProjectile.Visuals != null) Visuals.ResetTo(originalProjectile.Visuals);
+    }
+
     protected virtual void SetupTeleportAbility(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out TeleportAbility component)) return;

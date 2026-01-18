@@ -18,6 +18,13 @@ public class TextureData
         m_bytes = File.ReadAllBytes(filePath);
     }
 
+    public TextureData(string fileName, byte[] bytes)
+    {
+        m_filePath = "Server";
+        m_name = fileName;
+        m_bytes = bytes;
+    }
+
     public Texture ToTex(Texture2D? original)
     {
         if (m_tex != null) return m_tex;
@@ -38,5 +45,13 @@ public class TextureData
         sprite.name = m_name;
         m_sprite = sprite;
         return sprite;
+    }
+
+    public void Write()
+    {
+        var folderPath = Path.Combine(FileManager.ImportFolder, "textures");
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+        string filePath = Path.Combine(folderPath, m_name + ".png");
+        File.WriteAllBytes(filePath, m_bytes);
     }
 }

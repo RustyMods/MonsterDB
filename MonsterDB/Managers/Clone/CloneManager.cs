@@ -19,4 +19,30 @@ public static class CloneManager
     {
         return root.transform;
     }
+
+    public static void Clear()
+    {
+        for (int i = 0; i < root.transform.childCount; ++i)
+        {
+            GameObject child = root.transform.GetChild(i).gameObject;
+            int hash = child.name.GetStableHashCode();
+            if (ZNetScene.instance)
+            {
+                ZNetScene.instance.m_prefabs.Remove(child);
+                ZNetScene.instance.m_namedPrefabs.Remove(hash);
+            }
+            if (ObjectDB.instance)
+            {
+                ObjectDB.instance.m_items.Remove(child);
+                ObjectDB.instance.m_itemByHash.Remove(hash);
+            }
+            PrefabManager.PrefabsToRegister.Remove(child);
+            PrefabManager._prefabs.Remove(child.name);
+            MonsterDBPlugin.LogDebug($"Destroyed {child.name}");
+            Object.Destroy(child);
+        }
+
+        clones.Clear();
+        PrefabManager.Clones.Clear();
+    }
 }

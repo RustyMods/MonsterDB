@@ -14,6 +14,7 @@ public static class FileManager
     public static readonly string ExportFolder;
     public static readonly string ImportFolder;
     private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;
+    public static bool started;
     
     static FileManager()
     {
@@ -41,6 +42,7 @@ public static class FileManager
     
     public static void Start()
     {
+        if (started) return;
         string[] files =  Directory.GetFiles(ImportFolder, "*.yml", SearchOption.AllDirectories);
         for (int i = 0; i < files.Length; ++i)
         {
@@ -127,6 +129,7 @@ public static class FileManager
             }
         }
         MonsterDBPlugin.LogInfo($"Loaded {files.Length} files.");
+        started = true;
     }
 
     private static void RegisterSpawnList(SpawnDataRef[]? list)

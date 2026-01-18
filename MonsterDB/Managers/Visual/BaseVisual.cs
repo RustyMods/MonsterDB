@@ -18,7 +18,14 @@ public class BaseVisual : Header
         ClonedFrom = source;
         SetupVisuals(prefab);
     }
-    
+
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseVisual originalVisual) return;
+        if (Visuals != null && originalVisual.Visuals != null) Visuals.ResetTo(originalVisual.Visuals);
+    }
+
     public override void Update()
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);

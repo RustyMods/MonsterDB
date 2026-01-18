@@ -30,6 +30,14 @@ public class BaseCharacter : Base
         LoadManager.files.Add(this);
     }
 
+    public override void CopyFields(Header original)
+    {
+        base.CopyFields(original);
+        if (original is not BaseCharacter originalCharacter) return;
+        if (Character != null && originalCharacter.Character != null) Character.ResetTo(originalCharacter.Character);
+        if (AI != null && originalCharacter.AI != null) AI.ResetTo(originalCharacter.AI);
+    }
+
     protected override void UpdatePrefab(GameObject prefab, bool isInstance = false)
     {
         base.UpdatePrefab(prefab, isInstance);

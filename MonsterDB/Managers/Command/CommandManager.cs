@@ -109,99 +109,12 @@ public static class CommandManager
         return false;
     }
 
-    private static void Patch_Terminal_TabCycle(Terminal __instance, string word, ref List<string>? options, bool usePrefix)
+    private static void Patch_Terminal_TabCycle(string word, ref List<string>? options)
     {
-        if (commands.TryGetValue(word, out var command))
+        if (commands.TryGetValue(word, out Command? command))
         {
             options = command.FetchOptions();
         }
-    }
-    
-    private static bool HandleTabCycle(Terminal __instance, string word, List<string> options, bool usePrefix)
-    {
-        string currentInput = __instance.m_input.text;
-        string[] inputParts = currentInput.Split(' ');
-
-        bool isCustomCommand = inputParts.Length >= 2 &&
-                               String.Equals(inputParts[0], startCommand, StringComparison.CurrentCultureIgnoreCase) &&
-                               commands.ContainsKey(inputParts[1]);
-
-        if (!isCustomCommand)
-        {
-            return true; 
-        }
-        
-        if (__instance.m_tabCaretPosition == -1)
-        {
-            __instance.m_tabOptions.Clear();
-            __instance.m_tabCaretPosition = __instance.m_input.caretPosition;
-            word = word.ToLower();
-            __instance.m_tabLength = word.Length;
-            
-            if (__instance.m_tabLength == 0)
-            {
-                __instance.m_tabOptions.AddRange(options);
-            }
-            else
-            {
-                foreach (string option in options)
-                {
-                    if (option != null && option.Length > __instance.m_tabLength && 
-                        option.Substring(0, __instance.m_tabLength).ToLower() == word)
-                    {
-                        __instance.m_tabOptions.Add(option);
-                    }
-                }
-            }
-            __instance.m_tabOptions.Sort();
-            __instance.m_tabIndex = -1;
-        }
-        
-        if (__instance.m_tabOptions.Count == 0)
-            __instance.m_tabOptions.AddRange(__instance.m_lastSearch);
-            
-        if (__instance.m_tabOptions.Count == 0)
-            return false;
-        
-        if (++__instance.m_tabIndex >= __instance.m_tabOptions.Count)
-            __instance.m_tabIndex = 0;
-        
-        // Custom replacement logic for commands
-        if (__instance.m_tabCaretPosition - __instance.m_tabLength >= 0)
-        {
-            // Find the position where the third argument (the option being completed) starts
-            int spaceCount = 0;
-            int thirdArgStart = 0;
-            
-            for (int i = 0; i < currentInput.Length; i++)
-            {
-                if (currentInput[i] == ' ')
-                {
-                    spaceCount++;
-                    if (spaceCount == 2)
-                    {
-                        thirdArgStart = i + 1;
-                        break;
-                    }
-                }
-            }
-            
-            // Rebuild the command with the selected option
-            if (inputParts.Length >= 3 && thirdArgStart > 0)
-            {
-                // Replace everything from the third argument onwards with the selected option
-                string baseCommand = currentInput.Substring(0, thirdArgStart);
-                __instance.m_input.text = baseCommand + __instance.m_tabOptions[__instance.m_tabIndex];
-            }
-            else if (inputParts.Length == 2)
-            {
-                // Add the selected option as the third argument
-                __instance.m_input.text = currentInput + " " + __instance.m_tabOptions[__instance.m_tabIndex];
-            }
-        }
-        
-        __instance.m_tabCaretPositionEnd = __instance.m_input.caretPosition = __instance.m_input.text.Length;
-        return false;
     }
 }
 

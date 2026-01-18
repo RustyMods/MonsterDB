@@ -44,7 +44,14 @@ public class ParticleSystemRef : Reference
 
         if (changed && log && !string.IsNullOrEmpty(targetName))
         {
-            MonsterDBPlugin.LogDebug($"[{targetName}]/[{ps.name}] Particle System Updated");
+            if (LoadManager.resetting)
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}]/[{ps.name}] Particle System Reverted");
+            }
+            else
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}]/[{ps.name}] Particle System Updated");
+            }
         }
     }
 

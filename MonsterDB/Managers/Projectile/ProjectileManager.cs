@@ -116,15 +116,6 @@ public static class ProjectileManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
-            Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
-            Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
-
-            for (int i = 0; i < renderers.Length; ++i)
-            {
-                Renderer renderer = renderers[i];
-                VisualUtils.CloneMaterials(renderer, ref newMaterials);
-            }
-
             if (p.TryGetComponent(out Projectile projectile) && projectile.m_spawnOnHit != null && projectile.m_spawnOnHit.GetComponent<SpawnAbility>())
             {
                 string newName = $"MDB_{cloneName}_{projectile.m_spawnOnHit.name}";

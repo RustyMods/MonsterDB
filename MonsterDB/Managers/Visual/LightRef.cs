@@ -20,7 +20,14 @@ public class LightRef : Reference
     {
         if (log && !string.IsNullOrEmpty(targetName))
         {
-            MonsterDBPlugin.LogDebug($"[{targetName}]/[{light.name}] Updating light");
+            if (LoadManager.resetting)
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}]/[{light.name}] Resetting light");
+            }
+            else
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}]/[{light.name}] Updating light");
+            }
         }
         
         log &= ConfigManager.ShouldLogDetails() && !string.IsNullOrEmpty(targetName);

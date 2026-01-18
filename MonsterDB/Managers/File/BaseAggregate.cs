@@ -22,6 +22,9 @@ public class BaseAggregate : Header
 
     public string? PrefabToUpdate;
 
+    public int Count() => humanoids?.Count + characters?.Count + humans?.Count + eggs?.Count + items?.Count +
+        fishes?.Count + projectiles?.Count + ragdolls?.Count + spawnAbilities?.Count + visuals?.Count ?? 0;
+
     public bool GetPrefabToUpdate(out Header header)
     {
         header = null!;

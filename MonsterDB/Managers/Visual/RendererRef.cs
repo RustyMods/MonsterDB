@@ -17,7 +17,14 @@ public class RendererRef : Reference
     {
         if (log && !string.IsNullOrEmpty(targetName))
         {
-            MonsterDBPlugin.LogDebug($"[{targetName}]/[{renderer.name}] Updating Renderer");
+            if (LoadManager.resetting)
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}]/[{renderer.name}] Resetting Renderer");
+            }
+            else
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}]/[{renderer.name}] Updating Renderer");
+            }
         }
         
         if (m_active.HasValue)
