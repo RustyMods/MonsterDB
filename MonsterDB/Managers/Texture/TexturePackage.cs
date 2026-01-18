@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MonsterDB;
 
-public static class ImageTransfer
+public static class TexturePackage
 {
     private const int MAX_COMPRESSED_CHUNK_SIZE = 64 * 1024; // 64 KB
     
@@ -63,7 +63,7 @@ public static class ImageTransfer
             }
         
             MonsterDBPlugin.LogInfo(
-                $"ImageTransfer completed: {TotalChunks} chunks, " +
+                $"TexturePack completed: {TotalChunks} chunks, " +
                 $"{ReceivedBytes / 1024f:F1} KB received"
             );
         }
@@ -156,7 +156,7 @@ public static class ImageTransfer
         string transferId = System.Guid.NewGuid().ToString();
 
         MonsterDBPlugin.LogInfo(
-            $"ImageTransfer: sending {totalSize} bytes in {chunkCount} chunks");
+            $"TexturePack: sending {totalSize} bytes in {chunkCount} chunks");
 
         for (int i = 0; i < chunkCount; i++)
         {
@@ -204,7 +204,7 @@ public static class ImageTransfer
 
             MonsterDBPlugin.LogInfo(
                 string.Format(
-                    "ImageTransfer | {0,3}/{1,-3} | {2,3}% | chunk {3,2} | {4,6} bytes | recv {5,7:F1} KB",
+                    "TexturePack | {0,3}/{1,-3} | {2,3}% | chunk {3,2} | {4,6} bytes | recv {5,7:F1} KB",
                     buffer.Received,
                     buffer.TotalChunks,
                     percent,

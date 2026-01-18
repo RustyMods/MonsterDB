@@ -228,10 +228,10 @@
         <Compile Include="Managers\SpawnSystem\SpawnManager.cs" />
         <Compile Include="Managers\File\Header.cs" />
         <Compile Include="Managers\File\LoadManager.cs" />
+        <Compile Include="Managers\Texture\TexturePackage.cs" />
         <Compile Include="Managers\Texture\TextureData.cs" />
         <Compile Include="Managers\Texture\TextureManager.cs" />
         <Compile Include="Managers\Texture\TextureRef.cs" />
-        <Compile Include="Managers\Transfer\ImageTransfer.cs" />
         <Compile Include="Managers\Visual\BaseVisual.cs" />
         <Compile Include="Managers\Visual\LevelSetupRef.cs" />
         <Compile Include="Managers\Visual\LightRef.cs" />
