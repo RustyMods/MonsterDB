@@ -100,7 +100,7 @@ public static class ProjectileManager
         {
             bool isSpawnClone = false;
             string spawnSource = "";
-            if (PrefabManager.Clones.TryGetValue(component.m_spawnOnHit.name, out Clone c))
+            if (CloneManager.clones.TryGetValue(component.m_spawnOnHit.name, out Clone c))
             {
                 isSpawnClone = true;
                 spawnSource = c.PrefabName;
@@ -112,7 +112,7 @@ public static class ProjectileManager
 
     public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
     {
-        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {

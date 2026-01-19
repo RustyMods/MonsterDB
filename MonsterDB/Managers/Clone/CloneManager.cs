@@ -6,10 +6,14 @@ namespace MonsterDB;
 public static class CloneManager
 {
     private static readonly GameObject root;
-    internal static readonly Dictionary<string, GameObject> clones = new();
+    internal static readonly Dictionary<string, GameObject> prefabs;
+    internal static readonly Dictionary<string, Clone> clones;
+
 
     static CloneManager()
     {
+        prefabs = new Dictionary<string, GameObject>();
+        clones =  new Dictionary<string, Clone>();
         root = new GameObject($"{MonsterDBPlugin.ModName}_prefab_root");
         UnityEngine.Object.DontDestroyOnLoad(root);
         root.SetActive(false);
@@ -42,7 +46,7 @@ public static class CloneManager
             Object.Destroy(child);
         }
 
+        prefabs.Clear();
         clones.Clear();
-        PrefabManager.Clones.Clear();
     }
 }

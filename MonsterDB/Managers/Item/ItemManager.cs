@@ -168,7 +168,7 @@ public static class ItemManager
             {
                 bool isProjectileClone = false;
                 string projectileSource = "";
-                if (PrefabManager.Clones.TryGetValue(sharedData.m_attack.m_attackProjectile.name, out Clone c))
+                if (CloneManager.clones.TryGetValue(sharedData.m_attack.m_attackProjectile.name, out Clone c))
                 {
                     isProjectileClone = true;
                     projectileSource = c.PrefabName;
@@ -181,7 +181,7 @@ public static class ItemManager
             {
                 bool isProjectileClone = false;
                 string projectileSource = "";
-                if (PrefabManager.Clones.TryGetValue(sharedData.m_secondaryAttack.m_attackProjectile.name, out Clone c))
+                if (CloneManager.clones.TryGetValue(sharedData.m_secondaryAttack.m_attackProjectile.name, out Clone c))
                 {
                     isProjectileClone = true;
                     projectileSource = c.PrefabName;
@@ -213,7 +213,7 @@ public static class ItemManager
 
     public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
     {
-        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         if (!source.GetComponent<ItemDrop>()) return false;
         
         Clone c = new Clone(source, cloneName);

@@ -64,22 +64,23 @@ public class BaseRagdoll : Header
 
     private void UpdatePrefab(GameObject prefab)
     {
+        UpdateRagdoll(prefab);
+        UpdateVisuals(prefab);
+    }
+
+    private void UpdateRagdoll(GameObject prefab)
+    {
         if (Ragdoll != null && prefab.TryGetComponent(out Ragdoll component))
         {
             Ragdoll.UpdateFields(component, prefab.name, true);
         }
+    }
 
+    private void UpdateVisuals(GameObject prefab)
+    {
         if (Visuals != null)
         {
-            Visuals.Update(prefab, false);
-            if (Visuals.m_scale.HasValue)
-            {
-                prefab.transform.localScale =  Visuals.m_scale.Value;
-                if (ConfigManager.ShouldLogDetails())
-                {
-                    MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
-                }
-            }
+            Visuals.Update(prefab, false, false);
         }
     }
 }

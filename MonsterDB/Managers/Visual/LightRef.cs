@@ -43,7 +43,7 @@ public class LightRef : Reference
         
         if (color != null)
         {
-            light.color = color.FromHex(light.color);
+            light.color = color.FromHexOrRGBA(light.color);
             if (log)
             {
                 MonsterDBPlugin.LogDebug($"[{targetName}]/[{light.name}] m_color: {color}");
@@ -90,7 +90,7 @@ public static partial class Extensions
                 m_parent = x.transform.parent?.name,
                 m_index = x.transform.GetSiblingIndex(),
                 m_active = x.gameObject.activeSelf,
-                color = x.color.ToHex(),
+                color = x.color.ToRGBAString(),
                 type = x.type,
                 intensity = x.intensity,
                 range = x.range

@@ -37,7 +37,7 @@ public static class SpawnAbilityManager
 
             bool isClone = false;
             string source = "";
-            if (PrefabManager.Clones.TryGetValue(prefabName, out Clone c))
+            if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
             {
                 isClone = true;
                 source = c.PrefabName;
@@ -106,7 +106,7 @@ public static class SpawnAbilityManager
         string dirPath = "")
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         
         Clone c = new Clone(prefab, cloneName);
         c.OnCreated += p =>

@@ -123,7 +123,7 @@ public static partial class Extensions
             .Select(x => new GradientColorKeyRef()
             {
                 m_time = x.time,
-                m_color = x.color.ToHex()
+                m_color = x.color.ToRGBAString()
             })
             .ToArray();
     }
@@ -134,7 +134,7 @@ public static partial class Extensions
             .Select(x => new GradientColorKey()
             {
                 time = x.m_time,
-                color = x.m_color.FromHex(Color.white)
+                color = x.m_color.FromHexOrRGBA(Color.white)
             })
             .ToArray();
     }

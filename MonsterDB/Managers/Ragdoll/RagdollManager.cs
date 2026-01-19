@@ -52,7 +52,7 @@ public static class RagdollManager
 
     public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
     {
-        if (CloneManager.clones.TryGetValue(cloneName, out clone)) return true;
+        if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {

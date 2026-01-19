@@ -14,13 +14,11 @@ public static class PrefabManager
     internal static ObjectDB? _ObjectDB;
     internal static readonly Dictionary<string, GameObject> _prefabs;
     internal static List<GameObject> PrefabsToRegister;
-    internal static Dictionary<string, Clone> Clones;
 
     static PrefabManager()
     {
         _prefabs = new Dictionary<string, GameObject>();
         PrefabsToRegister = new List<GameObject>();
-        Clones =  new Dictionary<string, Clone>();
     }
 
     public static void Start()
@@ -97,7 +95,7 @@ public static class PrefabManager
             if (prefab != null) return prefab;
         }
 
-        if (CloneManager.clones.TryGetValue(prefabName, out prefab))
+        if (CloneManager.prefabs.TryGetValue(prefabName, out prefab))
         {
             return prefab;
         }
@@ -206,7 +204,7 @@ public static class PrefabManager
         _ZNetScene = __instance.m_objectDBPrefab.GetComponent<ZNetScene>();
         _ObjectDB = __instance.m_objectDBPrefab.GetComponent<ObjectDB>();
         ShaderRef.CacheShaders();
-        foreach (Clone clone in Clones.Values)
+        foreach (Clone clone in CloneManager.clones.Values)
         {
             clone.Create();
         }

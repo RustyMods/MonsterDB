@@ -20,9 +20,9 @@ public class MinMaxGradientRef : Reference
     public void Set(ParticleSystem.MinMaxGradient gradient)
     {
         m_mode = gradient.mode;
-        m_color = gradient.color.ToHex();
-        m_colorMin = gradient.colorMin.ToHex();
-        m_colorMax = gradient.colorMax.ToHex();
+        m_color = gradient.color.ToRGBAString();
+        m_colorMin = gradient.colorMin.ToRGBAString();
+        m_colorMax = gradient.colorMax.ToRGBAString();
         if (gradient.gradient != null) m_gradient = gradient.gradient;
         if (gradient.gradientMin != null) m_gradientMin = gradient.gradientMin;
         if (gradient.gradientMax != null) m_gradientMax = gradient.gradientMax;
@@ -36,17 +36,17 @@ public class MinMaxGradientRef : Reference
         }
         if (m_color != null && !string.IsNullOrEmpty(m_color))
         {
-            gradient.color = m_color.FromHex(gradient.color);
+            gradient.color = m_color.FromHexOrRGBA(gradient.color);
         }
 
         if (m_colorMin != null && !string.IsNullOrEmpty(m_colorMin))
         {
-            gradient.colorMin = m_colorMin.FromHex(gradient.colorMin);
+            gradient.colorMin = m_colorMin.FromHexOrRGBA(gradient.colorMin);
         }
 
         if (m_colorMax != null && !string.IsNullOrEmpty(m_colorMax))
         {
-            gradient.colorMax = m_colorMax.FromHex(gradient.colorMax);
+            gradient.colorMax = m_colorMax.FromHexOrRGBA(gradient.colorMax);
         }
 
         if (m_gradient != null)

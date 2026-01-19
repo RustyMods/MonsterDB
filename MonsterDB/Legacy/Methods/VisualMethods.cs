@@ -176,6 +176,6 @@ public static class VisualMethods
         public float a;
         
         public Color ToColor() => new Color(r, g, b, a);
-        public string ToHex() => ToColor().ToHex();
+        public string ToHex() => ToColor().ToRGBAString();
     }
 }

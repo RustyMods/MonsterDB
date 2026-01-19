@@ -67,7 +67,7 @@ public static class EggManager
                 bool isClone = false;
                 string source = "";
 
-                if (PrefabManager.Clones.TryGetValue(prefabName, out Clone c))
+                if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
                 {
                     isClone = true;
                     source = c.PrefabName;
@@ -217,7 +217,7 @@ public static class EggManager
 
     public static void Clone(GameObject source, string cloneName, bool write = true)
     {
-        if (CloneManager.clones.ContainsKey(cloneName)) return;
+        if (CloneManager.prefabs.ContainsKey(cloneName)) return;
         if (!source.GetComponent<ItemDrop>()) return;
         
         Clone c = new Clone(source, cloneName);

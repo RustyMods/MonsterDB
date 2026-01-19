@@ -42,12 +42,12 @@ public class Human : Humanoid
             if (m_skinColors != null)
             {
                 string color = m_skinColors[UnityEngine.Random.Range(0, m_skinColors.Length)];
-                m_skinColor = Utils.ColorToVec3(color.FromHex(Color.white));
+                m_skinColor = Utils.ColorToVec3(color.FromHexOrRGBA(Color.white));
             }
             if (m_hairColors != null)
             {
                 string color = m_hairColors[UnityEngine.Random.Range(0, m_hairColors.Length)];
-                m_hairColor = Utils.ColorToVec3(color.FromHex(Color.black));
+                m_hairColor = Utils.ColorToVec3(color.FromHexOrRGBA(Color.black));
             }
             
             m_nview.GetZDO().Set(ZDOVars.s_addedDefaultItems, true);

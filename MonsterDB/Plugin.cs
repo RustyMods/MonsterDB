@@ -10,7 +10,7 @@ namespace MonsterDB;
 public class MonsterDBPlugin : BaseUnityPlugin
 {
     internal const string ModName = "MonsterDB";
-    internal const string ModVersion = "0.2.0";
+    internal const string ModVersion = "0.2.1";
     internal const string Author = "RustyMods";
     public const string ModGUID = Author + "." + ModName;
     internal static string ConnectionError = "";

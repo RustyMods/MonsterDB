@@ -19,11 +19,11 @@ public class RendererRef : Reference
         {
             if (LoadManager.resetting)
             {
-                MonsterDBPlugin.LogDebug($"[{targetName}]/[{renderer.name}] Resetting Renderer");
+                MonsterDBPlugin.LogDebug($"[{targetName}].[{renderer.name}] Resetting Renderer");
             }
             else
             {
-                MonsterDBPlugin.LogDebug($"[{targetName}]/[{renderer.name}] Updating Renderer");
+                MonsterDBPlugin.LogDebug($"[{targetName}].[{renderer.name}] Updating Renderer");
             }
         }
         
@@ -39,7 +39,7 @@ public class RendererRef : Reference
 
         if (m_materials != null)
         {
-            UpdateMaterials(renderer, m_materials, $"{targetName}/{renderer.name}", log);
+            UpdateMaterials(renderer, m_materials, $"{targetName}.{renderer.name}", log);
         }
     }
     

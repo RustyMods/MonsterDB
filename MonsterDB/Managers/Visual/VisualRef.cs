@@ -19,16 +19,54 @@ public class VisualRef : Reference
     public string[]? m_hairColors;
     public string[]? m_skinColors;
 
-    public void Update(GameObject prefab, bool isInstance)
+    public void Update(GameObject prefab, bool isInstance, bool isItem)
     {
-        UpdateRenderers(prefab, isInstance);
+        UpdateRenderers(prefab, isInstance, isItem);
         UpdateLights(prefab, isInstance);
         UpdateParticleSystems(prefab, isInstance);
     }
-    public void UpdateRenderers(GameObject prefab, bool isInstance)
+
+    public void UpdateChildrenScale(GameObject prefab, Renderer[] renderers, bool log)
     {
-        if (m_renderers == null) return;
+        log &= ConfigManager.ShouldLogDetails();
+        
+        if (m_scale.HasValue)
+        {
+            for (int i = 0; i < renderers.Length; ++i)
+            {
+                Renderer renderer = renderers[i];
+                GameObject go = renderer.gameObject;
+
+                go.transform.localScale = Vector3.Scale(go.transform.localScale, m_scale.Value);
+                    
+                if (log)
+                {
+                    MonsterDBPlugin.LogDebug($"[{prefab.name}][{go.name}] m_scale: {go.transform.localScale.ToString()}");
+                }
+            }
+        }
+    }
+
+    public void UpdateScale(GameObject prefab, bool log)
+    {
+        log &= ConfigManager.ShouldLogDetails();
+        if (m_scale.HasValue)
+        {
+            prefab.transform.localScale = m_scale.Value;
+            if (log)
+            {
+                MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
+            }
+        }
+    }
+    public void UpdateRenderers(GameObject prefab, bool isInstance, bool isItem)
+    {
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+
+        if (!isItem) UpdateScale(prefab, !isInstance);
+        else UpdateChildrenScale(prefab, renderers, !isInstance);
+        
+        if (m_renderers == null) return;
         
         Dictionary<(string m_prefab, string? m_parent, int? m_index), RendererRef> exactMatchLookup = m_renderers
             .GroupBy(x => (x.m_prefab, x.m_parent, x.m_index))

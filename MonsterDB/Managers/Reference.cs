@@ -388,18 +388,18 @@ public abstract class Reference
                 targetField.SetValue(target, prefab);
                 if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {prefab.name}");
             }
-            else
-            {
-                if (target is MonoBehaviour mono)
-                {
-                    Transform? possibleChild = Utils.FindChild(mono.transform, goName);
-                    if (possibleChild != null)
-                    {
-                        targetField.SetValue(target, possibleChild.gameObject);
-                        if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {possibleChild.name} transform");
-                    }
-                }
-            }
+            // else
+            // {
+            //     if (target is MonoBehaviour mono)
+            //     {
+            //         Transform? possibleChild = Utils.FindChild(mono.transform, goName);
+            //         if (possibleChild != null)
+            //         {
+            //             targetField.SetValue(target, possibleChild.gameObject);
+            //             if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {possibleChild.name} transform");
+            //         }
+            //     }
+            // }
         }
     }
 
@@ -464,7 +464,7 @@ public abstract class Reference
     {
         object? targetValue = targetField.GetValue(target);
         if (targetValue is not Color targetColor) return;
-        targetField.SetValue(target, hex.FromHex(targetColor));
+        targetField.SetValue(target, hex.FromHexOrRGBA(targetColor));
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {hex}");
     }
 

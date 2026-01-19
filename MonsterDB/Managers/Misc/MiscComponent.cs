@@ -171,7 +171,7 @@ public class MiscComponent : Reference
                 {
                     object? TValue = targetField.GetValue(target);
                     if (TValue is not Color defaultColor) continue;
-                    targetField.SetValue(target, hex.FromHex(defaultColor));
+                    targetField.SetValue(target, hex.FromHexOrRGBA(defaultColor));
                 }
                 else if (TType == typeof(List<CharacterDrop.Drop>) && 
                          info.m_value is List<DropRef> dr)

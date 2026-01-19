@@ -24,7 +24,7 @@ public class LevelSetupRef : Reference
         setup.m_saturation = m_saturation;
         setup.m_value = m_value;
         setup.m_setEmissiveColor = m_setEmissiveColor;
-        setup.m_emissiveColor = m_emissiveColor.FromHex(Color.white);
+        setup.m_emissiveColor = m_emissiveColor.FromHexOrRGBA(Color.white);
         if (!string.IsNullOrEmpty(m_enableObject) && 
             renderers.TryGetValue(m_enableObject, out Renderer? renderer))
         {
@@ -46,7 +46,7 @@ public static partial class Extensions
                 m_hue = x.m_hue,
                 m_saturation = x.m_saturation,
                 m_setEmissiveColor = x.m_setEmissiveColor,
-                m_emissiveColor = x.m_emissiveColor.ToHex()
+                m_emissiveColor = x.m_emissiveColor.ToRGBAString()
             })
             .ToList();
         return levelSetups;

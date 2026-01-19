@@ -36,7 +36,7 @@ public class MaterialRef : Reference
         {
             if (!string.IsNullOrEmpty(m_color))
             {
-                material.color = m_color.FromHex(material.color);
+                material.color = m_color.FromHexOrRGBA(material.color);
                 if (log)
                 {
                     MonsterDBPlugin.LogDebug($"[{targetName}][{material.name}] m_color: {m_color}");
@@ -71,7 +71,7 @@ public class MaterialRef : Reference
         {
             if (!string.IsNullOrEmpty(m_emissionColor))
             {
-                material.SetColor(ShaderRef._EmissionColor, m_emissionColor.FromHex(material.GetColor(ShaderRef._EmissionColor)));
+                material.SetColor(ShaderRef._EmissionColor, m_emissionColor.FromHexOrRGBA(material.GetColor(ShaderRef._EmissionColor)));
                 if (log)
                 {
                     MonsterDBPlugin.LogDebug($"[{targetName}][{material.name}] m_emissionColor: {m_emissionColor}");
@@ -91,7 +91,7 @@ public class MaterialRef : Reference
         {
             if (!string.IsNullOrEmpty(m_tintColor))
             {
-                material.SetColor(ShaderRef._TintColor, m_tintColor.FromHex(material.GetColor(ShaderRef._TintColor)));
+                material.SetColor(ShaderRef._TintColor, m_tintColor.FromHexOrRGBA(material.GetColor(ShaderRef._TintColor)));
                 if (log)
                 {
                     MonsterDBPlugin.LogDebug($"[{targetName}][{material.name}] m_tintColor: {m_tintColor}");
@@ -117,13 +117,13 @@ public class MaterialRef : Reference
         {
             m_name = mat.name,
             m_shader = mat.shader.name,
-            m_color = mat.HasProperty(ShaderRef._Color) ? mat.color.ToHex() : null,
+            m_color = mat.HasProperty(ShaderRef._Color) ? mat.color.ToRGBAString() : null,
             m_hue = mat.HasProperty(ShaderRef._Hue) ? mat.GetFloat(ShaderRef._Hue) : null,
             m_saturation = mat.HasProperty(ShaderRef._Saturation) ? mat.GetFloat(ShaderRef._Saturation) : null,
             m_value =  mat.HasProperty(ShaderRef._Value) ? mat.GetFloat(ShaderRef._Value) : null,
-            m_emissionColor = mat.HasProperty(ShaderRef._EmissionColor) ? mat.GetColor(ShaderRef._EmissionColor).ToHex() : null,
+            m_emissionColor = mat.HasProperty(ShaderRef._EmissionColor) ? mat.GetColor(ShaderRef._EmissionColor).ToRGBAString() : null,
             m_mainTexture = mat.mainTexture?.name ?? null,
-            m_tintColor = mat.HasProperty(ShaderRef._TintColor) ? mat.GetColor(ShaderRef._TintColor).ToHex() : null,
+            m_tintColor = mat.HasProperty(ShaderRef._TintColor) ? mat.GetColor(ShaderRef._TintColor).ToRGBAString() : null,
             m_emissionTexture = mat.HasProperty(ShaderRef._EmissionMap) ? mat.GetTexture(ShaderRef._EmissionMap)?.name : null
         };
         
@@ -145,8 +145,9 @@ public static partial class Extensions
         return refs.ToArray();
     }
     
-    public static string ToHex(this Color color, bool includeAlpha = true)
+    public static string ToRGBAString(this Color color, bool includeAlpha = true)
     {
+        return color.ToString();
         Color32 c = color;
 
         return includeAlpha
@@ -154,22 +155,39 @@ public static partial class Extensions
             : $"#{c.r:X2}{c.g:X2}{c.b:X2}";
     }
     
-    public static Color FromHex(this string hex, Color defaultValue)
+    public static Color FromHexOrRGBA(this string hex, Color defaultValue)
     {
         if (string.IsNullOrWhiteSpace(hex)) return defaultValue;
 
-        hex = hex.TrimStart('#');
+        if (hex.StartsWith("#"))
+        {
+            hex = hex.TrimStart('#');
 
-        if (hex.Length != 6 && hex.Length != 8)
-            return defaultValue;
+            if (hex.Length != 6 && hex.Length != 8)
+                return defaultValue;
 
-        byte r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
-        byte g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-        byte b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
-        byte a = hex.Length == 8
-            ? byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber)
-            : (byte)255;
+            byte r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
+            byte g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
+            byte b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
+            byte a = hex.Length == 8
+                ? byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber)
+                : (byte)255;
 
-        return new Color32(r, g, b, a);
+            return new Color32(r, g, b, a);
+        }
+        if (hex.StartsWith("RGBA"))
+        {
+            int start = hex.IndexOf('(') + 1;
+            int end = hex.IndexOf(')');
+            string[] values = hex.Substring(start, end - start).Split(',');
+            if (values.Length != 4) return defaultValue;
+            if (!float.TryParse(values[0], out float r)) return defaultValue;
+            if (!float.TryParse(values[1], out float g)) return defaultValue;
+            if (!float.TryParse(values[2], out float b)) return defaultValue;
+            if (!float.TryParse(values[3], out float a)) return defaultValue;
+            return new Color(r, g, b, a);
+        }
+
+        return defaultValue;
     }
 }

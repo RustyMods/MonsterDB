@@ -195,7 +195,7 @@ public static class CreatureManager
                     {
                         bool isRagdollClone = false;
                         string ragdollSource = "";
-                        if (PrefabManager.Clones.TryGetValue(effect.m_prefab.name, out Clone ragdollClone))
+                        if (CloneManager.clones.TryGetValue(effect.m_prefab.name, out Clone ragdollClone))
                         {
                             isRagdollClone = true;
                             ragdollSource = ragdollClone.PrefabName;
@@ -217,7 +217,7 @@ public static class CreatureManager
                         bool isItemClone = false;
                         string itemSource = "";
                         
-                        if (PrefabManager.Clones.TryGetValue(item.name, out Clone d))
+                        if (CloneManager.clones.TryGetValue(item.name, out Clone d))
                         {
                             isItemClone = true;
                             itemSource = d.PrefabName;
@@ -232,7 +232,7 @@ public static class CreatureManager
 
     public static GameObject? Clone(GameObject source, string cloneName, bool write = true)
     {
-        if (CloneManager.clones.TryGetValue(cloneName, out var clone)) return clone;
+        if (CloneManager.prefabs.TryGetValue(cloneName, out var clone)) return clone;
         
         Clone c = new Clone(source, cloneName);
         c.OnCreated += prefab =>

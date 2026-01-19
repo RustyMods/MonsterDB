@@ -17,7 +17,7 @@ public class Clone
     {
         PrefabName = prefabName;
         NewName = newName;
-        PrefabManager.Clones[newName] = this;
+        CloneManager.clones[newName] = this;
     }
 
     public Clone(GameObject prefab, string newName)
@@ -25,7 +25,7 @@ public class Clone
         PrefabName = prefab.name;
         NewName = newName;
         Source = prefab;
-        PrefabManager.Clones[newName] = this;
+        CloneManager.clones[newName] = this;
     }
 
     internal GameObject? Create()
@@ -42,7 +42,7 @@ public class Clone
         Prefab.name = NewName;
         PrefabManager.RegisterPrefab(Prefab);
         OnCreated?.Invoke(Prefab);
-        CloneManager.clones[Prefab.name] = Prefab;
+        CloneManager.prefabs[Prefab.name] = Prefab;
         Loaded = true;
         return Prefab;
     }

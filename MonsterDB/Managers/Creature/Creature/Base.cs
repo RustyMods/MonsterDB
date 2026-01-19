@@ -241,15 +241,7 @@ public class Base : Header
     {
         if (Visuals != null)
         {
-            Visuals.Update(prefab, isInstance);
-            if (Visuals.m_scale.HasValue)
-            {
-                prefab.transform.localScale = Visuals.m_scale.Value;
-                if (!isInstance && ConfigManager.ShouldLogDetails())
-                {
-                    MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
-                }
-            }
+            Visuals.Update(prefab, isInstance, false);
         }
     }
 

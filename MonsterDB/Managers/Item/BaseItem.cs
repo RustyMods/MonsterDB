@@ -29,14 +29,14 @@ public class BaseItem : Header
         if (Visuals != null && originalItem.Visuals != null) Visuals.ResetTo(originalItem.Visuals);
     }
 
-    protected virtual void SetupItem(GameObject prefab)
+    protected void SetupItem(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out ItemDrop component)) return;
         ItemData = new ItemDataSharedRef();
         ItemData.Setup(component.m_itemData.m_shared);
     }
 
-    protected virtual void SetupVisuals(GameObject prefab)
+    protected void SetupVisuals(GameObject prefab)
     {
         Visuals = new VisualRef()
         {
@@ -84,7 +84,7 @@ public class BaseItem : Header
         UpdateVisuals(prefab);
     }
 
-    protected virtual void UpdateItem(GameObject prefab)
+    protected void UpdateItem(GameObject prefab)
     {
         if (ItemData == null) return;
         ItemDrop? item = prefab.GetComponent<ItemDrop>();
@@ -92,26 +92,11 @@ public class BaseItem : Header
         ItemData.UpdateFields(item.m_itemData.m_shared, prefab.name, true);
     }
 
-    protected virtual void UpdateVisuals(GameObject prefab)
+    protected void UpdateVisuals(GameObject prefab)
     {
         if (Visuals != null)
         {
-            if (Visuals.m_scale.HasValue)
-            {
-                Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>();
-                for (int i = 0; i < renderers.Length; ++i)
-                {
-                    Renderer? renderer = renderers[i];
-                    GameObject go = renderer.gameObject;
-                    go.transform.localScale = Visuals.m_scale.Value;
-                    if (ConfigManager.ShouldLogDetails())
-                    {
-                        MonsterDBPlugin.LogDebug($"[{prefab.name}][{go.name}] m_scale: {go.transform.localScale.ToString()}");
-                    }
-                }
-            }
-            
-            Visuals.Update(prefab, false);
+            Visuals.Update(prefab, false, true);
         }
     }
 }

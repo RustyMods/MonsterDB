@@ -171,7 +171,7 @@ public static class FishManager
 
     public static void Clone(GameObject source, string cloneName, bool write = true)
     {
-        if (CloneManager.clones.ContainsKey(cloneName)) return;
+        if (CloneManager.prefabs.ContainsKey(cloneName)) return;
         if  (!source.GetComponent<ItemDrop>()) return;
         
         Clone c = new Clone(source, cloneName);

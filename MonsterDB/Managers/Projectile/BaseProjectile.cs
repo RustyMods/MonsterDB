@@ -125,16 +125,7 @@ public class BaseProjectile : Header
     {
         if (Visuals != null)
         {
-            if (Visuals.m_scale.HasValue)
-            {
-                prefab.transform.localScale = Visuals.m_scale.Value;
-                if (ConfigManager.ShouldLogDetails())
-                {
-                    MonsterDBPlugin.LogDebug($"[{prefab.name}] m_scale: {prefab.transform.localScale.ToString()}");
-                }
-            }
-
-            Visuals.Update(prefab, false);
+            Visuals.Update(prefab, false, false);
         }
     }
 }
