@@ -1,6 +1,6 @@
 {
 	"name": "MonsterDB",
-	"version_number": "0.2.0",
+	"version_number": "0.2.1",
 	"website_url": "https://github.com/RustyMods/MonsterDB",
 	"description": "Edit and clone Valheim creatures through YAML configuration.",
 	"dependencies": [

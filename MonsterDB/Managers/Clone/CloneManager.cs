@@ -8,8 +8,6 @@ public static class CloneManager
     private static readonly GameObject root;
     internal static readonly Dictionary<string, GameObject> prefabs;
     internal static readonly Dictionary<string, Clone> clones;
-
-
     static CloneManager()
     {
         prefabs = new Dictionary<string, GameObject>();

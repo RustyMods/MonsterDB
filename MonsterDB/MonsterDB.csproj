@@ -263,6 +263,7 @@
         <Content Include="Libs\UnityEngine.ImageConversionModule.dll" />
         <Content Include="Thunderstore\icon.png" />
         <Content Include="Thunderstore\manifest.json" />
+        <Content Include="Thunderstore\MonsterDB.dll" />
         <Content Include="UpdateManifest.ps1" />
         <Content Include="Wiki\Reference\Export\Abomination\Abomination.yml" />
         <Content Include="Wiki\Reference\Export\Abomination\Abomination_ragdoll.yml" />
