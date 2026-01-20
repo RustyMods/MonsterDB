@@ -28,7 +28,7 @@ public static class ConfigManager
     public static string Serialize<T>(T obj)
     {
         if (obj == null) return "";
-        using var sw = new StringWriter();
+        using StringWriter sw = new StringWriter();
         serializer.Serialize(sw, obj, obj.GetType());
         return sw.ToString();
     }
@@ -101,7 +101,6 @@ public static class ConfigManager
         LoadManager.Init(__instance);
         SpawnManager.Init(__instance);
         LocalizationManager.Init(__instance);
-        // TransferManager.Init(__instance);
     }
     
     public static void SetupWatcher()

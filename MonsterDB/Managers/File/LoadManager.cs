@@ -295,6 +295,7 @@ public static class LoadManager
         }
     }
 
+    [HarmonyPriority(Priority.Last)]
     public static void Start()
     {
         LoadClones();

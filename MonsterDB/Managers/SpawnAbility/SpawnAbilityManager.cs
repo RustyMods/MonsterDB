@@ -95,10 +95,10 @@ public static class SpawnAbilityManager
     public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        var filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
         BaseSpawnAbility spawnAbility = new();
         spawnAbility.Setup(prefab, isClone, source);
-        var text = ConfigManager.Serialize(spawnAbility);
+        string text = ConfigManager.Serialize(spawnAbility);
         File.WriteAllText(filePath, text);
     }
 

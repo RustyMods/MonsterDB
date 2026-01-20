@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class SpawnDataRef : Reference
 {
     public string m_name = "";

@@ -7,8 +7,16 @@ namespace MonsterDB;
 public static class TexturePackage
 {
     private const int MAX_COMPRESSED_CHUNK_SIZE = 64 * 1024; // 64 KB
-    
-    private static readonly Dictionary<string, ChunkBuffer> _chunkBuffers = new();
+
+    private static readonly Dictionary<string, ChunkBuffer> _chunkBuffers;
+
+    static TexturePackage()
+    {
+        _chunkBuffers = new Dictionary<string, ChunkBuffer>();
+        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        harmony.Patch(AccessTools.Method(typeof(ZNet), nameof(ZNet.OnNewConnection)),
+            prefix: new HarmonyMethod(AccessTools.Method(typeof(TexturePackage), nameof(Patch_ZNet_OnNewConnection))));
+    }
 
     private class ChunkBuffer
     {
@@ -33,13 +41,13 @@ public static class TexturePackage
         public void Assemble()
         {
             int fullSize = 0;
-            for (int i = 0; i < TotalChunks; i++)
+            for (int i = 0; i < TotalChunks; ++i)
                 fullSize += Chunks[i].Length;
 
             byte[] fullData = new byte[fullSize];
             int offset = 0;
 
-            for (int i = 0; i < TotalChunks; i++)
+            for (int i = 0; i < TotalChunks; ++i)
             {
                 byte[] c = Chunks[i];
                 System.Buffer.BlockCopy(c, 0, fullData, offset, c.Length);
@@ -52,7 +60,7 @@ public static class TexturePackage
             ZPackage dataPkg = compressedPkg.ReadCompressedPackage();
 
             int count = dataPkg.ReadInt();
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; ++i)
             {
                 string name = dataPkg.ReadString();
                 byte[] bytes = dataPkg.ReadByteArray();
@@ -68,19 +76,15 @@ public static class TexturePackage
             );
         }
     }
-    
-    [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]
-    private static class ZNet_OnNewConnection
+
+    private static void Patch_ZNet_OnNewConnection(ZNet __instance, ZNetPeer peer)
     {
-        private static void Prefix(ZNet __instance, ZNetPeer peer)
+        peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTextureNames), RPC_ReceiveTextureNames);
+        peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTexturesCompressed), RPC_ReceiveTexturesCompressed);
+        peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTextureChunk), RPC_ReceiveTextureChunk);
+        if (!__instance.IsServer())
         {
-            peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTextureNames), RPC_ReceiveTextureNames);
-            peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTexturesCompressed), RPC_ReceiveTexturesCompressed);
-            peer.m_rpc.Register<ZPackage>(nameof(RPC_ReceiveTextureChunk), RPC_ReceiveTextureChunk);
-            if (!__instance.IsServer())
-            {
-                SendTextureNames(peer.m_rpc);
-            }
+            SendTextureNames(peer.m_rpc);
         }
     }
 
@@ -158,7 +162,7 @@ public static class TexturePackage
         MonsterDBPlugin.LogInfo(
             $"TexturePack: sending {totalSize} bytes in {chunkCount} chunks");
 
-        for (int i = 0; i < chunkCount; i++)
+        for (int i = 0; i < chunkCount; ++i)
         {
             int offset = i * MAX_COMPRESSED_CHUNK_SIZE;
             int size = Mathf.Min(MAX_COMPRESSED_CHUNK_SIZE, totalSize - offset);
