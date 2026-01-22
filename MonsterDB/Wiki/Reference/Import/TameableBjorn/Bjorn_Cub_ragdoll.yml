@@ -1,0 +1,11 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.2
+Type: Ragdoll
+Prefab: Bjorn_Cub_ragdoll
+ClonedFrom: Bjorn_ragdoll
+IsCloned: true
+Visuals:
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5

@@ -907,6 +907,10 @@
         <Content Include="Wiki\Reference\Import\Stag\Stag_ragdoll.yml" />
         <Content Include="Wiki\Reference\Import\Stag\Stag.yml" />
         <Content Include="Wiki\Reference\Import\Stag\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\TameableBjorn\Bjorn_Cub.yml" />
+        <Content Include="Wiki\Reference\Import\TameableBjorn\Bjorn_Cub_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Import\TameableBjorn\TameableBjorn.yml" />
+        <Content Include="Wiki\Reference\Import\TameableBjorn\translations.English.yml" />
         <Content Include="Wiki\Reference\Import\TameableNeck\Neck_hatchling_ragdoll.yml" />
         <Content Include="Wiki\Reference\Import\TameableNeck\Neck.yml" />
         <Content Include="Wiki\Reference\Import\TameableNeck\NeckEgg.yml" />
