@@ -17,22 +17,22 @@ public class DropProjectileOverDistanceRef : Reference
     public ProjectileRef? m_projectile;
     public AoeRef? m_projectileAoe;
 
-    public static implicit operator DropProjectileOverDistanceRef(DropProjectileOverDistance dpod)
+    public DropProjectileOverDistanceRef(){}
+
+    public DropProjectileOverDistanceRef(DropProjectileOverDistance component)
     {
-        DropProjectileOverDistanceRef reference = new DropProjectileOverDistanceRef();
-        reference.Setup(dpod);
-        if (dpod.m_projectilePrefab != null)
+        Setup(component);
+        if (component.m_projectilePrefab != null)
         {
-            if (dpod.m_projectilePrefab.TryGetComponent(out Projectile projectile))
+            if (component.m_projectilePrefab.TryGetComponent(out Projectile projectile))
             {
-                reference.m_projectile = projectile;
+                m_projectile = new ProjectileRef(projectile);
             }
 
-            if (dpod.m_projectilePrefab.TryGetComponent(out Aoe aoe))
+            if (component.m_projectilePrefab.TryGetComponent(out Aoe aoe))
             {
-                reference.m_projectileAoe = aoe.ToRef();
+                m_projectileAoe = new AoeRef(aoe);
             }
         }
-        return reference;
     }
 }

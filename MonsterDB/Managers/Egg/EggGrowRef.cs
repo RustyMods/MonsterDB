@@ -16,11 +16,7 @@ public class EggGrowRef : Reference
     public bool? m_requireUnderRoof;
     public float? m_requireCoverPercentige;
     public EffectListRef? m_hatchEffect;
-
-    public static implicit operator EggGrowRef(EggGrow egg)
-    {
-        EggGrowRef reference = new EggGrowRef();
-        reference.Setup(egg);
-        return reference;
-    }
+    
+    public EggGrowRef(){}
+    public EggGrowRef(EggGrow egg) => Setup(egg);
 }

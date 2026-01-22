@@ -100,6 +100,7 @@ public static class ConfigManager
         FactionManager.Init(__instance);
         LoadManager.Init(__instance);
         SpawnManager.Init(__instance);
+        RaidManager.Init(__instance);
         LocalizationManager.Init(__instance);
     }
     

@@ -157,7 +157,7 @@ public class MiscComponent : Reference
                 }
                 else if (TType == typeof(Humanoid.ItemSet[]) && info.m_value is HumanoidRef.ItemSet[] isa)
                 {
-                    targetField.SetValue(target, isa.FromRef());
+                    targetField.SetValue(target, isa.ToHumanoidItemSetArray());
                 }
                 else if (TType == typeof(StatusEffect) && info.m_value is string seName)
                 {

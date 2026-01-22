@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using JetBrains.Annotations;
 using YamlDotNet.Serialization;
 
@@ -85,4 +86,9 @@ public class CharacterRef : Reference
     [YamlMember(Order = 66)] public float? m_lavaSlowMax;
     [YamlMember(Order = 67)] public float? m_lavaSlowHeight;
     [YamlMember(Order = 68)] public EffectListRef? m_lavaHeatEffects;
+    
+    public CharacterRef(){}
+
+    public CharacterRef(Character character) => Setup(character);
+    
 }

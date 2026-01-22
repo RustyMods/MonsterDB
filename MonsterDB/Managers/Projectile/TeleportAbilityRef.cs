@@ -10,13 +10,9 @@ public class TeleportAbilityRef : Reference
     public string? m_targetTag = "";
     public string? m_message = "";
     public float? m_maxTeleportRange = 100f;
-
-    public static implicit operator TeleportAbilityRef(TeleportAbility ta)
-    {
-        TeleportAbilityRef reference = new TeleportAbilityRef();
-        reference.Setup(ta);
-        return reference;
-    }
+    
+    public TeleportAbilityRef(){}
+    public TeleportAbilityRef(TeleportAbility ability) => Setup(ability);
 
     public void Update(TeleportAbility ta, string targetName)
     {

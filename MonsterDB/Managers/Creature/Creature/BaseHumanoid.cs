@@ -13,14 +13,13 @@ public class BaseHumanoid : Base
     
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
-        base.Setup(prefab, isClone, source);
         Humanoid? character = prefab.GetComponent<Humanoid>();
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
+        if (character == null || ai == null) return;
+        base.Setup(prefab, isClone, source);
         Type = BaseType.Humanoid;
-        Character = new HumanoidRef();
-        AI = new MonsterAIRef();
-        Character.Setup(character);
-        AI.Setup(ai);
+        Character = new HumanoidRef(character);
+        AI = new MonsterAIRef(ai);
     }
     
     public override void CopyFields(Header original)

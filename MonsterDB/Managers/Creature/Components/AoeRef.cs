@@ -73,14 +73,8 @@ public class AoeRef : Reference
     public bool? m_attachToCaster;
     public EffectListRef? m_hitEffects;
     public EffectListRef? m_initiateEffect;
-}
+    
+    public AoeRef(){}
 
-public static partial class Extensions
-{
-    public static AoeRef ToRef(this Aoe aoe)
-    {
-        AoeRef aoeRef = new AoeRef();
-        aoeRef.Setup(aoe);
-        return aoeRef;
-    }
+    public AoeRef(Aoe aoe) => Setup(aoe);
 }

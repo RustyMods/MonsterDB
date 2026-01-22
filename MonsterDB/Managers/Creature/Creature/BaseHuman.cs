@@ -9,17 +9,14 @@ public class BaseHuman : BaseHumanoid
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         SetupVersions();
-        SetupSharedFields(prefab, isClone, source);
-        
         Human? character = prefab.GetComponent<Human>();
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
+        if (character == null || ai == null) return;
+        SetupSharedFields(prefab, isClone, source);
         Type = BaseType.Human;
-        Character = new HumanoidRef();
-        AI = new MonsterAIRef();
-        Character.Setup(character);
-        AI.Setup(ai);
+        Character = new HumanoidRef(character);
+        AI = new MonsterAIRef(ai);
         Visuals?.SetDefaultHumanFields();
-        
         if (isClone) SetupSpawnData();
     }
 

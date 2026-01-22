@@ -24,6 +24,8 @@ public class BaseProjectile : Header
         SetupTeleportAbility(prefab);
         SetupVisuals(prefab);
     }
+    
+    public override VisualRef? GetVisualData() => Visuals;
 
     public override void CopyFields(Header original)
     {
@@ -38,44 +40,24 @@ public class BaseProjectile : Header
     protected virtual void SetupTeleportAbility(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out TeleportAbility component)) return;
-        TeleportAbility = component;
+        TeleportAbility = new TeleportAbilityRef(component);
     }
 
     protected virtual void SetupTriggerSpawnAbility(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out TriggerSpawnAbility component)) return;
-        TriggerSpawnAbility = new TriggerSpawnAbilityRef();
-        TriggerSpawnAbility.m_range = component.m_range;
+        TriggerSpawnAbility = new TriggerSpawnAbilityRef(component);
     }
 
     protected virtual void SetupProjectile(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out Projectile component)) return;
-        ProjectileData = component;
+        ProjectileData = new ProjectileRef(component);
     }
     
     protected virtual void SetupVisuals(GameObject prefab)
     {
-        Visuals = new VisualRef()
-        {
-            m_scale = prefab.transform.localScale,
-        };
-        
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
-        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
-        if (particleSystems.Length > 0)
-        {
-            Visuals.m_particleSystems = particleSystems.ToRef();
-        }
-        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
-        if (lights.Length > 0)
-        {
-            Visuals.m_lights = lights.ToRef();
-        }
+        Visuals = new VisualRef(prefab);
     }
 
     public override void Update()

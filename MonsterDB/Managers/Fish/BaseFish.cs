@@ -20,7 +20,7 @@ public class BaseFish : BaseItem
         IsCloned = isClone;
         if (prefab.TryGetComponent(out Fish fish))
         {
-            Fish = fish;
+            Fish = new FishRef(fish);
         }
     }
 

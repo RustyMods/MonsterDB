@@ -25,11 +25,7 @@ public class NPCTalkRef : Reference
     public EffectListRef? m_randomTalkFX;
     public EffectListRef? m_randomGreetFX;
     public EffectListRef? m_randomGoodbyeFX;
-
-    public static implicit operator NPCTalkRef(NpcTalk npcTalk)
-    {
-        NPCTalkRef reference = new NPCTalkRef();
-        reference.Setup(npcTalk);
-        return reference;
-    }
+    
+    public NPCTalkRef(){}
+    public NPCTalkRef(NpcTalk component) => Setup(component);
 }

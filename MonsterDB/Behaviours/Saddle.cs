@@ -24,7 +24,7 @@ public static class Hud_UpdateMount
         float maxStamina = doodadController.GetMaxStamina();
         __instance.m_mountStaminaBar.SetValue(stamina / maxStamina);
         __instance.m_mountStaminaText.text = Mathf.CeilToInt(stamina).ToFastString();
-        __instance.m_mountNameText.text = $"{character.GetHoverName()} ({Localization.instance.Localize(doodadController.GetTameable().GetStatusString())} )";
+        __instance.m_mountNameText.text = $"{character.GetHoverName()} ( {Localization.instance.Localize(doodadController.GetTameable().GetStatusString())} )";
         
         return false;
     }

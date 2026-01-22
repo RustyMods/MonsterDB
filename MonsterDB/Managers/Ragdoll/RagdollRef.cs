@@ -12,4 +12,7 @@ public class RagdollRef : Reference
     public bool? m_float;
     public float? m_floatOffset;
     [DefaultValue(true)] public bool? m_dropItems;
+    
+    public RagdollRef(){}
+    public RagdollRef(Ragdoll doll) => Setup(doll);
 }

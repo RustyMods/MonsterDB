@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HarmonyLib;
@@ -29,6 +30,7 @@ public static class LoadManager
             loadList.Clear();
             SpawnManager.Clear();
             CloneManager.Clear();
+            FileManager.started = false;
             FileManager.Start();
             LoadClones();
             Load();
@@ -50,6 +52,7 @@ public static class LoadManager
         loadList.Clear();
         SpawnManager.Clear();
         CloneManager.Clear();
+        RaidManager.Reset();
         FileManager.started = false;
     }
 

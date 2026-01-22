@@ -21,6 +21,8 @@ public class BaseItem : Header
         SetupVisuals(prefab);
     }
 
+    public override VisualRef? GetVisualData() => Visuals;
+
     public override void CopyFields(Header original)
     {
         base.CopyFields(original);
@@ -32,32 +34,12 @@ public class BaseItem : Header
     protected void SetupItem(GameObject prefab)
     {
         if (!prefab.TryGetComponent(out ItemDrop component)) return;
-        ItemData = new ItemDataSharedRef();
-        ItemData.Setup(component.m_itemData.m_shared);
+        ItemData = new ItemDataSharedRef(component.m_itemData.m_shared);
     }
 
     protected void SetupVisuals(GameObject prefab)
     {
-        Visuals = new VisualRef()
-        {
-            m_scale = prefab.transform.localScale,
-        };
-        
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
-        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
-        if (particleSystems.Length > 0)
-        {
-            Visuals.m_particleSystems = particleSystems.ToRef();
-        }
-        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
-        if (lights.Length > 0)
-        {
-            Visuals.m_lights = lights.ToRef();
-        }
+        Visuals = new VisualRef(prefab);
     }
 
     public override void Update()

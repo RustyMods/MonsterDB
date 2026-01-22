@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using UnityEngine;
 
 namespace MonsterDB;
 
@@ -7,21 +9,43 @@ public class MovementDamageRef : Reference
 {
     public string? m_runDamageObject;
     public AoeRef? m_areaOfEffect;
+    
+    public MovementDamageRef(){}
 
-    public static implicit operator MovementDamageRef(MovementDamage md)
+    public MovementDamageRef(MovementDamage md)
     {
-        MovementDamageRef reference = new MovementDamageRef();
         if (md.m_runDamageObject != null)
         {
-            reference.m_runDamageObject = md.m_runDamageObject.name;
+            m_runDamageObject = md.m_runDamageObject.name;
             Aoe? aoe = md.m_runDamageObject.GetComponent<Aoe>();
             if (aoe != null)
             {
-                reference.m_areaOfEffect = new AoeRef();
-                reference.m_areaOfEffect.m_damage = aoe.m_damage;
+                m_areaOfEffect = new AoeRef
+                {
+                    m_damage = aoe.m_damage
+                };
             }
         }
+    }
 
-        return reference;
+    protected override void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName,
+        bool log)
+    {
+        if (target is not MovementDamage component) return;
+        
+        if (string.IsNullOrEmpty(goName))
+        {
+            targetField.SetValue(target, null);
+            if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: null");
+        }
+        else
+        {
+            Transform child = Utils.FindChild(component.transform, goName);
+            if (child != null)
+            {
+                targetField.SetValue(target, child.gameObject);
+                if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {child.name}");
+            }
+        }
     }
 }

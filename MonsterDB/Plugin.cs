@@ -29,6 +29,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
         AudioManager.Start();
         TextureManager.Start();
         FactionManager.Start();
+        RaidManager.Start();
         
         CreatureManager.Setup();
         ItemManager.Setup();
@@ -41,6 +42,8 @@ public class MonsterDBPlugin : BaseUnityPlugin
         FileManager.Start();
         PrefabManager.Start();
         SpawnManager.Setup();
+        ProcreateText.Setup();
+        GrowUpText.Setup();
         
         Wiki.Write();
         

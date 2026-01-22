@@ -58,7 +58,7 @@ public static class TextureManager
         {   
             if (args.Length < 3) return false;
 
-            string? texName = args[2];
+            string texName = string.Join(" ", args.Args.Skip(2));
             if (string.IsNullOrEmpty(texName)) return false;
 
             if (!m_cachedTextures.TryGetValue(texName, out Texture2D? texture))
@@ -74,7 +74,7 @@ public static class TextureManager
         {
             if (args.Length < 3) return true;
 
-            string query = args[2];
+            string query = string.Join(" ", args.Args.Skip(2));
             List<string> names = m_cachedTextures.Keys.ToList();
             for (int i = 0; i < names.Count; ++i)
             {
@@ -91,7 +91,7 @@ public static class TextureManager
         {
             if (args.Length < 3) return true;
 
-            string query = args[2];
+            string query = string.Join(" ", args.Args.Skip(2));
             List<string> names = m_cachedSprites.Keys.ToList();
             for (int i = 0; i < names.Count; ++i)
             {
@@ -108,7 +108,8 @@ public static class TextureManager
         {
             if (args.Length < 3) return true;
 
-            Sprite? sprite = GetSprite(args[2], null);
+            var name = string.Join(" ", args.Args.Skip(2));
+            Sprite? sprite = GetSprite(name, null);
             if (sprite == null)
             {
                 MonsterDBPlugin.LogWarning($"Failed to find sprite: {args[2]}");

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Text;
+using BepInEx.Configuration;
+using HarmonyLib;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
@@ -21,11 +25,42 @@ public class ProcreationRef : Reference
     public string? m_noPartnerOffspring;
     public EffectListRef? m_birthEffects;
     public EffectListRef? m_loveEffects;
+    
+    public ProcreationRef(){}
+    public ProcreationRef(Procreation component) => Setup(component);
+}
 
-    public static implicit operator ProcreationRef(Procreation procreation)
+public static class ProcreateText
+{
+    private static ConfigEntry<Toggle> addProcreateProgressText = null!;
+
+    public static void Setup()
     {
-        ProcreationRef reference = new ProcreationRef();
-        reference.Setup(procreation);
-        return reference;
+        addProcreateProgressText = ConfigManager.config("Procreation", "Add Progress Text", Toggle.Off,
+            "If on, will add procreation progress info to hover text");
+    }
+
+    private static bool AddProgressText() => addProcreateProgressText.Value is Toggle.On;
+
+
+    [HarmonyPatch(typeof(Tameable), nameof(Tameable.GetStatusString))]
+    private static class Tameable_GetStatusString
+    {
+        private static void Postfix(Tameable __instance, ref string __result)
+        {
+            if (!AddProgressText()) return;
+            if (!__instance.IsTamed() || !__instance.TryGetComponent(out Procreation component)) return;
+
+            if (component.IsPregnant())
+            {
+                __result += ", $hud_procreate_pregnant";
+            }
+            else
+            {
+                int points = component.GetLovePoints();
+                float percentage = (float)points / component.m_requiredLovePoints * 100f;
+                __result += $", $hud_procreate_bonding {percentage}%";
+            }
+        }
     }
 }

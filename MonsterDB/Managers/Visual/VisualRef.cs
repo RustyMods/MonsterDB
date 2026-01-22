@@ -18,6 +18,33 @@ public class VisualRef : Reference
     public string[]? m_hairs;
     public string[]? m_hairColors;
     public string[]? m_skinColors;
+    
+    public VisualRef(){}
+
+    public VisualRef(GameObject prefab)
+    {
+        m_scale = prefab.transform.localScale;
+        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+        if (renderers.Length > 0)
+        {
+            m_renderers = renderers.ToRef();
+        }
+        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
+        if (particleSystems.Length > 0)
+        {
+            m_particleSystems = particleSystems.ToRef();
+        }
+        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
+        if (lights.Length > 0)
+        {
+            m_lights = lights.ToRef();
+        }
+        LevelEffects levelEffects = prefab.GetComponentInChildren<LevelEffects>();
+        if (levelEffects != null)
+        {
+            m_levelSetups = levelEffects.m_levelSetups.ToRef();
+        }
+    }
 
     public void Update(GameObject prefab, bool isInstance, bool isItem)
     {
@@ -30,14 +57,15 @@ public class VisualRef : Reference
     {
         log &= ConfigManager.ShouldLogDetails();
         
-        if (m_scale.HasValue)
+        if (m_scale.HasValue && LoadManager.originals.TryGetValue(prefab.name, out Header header) && header.GetVisualData() is {} originalVisualData && originalVisualData.m_scale.HasValue)
         {
+            Vector3 originalScale = originalVisualData.m_scale.Value;
             for (int i = 0; i < renderers.Length; ++i)
             {
                 Renderer renderer = renderers[i];
                 GameObject go = renderer.gameObject;
 
-                go.transform.localScale = Vector3.Scale(go.transform.localScale, m_scale.Value);
+                go.transform.localScale = Vector3.Scale(originalScale, m_scale.Value);
                     
                 if (log)
                 {

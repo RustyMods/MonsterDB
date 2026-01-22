@@ -21,7 +21,7 @@ public class BaseEgg : BaseItem
         IsCloned = isClone;
         if (prefab.TryGetComponent(out EggGrow component))
         {
-            EggGrow = component;
+            EggGrow = new EggGrowRef(component);
         }
     }
 

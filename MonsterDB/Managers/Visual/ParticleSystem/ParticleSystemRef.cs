@@ -14,6 +14,10 @@ public class ParticleSystemRef : Reference
     public CustomDataModuleRef? m_customData;
     public MinMaxGradientRef? m_colorOverLifetime;
     
+    public ParticleSystemRef(){}
+
+    public ParticleSystemRef(ParticleSystem ps) => Set(ps);
+    
     public void Update(ParticleSystem ps, string targetName, bool log)
     {
         bool changed = false;
@@ -60,22 +64,19 @@ public class ParticleSystemRef : Reference
         m_prefab = ps.gameObject.name;
         m_parent = ps.transform.parent?.name;
         m_index = ps.transform.GetSiblingIndex();
-        m_startColor = new MinMaxGradientRef();
-        m_startColor.Set(ps.main.startColor);
+        m_startColor = new MinMaxGradientRef(ps.main.startColor);
         
         ParticleSystem.CustomDataModule custom = ps.customData;
         if (custom.enabled)
         {
-            m_customData = new CustomDataModuleRef();
-            m_customData.Set(custom);
+            m_customData = new CustomDataModuleRef(custom);
         }
         
         ParticleSystem.ColorOverLifetimeModule colorOverLifetime = ps.colorOverLifetime;
         if (colorOverLifetime.enabled)
         {
             ParticleSystem.MinMaxGradient color = colorOverLifetime.color;
-            m_colorOverLifetime = new MinMaxGradientRef();
-            m_colorOverLifetime.Set(color);
+            m_colorOverLifetime = new MinMaxGradientRef(color);
         }
     }
 }
@@ -85,57 +86,35 @@ public static partial class Extensions
     public static ParticleSystemRef[] ToRef(this ParticleSystem[] particleSystems)
     {
         return particleSystems
-            .Select(x => x.ToRef())
+            .Select(x => new ParticleSystemRef(x))
             .ToArray();
-    }
-    public static ParticleSystemRef ToRef(this ParticleSystem ps)
-    {
-        var reference = new ParticleSystemRef();
-        reference.Set(ps);
-        return reference;
     }
     
     public static GradientAlphaKeyRef[] ToRef(this GradientAlphaKey[] keys)
     {
         return keys
-            .Select(x => new GradientAlphaKeyRef()
-            {
-                m_time = x.time,
-                m_alpha = x.alpha
-            })
+            .Select(x => new GradientAlphaKeyRef(x))
             .ToArray();
     }
 
     public static GradientAlphaKey[] FromRef(this GradientAlphaKeyRef[] keys)
     {
         return keys
-            .Select(x => new GradientAlphaKey()
-            {
-                time = x.m_time,
-                alpha = x.m_alpha
-            })
+            .Select(x => x.ToGradientAlphaKey())
             .ToArray();
     }
 
     public static GradientColorKeyRef[] ToRef(this GradientColorKey[] keys)
     {
         return keys
-            .Select(x => new GradientColorKeyRef()
-            {
-                m_time = x.time,
-                m_color = x.color.ToRGBAString()
-            })
+            .Select(x => new GradientColorKeyRef(x))
             .ToArray();
     }
 
     public static GradientColorKey[] FromRef(this GradientColorKeyRef[] keys)
     {
         return keys
-            .Select(x => new GradientColorKey()
-            {
-                time = x.m_time,
-                color = x.m_color.FromHexOrRGBA(Color.white)
-            })
+            .Select(x => x.ToGradientColorKey())
             .ToArray();
     }
 }

@@ -15,13 +15,14 @@ public class BaseRagdoll : Header
         if (!prefab.TryGetComponent(out Ragdoll component)) return;
         base.Setup(prefab, isClone, source);
         Type = BaseType.Ragdoll;
-        Ragdoll = new RagdollRef();
-        Ragdoll.Setup(component);
+        Ragdoll = new RagdollRef(component);
+        Visuals = new VisualRef(prefab);
         IsCloned = isClone;
         ClonedFrom = source;
         Prefab = prefab.name;
-        SetupVisuals(prefab);
     }
+    
+    public override VisualRef? GetVisualData() => Visuals;
 
     public override void CopyFields(Header original)
     {
@@ -30,28 +31,7 @@ public class BaseRagdoll : Header
         if (Ragdoll != null && originalRagdoll.Ragdoll != null) Ragdoll.ResetTo(originalRagdoll.Ragdoll);
         if (Visuals != null && originalRagdoll.Visuals != null) Visuals.ResetTo(originalRagdoll.Visuals);
     }
-
-    private void SetupVisuals(GameObject prefab)
-    {
-        Visuals = new  VisualRef();
-        Visuals.m_scale = prefab.transform.localScale;
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
-        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
-        if (particleSystems.Length > 0)
-        {
-            Visuals.m_particleSystems = particleSystems.ToRef();
-        }
-        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
-        if (lights.Length > 0)
-        {
-            Visuals.m_lights = lights.ToRef();
-        }
-    }
-
+    
     public override void Update()
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);

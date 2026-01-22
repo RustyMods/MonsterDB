@@ -33,7 +33,9 @@ public class Base : Header
     [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled to false to disable")] public SpawnDataRef[]? SpawnData;
     [YamlMember(Order = 100)] public MiscComponent? Extra;
     [YamlMember(Order = 101, Description = "Reference only, these are attack animation triggers")] public List<string>? AnimationTriggers;
-    
+
+    public override VisualRef? GetVisualData() => Visuals;
+
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         base.Setup(prefab, isClone, source);
@@ -86,82 +88,56 @@ public class Base : Header
         
         if (prefab.TryGetComponent(out CharacterDrop characterDrop))
         {
-            Drops = characterDrop;
+            Drops = new CharacterDropRef(characterDrop);
         }
 
         if (prefab.TryGetComponent(out Growup growUp))
         {
-            GrowUp = growUp;
+            GrowUp = new GrowUpRef(growUp);
         }
         
         if (prefab.TryGetComponent(out Tameable tameable))
         {
-            Tameable = tameable;
+            Tameable = new TameableRef(tameable);
         }
         
         if (prefab.TryGetComponent(out Procreation procreation))
         {
-            Procreation = procreation;
+            Procreation = new ProcreationRef(procreation);
         }
 
         if (prefab.TryGetComponent(out NpcTalk npcTalk))
         {
-            NPCTalk = npcTalk;
+            NPCTalk = new NPCTalkRef(npcTalk);
         }
 
         if (prefab.TryGetComponent(out MovementDamage md))
         {
-            MovementDamage = md;
+            MovementDamage = new MovementDamageRef(md);
         }
 
         Sadle? saddle = prefab.GetComponentInChildren<Sadle>(true);
         if (saddle != null)
         {
-            Saddle = saddle;
+            Saddle = new SaddleRef(saddle);
         }
 
         if (prefab.TryGetComponent(out DropProjectileOverDistance dp))
         {
-            DropProjectileOverDistance = dp;
+            DropProjectileOverDistance = new DropProjectileOverDistanceRef(dp);
         }
+
+        Visuals = new VisualRef(prefab);
         
-        Visuals = new VisualRef
-        {
-            m_scale = prefab.transform.localScale
-        };
-        
-        LevelEffects levelEffects = prefab.GetComponentInChildren<LevelEffects>();
-        if (levelEffects != null)
-        {
-            Visuals.m_levelSetups = levelEffects.m_levelSetups.ToRef();
-        }
-        
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
-        
-        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
-        if (lights.Length > 0)
-        {
-            Visuals.m_lights = lights.ToRef();
-        }
-        
-        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
-        if (particleSystems.Length > 0)
-        {
-            Visuals.m_particleSystems = particleSystems.ToRef();
-        }
 
         if (prefab.TryGetComponent(out CinderSpawner cinderSpawner))
         {
-            CinderSpawner = cinderSpawner;
+            CinderSpawner = new CinderSpawnerRef(cinderSpawner);
         }
 
         if (prefab.TryGetComponent(out CharacterTimedDestruction ctd))
         {
-            TimedDestruction = ctd;
+            TimedDestruction = new CharacterTimedDestructionRef(ctd);
         }
         
         SetupAnimationTriggers(prefab);

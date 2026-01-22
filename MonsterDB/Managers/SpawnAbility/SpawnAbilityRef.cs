@@ -47,11 +47,7 @@ public class SpawnAbilityRef : Reference
     public bool? m_randomDirection;
     public float? m_randomAngleMin;
     public float? m_randomAngleMax;
-
-    public static implicit operator SpawnAbilityRef(SpawnAbility spawnAbility)
-    {
-        var reference = new SpawnAbilityRef();
-        reference.Setup(spawnAbility);
-        return reference;
-    }
+    
+    public SpawnAbilityRef(){}
+    public SpawnAbilityRef(SpawnAbility ability) => Setup(ability);
 }

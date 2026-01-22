@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MonsterDB;
 
+[Serializable]
 public class DropTableRef : Reference
 {
     public List<DropDataRef>? m_drops;
@@ -10,10 +12,10 @@ public class DropTableRef : Reference
     public float? m_dropChance;
     public bool? m_oneOfEach;
 
-    public static implicit operator DropTableRef(DropTable dropTable)
+    public DropTable ToDropTable(string targetName = "")
     {
-        DropTableRef reference = new DropTableRef();
-        reference.Setup(dropTable);
-        return reference;
+        DropTable table = new DropTable();
+        UpdateFields(table, targetName, false);
+        return table;
     }
 }

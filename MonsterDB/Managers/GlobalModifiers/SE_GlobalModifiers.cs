@@ -5,6 +5,8 @@ namespace MonsterDB.GlobalModifiers;
 
 public class SE_GlobalModifiers : StatusEffect
 {
+    private static List<SE_GlobalModifiers> instances = new();
+    
     private string prefab = "";
     
     public override void Setup(Character character)
@@ -13,6 +15,13 @@ public class SE_GlobalModifiers : StatusEffect
         prefab = Utils.GetPrefabName(character.name);
         
         ModifyHealth(character);
+        instances.Add(this);
+    }
+
+    public override void Stop()
+    {
+        base.Stop();
+        instances.Remove(this);
     }
 
     private void ModifyHealth(Character character)

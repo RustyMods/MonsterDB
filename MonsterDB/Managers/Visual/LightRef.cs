@@ -15,6 +15,20 @@ public class LightRef : Reference
     public LightType? type;
     public float? intensity;
     public float? range;
+    
+    public LightRef(){}
+
+    public LightRef(Light light)
+    {
+        m_prefab = light.name;
+        m_parent = light.transform.parent?.name;
+        m_index = light.transform.GetSiblingIndex();
+        m_active = light.gameObject.activeSelf;
+        color = light.color.ToRGBAString();
+        type = light.type;
+        intensity = light.intensity;
+        range = light.range;
+    }
 
     public void Update(Light light, string targetName, bool log)
     {
@@ -84,17 +98,7 @@ public static partial class Extensions
     public static LightRef[] ToRef(this Light[] lights)
     {
         return lights
-            .Select(x => new LightRef()
-            {
-                m_prefab = x.name,
-                m_parent = x.transform.parent?.name,
-                m_index = x.transform.GetSiblingIndex(),
-                m_active = x.gameObject.activeSelf,
-                color = x.color.ToRGBAString(),
-                type = x.type,
-                intensity = x.intensity,
-                range = x.range
-            })
+            .Select(x => new LightRef(x))
             .ToArray();
     }
 }

@@ -52,11 +52,7 @@ public class SpawnDataRef : Reference
     public float m_levelUpMinCenterDistance;
     [DefaultValue(-1f)] public float m_overrideLevelupChance = -1f;
     public bool m_foldout;
-
-    public static implicit operator SpawnSystem.SpawnData(SpawnDataRef spawnRef)
-    {
-        SpawnSystem.SpawnData data = new SpawnSystem.SpawnData();
-        spawnRef.UpdateFields(data, spawnRef.m_name, log: false);
-        return data;
-    }
+    
+    public SpawnDataRef(){}
+    public SpawnDataRef(SpawnSystem.SpawnData data) => Setup(data);
 }

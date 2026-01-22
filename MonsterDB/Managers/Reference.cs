@@ -193,7 +193,7 @@ public abstract class Reference
                     break;
                 case List<DropTable.DropData> dd when 
                     targetType == typeof(List<DropTableRef>):
-                    target.SetValue(this, dd.ToRef());
+                    target.SetValue(this, dd.ToDropDataRefList());
                     break;
                 case List<Fish.BaitSetting> bs when 
                     targetType == typeof(List<BaitSettingRef>):
@@ -202,6 +202,10 @@ public abstract class Reference
                 case List<RandomAnimation.RandomValue> rv when 
                     targetType == typeof(List<RandomAnimationRef.RandomValueRef>):
                     target.SetValue(this, rv.ToRef());
+                    break;
+                case List<SpawnSystem.SpawnData> sps when
+                    targetType == typeof(List<SpawnDataRef>):
+                    target.SetValue(this, sps.ToSpawnDataRefList());
                     break;
             }
         }
@@ -250,127 +254,161 @@ public abstract class Reference
 
     private void UpdateField<T>(T target, FieldInfo sourceField, FieldInfo targetField, string targetName, bool log)
     {
-        object? SValue = sourceField.GetValue(this);
-        if (SValue == null) return;
+        object? newValue = sourceField.GetValue(this);
+        if (newValue == null) return;
         
-        Type TType = targetField.FieldType;
-        Type SType = Nullable.GetUnderlyingType(sourceField.FieldType) ?? sourceField.FieldType;
+        Type targetType = targetField.FieldType;
+        Type sourceType = Nullable.GetUnderlyingType(sourceField.FieldType) ?? sourceField.FieldType;
         
         if (string.IsNullOrEmpty(targetName))
         {
             targetName = "Unknown";
         }
-        if (TType.IsAssignableFrom(SType))
+        if (targetType.IsAssignableFrom(sourceType))
         {
-            targetField.SetValue(target, SValue);
-            if (log)
-            {
-                if (TType == typeof(Character.Faction))
-                {
-                    Character.Faction faction = (Character.Faction)SValue;
-                    MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {faction.ToString()}");
-                }
-                else
-                {
-                    MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {SValue}");
-                }
-            }
+            UpdateAssignableType(target, targetField, targetType, newValue, targetName, log);
         }
-        else if (TType == typeof(GameObject) && 
-                 SValue is string goName)
+        else if (targetType == typeof(GameObject) && 
+                 newValue is string goName)
         {
             UpdateGameObject(target, targetField, targetName, goName, log);
         }
-        else if (TType == typeof(Sprite[]) &&
-                 SValue is string[] spn)
+        else if (targetType == typeof(Sprite[]) &&
+                 newValue is string[] spn)
         {
             UpdateSpriteArray(target, targetField, spn, targetName, log);
         }
-        else if (TType == typeof(Vector3) &&
-                 SValue is Vector3Ref vr)
+        else if (targetType == typeof(Vector3) &&
+                 newValue is Vector3Ref vr)
         {
             UpdateVector3(target, targetField, vr, targetName, log);
         }
-        else if (TType == typeof(GameObject[]) && 
-                 SValue is string[] goNames)
+        else if (targetType == typeof(GameObject[]) && 
+                 newValue is string[] goNames)
         {
             UpdateGameObjectArray(target, targetField, goNames, targetName, log);
         }
-        else if (SType == typeof(Humanoid.ItemSet[]) && 
-                 SValue is HumanoidRef.ItemSet[] isa)
+        else if (sourceType == typeof(Humanoid.ItemSet[]) && 
+                 newValue is HumanoidRef.ItemSet[] isa)
         {
             UpdateItemSets(target, targetField, isa, targetName, log);
         }
-        else if (TType == typeof(Humanoid.RandomItem[]) && 
-                 SValue is HumanoidRef.RandomItem[] ria)
+        else if (targetType == typeof(Humanoid.RandomItem[]) && 
+                 newValue is HumanoidRef.RandomItem[] ria)
         {
             UpdateRandomItems(target, targetField, ria, targetName, log);
         }
-        else if (TType == typeof(EffectList) && 
-                 SValue is EffectListRef el)
+        else if (targetType == typeof(EffectList) && 
+                 newValue is EffectListRef el)
         {
             UpdateEffectList(target, targetField, el, targetName, log);
         }
-        else if (TType == typeof(StatusEffect) && 
-                 SValue is string seName)
+        else if (targetType == typeof(StatusEffect) && 
+                 newValue is string seName)
         {
             UpdateStatusEffect(target, targetField, seName, targetName, log);
         }
-        else if (TType == typeof(Color) &&
-                 SValue is string hex)
+        else if (targetType == typeof(Color) &&
+                 newValue is string hex)
         {
             UpdateColor(target, targetField, hex, targetName, log);
         }
-        else if (TType == typeof(List<CharacterDrop.Drop>) && 
-                 SValue is List<DropRef> dr)
+        else if (targetType == typeof(List<CharacterDrop.Drop>) && 
+                 newValue is List<DropRef> dr)
         {
             UpdateCharacterDrops(target, targetField, dr, targetName, log);
         }
-        else if (TType == typeof(List<ItemDrop>) && 
-                 SValue is List<string> il)
+        else if (targetType == typeof(List<ItemDrop>) && 
+                 newValue is List<string> il)
         {
             UpdateItemList(target, targetField, il, targetName, log);
         }
-        else if (TType == typeof(List<Growup.GrownEntry>) && 
-                 SValue is List<GrowUpRef.GrownEntry> ge)
+        else if (targetType == typeof(List<Growup.GrownEntry>) && 
+                 newValue is List<GrowUpRef.GrownEntry> ge)
         {
             UpdateGrownEntries(target, targetField, ge, targetName, log);
         }
-        else if (TType == typeof(Sprite) &&
-                 SValue is string sn)
+        else if (targetType == typeof(Sprite) &&
+                 newValue is string sn)
         {
             UpdateSprite(target, targetField, sn, targetName, log);
         }
-        else if (TType == typeof(List<DropTable.DropData>) && 
-                 SValue is List<DropDataRef> dd)
+        else if (targetType == typeof(List<DropTable.DropData>) && 
+                 newValue is List<DropDataRef> dd)
         {
             UpdateDropTable(target, targetField, dd, targetName, log);
         }
-        else if (TType == typeof(List<Fish.BaitSetting>) &&
-                 SValue is List<BaitSettingRef> bs)
+        else if (targetType == typeof(List<Fish.BaitSetting>) &&
+                 newValue is List<BaitSettingRef> bs)
         {
             UpdateFishBaits(target, targetField, bs, targetName, log);
         }
-        else if (TType == typeof(List<RandomAnimation.RandomValue>) &&
-                 SValue is List<RandomAnimationRef.RandomValueRef> rv)
+        else if (targetType == typeof(List<RandomAnimation.RandomValue>) &&
+                 newValue is List<RandomAnimationRef.RandomValueRef> rv)
         {
             UpdateRandomAnimations(target, targetField, rv, targetName, log);
         }
-        else if (TType == typeof(Attack) &&
-                 SValue is AttackRef ar)
+        else if (targetType == typeof(Attack) &&
+                 newValue is AttackRef ar)
         {
             UpdateAttack(target, targetField, ar, targetName, log);
         }
-        else if (TType == typeof(Aoe) &&
-                 SValue is AoeRef aor)
+        else if (targetType == typeof(Aoe) &&
+                 newValue is AoeRef aor)
         {
             UpdateAoe(target, targetField, aor, targetName, log);
         }
-        else if (TType == typeof(ItemDrop) &&
-                 SValue is string idName)
+        else if (targetType == typeof(ItemDrop) &&
+                 newValue is string idName)
         {
             UpdateItem(target, targetField, idName, targetName, log);
         }
+        else if (targetType == typeof(List<SpawnSystem.SpawnData>) &&
+                 newValue is List<SpawnDataRef> sdr)
+        {
+            UpdateSpawnDataList(target, targetField, sdr, targetName, log);
+        }
+        else if (targetType == typeof(DropTable) &&
+                 newValue is DropTableRef dt)
+        {
+            UpdateDropTable(target, targetField, dt, targetName, log);
+        }
+    }
+
+    protected virtual void UpdateAssignableType<T>(T target, FieldInfo targetField, Type targetType, object value, string targetName, bool log)
+    {
+        targetField.SetValue(target, value);
+        if (log)
+        {
+            if (targetType.IsArray)
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {targetType.Name}[{((Array)value).Length}]");
+            }
+            else if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                Type listType = targetType.GetGenericArguments()[0];
+                int count = ((System.Collections.ICollection)value).Count;
+                MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {listType.Name}[{count}]");
+            }
+            else if (targetType == typeof(HitData.DamageModifiers))
+            {
+                HitData.DamageModifiers modifiers = (HitData.DamageModifiers)value;
+                FieldInfo[] fields = modifiers.GetType().GetFields();
+                IEnumerable<string> parts = fields.Select(f => $"{f.Name}={f.GetValue(modifiers)}");
+                MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {string.Join(", ", parts)}");
+            }
+            else
+            {
+                MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {value}");
+            }
+        }
+    }
+
+    protected virtual void UpdateDropTable<T>(T target, FieldInfo targetField, DropTableRef dt, string targetName,
+        bool log)
+    {
+        DropTable table = dt.ToDropTable(targetName);
+        targetField.SetValue(target, table);
     }
 
     protected virtual void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName, bool log)
@@ -388,19 +426,28 @@ public abstract class Reference
                 targetField.SetValue(target, prefab);
                 if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {prefab.name}");
             }
-            // else
-            // {
-            //     if (target is MonoBehaviour mono)
-            //     {
-            //         Transform? possibleChild = Utils.FindChild(mono.transform, goName);
-            //         if (possibleChild != null)
-            //         {
-            //             targetField.SetValue(target, possibleChild.gameObject);
-            //             if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {possibleChild.name} transform");
-            //         }
-            //     }
-            // }
         }
+    }
+
+    private void UpdateSpawnDataList<T>(T target, FieldInfo targetField, List<SpawnDataRef> r, string targetName, bool log)
+    {
+        log &= ConfigManager.ShouldLogDetails();
+        if (string.IsNullOrEmpty(targetName)) targetName = "Unknown";
+        List<SpawnSystem.SpawnData> list = new List<SpawnSystem.SpawnData>();
+        for (int i = 0; i < r.Count; ++i)
+        {
+            SpawnDataRef? reference = r[i];
+            SpawnSystem.SpawnData data = new SpawnSystem.SpawnData();
+            reference.UpdateFields(data, reference.m_name, false);
+            if (data.m_prefab == null) continue;
+            list.Add(data);
+        }
+        targetField.SetValue(target, list);
+        if (log)
+        {
+            MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: SpawnSystem.SpawnData[{list.Count}]");
+        }
+
     }
 
     private void UpdateSpriteArray<T>(T target, FieldInfo targetField, string[] spriteNames, string targetName, bool log)
@@ -428,14 +475,14 @@ public abstract class Reference
 
     private void UpdateItemSets<T>(T target, FieldInfo targetField, HumanoidRef.ItemSet[] sets, string targetName, bool log)
     {
-        Humanoid.ItemSet[] itemSets = sets.FromRef();
+        Humanoid.ItemSet[] itemSets = sets.ToHumanoidItemSetArray();
         targetField.SetValue(target, itemSets);
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: ItemSet[{itemSets.Length}]");
     }
 
     private void UpdateRandomItems<T>(T target, FieldInfo targetField, HumanoidRef.RandomItem[] items, string targetName, bool log)
     {
-        Humanoid.RandomItem[] randomItems = items.FromRef();
+        Humanoid.RandomItem[] randomItems = items.ToHumanoidRandomItemArray();
         targetField.SetValue(target, randomItems);
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: RandomItem[{randomItems.Length}]");
     }
@@ -462,10 +509,11 @@ public abstract class Reference
 
     private void UpdateColor<T>(T target, FieldInfo targetField, string hex,  string targetName, bool log)
     {
-        object? targetValue = targetField.GetValue(target);
-        if (targetValue is not Color targetColor) return;
-        targetField.SetValue(target, hex.FromHexOrRGBA(targetColor));
-        if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {hex}");
+        object? currentValue = targetField.GetValue(target);
+        if (currentValue is not Color currentColor) return;
+        Color color = hex.FromHexOrRGBA(currentColor);
+        targetField.SetValue(target, color);
+        if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {color.ToString()}");
     }
 
     private void UpdateCharacterDrops<T>(T target, FieldInfo targetField, List<DropRef> dropRefs, string targetName, bool log)
@@ -503,7 +551,7 @@ public abstract class Reference
 
     private void UpdateDropTable<T>(T target, FieldInfo targetField, List<DropDataRef> dropData, string targetName, bool log)
     {
-        List<DropTable.DropData> drops = dropData.FromRef();
+        List<DropTable.DropData> drops = dropData.ToDropDataList();
         targetField.SetValue(target, drops);
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: DropTable[{drops.Count}]");
     }
@@ -524,8 +572,8 @@ public abstract class Reference
 
     private void UpdateAttack<T>(T target, FieldInfo targetField, AttackRef attackRef, string targetName, bool log)
     {
-        object? targetValue  = targetField.GetValue(target);
-        if (targetValue is Attack attack)
+        object? currentValue = targetField.GetValue(target);
+        if (currentValue is Attack attack)
         {
             attackRef.UpdateFields(attack, targetName, log);
         }

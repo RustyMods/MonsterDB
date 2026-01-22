@@ -19,6 +19,9 @@ public class HumanoidRef : CharacterRef
     [YamlMember(Order = 106)] public EffectListRef? m_consumeItemEffects;
     [YamlMember(Order = 107)] public EffectListRef? m_equipEffects;
     [YamlMember(Order = 108)] public EffectListRef? m_perfectBlockEffect;
+    
+    public HumanoidRef(){}
+    public HumanoidRef(Humanoid humanoid) => Setup(humanoid);
 
     [Serializable]
     public class ItemSet
@@ -104,7 +107,7 @@ public static partial class Extensions
         return randomItems;
     }
 
-    public static Humanoid.RandomItem[] FromRef(this HumanoidRef.RandomItem[] ria)
+    public static Humanoid.RandomItem[] ToHumanoidRandomItemArray(this HumanoidRef.RandomItem[] ria)
     {
         Humanoid.RandomItem[] randomItems = ria
             .Where(x => !string.IsNullOrEmpty(x.m_prefab))
@@ -134,7 +137,7 @@ public static partial class Extensions
         return itemSets;
     }
 
-    public static Humanoid.ItemSet[] FromRef(this HumanoidRef.ItemSet[] isa)
+    public static Humanoid.ItemSet[] ToHumanoidItemSetArray(this HumanoidRef.ItemSet[] isa)
     {
         Humanoid.ItemSet[] itemSets = isa
             .Where(x => x.m_items.Length > 0)

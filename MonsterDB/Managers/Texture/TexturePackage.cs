@@ -87,8 +87,8 @@ public static class TexturePackage
             SendTextureNames(peer.m_rpc);
         }
     }
-
-    private static void SendTextureNames(ZRpc rpc)
+    
+    public static void SendTextureNames(ZRpc rpc)
     {
         Dictionary<string, TextureData> files = TextureManager.GetTextureData();
         ZPackage pkg = new ZPackage();
@@ -136,7 +136,10 @@ public static class TexturePackage
             files.Remove(name);
         }
 
-        if (files.Count <= 0) return;
+        if (files.Count <= 0)
+        {
+            return;
+        }
 
         // Build uncompressed payload
         ZPackage fullPkg = new ZPackage();

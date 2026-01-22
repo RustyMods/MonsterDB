@@ -16,6 +16,19 @@ public class LevelSetupRef : Reference
     public bool m_setEmissiveColor;
     [DefaultValue("#FFFFFFFF")] public string m_emissiveColor = "#FFFFFFFF";
     public string m_enableObject = "";
+    
+    public LevelSetupRef(){}
+
+    public LevelSetupRef(LevelEffects.LevelSetup setup)
+    {
+        m_scale = setup.m_scale;
+        m_value = setup.m_value;
+        m_enableObject = setup.m_enableObject?.name ?? "";
+        m_hue = setup.m_hue;
+        m_saturation = setup.m_saturation;
+        m_setEmissiveColor = setup.m_setEmissiveColor;
+        m_emissiveColor = setup.m_emissiveColor.ToRGBAString();
+    }
 
     public void Set(LevelEffects.LevelSetup setup, Dictionary<string, Renderer> renderers)
     {
@@ -38,16 +51,7 @@ public static partial class Extensions
     public static List<LevelSetupRef> ToRef(this List<LevelEffects.LevelSetup> ls)
     {
         List<LevelSetupRef> levelSetups = ls
-            .Select(x => new LevelSetupRef()
-            {
-                m_scale = x.m_scale,
-                m_value = x.m_value,
-                m_enableObject = x.m_enableObject?.name ?? "",
-                m_hue = x.m_hue,
-                m_saturation = x.m_saturation,
-                m_setEmissiveColor = x.m_setEmissiveColor,
-                m_emissiveColor = x.m_emissiveColor.ToRGBAString()
-            })
+            .Select(x => new LevelSetupRef(x))
             .ToList();
         return levelSetups;
     }

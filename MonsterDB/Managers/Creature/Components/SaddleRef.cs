@@ -20,11 +20,7 @@ public class SaddleRef : Reference
     public string? m_mountIcon;
     [YamlMember(Description = "If added saddle by MonsterDB, use this to position attach point")] 
     public Vector3Ref? m_attachOffset;
-
-    public static implicit operator SaddleRef(Sadle saddle)
-    {
-        SaddleRef reference = new SaddleRef();
-        reference.Setup(saddle);
-        return reference;
-    }
+    
+    public SaddleRef(){}
+    public SaddleRef(Sadle component) => Setup(component);
 }

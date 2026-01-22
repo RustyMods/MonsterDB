@@ -19,6 +19,21 @@ public class MaterialRef : Reference
     public string? m_mainTexture = "";
     public string? m_tintColor = "";
 
+    public MaterialRef(){}
+
+    public MaterialRef(Material mat)
+    {
+        m_name = mat.name;
+        m_shader = mat.shader.name;
+        m_color = mat.HasProperty(ShaderRef._Color) ? mat.color.ToRGBAString() : null;
+        m_hue = mat.HasProperty(ShaderRef._Hue) ? mat.GetFloat(ShaderRef._Hue) : null;
+        m_saturation = mat.HasProperty(ShaderRef._Saturation) ? mat.GetFloat(ShaderRef._Saturation) : null;
+        m_value =  mat.HasProperty(ShaderRef._Value) ? mat.GetFloat(ShaderRef._Value) : null;
+        m_emissionColor = mat.HasProperty(ShaderRef._EmissionColor) ? mat.GetColor(ShaderRef._EmissionColor).ToRGBAString() : null;
+        m_mainTexture = mat.mainTexture?.name ?? null;
+        m_tintColor = mat.HasProperty(ShaderRef._TintColor) ? mat.GetColor(ShaderRef._TintColor).ToRGBAString() : null;
+        m_emissionTexture = mat.HasProperty(ShaderRef._EmissionMap) ? mat.GetTexture(ShaderRef._EmissionMap)?.name : null;
+    }
     public void Update(Material material, string targetName, bool log)
     {
         if (string.IsNullOrEmpty(targetName)) targetName = "Unknown";
@@ -110,44 +125,29 @@ public class MaterialRef : Reference
             }
         }
     }
-
-    public static implicit operator MaterialRef(Material mat)
-    {
-        MaterialRef reference = new MaterialRef
-        {
-            m_name = mat.name,
-            m_shader = mat.shader.name,
-            m_color = mat.HasProperty(ShaderRef._Color) ? mat.color.ToRGBAString() : null,
-            m_hue = mat.HasProperty(ShaderRef._Hue) ? mat.GetFloat(ShaderRef._Hue) : null,
-            m_saturation = mat.HasProperty(ShaderRef._Saturation) ? mat.GetFloat(ShaderRef._Saturation) : null,
-            m_value =  mat.HasProperty(ShaderRef._Value) ? mat.GetFloat(ShaderRef._Value) : null,
-            m_emissionColor = mat.HasProperty(ShaderRef._EmissionColor) ? mat.GetColor(ShaderRef._EmissionColor).ToRGBAString() : null,
-            m_mainTexture = mat.mainTexture?.name ?? null,
-            m_tintColor = mat.HasProperty(ShaderRef._TintColor) ? mat.GetColor(ShaderRef._TintColor).ToRGBAString() : null,
-            m_emissionTexture = mat.HasProperty(ShaderRef._EmissionMap) ? mat.GetTexture(ShaderRef._EmissionMap)?.name : null
-        };
-        
-        return reference;
-    }
 }
 
 public static partial class Extensions
 {
-    public static MaterialRef[] ToRef(this Material[] mats)
+    public static MaterialRef[] ToMaterialRefArray(this Material[] mats)
     {
         List<MaterialRef> refs = new();
         foreach (Material? mat in mats)
         {
             if (mat == null) continue;
-            refs.Add(mat);
+            refs.Add(new MaterialRef(mat));
         }
 
         return refs.ToArray();
     }
     
-    public static string ToRGBAString(this Color color, bool includeAlpha = true)
+    public static string ToRGBAString(this Color color)
     {
         return color.ToString();
+    }
+
+    public static string ToHexString(this Color color, bool includeAlpha = true)
+    {
         Color32 c = color;
 
         return includeAlpha

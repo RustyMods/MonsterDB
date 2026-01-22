@@ -8,14 +8,15 @@ public class CustomDataModuleRef : Reference
 {
     public MinMaxGradientRef? m_custom1;
     public MinMaxGradientRef? m_custom2;
+    
+    public CustomDataModuleRef(){}
 
-    public void Set(ParticleSystem.CustomDataModule cm)
+    public CustomDataModuleRef(ParticleSystem.CustomDataModule module)
     {
-        m_custom1 = new MinMaxGradientRef();
-        m_custom1.Set(cm.GetColor(ParticleSystemCustomData.Custom1));
-        m_custom2 = new MinMaxGradientRef();
-        m_custom2.Set(cm.GetColor(ParticleSystemCustomData.Custom2));
+        m_custom1 = new MinMaxGradientRef(module.GetColor(ParticleSystemCustomData.Custom1));
+        m_custom2 = new MinMaxGradientRef(module.GetColor(ParticleSystemCustomData.Custom2));
     }
+    
 
     public void Update(ParticleSystem.CustomDataModule cm)
     {

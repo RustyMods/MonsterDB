@@ -47,9 +47,13 @@ public static class LocalizationManager
                 "# Name of file without extension dictates language (e.g. English.yml)",
                 "# Any lines that start with # will be ignored",
                 "enemy_human: Human",
-                "hud_ride: Ride"
+                "hud_ride: Ride",
+                "hud_procreate_pregnant: Expecting",
+                "hud_procreate_bonding: Bonding",
+                "hud_growup_maturing: Maturing"
             };
             File.WriteAllLines(filePath, defaultLines);
+            localizations["English"] = defaultLines.ToArray();
         }
         else
         {

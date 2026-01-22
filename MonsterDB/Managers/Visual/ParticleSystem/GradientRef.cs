@@ -52,6 +52,16 @@ public class GradientAlphaKeyRef : Reference
 {
     [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)] public float m_alpha;
     [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)] public float m_time;
+    
+    public GradientAlphaKeyRef(){}
+
+    public GradientAlphaKeyRef(GradientAlphaKey key)
+    {
+        m_time = key.time;
+        m_alpha = key.alpha;
+    }
+
+    public GradientAlphaKey ToGradientAlphaKey() => new GradientAlphaKey() { time = m_time, alpha = m_alpha };
 }
 
 [Serializable]
@@ -59,4 +69,15 @@ public class GradientColorKeyRef : Reference
 {
     [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)] public string m_color = "";
     [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)] public float m_time;
+    
+    public GradientColorKeyRef(){}
+
+    public GradientColorKeyRef(GradientColorKey key)
+    {
+        m_color = key.color.ToRGBAString();
+        m_time = key.time;
+    }
+
+    public GradientColorKey ToGradientColorKey() => new GradientColorKey()
+        { color = m_color.FromHexOrRGBA(Color.white), time = m_time };
 }

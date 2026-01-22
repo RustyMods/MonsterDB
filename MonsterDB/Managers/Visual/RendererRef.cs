@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace MonsterDB;
 
+[Serializable]
 public class RendererRef : Reference
 {
     public string m_prefab = "";
@@ -12,6 +14,18 @@ public class RendererRef : Reference
     public bool? m_active;
     public bool? m_enabled;
     public MaterialRef[]? m_materials;
+    
+    public RendererRef(){}
+
+    public RendererRef(Renderer renderer)
+    {
+        m_prefab = renderer.name;
+        m_parent = renderer.transform.parent?.name;
+        m_index = renderer.transform.GetSiblingIndex();
+        m_active = renderer.gameObject.activeSelf;
+        m_enabled = renderer.enabled;
+        m_materials = renderer.sharedMaterials.ToMaterialRefArray();
+    }
 
     public void Update(Renderer renderer, string targetName, bool log)
     {
@@ -77,15 +91,7 @@ public partial class Extensions
     public static RendererRef[] ToRef(this Renderer[] renderers)
     {
         RendererRef[] reference = renderers
-        .Select(x => new RendererRef()
-        {
-            m_prefab = x.name,
-            m_parent = x.transform.parent?.name,
-            m_index = x.transform.GetSiblingIndex(),
-            m_active = x.gameObject.activeSelf,
-            m_enabled = x.enabled,
-            m_materials = x.sharedMaterials.ToRef()
-        })
+        .Select(x => new RendererRef(x))
         .OrderBy(x => x.m_parent)
         .ThenBy(x => x.m_index)
         .ToArray();

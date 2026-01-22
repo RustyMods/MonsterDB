@@ -17,6 +17,17 @@ public class CinderSpawnerRef : Reference
     public bool? m_spawnOnProjectileHit;
     [YamlMember(Description = "Will affect all new cinderPrefab instances, including cinderPrefab from other components")]
     public CinderRef? m_cinder;
+    
+    public CinderSpawnerRef(){}
+
+    public CinderSpawnerRef(CinderSpawner component)
+    {
+        Setup(component);
+        if (component.m_cinderPrefab != null && component.m_cinderPrefab.TryGetComponent(out Cinder cinder))
+        {
+            m_cinder = new CinderRef(cinder);
+        }
+    }
 
     public void Update(GameObject prefab, bool isInstance = false)
     {
@@ -27,16 +38,5 @@ public class CinderSpawnerRef : Reference
         {
             m_cinder.Update(cs.m_cinderPrefab, isInstance);
         }
-    }
-
-    public static implicit operator CinderSpawnerRef(CinderSpawner cs)
-    {
-        CinderSpawnerRef reference = new CinderSpawnerRef();
-        reference.Setup(cs);
-        if (cs.m_cinderPrefab != null && cs.m_cinderPrefab.TryGetComponent(out Cinder cinder))
-        {
-            reference.m_cinder = cinder;
-        }
-        return reference;
     }
 }

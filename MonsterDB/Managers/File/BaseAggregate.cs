@@ -281,61 +281,61 @@ public class BaseAggregate : Header
 
     public void Add(BaseVisual visual)
     {
-        if (visuals == null) visuals = new();
+        visuals ??= new Dictionary<string, BaseVisual>();
         visuals[visual.Prefab] = visual;
     }
 
     public void Add(BaseSpawnAbility spawnAbility)
     {
-        if (spawnAbilities == null) spawnAbilities = new();
+        spawnAbilities ??= new Dictionary<string, BaseSpawnAbility>();
         spawnAbilities[spawnAbility.Prefab] = spawnAbility;
     }
 
     public void Add(BaseHumanoid humanoid)
     {
-        if (humanoids == null) humanoids = new();
+        humanoids ??= new Dictionary<string, BaseHumanoid>();
         humanoids[humanoid.Prefab] = humanoid;
     }
 
     public void Add(BaseCharacter character)
     {
-        if (characters == null) characters = new();
+        characters ??= new Dictionary<string, BaseCharacter>();
         characters[character.Prefab] = character;
     }
 
     public void Add(BaseHuman human)
     {
-        if (humans == null) humans = new();
+        humans ??= new Dictionary<string, BaseHuman>();
         humans[human.Prefab] = human;
     }
 
     public void Add(BaseFish fish)
     {
-        if (fishes == null) fishes = new();
+        fishes ??= new Dictionary<string, BaseFish>();
         fishes[fish.Prefab] = fish;
     }
 
     public void Add(BaseProjectile projectile)
     {
-        if (projectiles == null) projectiles = new();
+        projectiles ??= new Dictionary<string, BaseProjectile>();
         projectiles[projectile.Prefab] = projectile;
     }
 
     public void Add(BaseRagdoll ragdoll)
     {
-        if (ragdolls == null) ragdolls = new();
+        ragdolls ??= new Dictionary<string, BaseRagdoll>();
         ragdolls[ragdoll.Prefab] = ragdoll;
     }
 
     public void Add(BaseEgg egg)
     {
-        if (eggs == null) eggs = new();
+        eggs ??= new Dictionary<string, BaseEgg>();
         eggs[egg.Prefab] = egg;
     }
 
     public void Add(BaseItem item)
     {
-        if (items == null) items = new();
+        items ??= new Dictionary<string, BaseItem>();
         items[item.Prefab] = item;
     }
 
@@ -343,18 +343,18 @@ public class BaseAggregate : Header
     {
         if (lines.Length <= 0) return;
 
-        if (translations == null) translations = new();
+        translations ??= new Dictionary<string, Dictionary<string, string>>();
 
         if (!translations.TryGetValue(language, out var translation))
         {
-            translation = new();
+            translation = new Dictionary<string, string>();
         }
 
         for (int i = 0; i < lines.Length; ++i)
         {
             string line = lines[i];
             if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
-            var parts = line.Split(':');
+            string[] parts = line.Split(':');
             if (parts.Length < 2) continue;
             string key = parts[0].Trim();
             string value = parts[1].Trim();
@@ -368,7 +368,7 @@ public class BaseAggregate : Header
     {
         if (other.humanoids != null)
         {
-            foreach (var humanoid in other.humanoids.Values)
+            foreach (BaseHumanoid? humanoid in other.humanoids.Values)
             {
                 Add(humanoid);
             }
@@ -376,7 +376,7 @@ public class BaseAggregate : Header
 
         if (other.characters != null)
         {
-            foreach (var character in other.characters.Values)
+            foreach (BaseCharacter? character in other.characters.Values)
             {
                 Add(character);
             }
@@ -384,7 +384,7 @@ public class BaseAggregate : Header
 
         if (other.humans != null)
         {
-            foreach (var human in other.humans.Values)
+            foreach (BaseHuman? human in other.humans.Values)
             {
                 Add(human);
             }
@@ -392,7 +392,7 @@ public class BaseAggregate : Header
 
         if (other.ragdolls != null)
         {
-            foreach (var ragdoll in other.ragdolls.Values)
+            foreach (BaseRagdoll? ragdoll in other.ragdolls.Values)
             {
                 Add(ragdoll);
             }
@@ -400,7 +400,7 @@ public class BaseAggregate : Header
 
         if (other.items != null)
         {
-            foreach (var item in other.items.Values)
+            foreach (BaseItem? item in other.items.Values)
             {
                 Add(item);
             }
@@ -408,7 +408,7 @@ public class BaseAggregate : Header
 
         if (other.eggs != null)
         {
-            foreach (var egg in other.eggs.Values)
+            foreach (BaseEgg? egg in other.eggs.Values)
             {
                 Add(egg);
             }
@@ -416,7 +416,7 @@ public class BaseAggregate : Header
 
         if (other.projectiles != null)
         {
-            foreach (var projectile in other.projectiles.Values)
+            foreach (BaseProjectile? projectile in other.projectiles.Values)
             {
                 Add(projectile);
             }
@@ -424,7 +424,7 @@ public class BaseAggregate : Header
 
         if (other.fishes != null)
         {
-            foreach (var fish in other.fishes.Values)
+            foreach (BaseFish? fish in other.fishes.Values)
             {
                 Add(fish);
             }
@@ -432,7 +432,7 @@ public class BaseAggregate : Header
 
         if (other.spawnAbilities != null)
         {
-            foreach (var spawnAbility in other.spawnAbilities.Values)
+            foreach (BaseSpawnAbility? spawnAbility in other.spawnAbilities.Values)
             {
                 Add(spawnAbility);
             }

@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
+[Serializable]
 public class CinderRef : Reference
 {
     [YamlMember(Description = "If prefab != cinderPrefab, this will not update")]
@@ -16,13 +18,13 @@ public class CinderRef : Reference
     [YamlMember(Description = "0.0 - 1.0")]
     public float m_chanceToIgniteGrass;
     public EffectListRef? m_hitEffects;
+    
+    public CinderRef(){}
 
-    public static implicit operator CinderRef(Cinder cinder)
+    public CinderRef(Cinder component)
     {
-        CinderRef reference = new CinderRef();
-        reference.Setup(cinder);
-        reference.m_prefab = cinder.name;
-        return reference;
+        Setup(component);
+        m_prefab = component.name;
     }
 
     public void Update(GameObject prefab, bool isInstance)

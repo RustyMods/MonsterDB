@@ -43,10 +43,11 @@ public class Header
 
         }
     }
-
     
     public virtual void CopyFields(Header original)
     {
         
     }
+
+    public virtual VisualRef? GetVisualData() => null;
 }

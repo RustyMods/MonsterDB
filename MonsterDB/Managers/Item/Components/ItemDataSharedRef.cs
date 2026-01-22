@@ -56,6 +56,9 @@ public class ItemDataSharedRef : Reference
     public EffectListRef? m_holdStartEffect ;
     public EffectListRef? m_triggerEffect ;
     public EffectListRef? m_trailStartEffect ;
+    
+    public ItemDataSharedRef(){}
+    public ItemDataSharedRef(ItemDrop.ItemData.SharedData sharedData) => Setup(sharedData);
 
     public void SetBasicFields(ItemDrop.ItemData.SharedData d)
     {

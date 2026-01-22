@@ -15,12 +15,11 @@ public class BaseCharacter : Base
     {
         Character? character = prefab.GetComponent<Character>();
         AnimalAI? ai = prefab.GetComponent<AnimalAI>();
+        if (character == null || ai == null) return;
         base.Setup(prefab, isClone, source);
         Type = BaseType.Character;
-        Character = new();
-        AI = new();
-        Character.Setup(character);
-        AI.Setup(ai);
+        Character = new CharacterRef(character);
+        AI = new AnimalAIRef(ai);
     }
 
     public override void Update()

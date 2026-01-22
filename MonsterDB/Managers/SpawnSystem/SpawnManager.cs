@@ -31,7 +31,8 @@ public static class SpawnManager
     {
         foreach (SpawnDataRef? data in spawnRefs.Values)
         {
-            SpawnSystem.SpawnData spawn = data;
+            SpawnSystem.SpawnData spawn = new SpawnSystem.SpawnData();
+            data.UpdateFields(spawn, data.m_name, false);
             SpawnList.m_spawners.Add(spawn);
         }
         MonsterDBPlugin.LogInfo($"Loaded {spawnRefs.Count} spawn files");
@@ -70,7 +71,8 @@ public static class SpawnManager
         SpawnList.m_spawners.Clear();
         foreach (KeyValuePair<string, SpawnDataRef> spawnRef in spawnRefs)
         {
-            SpawnSystem.SpawnData spawnData = spawnRef.Value;
+            SpawnSystem.SpawnData spawnData = new SpawnSystem.SpawnData();
+            spawnRef.Value.UpdateFields(spawnData, spawnRef.Key, false);
             SpawnList.m_spawners.Add(spawnData);
         }
     }
@@ -79,7 +81,8 @@ public static class SpawnManager
     {
         SpawnList.m_spawners.RemoveAll(x => x.m_name == info.m_name);
         spawnRefs[info.m_name] = info;
-        SpawnSystem.SpawnData spawnData = info;
+        SpawnSystem.SpawnData spawnData = new SpawnSystem.SpawnData();
+        info.UpdateFields(spawnData, info.m_name, false);
         SpawnList.m_spawners.Add(spawnData);
         
         UpdateSync();

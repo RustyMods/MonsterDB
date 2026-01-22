@@ -49,11 +49,7 @@ public class FishRef : Reference
     public float? m_waveJumpMultiplier;
     public float? m_jumpMaxLevel;
     public EffectListRef? m_jumpEffects;
-
-    public static implicit operator FishRef(Fish fish)
-    {
-        FishRef reference = new FishRef();
-        reference.Setup(fish);
-        return reference;
-    }
+    
+    public FishRef(){}
+    public FishRef(Fish fish) => Setup(fish);
 }

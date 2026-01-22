@@ -45,4 +45,7 @@ public class MonsterAIRef : BaseAIRef
     public float? m_consumeRange;
     public float? m_consumeSearchRange;
     public float? m_consumeSearchInterval;
+    
+    public MonsterAIRef(){}
+    public MonsterAIRef(MonsterAI ai) => Setup(ai);
 }

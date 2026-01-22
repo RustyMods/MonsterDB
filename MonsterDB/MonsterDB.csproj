@@ -220,6 +220,8 @@
         <Compile Include="Managers\Ragdoll\BaseRagdoll.cs" />
         <Compile Include="Managers\Ragdoll\RagdollManager.cs" />
         <Compile Include="Managers\Ragdoll\RagdollRef.cs" />
+        <Compile Include="Managers\Raids\RaidManager.cs" />
+        <Compile Include="Managers\Raids\RandomEventRef.cs" />
         <Compile Include="Managers\Reference.cs" />
         <Compile Include="Managers\SpawnAbility\BaseSpawnAbility.cs" />
         <Compile Include="Managers\SpawnAbility\SpawnAbilityRef.cs" />

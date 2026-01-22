@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class AttackRef : Reference
 {
     public Attack.AttackType? m_attackType;

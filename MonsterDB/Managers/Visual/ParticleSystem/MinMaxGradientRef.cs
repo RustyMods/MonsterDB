@@ -16,8 +16,10 @@ public class MinMaxGradientRef : Reference
     public GradientRef? m_gradient;
     public GradientRef? m_gradientMin;
     public GradientRef? m_gradientMax;
+    
+    public MinMaxGradientRef(){}
 
-    public void Set(ParticleSystem.MinMaxGradient gradient)
+    public MinMaxGradientRef(ParticleSystem.MinMaxGradient gradient)
     {
         m_mode = gradient.mode;
         m_color = gradient.color.ToRGBAString();

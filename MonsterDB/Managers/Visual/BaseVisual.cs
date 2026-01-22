@@ -19,6 +19,8 @@ public class BaseVisual : Header
         SetupVisuals(prefab);
     }
 
+    public override VisualRef? GetVisualData() => Visuals;
+
     public override void CopyFields(Header original)
     {
         base.CopyFields(original);

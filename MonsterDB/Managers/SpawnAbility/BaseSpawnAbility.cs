@@ -17,10 +17,11 @@ public class BaseSpawnAbility : Header
         Prefab = prefab.name;
         IsCloned = isClone;
         ClonedFrom = source;
-
-        SetupVisuals(prefab);
+        Visuals = new VisualRef(prefab);
         SetupSpawnAbility(prefab);
     }
+    
+    public override VisualRef? GetVisualData() => Visuals;
 
     public override void CopyFields(Header original)
     {
@@ -34,31 +35,7 @@ public class BaseSpawnAbility : Header
     {
         if (prefab.TryGetComponent(out SpawnAbility spawnAbility))
         {
-            SpawnAbility = spawnAbility;
-        }
-    }
-    
-    protected virtual void SetupVisuals(GameObject prefab)
-    {
-        Visuals = new VisualRef()
-        {
-            m_scale = prefab.transform.localScale,
-        };
-        
-        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length > 0)
-        {
-            Visuals.m_renderers = renderers.ToRef();
-        }
-        ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
-        if (particleSystems.Length > 0)
-        {
-            Visuals.m_particleSystems = particleSystems.ToRef();
-        }
-        Light[] lights = prefab.GetComponentsInChildren<Light>(true);
-        if (lights.Length > 0)
-        {
-            Visuals.m_lights = lights.ToRef();
+            SpawnAbility = new SpawnAbilityRef(spawnAbility);
         }
     }
 

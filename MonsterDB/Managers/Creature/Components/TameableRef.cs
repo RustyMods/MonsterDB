@@ -28,11 +28,7 @@ public class TameableRef : Reference
     public float? m_tamingBoostMultiplier;
     public bool? m_nameBeforeText;
     public string? m_tameText;
-
-    public static implicit operator TameableRef(Tameable tameable)
-    {
-        TameableRef reference = new TameableRef();
-        reference.Setup(tameable);
-        return reference;
-    }
+    
+    public TameableRef(){}
+    public TameableRef(Tameable component) => Setup(component);
 }

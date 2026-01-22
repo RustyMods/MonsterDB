@@ -11,13 +11,10 @@ public class CharacterDropRef : Reference
 {
     public List<DropRef>? m_drops;
     [DefaultValue(true)][YamlMember(Description = "Only works if Character Death Effects do not have a ragdoll")] public bool? m_dropsEnabled;
+    
+    public CharacterDropRef(){}
 
-    public static implicit operator CharacterDropRef(CharacterDrop characterDrop)
-    {
-        CharacterDropRef reference = new CharacterDropRef();
-        reference.Setup(characterDrop);
-        return reference;
-    }
+    public CharacterDropRef(CharacterDrop characterDrop) => Setup(characterDrop);
 }
 
 [Serializable]
@@ -30,6 +27,19 @@ public class DropRef : Reference
     [DefaultValue(false)] public bool? m_onePerPlayer;
     [DefaultValue(true)] public bool? m_levelMultiplier;
     [DefaultValue(false)] public bool? m_dontScale;
+    
+    public DropRef(){}
+
+    public DropRef(CharacterDrop.Drop drop)
+    {
+        m_prefab = drop.m_prefab.name;
+        m_chance = drop.m_chance;
+        m_amountMin =  drop.m_amountMin;
+        m_amountMax =  drop.m_amountMax;
+        m_dontScale =  drop.m_dontScale;
+        m_levelMultiplier = drop.m_levelMultiplier;
+        m_onePerPlayer = drop.m_onePerPlayer;
+    }
 }
 
 public static partial class Extensions
@@ -38,16 +48,7 @@ public static partial class Extensions
     {
         List<DropRef> drops = cd
             .Where(x => x.m_prefab != null)
-            .Select(x => new DropRef()
-            {
-                m_prefab = x.m_prefab.name,
-                m_chance = x.m_chance,
-                m_amountMin =  x.m_amountMin,
-                m_amountMax =  x.m_amountMax,
-                m_dontScale =  x.m_dontScale,
-                m_levelMultiplier = x.m_levelMultiplier,
-                m_onePerPlayer = x.m_onePerPlayer,
-            })
+            .Select(x => new DropRef(x))
             .ToList();
         return drops;
     }

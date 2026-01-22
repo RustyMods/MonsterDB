@@ -49,12 +49,12 @@ public class ProjectileRef : Reference
     public bool? m_projectilesInheritHitData;
     public bool? m_onlySpawnedProjectilesDealDamage;
     public bool? m_divideDamageBetweenProjectiles;
+    
+    public ProjectileRef(){}
 
-    public static implicit operator ProjectileRef(Projectile pj)
+    public ProjectileRef(Projectile projectile)
     {
-        ProjectileRef projectileRef = new ProjectileRef();
-        projectileRef.Setup(pj);
-        projectileRef.m_prefab = pj.name;
-        return projectileRef;
+        Setup(projectile);
+        m_prefab = projectile.name;
     }
 }
