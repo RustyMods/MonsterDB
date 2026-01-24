@@ -135,6 +135,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="assets\AssetBundleManager.cs" />
         <Compile Include="Behaviours\AnimalTameable.cs" />
         <Compile Include="Behaviours\Human.cs" />
         <Compile Include="Behaviours\Saddle.cs" />
@@ -248,6 +249,7 @@
         <Compile Include="Managers\Visual\VisualManager.cs" />
         <Compile Include="Managers\Visual\VisualRef.cs" />
         <Compile Include="Managers\Visual\VisualUtils.cs" />
+        <Compile Include="Managers\VultureOverride.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="VersionHandshake.cs" />
@@ -258,6 +260,8 @@
           <Link>README.md</Link>
         </Content>
         <Content Include=".gitignore" />
+        <EmbeddedResource Include="assets\volture_fix" />
+        <Content Include="assets\volture_fix.manifest" />
         <Content Include="environment.props" />
         <Content Include="ILRepack.targets" />
         <Content Include="Libs\ServerSync.dll">

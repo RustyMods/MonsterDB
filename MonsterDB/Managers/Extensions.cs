@@ -67,16 +67,18 @@ public static partial class Extensions
             .Where(item => item.IsWeapon() && humanoid.m_baseAI.CanUseAttack(item))
             .ToList();
     }
+    
+    private static readonly Dictionary<string, bool> canFlyToggleCache = new Dictionary<string, bool>();
 
     public static bool CanToggleFly(this Character character)
     {
-        AnimatorControllerParameter[]? animParams = character.m_animator.parameters;
-        for (int i = 0; i < animParams.Length; ++i)
-        {
-            AnimatorControllerParameter? param = animParams[i];
-            if (param.name == "fly_takeoff" || param.name == "fly_land") return true;
-        }
+        string? prefabName = Utils.GetPrefabName(character.name);
+        if (canFlyToggleCache.TryGetValue(prefabName, out bool value)) return value;
 
-        return false;
+        bool canToggle = character.m_animator.parameters
+            .Any(p => p.name == "fly_takeoff" || p.name == "fly_land");
+
+        canFlyToggleCache[prefabName] = canToggle;
+        return canToggle;
     }
 }

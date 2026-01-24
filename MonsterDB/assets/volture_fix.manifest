@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.0.46f1
+CRC: 3270616106
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 46b6a0aba1b97cdc62b34e688ee18ece
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a3694848597d49e3077f78984d7a884a
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 3037238c25af74465bdb31fbf19f3271
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1282597392, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AnimationClip/VoltureFix/Volture_temp.prefab
+- Assets/AnimationClip/VoltureFix/Volture_animator_fix.controller
+Dependencies: []

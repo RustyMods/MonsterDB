@@ -209,5 +209,6 @@ public static class PrefabManager
             clone.Create();
         }
         ConfigManager.SetupWatcher();
+        VultureOverride.Setup();
     }
 }

@@ -47,7 +47,6 @@ public class MonsterDBPlugin : BaseUnityPlugin
         Snapshot.Setup();
         
         Wiki.Write();
-        
         Assembly assembly = Assembly.GetExecutingAssembly();
         _harmony.PatchAll(assembly); 
     }

@@ -194,6 +194,7 @@ public class Base : Header
                 SpawnManager.Update(data);
             }
         }
+        
         base.Update();
     }
 
