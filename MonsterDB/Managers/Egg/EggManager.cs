@@ -320,14 +320,14 @@ public static class EggManager
         ParticleSystem? ps = __instance.GetComponent<ParticleSystem>();
         if (ps == null) return;
             
-        bool enablePS = grow > 0.0;
+        bool enablePS = grow == 0.0;
         if (enablePS)
         {
             ps.Play();
         }
         else
         {
-            ps.Pause();
+            ps.Stop();
         }
     }
 }

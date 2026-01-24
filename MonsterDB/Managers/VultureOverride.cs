@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HarmonyLib;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -10,6 +11,19 @@ public static class VultureOverride
     {
         "Volture"
     };
+
+    [HarmonyPatch(typeof(Character), nameof(Character.Awake))]
+    private static class Character_Awake
+    {
+        private static void Postfix(Character __instance)
+        {
+            string? prefabName = Utils.GetPrefabName(__instance.name);
+            if (!ShouldOverride(prefabName) || !LoadManager.originals.ContainsKey(prefabName)) return;
+            __instance.m_animator.runtimeAnimatorController = overrideController;
+            __instance.Land();
+            MonsterDBPlugin.LogDebug($"Overriding {__instance.name} controller");
+        }
+    }
     
     public static void Register(string prefab)
     {
