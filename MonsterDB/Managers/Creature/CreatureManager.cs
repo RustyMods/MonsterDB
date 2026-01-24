@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -12,13 +13,7 @@ public static class CreatureManager
             $"[prefabName]: save creature YML to {FileManager.ExportFolder} folder", 
             args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-                
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -54,13 +49,7 @@ public static class CreatureManager
             $"[fileName]: read YML file from {FileManager.ImportFolder} and update", 
             args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string fileName = args[2];
+            string fileName = args.GetString(2);
             if (string.IsNullOrEmpty(fileName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -76,13 +65,7 @@ public static class CreatureManager
             "[prefabName]: revert creature to factory settings", 
             args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogInfo("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogInfo("Invalid prefab");
@@ -103,14 +86,8 @@ public static class CreatureManager
             "[prefabName][newName]: must be a character", 
             args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
-            string newName = args[3];
+            string prefabName = args.GetString(2);
+            string newName = args.GetString(3);
             if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -130,6 +107,29 @@ public static class CreatureManager
             Clone(prefab, newName);
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>, adminOnly: true);
+
+        Command hierarchy = new Command("export_bones", "[prefabName]: export creature hierarchy", args =>
+        {
+            string prefabName = args.GetString(2);
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                MonsterDBPlugin.LogInfo("Invalid parameters");
+                return true;
+            }
+
+            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+            if (prefab == null)
+            {
+                MonsterDBPlugin.LogWarning($"Failed to find prefab {prefabName}");
+                return true;
+            }
+
+            string folderPath = Path.Combine(FileManager.ExportFolder, prefabName);
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            string filePath = Path.Combine(folderPath, $"{prefabName}.bones.yml");
+            ExportHierarchy(prefab, filePath);
+            return true;
+        }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>);
     }
 
     public static bool TrySave(GameObject prefab, out Base? data, bool isClone = false, string source = "")
@@ -354,5 +354,37 @@ public static class CreatureManager
         }
 
         return newItems.ToArray();
+    }
+
+    public static void ExportHierarchy(GameObject root, string filePath)
+    {
+        if (root == null) return;
+
+        if (string.IsNullOrEmpty(filePath))
+            filePath = Path.Combine(FileManager.ExportFolder, $"{root.name}.bones.yml");
+
+        StringBuilder sb = new();
+        sb.AppendLine(root.name);
+        for (int i = 0; i < root.transform.childCount; ++i)
+        {
+            WriteTransform(sb, root.transform.GetChild(i), 1);
+        }
+
+        File.WriteAllText(filePath, sb.ToString());
+        MonsterDBPlugin.LogInfo($"Saved {root.name} hierarchy to {filePath}");
+
+        return;
+        
+        void WriteTransform(StringBuilder builder, Transform t, int depth)
+        {
+            builder.Append(new string(' ', depth * 2)); // 2 spaces per depth
+            builder.Append("- ");
+            builder.AppendLine(t.name);
+
+            for (int i = 0; i < t.childCount; i++)
+            {
+                WriteTransform(builder, t.GetChild(i), depth + 1);
+            }
+        }
     }
 }

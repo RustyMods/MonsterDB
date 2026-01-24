@@ -8,7 +8,9 @@ public static class RagdollManager
 {
     public static bool TrySave(GameObject prefab, out BaseRagdoll ragdoll, bool isClone = false, string source = "")
     {
+#pragma warning disable CS8601 // Possible null reference assignment.
         ragdoll = LoadManager.GetOriginal<BaseRagdoll>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
         if (ragdoll != null) return true;
 
         if (!prefab.GetComponent<Ragdoll>()) return false;
@@ -62,7 +64,9 @@ public static class RagdollManager
                 Write(p, true, source.name, dirPath);
             }
         };
+#pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
+#pragma warning restore CS8601 // Possible null reference assignment.
         return clone != null;
     }
 }

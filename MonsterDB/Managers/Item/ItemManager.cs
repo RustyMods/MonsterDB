@@ -10,13 +10,7 @@ public static class ItemManager
     {
         Command save = new Command("write_item", $"[prefabName]: write item YML to {FileManager.ExportFolder} folder", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -42,13 +36,7 @@ public static class ItemManager
         
         Command read = new Command("mod_item", $"[fileName]: read item YML from {FileManager.ImportFolder} folder", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -62,13 +50,7 @@ public static class ItemManager
 
         Command revert = new Command("revert_item", "[prefabName]: revert item to factory settings", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogInfo("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogInfo("Invalid prefab");
@@ -95,9 +77,9 @@ public static class ItemManager
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return true;
             }
-            
-            string prefabName = args[2];
-            string newName = args[3];
+
+            string prefabName = args.GetString(2);
+            string newName = args.GetString(3);
             if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -121,10 +103,8 @@ public static class ItemManager
 
         Command search = new Command("search_item", "search item by name", args =>
         {
-            if (args.Length < 3) return true;
-
-            string query = args[2];
-            var names = PrefabManager.SearchCache<ItemDrop>(query);
+            string query = args.GetString(2);
+            List<string> names = PrefabManager.SearchCache<ItemDrop>(query);
             for (int i = 0; i < names.Count; ++i)
             {
                 MonsterDBPlugin.LogInfo(names[i]);
@@ -132,11 +112,57 @@ public static class ItemManager
             
             return true;
         }, () => PrefabManager.SearchCache<ItemDrop>(""));
+
+        Command create = new Command("create_item", "[prefabName]: create item from non-item prefabs", args =>
+        {
+            string prefabName = args.GetString(2);
+            string newName = args.GetString(3);
+            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+            {
+                MonsterDBPlugin.LogWarning("Invalid parameters");
+                return true;
+            }
+            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+            if (prefab == null)
+            {
+                return true;
+            }
+
+            if (prefab.GetComponent<Character>())
+            {
+                MonsterDBPlugin.LogWarning("Cannot convert creature into an item");
+                return true;
+            }
+
+            if (prefab.GetComponent<ItemDrop>())
+            {
+                TryClone(prefab, newName, out _);
+                return true;
+            }
+
+            if (!prefab.GetComponent<ZNetView>())
+            {
+                MonsterDBPlugin.LogWarning("Invalid prefab, missing ZNetView");
+                return true;
+            }
+
+            var colliders = prefab.GetComponentInChildren<Collider>();
+            if (colliders == null)
+            {
+                MonsterDBPlugin.LogWarning("Invalid prefab, missing colliders");
+                return true;
+            }
+
+            TryCreateItem(prefab, newName, out _);
+            return true;
+        }, PrefabManager.GetAllPrefabNames<ZNetView>, adminOnly: true);
     }
 
     public static bool TrySave(GameObject prefab, out BaseItem item, bool isClone = false, string source = "")
     {
+#pragma warning disable CS8601 // Possible null reference assignment.
         item = LoadManager.GetOriginal<BaseItem>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
         if (item != null) return true;
 
         if (!prefab.GetComponent<ItemDrop>()) return false;
@@ -163,7 +189,7 @@ public static class ItemManager
 
         if (prefab.TryGetComponent(out ItemDrop itemDrop))
         {
-            var sharedData = itemDrop.m_itemData.m_shared;
+            ItemDrop.ItemData.SharedData? sharedData = itemDrop.m_itemData.m_shared;
             if (sharedData.m_attack.m_attackProjectile != null)
             {
                 bool isProjectileClone = false;
@@ -219,15 +245,6 @@ public static class ItemManager
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
-            // Renderer[]? renderers = p.GetComponentsInChildren<Renderer>(true);
-            // Dictionary<string, Material> newMaterials = new Dictionary<string, Material>();
-            //
-            // for (int i = 0; i < renderers.Length; ++i)
-            // {
-            //     Renderer renderer = renderers[i];
-            //     VisualUtils.CloneMaterials(renderer, ref newMaterials);
-            // }
-
             ItemDrop? itemDrop = p.GetComponent<ItemDrop>();
             if (itemDrop != null)
             {
@@ -249,7 +266,89 @@ public static class ItemManager
                 Write(p, true, source.name, dirPath);
             }
         };
+#pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
+#pragma warning restore CS8601 // Possible null reference assignment.
+        return clone != null;
+    }
+
+    public static bool TryCreateItem(GameObject source, string cloneName, out GameObject clone, bool write = true,
+        string dirPath = "")
+    {
+        if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
+        if (source.GetComponent<ItemDrop>() || !source.GetComponent<ZNetView>()) return false;
+
+        Clone c = new Clone(source, cloneName);
+        c.OnCreated += p =>
+        {
+            MonoBehaviour[]? components = p.GetComponents<MonoBehaviour>();
+            for (int i = 0; i < components.Length; ++i)
+            {
+                MonoBehaviour component = components[i];
+                if (component is ZNetView) continue;
+                Object.Destroy(component);
+            }
+            
+            ItemDrop? item = p.AddComponent<ItemDrop>();
+            GameObject? eggPrefab = PrefabManager.GetPrefab("AsksvinEgg");
+            if (eggPrefab == null) return;
+            if (!eggPrefab.TryGetComponent(out ItemDrop egg)) return;
+            Sprite[]? icons = egg.m_itemData.m_shared.m_icons;
+            Transform? notGrowing = Utils.FindChild(eggPrefab.transform, "Not Growing");
+            if (notGrowing != null)
+            {
+                var itemParticles = Object.Instantiate(notGrowing, p.transform);
+                itemParticles.name = "Not Growing";
+            }
+            item.m_itemData = new ItemDrop.ItemData
+            {
+                m_shared = new ItemDrop.ItemData.SharedData
+                {
+                    m_name = cloneName,
+                    m_icons = icons,
+                    m_attack = new Attack(),
+                    m_secondaryAttack = new Attack()
+                },
+            };
+
+            if (!p.TryGetComponent(out ZSyncTransform zSyncTransform))
+            {
+                zSyncTransform = p.AddComponent<ZSyncTransform>();
+                zSyncTransform.m_syncPosition = true;
+                zSyncTransform.m_syncRotation = true;
+            }
+
+            if (!p.TryGetComponent(out Rigidbody rigidbody))
+            {
+                rigidbody = p.AddComponent<Rigidbody>();
+                rigidbody.mass = 1;
+                rigidbody.linearDamping = 0;
+                rigidbody.angularDamping = 0.05f;
+                rigidbody.useGravity = true;
+                rigidbody.isKinematic = false;
+                rigidbody.interpolation = RigidbodyInterpolation.None;
+                rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            }
+            
+            var colliders = p.GetComponentsInChildren<Collider>();
+            var itemLayer = LayerMask.NameToLayer("item");
+            for (int i = 0; i < colliders.Length; ++i)
+            {
+                var collider = colliders[i];
+                collider.gameObject.layer = itemLayer;
+            }
+            
+            MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
+            if (write)
+            {
+                Write(p, true, source.name, dirPath);
+            }
+        };
+
+#pragma warning disable CS8601 // Possible null reference assignment.
+        clone = c.Create();
+#pragma warning restore CS8601 // Possible null reference assignment.
+
         return clone != null;
     }
 }

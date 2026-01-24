@@ -1,0 +1,24 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.2
+Type: Egg
+Prefab: SeekerEggItem
+ClonedFrom: SeekerEgg
+IsCloned: true
+ItemData:
+  name: $item_seekeregg
+  description: $item_seekeregg_description
+  icons:
+  - SeekerEgg_icon
+  maxStackSize: 20
+EggGrow:
+  growTime: 1800
+  grownPrefab: SeekerLarva
+  tamed: true
+  updateInterval: 5
+  requireNearbyFire: true
+  requireUnderRoof: true
+  requireCoverPercentige: 0.7
+  hatchEffect:
+    effectPrefabs:
+    - prefab: fx_egg_splash
+  notGrowingObject: Not Growing

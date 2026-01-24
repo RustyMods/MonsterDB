@@ -11,6 +11,10 @@ public abstract class Reference
 {
     public const BindingFlags FieldBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
+    /// <summary>
+    /// Resets any fields with values to original value
+    /// </summary>
+    /// <param name="source"></param>
     public void ResetTo(Reference source)
     {
         if (source.GetType() != GetType())
@@ -92,6 +96,11 @@ public abstract class Reference
         }
     }
     
+    /// <summary>
+    /// Grabs all values that matches reference fields and sets value
+    /// </summary>
+    /// <param name="source"></param>
+    /// <typeparam name="V"></typeparam>
     public void Setup<V>(V source)
     {
         if (source == null) return;

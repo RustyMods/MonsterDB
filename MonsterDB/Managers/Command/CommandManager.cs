@@ -118,3 +118,26 @@ public static class CommandManager
     }
 }
 
+public static partial class Extensions
+{
+    public static string GetString(this Terminal.ConsoleEventArgs args, int index, string defaultValue = "")
+    {
+        if (args.Length < index + 1) return defaultValue;
+        return args[index];
+    }
+
+    public static float GetFloat(this Terminal.ConsoleEventArgs args, int index, float defaultValue = 0f)
+    {
+        if (args.Length < index + 1) return defaultValue;
+        string? arg = args[index];
+        return float.TryParse(arg, out float result) ? result : defaultValue;
+    }
+
+    public static int GetInt(this Terminal.ConsoleEventArgs args, int index, int defaultValue = 0)
+    {
+        if (args.Length < index + 1) return defaultValue;
+        string? arg = args[index];
+        return int.TryParse(arg, out int result) ? result : defaultValue;
+    }
+}
+

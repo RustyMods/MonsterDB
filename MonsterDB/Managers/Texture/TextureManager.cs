@@ -25,9 +25,7 @@ public static class TextureManager
         
         Command export = new Command("export_main_tex", "[prefabName]: export creature main texture", args =>
         {
-            if (args.Length < 3) return false;
-
-            string? prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName)) return false;
             
             GameObject? prefab = PrefabManager.GetPrefab(prefabName);
@@ -108,7 +106,7 @@ public static class TextureManager
         {
             if (args.Length < 3) return true;
 
-            var name = string.Join(" ", args.Args.Skip(2));
+            string name = string.Join(" ", args.Args.Skip(2));
             Sprite? sprite = GetSprite(name, null);
             if (sprite == null)
             {
@@ -237,7 +235,7 @@ public static class TextureManager
         }
     }
     
-    private static void ExportSprite(Sprite sprite, string path)
+    public static void ExportSprite(Sprite sprite, string path)
     {
         if (sprite == null || sprite.texture == null) return;
     
@@ -314,5 +312,10 @@ public static class TextureManager
     public static void Add(TextureData data)
     {
         m_customs[data.m_name] = data;
+    }
+
+    public static void RegisterNewIcon(Sprite icon)
+    {
+        m_cachedSprites[icon.name] = icon;
     }
 }

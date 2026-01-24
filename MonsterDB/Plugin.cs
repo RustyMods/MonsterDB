@@ -44,6 +44,7 @@ public class MonsterDBPlugin : BaseUnityPlugin
         SpawnManager.Setup();
         ProcreateText.Setup();
         GrowUpText.Setup();
+        Snapshot.Setup();
         
         Wiki.Write();
         

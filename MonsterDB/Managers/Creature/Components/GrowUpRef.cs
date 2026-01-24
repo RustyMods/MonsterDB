@@ -80,7 +80,7 @@ public static class GrowUpText
         private static void Postfix(Character __instance, ref string __result)
         {
             if (!AddGrowUpText()) return;
-            if (!__instance.TryGetComponent(out Growup component) || !string.IsNullOrEmpty(__result)) return;
+            if (!__instance.TryGetComponent(out Growup component) || !string.IsNullOrEmpty(__result) || component.m_baseAI == null) return;
 
             double startTime = component.m_baseAI.GetTimeSinceSpawned().TotalSeconds;
             double percentage = startTime / component.m_growTime * 100f;

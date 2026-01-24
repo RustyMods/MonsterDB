@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using BepInEx.Configuration;
 using HarmonyLib;
 using UnityEngine;
@@ -25,7 +26,7 @@ public static class EggManager
         
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ItemDrop), nameof(ItemDrop.GetHoverText)),
-            postfix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_ItemDrop_GetHoverText))));
+            prefix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_ItemDrop_GetHoverText))));
         harmony.Patch(AccessTools.Method(typeof(EggGrow), nameof(EggGrow.GetHoverText)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_EggGrow_GetHoverText))));
         harmony.Patch(AccessTools.Method(typeof(EggGrow), nameof(EggGrow.UpdateEffects)),
@@ -34,23 +35,17 @@ public static class EggManager
 
     public static void Setup()
     {
-        var save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder",
+        Command save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder",
             args =>
             {
-                if (args.Length < 3)
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return true;
-                }
-
-                var prefabName = args[2];
+                string prefabName = args.GetString(2);
                 if (string.IsNullOrEmpty(prefabName))
                 {
                     MonsterDBPlugin.LogWarning("Invalid parameters");
                     return false;
                 }
 
-                var prefab = PrefabManager.GetPrefab(prefabName);
+                GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
                 if (prefab == null)
                 {
@@ -77,9 +72,9 @@ public static class EggManager
                 return true;
             }, PrefabManager.GetAllPrefabNames<ItemDrop>);
 
-        var saveAll = new Command("write_all_egg", $"save all egg references to {FileManager.ExportFolder} folder", _ =>
+        Command saveAll = new Command("write_all_egg", $"save all egg references to {FileManager.ExportFolder} folder", _ =>
         {
-            var prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
+            List<GameObject> prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
             for (var i = 0; i < prefabs.Count; ++i)
             {
                 var prefab = prefabs[i];
@@ -89,28 +84,22 @@ public static class EggManager
             return true;
         });
 
-        var read = new Command("mod_egg", $"[fileName]: read egg reference from {FileManager.ImportFolder} folder",
+        Command read = new Command("mod_egg", $"[fileName]: read egg reference from {FileManager.ImportFolder} folder",
             args =>
             {
-                if (args.Length < 3)
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return true;
-                }
-
-                var prefabName = args[2];
+                string prefabName = args.GetString(2);
                 if (string.IsNullOrEmpty(prefabName))
                 {
                     MonsterDBPlugin.LogWarning("Invalid parameters");
                     return true;
                 }
 
-                var filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
+                string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
                 Read(filePath);
                 return true;
             }, FileManager.GetModFileNames, adminOnly: true);
 
-        var revert = new Command("revert_egg", "[prefabName]: revert egg to factory settings", args =>
+        Command revert = new Command("revert_egg", "[prefabName]: revert egg to factory settings", args =>
         {
             if (args.Length < 3)
             {
@@ -118,7 +107,7 @@ public static class EggManager
                 return true;
             }
 
-            var prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogInfo("Invalid prefab");
@@ -137,23 +126,17 @@ public static class EggManager
             return true;
         }, LoadManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
 
-        var clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
+        Command clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
         {
-            if (args.Length < 4)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-
-            var prefabName = args[2];
-            var newName = args[3];
+            string prefabName = args.GetString(2);
+            string newName = args.GetString(3);
             if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return true;
             }
 
-            var prefab = PrefabManager.GetPrefab(prefabName);
+            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
             if (prefab == null)
             {
                 MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
@@ -244,33 +227,76 @@ public static class EggManager
         return newEggComponentPrefabs.Contains(prefabName);
     }
 
-    private static void Patch_ItemDrop_GetHoverText(ItemDrop __instance, ref string __result)
+    private static void GetEggGrowth(EggGrow egg, out bool isGrowing, out double growPercentage)
     {
-        if (!__instance.TryGetComponent(out EggGrow eggGrow)) return;
-
-        if (!IsNewEgg(__instance)) return;
-            
-        if (!eggGrow.m_nview || !eggGrow.m_nview.IsValid()) return;
-
-        float growStart = eggGrow.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
-        bool isGrowing = growStart > 0.0;
-        double growPercentage = 0.0;
+        float growStart = egg.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
+        isGrowing = growStart > 0.0;
+        growPercentage = 0.0;
         if (isGrowing)
         {
             double timeElapsed = ZNet.instance.GetTimeSeconds() - growStart;
-            growPercentage = Mathf.Clamp01((float)timeElapsed / eggGrow.m_growTime) * 100f;
+            growPercentage = Mathf.Clamp01((float)timeElapsed / egg.m_growTime) * 100f;
+        }
+    }
+
+    private static string GetEggHoverText(ItemDrop item, EggGrow eggGrow)
+    {
+        item.Load();
+        
+        GetEggGrowth(eggGrow, out bool isGrowing, out double growPercentage);
+
+        StringBuilder sb = new();
+        sb.Append(item.m_itemData.m_shared.m_name);
+        if (item.m_itemData.m_quality > 1)
+        {
+            sb.Append($"[{item.m_itemData.m_quality}]");
         }
 
-        string text = __instance.m_itemData.m_stack > 1
-            ? "$item_chicken_egg_stacked"
-            : isGrowing ? _addPercentage.Value is Toggle.On ?
-                    $"$item_chicken_egg_warm ({growPercentage:0.0}%)" : "$item_chicken_egg_warm" :
-                "$item_chicken_egg_cold";
-        string hover = __result;
-        int num = hover.IndexOf('\n');
-        __result = num > 0
-            ? $"{hover.Substring(0, num)} {Localization.instance.Localize(text)} {hover.Substring(num)}"
-            : hover;
+        bool isStacked = item.m_itemData.m_stack > 1;
+        
+        if (isStacked)
+        {
+            sb.Append($" x{item.m_itemData.m_stack}");
+            sb.Append(" $item_chicken_egg_stacked");
+        }
+        else
+        {
+            if (isGrowing)
+            {
+                string warm = Localization.instance.Localize("$item_chicken_egg_warm");
+                warm = warm.Replace("(", string.Empty).Replace(")", string.Empty).Trim();
+                sb.Append($" ({warm}");
+                if (_addPercentage.Value is Toggle.On)
+                {
+                    sb.Append($" {growPercentage:0.0}%");
+                }
+                sb.Append(")");
+            }
+            else
+            {
+                sb.Append(" $item_chicken_egg_cold");
+            }
+        }
+        
+        if (item.m_itemData.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Consumable && item.IsPiece())
+        {
+            string consumeText = item.m_itemData.m_shared.m_isDrink ? "$item_drink" : "$item_eat";
+            sb.Append($"\n[<color=yellow><b>$KEY_Use</b></color>] {consumeText}");
+        }
+        else
+        {
+            sb.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $inventory_pickup");
+        }
+
+        return Localization.instance.Localize(sb.ToString());
+    }
+
+    private static bool Patch_ItemDrop_GetHoverText(ItemDrop __instance, ref string __result)
+    {
+        if (!__instance.TryGetComponent(out EggGrow eggGrow) || !IsNewEgg(__instance)) return true;
+        if (!eggGrow.m_nview || !eggGrow.m_nview.IsValid()) return true;
+        __result = GetEggHoverText(__instance, eggGrow);
+        return false;
     }
 
     private static bool Patch_EggGrow_GetHoverText(EggGrow __instance, ref string __result)
@@ -283,34 +309,15 @@ public static class EggManager
             __result = __instance.m_item.GetHoverText();
             return false;
         }
-        
-        float growStart = __instance.m_nview.GetZDO().GetFloat(ZDOVars.s_growStart);
-        bool isGrowing = growStart > 0.0;
-        
-        double growPercentage = 0.0;
-        if (isGrowing)
-        {
-            double timeElapsed = ZNet.instance.GetTimeSeconds() - growStart;
-            growPercentage = Mathf.Clamp01((float)timeElapsed / __instance.m_growTime) * 100f;
-        }
-        string text = __instance.m_item.m_itemData.m_stack > 1
-            ? "$item_chicken_egg_stacked"
-            : isGrowing ? 
-                $"$item_chicken_egg_warm ({growPercentage:0.0}%)" : 
-                "$item_chicken_egg_cold";
-        string hover = __instance.m_item.GetHoverText();
-        int num = hover.IndexOf('\n');
-        __result = num > 0
-            ? $"{hover.Substring(0, num)} {Localization.instance.Localize(text)} {hover.Substring(num)}"
-            : hover;
 
+        __result = GetEggHoverText(__instance.m_item, __instance);
         return false;
     }
 
     private static void Patch_EggGrow_UpdateEffects(EggGrow __instance, float grow)
     {
         if (!IsNewEgg(__instance.m_item)) return;
-        var ps = __instance.GetComponent<ParticleSystem>();
+        ParticleSystem? ps = __instance.GetComponent<ParticleSystem>();
         if (ps == null) return;
             
         bool enablePS = grow > 0.0;

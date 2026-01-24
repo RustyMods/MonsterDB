@@ -58,4 +58,25 @@ public static partial class Extensions
 
         return dict;
     }
+
+    public static List<ItemDrop.ItemData> GetAvailableAttacks(this Humanoid humanoid)
+    {
+        return humanoid
+            .GetInventory()
+            .GetAllItems()
+            .Where(item => item.IsWeapon() && humanoid.m_baseAI.CanUseAttack(item))
+            .ToList();
+    }
+
+    public static bool CanToggleFly(this Character character)
+    {
+        AnimatorControllerParameter[]? animParams = character.m_animator.parameters;
+        for (int i = 0; i < animParams.Length; ++i)
+        {
+            AnimatorControllerParameter? param = animParams[i];
+            if (param.name == "fly_takeoff" || param.name == "fly_land") return true;
+        }
+
+        return false;
+    }
 }

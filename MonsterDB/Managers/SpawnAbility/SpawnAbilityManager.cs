@@ -118,7 +118,9 @@ public static class SpawnAbilityManager
             
             MonsterDBPlugin.LogDebug($"Cloned {prefab.name} as {cloneName}");
         };
+#pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
+#pragma warning restore CS8601 // Possible null reference assignment.
         return clone != null;
     }
 }

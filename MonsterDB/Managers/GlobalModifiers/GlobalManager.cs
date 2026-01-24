@@ -6,6 +6,9 @@ namespace MonsterDB.GlobalModifiers;
 
 public static class GlobalManager
 {
+    /// <summary>
+    /// Not implemented 
+    /// </summary>
     private const string FileName = "GlobalModifiers.yml";
     public static Global mods;
     

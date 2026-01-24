@@ -1,3 +1,13 @@
+## 0.2.3
+- improved custom saddle
+- new field for saddle: `attachParent` use this field to target specific creature bone to attach to
+- new command `monsterdb export_bones [prefabName]`: writes creature child hierarchy to learn structure of creature, to use to target specific child for saddle
+- improved saddle control for custom saddled creatures
+- new command: `monsterdb snapshot [prefabName]`: generate icon for prefab
+- new feature, turn any prefab into an item (risky), e.g: SeekerEgg into an item, to use to create an egg for seeker; command: `monsterdb create_item [prefabName][newName]`
+- improved egg growth percentage hover text
+- fixed grow up hover text error when creature is not loaded
+
 ## 0.2.2
 - added last priority to startup to load after WackyDB
 - fixed item scaling to always scale based off original scale to fix continuously multiplying scale off new value, when updating multiple times during same session

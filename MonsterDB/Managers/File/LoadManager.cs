@@ -160,11 +160,25 @@ public static class LoadManager
                         break;
                     case BaseType.Egg:
                         ++eggs;
-                        EggManager.Clone(prefab, data.Prefab, false);
+                        if (!prefab.GetComponent<ItemDrop>())
+                        {
+                            ItemManager.TryCreateItem(prefab, data.Prefab, out _, false);
+                        }
+                        else
+                        {
+                            EggManager.Clone(prefab, data.Prefab, false);
+                        }
                         break;
                     case BaseType.Item:
                         ++items;
-                        ItemManager.TryClone(prefab, data.Prefab, out _, false);
+                        if (!prefab.GetComponent<ItemDrop>())
+                        {
+                            ItemManager.TryCreateItem(prefab, data.Prefab, out _, false);
+                        }
+                        else
+                        {
+                            ItemManager.TryClone(prefab, data.Prefab, out _, false);
+                        }
                         break;
                     case BaseType.Fish:
                         ++fish;

@@ -189,12 +189,12 @@ public static class LocalizationManager
         {
             for (int i = 0; i < localization.Length; ++i)
             {
-                var line = localization[i];
+                string line = localization[i];
                 if (string.IsNullOrEmpty(line) || line.StartsWith("$")) continue;
-                var lineParts = line.Split(':');
+                string[] lineParts = line.Split(':');
                 if (lineParts.Length < 2) continue;
-                var key =  lineParts[0].Trim();
-                var value =  lineParts[1].Trim();
+                string key =  lineParts[0].Trim();
+                string value =  lineParts[1].Trim();
                 lines[key] = value;
             }
         }

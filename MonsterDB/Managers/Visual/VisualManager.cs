@@ -10,20 +10,14 @@ public static class VisualManager
     {
         Command export = new Command("write_visual", "[prefabName]: write prefab visual data YML file", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-
-            string? prefabName = args[2];
+            string? prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return false;
             }
 
-            var prefab = PrefabManager.GetPrefab(prefabName);
+            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
             if (prefab == null)
             {
@@ -47,21 +41,15 @@ public static class VisualManager
         Command clone = new Command("clone_visual", "[prefabName]: clone prefab and write visual YML file",
             args =>
             {
-                if (args.Length < 4)
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return true;
-                }
-
-                var prefabName = args[2];
-                var newName = args[3];
+                string prefabName = args.GetString(2);
+                string newName = args.GetString(3);
                 if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
                 {
                     MonsterDBPlugin.LogWarning("Invalid parameters");
                     return true;
                 }
 
-                var prefab = PrefabManager.GetPrefab(prefabName);
+                GameObject? prefab = PrefabManager.GetPrefab(prefabName);
                 if (prefab == null)
                 {
                     MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
@@ -88,7 +76,9 @@ public static class VisualManager
 
     public static bool TrySave(GameObject prefab, out BaseVisual visual, bool isClone = false, string source = "")
     {
+#pragma warning disable CS8601 // Possible null reference assignment.
         visual = LoadManager.GetOriginal<BaseVisual>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
         if (visual != null) return true;
         
         visual = new BaseVisual();
@@ -109,7 +99,9 @@ public static class VisualManager
                 Write(p, true, source.name, dirPath);
             }
         };
+#pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
+#pragma warning restore CS8601 // Possible null reference assignment.
         return clone != null;
     }
 }

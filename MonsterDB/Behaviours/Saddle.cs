@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using HarmonyLib;
 using UnityEngine;
@@ -41,12 +44,33 @@ public static class Player_IsRiding
     }
 }
 
+[HarmonyPatch(typeof(Player), nameof(Player.SetControls))]
+public static class Player_SetControls_SaddlePatch
+{
+    private static bool Prefix(Player __instance, 
+        Vector3 movedir, 
+        bool attack, 
+        bool secondaryAttack,
+        bool block, 
+        bool jump, 
+        bool run, 
+        bool autoRun)
+    {
+        if (__instance.m_doodadController is not Saddle saddle || !saddle.IsValid()) return true;
+        saddle.ApplyCustomControls(movedir, __instance.m_lookDir, run, autoRun, block, attack, secondaryAttack, jump);
+        return false;
+    }
+}
+
 public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 {
     public string m_hoverText = "";
     public float m_maxUseRange = 10f;
     public Transform? m_attachPoint;
     public Vector3 m_attachOffset;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    public GameObject m_attachParent;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public Vector3 m_detachOffset = new(0.0f, 0.5f, 0.0f);
     public string m_attachAnimation = "attach_chair";
     public float m_maxStamina = 100f;
@@ -67,8 +91,8 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     public Tameable m_tambable = null!;
     public BaseAI m_baseAI = null!;
     public bool m_haveValidUser;
-    
-    private const string rideKey = "JoyLTrigger";
+
+    public const string rideKey = "JoyLTrigger";
     private const string removeKey = "JoyButtonB";
 
     public void Awake()
@@ -85,17 +109,31 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         m_nview.Register("Controls", new Action<long, Vector3, int, float>(RPC_Controls));
         
         m_nview.Register("AddSaddle", RPC_AddSaddle);
-        
+    }
+
+    public void Start()
+    {
         GameObject attach = new GameObject("attach");
-        attach.transform.SetParent(transform);
+        attach.transform.SetParent(m_attachParent != null ? m_attachParent.transform : transform);
         attach.transform.localPosition = m_attachOffset;
-        attach.transform.localRotation = Quaternion.identity;
+        attach.transform.rotation = Quaternion.identity;
         m_attachPoint = attach.transform;
+    }
+
+    public void Restart()
+    {
+        if (m_attachPoint != null)
+        {
+            m_attachPoint.SetParent(m_attachParent != null ? m_attachParent.transform : transform);
+            m_attachPoint.localPosition = m_attachOffset;
+            m_attachPoint.rotation = Quaternion.identity;
+            ValidateAttachRotation();
+        }
     }
 
     public bool IsValid()
     {
-        return this;
+        return this && m_attachPoint != null;
     }
     
     [HarmonyPatch(typeof(Tameable), nameof(Tameable.UseItem))]
@@ -152,7 +190,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         if (m_drownDamageTimer <= 1.0)
             return;
         m_drownDamageTimer = 0.0f;
-        var num = Mathf.Ceil(m_character.GetMaxHealth() / 20f);
+        float num = Mathf.Ceil(m_character.GetMaxHealth() / 20f);
         m_character.Damage(new HitData
         {
             m_damage =
@@ -208,17 +246,22 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         if (!m_character.IsTamed() || !HaveValidUser() || m_speed == Sadle.Speed.Stop || m_controlDir.magnitude == 0.0)
             return false;
         
-        
         if (m_speed == Sadle.Speed.Walk || m_speed == Sadle.Speed.Run)
         {
             if (m_speed == Sadle.Speed.Run && !HaveStamina())
+            {
                 m_speed = Sadle.Speed.Walk;
+            }
             m_baseAI.MoveTowards(m_controlDir, m_speed == Sadle.Speed.Run);
-            var num = Mathf.Lerp(1f, 0.5f, GetRiderSkill());
-            if (m_character.IsSwimming())
+            float num = Mathf.Lerp(1f, 0.5f, GetRiderSkill());
+            if (m_character.IsSwimming() || m_character.IsFlying())
+            {
                 UseStamina(m_swimStaminaDrain * num * dt);
+            }
             else if (m_speed == Sadle.Speed.Run)
+            {
                 UseStamina(m_runStaminaDrain * num * dt);
+            }
         }
         else if (m_speed == Sadle.Speed.Turn)
         {
@@ -240,8 +283,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 
     public void RPC_AddSaddle(long sender)
     {
-        if (!m_nview.IsOwner() || HaveSaddle())
-            return;
+        if (!m_nview.IsOwner() || HaveSaddle()) return;
         m_nview.GetZDO().Set(ZDOVars.s_haveSaddleHash, true);
         m_nview.InvokeRPC(ZNetView.Everybody, "SetSaddle", true);
     }
@@ -263,8 +305,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         Rigidbody? component =
             Instantiate(m_tambable.m_saddleItem.gameObject, transform.TransformPoint(m_tambable.m_dropSaddleOffset),
                 Quaternion.identity).GetComponent<Rigidbody>();
-        if (!component)
-            return;
+        if (!component) return;
         Vector3 up = Vector3.up;
         if (flyDirection.magnitude > 0.10000000149011612)
         {
@@ -365,6 +406,46 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         return m_tambable;
     }
 
+    public void ApplyCustomControls(Vector3 moveDir, Vector3 lookDir, bool run, bool autoRun, bool block, bool attack, bool attackSecondary, bool jump)
+    {
+        if (Player.m_localPlayer == null) return;
+        
+        if (jump)
+        {
+            if (m_character.GetBaseAI().m_randomFly || m_character.CanToggleFly())
+            {
+                if (m_character.IsFlying())
+                {
+                    m_character.Land();
+                }
+                else
+                {
+                    m_character.TakeOff();
+                }
+            }
+            else
+            {
+                m_character.Jump();
+            }
+        }
+        
+        ApplyControlls(moveDir, lookDir, run, autoRun, block);
+        
+        if (m_character.GetBaseAI() is MonsterAI monsterAI && m_character is Humanoid humanoid)
+        {
+            if (attack || attackSecondary)
+            {
+                List<ItemDrop.ItemData> items = humanoid.GetAvailableAttacks();
+                if (items.Count > 0)
+                {
+                    ItemDrop.ItemData? randomItem = items[UnityEngine.Random.Range(0, items.Count)];
+                    humanoid.EquipItem(randomItem);
+                }
+                monsterAI.DoAttack(null, false);
+            }
+        }
+    }
+    
     public void ApplyControlls(
         Vector3 moveDir,
         Vector3 lookDir,
@@ -372,45 +453,64 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         bool autoRun,
         bool block)
     {
-        if (Player.m_localPlayer == null)
-            return;
-        var skillFactor = Player.m_localPlayer.GetSkills().GetSkillFactor(Skills.SkillType.Ride);
-        var speed = Sadle.Speed.NoChange;
-        var vector3_1 = Vector3.zero;
-        if (((block ? 1 : moveDir.z > 0.5 ? 1 : 0) | (run ? 1 : 0)) != 0)
+        if (Player.m_localPlayer == null) return;
+
+        float rideSkill = Player.m_localPlayer
+            .GetSkills()
+            .GetSkillFactor(Skills.SkillType.Ride);
+
+        Sadle.Speed speed = Sadle.Speed.NoChange;
+        Vector3 desiredDirection = Vector3.zero;
+
+        bool hasMovementIntent =
+            run ||
+            block ||
+            moveDir.z > 0.5f;
+
+        if (hasMovementIntent)
         {
-            var vector3_2 = lookDir with { y = 0.0f };
-            vector3_2.Normalize();
-            vector3_1 = vector3_2;
+            desiredDirection = lookDir;
+            if (!m_character.IsFlying()) desiredDirection.y = 0f;
+
+            if (desiredDirection.sqrMagnitude > 0f)
+                desiredDirection.Normalize();
         }
 
         if (run)
+        {
             speed = Sadle.Speed.Run;
-        else if (moveDir.z > 0.5)
+        }
+        else if (moveDir.z > 0.5f)
+        {
             speed = Sadle.Speed.Walk;
-        else if (moveDir.z < -0.5)
+        }
+        else if (moveDir.z < -0.5f)
+        {
             speed = Sadle.Speed.Stop;
+        }
         else if (block)
+        {
             speed = Sadle.Speed.Turn;
-        m_nview.InvokeRPC("Controls", vector3_1, (int)speed, skillFactor);
+        }
+
+        m_nview.InvokeRPC("Controls", desiredDirection, (int)speed, rideSkill);
     }
 
     public void RPC_Controls(long sender, Vector3 rideDir, int rideSpeed, float skill)
     {
-        if (!m_nview.IsOwner())
-            return;
+        if (!m_nview.IsOwner()) return;
         m_rideSkill = skill;
         if (rideDir != Vector3.zero)
+        {
             m_controlDir = rideDir;
+        }
         switch (rideSpeed)
         {
             case 3:
-                if (m_speed == Sadle.Speed.Walk || m_speed == Sadle.Speed.Run)
-                    return;
+                if (m_speed == Sadle.Speed.Walk || m_speed == Sadle.Speed.Run) return;
                 break;
             case 4:
-                if (m_speed != Sadle.Speed.Turn)
-                    return;
+                if (m_speed != Sadle.Speed.Turn) return;
                 m_speed = Sadle.Speed.Stop;
                 return;
         }
@@ -421,11 +521,9 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     public void UpdateRidingSkill(float dt)
     {
         m_raiseSkillTimer += dt;
-        if (m_raiseSkillTimer <= 1.0)
-            return;
+        if (m_raiseSkillTimer <= 1.0) return;
         m_raiseSkillTimer = 0.0f;
-        if (m_speed != Sadle.Speed.Run)
-            return;
+        if (m_speed != Sadle.Speed.Run) return;
         Player.m_localPlayer.RaiseSkill(Skills.SkillType.Ride);
     }
 
@@ -448,18 +546,17 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 
     public void RPC_RemoveSaddle(long sender, Vector3 userPoint)
     {
-        if (!m_nview.IsOwner() || HaveValidUser())
-            return;
+        if (!m_nview.IsOwner() || HaveValidUser()) return;
         DropSaddle(userPoint);
     }
 
     public void RPC_RequestControl(long sender, long playerID)
     {
-        if (!m_nview.IsOwner())
-            return;
+        if (!m_nview.IsOwner()) return;
         CalculateHaveValidUser();
         if (GetUser() == playerID || !HaveValidUser())
         {
+            ValidateAttachRotation();
             m_nview.GetZDO().Set(ZDOVars.s_user, playerID);
             ResetControlls();
             m_nview.InvokeRPC(sender, "RequestRespons", true);
@@ -471,6 +568,61 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         }
     }
 
+    // private GameObject? line;
+    // public void StartLines(Player player)
+    // {
+    //     if (m_attachPoint == null) return;
+    //     try
+    //     {
+    //         var leftHandAttach = player.m_visEquipment.m_leftHand;
+    //         var rightHandAttach = player.m_visEquipment.m_rightHand;
+    //         var head = m_character.m_head;
+    //         
+    //         if (leftHandAttach == null || rightHandAttach == null || head == null) return;
+    //
+    //         var vfx_harpoon = PrefabManager.GetPrefab("vfx_Harpooned");
+    //         var vfx_renderer = vfx_harpoon.GetComponent<LineRenderer>();
+    //
+    //         line = new GameObject("line");
+    //         line.transform.SetParent(m_attachPoint);
+    //         LineRenderer? lineRenderer = line.AddComponent<LineRenderer>();
+    //         lineRenderer.material = vfx_renderer.material;
+    //         lineRenderer.startWidth = 0.1f;
+    //         lineRenderer.endWidth = 0.1f;
+    //         lineRenderer.positionCount = 3;
+    //         lineRenderer.SetPosition(0, leftHandAttach.position);
+    //         lineRenderer.SetPosition(1, head.position);
+    //         lineRenderer.SetPosition(2, rightHandAttach.position);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         MonsterDBPlugin.LogError(ex.Message);
+    //         MonsterDBPlugin.LogWarning(ex.StackTrace);
+    //     }
+    // }
+    //
+    // public void StopLines()
+    // {
+    //     if (line == null) return;
+    //     Destroy(line);
+    //     line = null;
+    // }
+
+    public void ValidateAttachRotation()
+    {
+        if (m_attachPoint == null) return;
+
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.0001f)
+            return;
+
+        forward.Normalize();
+
+        m_attachPoint.rotation = Quaternion.LookRotation(forward, Vector3.up);
+    }
+
     public bool HaveValidUser()
     {
         return m_haveValidUser;
@@ -479,13 +631,17 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     public void CalculateHaveValidUser()
     {
         m_haveValidUser = false;
+        if (m_attachPoint == null) return;
         long user = GetUser();
         if (user == 0L) return;
-        foreach (ZDO? zdo in ZNet.instance.GetAllCharacterZDOS())
+        List<ZDO>? zdos = ZNet.instance.GetAllCharacterZDOS();
+        for (int i = 0; i < zdos.Count; ++i)
         {
+            ZDO? zdo = zdos[i];
             if (zdo.m_uid.UserID == user)
             {
-                m_haveValidUser = Vector3.Distance(zdo.GetPosition(), transform.position) < (double)m_maxUseRange;
+                m_haveValidUser = Vector3.Distance(zdo.GetPosition(), transform.position) < m_maxUseRange;
+
                 break;
             }
         }
@@ -504,10 +660,8 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         if (granted && m_attachPoint != null)
         {
             Player.m_localPlayer.StartDoodadControl(this);
-            if (m_attachPoint == null) return;
-            
-            Player.m_localPlayer.AttachStart(m_attachPoint, m_character.gameObject, false, false, false,
-                m_attachAnimation, m_detachOffset);
+            Player.m_localPlayer.AttachStart(m_attachPoint, gameObject, false, false, false, m_attachAnimation, m_detachOffset);
+            // StartLines(Player.m_localPlayer);
         }
         else
         {
@@ -517,19 +671,17 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 
     public void OnUseStop(Player player)
     {
-        if (!m_nview.IsValid())
-            return;
+        if (!m_nview.IsValid()) return;
         m_nview.InvokeRPC("ReleaseControl", player.GetZDOID().UserID);
-        if (!(m_attachPoint != null))
-            return;
+        if (m_attachPoint == null) return;
         player.AttachStop();
+        // StopLines();
     }
 
     public bool IsLocalUser()
     {
-        if (!(bool)(Object)Player.m_localPlayer)
-            return false;
-        var user = GetUser();
+        if (!Player.m_localPlayer) return false;
+        long user = GetUser();
         return user != 0L && user == Player.m_localPlayer.GetZDOID().UserID;
     }
 
@@ -546,11 +698,9 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 
     public void UseStamina(float v)
     {
-        if (v == 0.0 || !m_nview.IsValid() || !m_nview.IsOwner())
-            return;
-        var stamina = GetStamina() - v;
-        if (stamina < 0.0)
-            stamina = 0.0f;
+        if (v == 0.0 || !m_nview.IsValid() || !m_nview.IsOwner()) return;
+        float stamina = GetStamina() - v;
+        if (stamina < 0.0) stamina = 0.0f;
         SetStamina(stamina);
         m_staminaRegenTimer = 1f;
     }
@@ -580,18 +730,30 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     public void UpdateStamina(float dt)
     {
         m_staminaRegenTimer -= dt;
-        if (m_staminaRegenTimer > 0.0 || m_character.InAttack() || m_character.IsSwimming())
+
+        if (m_staminaRegenTimer > 0f)
             return;
-        float stamina1 = GetStamina();
+
+        if (m_character.InAttack() || m_character.IsSwimming())
+            return;
+
+        float currentStamina = GetStamina();
         float maxStamina = GetMaxStamina();
-        if (stamina1 >= (double)maxStamina && stamina1 <= (double)maxStamina)
+
+        if (currentStamina >= maxStamina)
             return;
-        float num1 = m_tambable.IsHungry() ? m_staminaRegenHungry : m_staminaRegen;
-        float num2 = num1 + (float)(1.0 - stamina1 / (double)maxStamina) * num1;
-        float stamina2 = stamina1 + num2 * dt;
-        if (stamina2 > (double)maxStamina)
-            stamina2 = maxStamina;
-        SetStamina(stamina2);
+
+        float baseRegenRate = m_tambable.IsHungry()
+            ? m_staminaRegenHungry
+            : m_staminaRegen;
+
+        // Regen scales up as stamina gets lower
+        float missingFraction = 1f - currentStamina / maxStamina;
+        float regenRate = baseRegenRate + missingFraction * baseRegenRate;
+
+        float newStamina = currentStamina + regenRate * dt;
+
+        SetStamina(Mathf.Min(newStamina, maxStamina));
     }
 
     public float GetRiderSkill()

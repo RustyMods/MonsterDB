@@ -22,7 +22,9 @@ public static class TexturePackage
     {
         public string TransferId = "";
         public int TotalChunks;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public byte[][] Chunks;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public int Received;
         
         public int ReceivedBytes;
@@ -30,6 +32,7 @@ public static class TexturePackage
 
         public void Add(int index, byte[] chunk)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (Chunks[index] == null)
             {
                 Chunks[index] = chunk;

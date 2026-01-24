@@ -10,13 +10,7 @@ public static class FishManager
     {
         Command save = new Command("write_fish", $"[prefabName]: write fish YML to {FileManager.ExportFolder} folder", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -52,13 +46,7 @@ public static class FishManager
         
         Command read = new Command("mod_fish", $"[fileName]: read fish reference from {FileManager.ImportFolder} folder", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -72,13 +60,7 @@ public static class FishManager
 
         Command revert = new Command("revert_fish", "[prefabName]: revert fish to factory settings", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogInfo("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogInfo("Invalid prefab");
@@ -99,14 +81,8 @@ public static class FishManager
 
         Command clone = new Command("clone_fish", "[prefabName][newName]: must be a fish", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
-            string newName = args[3];
+            string prefabName = args.GetString(2);
+            string newName = args.GetString(3);
             if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");

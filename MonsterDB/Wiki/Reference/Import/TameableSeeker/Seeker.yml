@@ -1,7 +1,15 @@
 GameVersion: 0.221.4
 ModVersion: 0.2.2
 Type: Humanoid
-Prefab: Bjorn
+Prefab: Seeker
+AI:
+  consumeItems:
+  - MushroomJotunPuffs
+  consumeRange: 1
+  consumeSearchRange: 10
+  consumeSearchInterval: 10
+# If field removed, will remove component
+Drops: {}
 Tameable:
   fedDuration: 600
   tamingTime: 1800
@@ -25,18 +33,15 @@ Saddle:
   attachAnimation: attach_asksvin
   maxStamina: 240
   runStaminaDrain: 1
-  swimStaminaDrain: 5
+  swimStaminaDrain: 3
   staminaRegen: 0.2
   staminaRegenHungry: 0.1
   attachOffset:
-    x: 0
-    y: 0.004
-    z: 0.006
-  attachParent: Spine_01
-  mountIcon: TrophyBjorn
-# If field removed, will remove component
-Drops: {}
-# If field removed, will remove component
+    x: 0.0
+    y: 0.009
+    z: 0
+  attachParent: hip
+  mountIcon: TrophySeeker
 Procreation:
   updateInterval: 30
   totalCheckRange: 10
@@ -45,16 +50,16 @@ Procreation:
   pregnancyChance: 0.33
   pregnancyDuration: 60
   requiredLovePoints: 3
-  offspring: Bjorn_Cub
+  offspring: SeekerLarva
   minOffspringLevel: 0
   spawnOffset: 1
   spawnOffsetMax: 0
   spawnRandomDirection: false
   birthEffects:
     effectPrefabs:
-      - prefab: sfx_bear_hurt
-      - prefab: vfx_boar_birth
+      - prefab: sfx_seeker_hurt
+      - prefab: fx_seeker_hurt
   loveEffects:
     effectPrefabs:
-      - prefab: sfx_bear_idle
+      - prefab: sfx_seeker_alerted
       - prefab: vfx_lox_love

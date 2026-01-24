@@ -40,8 +40,8 @@ public class Clone
         
         Prefab = UnityEngine.Object.Instantiate(Source, CloneManager.GetRootTransform(), false);
         Prefab.name = NewName;
-        PrefabManager.RegisterPrefab(Prefab);
         OnCreated?.Invoke(Prefab);
+        PrefabManager.RegisterPrefab(Prefab);
         CloneManager.prefabs[Prefab.name] = Prefab;
         Loaded = true;
         return Prefab;

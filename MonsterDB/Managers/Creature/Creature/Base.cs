@@ -390,10 +390,7 @@ public class Base : Header
         if (custom != null && Saddle != null)
         {
             Saddle.UpdateFields(custom, prefab.name, !isInstance);
-            if (custom.m_attachPoint != null && Saddle.m_attachOffset.HasValue)
-            {
-                custom.m_attachPoint.localPosition = Saddle.m_attachOffset.Value;
-            }
+            custom.Restart();
         }
         
         if (saddle == null || Saddle == null) return;

@@ -10,13 +10,7 @@ public static class ProjectileManager
     {
         var save = new Command("write_projectile", "[prefabName]", args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -44,21 +38,9 @@ public static class ProjectileManager
         var clone = new Command("clone_projectile", "[prefabName][newName]: clones projectile and writes YML file",
             args =>
             {
-                if (args.Length < 4)
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return true;
-                }
-            
-                string prefabName = args[2];
-                if (string.IsNullOrEmpty(prefabName))
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return false;
-                }
-                
-                string newName = args[3];
-                if (string.IsNullOrEmpty(newName))
+                string prefabName = args.GetString(2);
+                string newName = args.GetString(3);
+                if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
                 {
                     MonsterDBPlugin.LogWarning("Invalid parameters");
                     return false;
@@ -79,7 +61,9 @@ public static class ProjectileManager
     
     public static bool TrySave(GameObject prefab, out BaseProjectile data, bool isClone = false, string source = "")
     {
+#pragma warning disable CS8601 // Possible null reference assignment.
         data = LoadManager.GetOriginal<BaseProjectile>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
         if (data != null) return true;
         data = new BaseProjectile();
         data.Setup(prefab, isClone, source);
@@ -132,7 +116,9 @@ public static class ProjectileManager
                 Write(p, true, source.name, dirPath);
             }
         };
+#pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
+#pragma warning restore CS8601 // Possible null reference assignment.
         return clone != null;
     }
 }
