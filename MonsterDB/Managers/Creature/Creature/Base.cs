@@ -30,7 +30,7 @@ public class Base : Header
     public DropProjectileOverDistanceRef? DropProjectileOverDistance;
     [YamlMember(Order = 17)] public CinderSpawnerRef? CinderSpawner;
     [YamlMember(Order = 18)] public CharacterTimedDestructionRef? TimedDestruction;
-    [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled to false to disable")] public SpawnDataRef[]? SpawnData;
+    [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled too false to disable")] public SpawnDataRef[]? SpawnData;
     [YamlMember(Order = 100)] public MiscComponent? Extra;
     [YamlMember(Order = 101, Description = "Reference only, these are attack animation triggers")] public List<string>? AnimationTriggers;
 

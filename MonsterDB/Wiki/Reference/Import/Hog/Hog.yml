@@ -67,7 +67,21 @@ Tameable:
 # If field removed, will remove component
 Procreation:
   offspring: Boar
-# If entries removed, will still be registered, set enabled to false to disable
+Saddle:
+  maxUseRange: 6
+  attachAnimation: attach_asksvin
+  maxStamina: 240
+  runStaminaDrain: 1
+  swimStaminaDrain: 3
+  staminaRegen: 0.2
+  staminaRegenHungry: 0.1
+  attachOffset:
+    x: 0.0
+    y: -0.1
+    z: 0.0
+  attachParent: Spine1
+  mountIcon: TrophyBoar
+# If entries removed, will still be registered, set enabled too false to disable
 SpawnData:
 - name: MDB Hog Spawn Data
   enabled: true

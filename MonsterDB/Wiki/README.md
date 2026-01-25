@@ -67,8 +67,8 @@ component to override this behavior and allow food searching and consumption.
 ### Rideable Creatures
 
 MonsterDB simplifies making creatures rideable.
-Instead of requiring a saddle setup, the player is attached directly to the creature’s root.
-You must adjust `attachOffset` to ensure correct visual alignment.
+Instead of requiring a saddle setup, the player is attached directly to the creature’s root or `attachParent` field
+You should adjust `attachOffset` to ensure correct visual alignment and use command: `monssterdb export_bones` to figure out which bone to attach to under `attachParent`
 
 ### Player Cloning
 
@@ -148,6 +148,9 @@ use `help` to see this list in-game
 - `monsterdb search_sprite [query]`: search cached sprites
 - `monsterdb write_visual [prefabName]`: export prefab visual YML
 - `monsterdb clone_visual [prefabName][newName]`: clone prefab and export visual YML
+- `monsterdb export_bones [prefabName]`: export bone structure as YML
+- `monsterdb create_item [prefabName][newName]`: advanced command to try to convert any prefab into an item, does not work with creatures
+- `monsterdb snapshot [prefabName]`: snapshots a prefab into an icon and exports as PNG
 
 ### Examples
 

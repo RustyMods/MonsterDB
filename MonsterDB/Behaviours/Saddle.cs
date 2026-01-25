@@ -110,14 +110,14 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         
         m_nview.Register("AddSaddle", RPC_AddSaddle);
         
-        string? prefabName = Utils.GetPrefabName(name);
-        if (VultureOverride.ShouldOverride(prefabName) && VultureOverride.overrideController != null)
-        {
-            if (m_character.m_animator.runtimeAnimatorController == VultureOverride.overrideController) return;
-            m_character.m_animator.runtimeAnimatorController = VultureOverride.overrideController;
-            m_character.Land();
-            MonsterDBPlugin.LogDebug($"Overriding {name} controller");
-        }
+        // string? prefabName = Utils.GetPrefabName(name);
+        // if (VultureOverride.ShouldOverride(prefabName) && VultureOverride.overrideController != null)
+        // {
+        //     if (m_character.m_animator.runtimeAnimatorController == VultureOverride.overrideController) return;
+        //     m_character.m_animator.runtimeAnimatorController = VultureOverride.overrideController;
+        //     m_character.Land();
+        //     MonsterDBPlugin.LogDebug($"Overriding {name} controller");
+        // }
     }
 
     public void Start()

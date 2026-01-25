@@ -1,0 +1,45 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.2
+Type: Humanoid
+Prefab: Volture_Chick
+ClonedFrom: Volture
+IsCloned: true
+Character:
+  name: $enemy_volture_chick
+  # Flying
+  flying: false
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_bat_death
+    - prefab: Volture_Chick_ragdoll
+    - prefab: sfx_vulture_death
+  # Base Health
+  health: 100
+  defaultItems:
+  - volture_talons
+AI:
+  randomFly: true
+  chanceToTakeoff: 0.1
+  chanceToLand: 0.9
+Visuals:
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  renderers:
+  - prefab: Feathers
+    parent: Volture
+    index: 1
+    active: false
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: Feathers
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    levelMultiplier: false
+GrowUp:
+  growTime: 3000
+  inheritTame: true
+  grownPrefab: Volture

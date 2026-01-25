@@ -7,6 +7,8 @@
 - new feature, turn any prefab into an item (risky), e.g: SeekerEgg into an item, to use to create an egg for seeker; command: `monsterdb create_item [prefabName][newName]`
 - improved egg growth percentage hover text
 - fixed grow up hover text error when creature is not loaded
+- created custom controller for volture to enable walking, landing, takeoff (originally not enabled in vanilla volture)
+- volture custom controller added automatically if volture modified
 
 ## 0.2.2
 - added last priority to startup to load after WackyDB

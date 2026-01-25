@@ -234,10 +234,10 @@ public static class CreatureManager
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out var clone)) return clone;
 
-        if (source.name == "Volture")
-        {
-            VultureOverride.Register(cloneName);
-        }
+        // if (source.name == "Volture")
+        // {
+        //     VultureOverride.Register(cloneName);
+        // }
         Clone c = new Clone(source, cloneName);
         c.OnCreated += prefab =>
         {

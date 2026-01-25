@@ -260,6 +260,11 @@
           <Link>README.md</Link>
         </Content>
         <Content Include=".gitignore" />
+        <Content Include="Wiki\Reference\Import\TameableVolture\translations.English.yml" />
+        <Content Include="Wiki\Reference\Import\TameableVolture\Volture.yml" />
+        <Content Include="Wiki\Reference\Import\TameableVolture\VoltureEgg.yml" />
+        <Content Include="Wiki\Reference\Import\TameableVolture\Volture_Chick.yml" />
+        <Content Include="Wiki\Reference\Import\TameableVolture\Volture_Chick_ragdoll.yml" />
         <EmbeddedResource Include="assets\volture_fix" />
         <Content Include="assets\volture_fix.manifest" />
         <Content Include="environment.props" />
@@ -906,12 +911,6 @@
         <Content Include="Wiki\Reference\Import\PolarLox_Calf\PolarLox_Calf.yml" />
         <Content Include="Wiki\Reference\Import\PolarLox_Calf\PolarLox_Calf_ragdoll.yml" />
         <Content Include="Wiki\Reference\Import\PolarLox_Calf\textures\PolarLox_calf_d.png" />
-        <Content Include="Wiki\Reference\Import\Stag\items\MDB_Stag_Eikthyr_antler.yml" />
-        <Content Include="Wiki\Reference\Import\Stag\items\MDB_Stag_Eikthyr_charge.yml" />
-        <Content Include="Wiki\Reference\Import\Stag\items\MDB_Stag_Eikthyr_stomp.yml" />
-        <Content Include="Wiki\Reference\Import\Stag\Stag.yml" />
-        <Content Include="Wiki\Reference\Import\Stag\Stag_ragdoll.yml" />
-        <Content Include="Wiki\Reference\Import\Stag\translations.English.yml" />
         <Content Include="Wiki\Reference\Import\TameableBjorn\Bjorn_Cub.yml" />
         <Content Include="Wiki\Reference\Import\TameableBjorn\Bjorn_Cub_ragdoll.yml" />
         <Content Include="Wiki\Reference\Import\TameableBjorn\TameableBjorn.yml" />

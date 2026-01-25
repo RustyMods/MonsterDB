@@ -1,0 +1,16 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.2
+Type: Ragdoll
+Prefab: Volture_Chick_ragdoll
+ClonedFrom: Volture_ragdoll
+IsCloned: true
+Visuals:
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  renderers:
+  - prefab: Feathers
+    parent: Volture
+    index: 1
+    active: false

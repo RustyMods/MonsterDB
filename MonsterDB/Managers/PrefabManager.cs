@@ -204,11 +204,11 @@ public static class PrefabManager
         _ZNetScene = __instance.m_objectDBPrefab.GetComponent<ZNetScene>();
         _ObjectDB = __instance.m_objectDBPrefab.GetComponent<ObjectDB>();
         ShaderRef.CacheShaders();
+        VultureOverride.Setup();
         foreach (Clone clone in CloneManager.clones.Values)
         {
             clone.Create();
         }
         ConfigManager.SetupWatcher();
-        VultureOverride.Setup();
     }
 }

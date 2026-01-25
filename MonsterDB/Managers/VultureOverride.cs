@@ -1,37 +1,25 @@
 ﻿using System.Collections.Generic;
-using HarmonyLib;
 using UnityEngine;
 
 namespace MonsterDB;
 
-public static class VultureOverride
+public class VultureOverride : MonoBehaviour
 {
-    public static AnimatorOverrideController? overrideController;
-    private static readonly List<string> Vultures = new List<string>()
-    {
-        "Volture"
-    };
+    private static AnimatorOverrideController? overrideController;
 
-    [HarmonyPatch(typeof(Character), nameof(Character.Awake))]
-    private static class Character_Awake
+    public void Start()
     {
-        private static void Postfix(Character __instance)
+        string? prefabName = Utils.GetPrefabName(name);
+        if (LoadManager.originals.ContainsKey(prefabName))
         {
-            string? prefabName = Utils.GetPrefabName(__instance.name);
-            if (!ShouldOverride(prefabName) || !LoadManager.originals.ContainsKey(prefabName)) return;
-            __instance.m_animator.runtimeAnimatorController = overrideController;
-            __instance.Land();
-            MonsterDBPlugin.LogDebug($"Overriding {__instance.name} controller");
+            Character? character = GetComponent<Character>();
+            character.m_animator.runtimeAnimatorController = overrideController;
+            MonsterDBPlugin.LogDebug($"Overriding {name} controller");
+            bool land = character.IsTamed() || character.GetComponent<Growup>();
+            if (land) character.Land();
+            else character.TakeOff();
         }
     }
-    
-    public static void Register(string prefab)
-    {
-        if (Vultures.Contains(prefab)) return;
-        Vultures.Add(prefab);
-    }
-    
-    public static bool ShouldOverride(string prefab) => Vultures.Contains(prefab);
     
     public static void Setup()
     {
@@ -68,28 +56,20 @@ public static class VultureOverride
                 }
             }
 
-            List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-            overrideController.GetOverrides(overrides);
-        
             List<KeyValuePair<AnimationClip, AnimationClip>> newOverrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-            
-            foreach (KeyValuePair<AnimationClip, AnimationClip> clip in overrides)
+            AnimationClip[]? clips = controller.animationClips;
+            for (int i = 0; i < clips.Length; ++i)
             {
-                if (clip.Key != null)
-                {
-                    string lookUp = clip.Key.name.Replace("MOCK ", string.Empty);
-                    if (originalClips.TryGetValue(lookUp, out var anim))
-                    {
-                        newOverrides.Add(new KeyValuePair<AnimationClip, AnimationClip>(clip.Key, anim));
-                    }
-                    else
-                    {
-                        newOverrides.Add(new KeyValuePair<AnimationClip, AnimationClip>(clip.Key, clip.Value));
-                    }
-                }
+                AnimationClip clip = clips[i];
+                string name = clip.name.Replace("MOCK ", string.Empty);
+                newOverrides.Add(originalClips.TryGetValue(name, out AnimationClip? anim)
+                    ? new KeyValuePair<AnimationClip, AnimationClip>(clip, anim)
+                    : new KeyValuePair<AnimationClip, AnimationClip>(clip, clip));
             }
             
             overrideController.ApplyOverrides(newOverrides);
+
+            volture.AddComponent<VultureOverride>();
         }
     }
 }
