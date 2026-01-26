@@ -31,8 +31,15 @@ public class ItemDataSharedRef : Reference
     [DefaultValue(1f)] public float? m_attackStatusEffectChance;
     public string? m_spawnOnHit;
     public string? m_spawnOnHitTerrain;
+    public string? m_ammoType;
     public AttackRef? m_attack;
     public AttackRef? m_secondaryAttack;
+    public float? m_useDurability;
+    public bool? m_destroyBroken;
+    public bool? m_canBeRepaired;
+    public float? m_maxDurability;
+    public float? m_durabilityPerLevel;
+    public float m_useDurabilityDrain;
     public float? m_aiAttackRange;
     public float? m_aiAttackRangeMin;
     public float? m_aiAttackInterval;

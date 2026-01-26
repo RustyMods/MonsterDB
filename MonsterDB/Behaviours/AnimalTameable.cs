@@ -70,7 +70,6 @@ public class AnimalTameable : MonoBehaviour
             if (!closestPlayer) return;
             
             closestPlayer.Message(MessageHud.MessageType.Center, __instance.m_character.m_name + " $hud_tamedone");
-
         }
     }
     

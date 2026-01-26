@@ -11,6 +11,7 @@ public static class EggManager
 {
     private static readonly List<string> newEggComponentPrefabs;
     private static readonly ConfigEntry<Toggle> _addPercentage;
+    private static bool addPercentage => _addPercentage.Value is Toggle.On;
 
     public static void RegisterHoverOverride(string prefabName)
     {
@@ -266,7 +267,7 @@ public static class EggManager
                 string warm = Localization.instance.Localize("$item_chicken_egg_warm");
                 warm = warm.Replace("(", string.Empty).Replace(")", string.Empty).Trim();
                 sb.Append($" ({warm}");
-                if (_addPercentage.Value is Toggle.On)
+                if (addPercentage)
                 {
                     sb.Append($" {growPercentage:0.0}%");
                 }

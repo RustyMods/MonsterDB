@@ -109,15 +109,6 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         m_nview.Register("Controls", new Action<long, Vector3, int, float>(RPC_Controls));
         
         m_nview.Register("AddSaddle", RPC_AddSaddle);
-        
-        // string? prefabName = Utils.GetPrefabName(name);
-        // if (VultureOverride.ShouldOverride(prefabName) && VultureOverride.overrideController != null)
-        // {
-        //     if (m_character.m_animator.runtimeAnimatorController == VultureOverride.overrideController) return;
-        //     m_character.m_animator.runtimeAnimatorController = VultureOverride.overrideController;
-        //     m_character.Land();
-        //     MonsterDBPlugin.LogDebug($"Overriding {name} controller");
-        // }
     }
 
     public void Start()
@@ -334,36 +325,24 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 
         component.AddForce(up * m_tambable.m_dropItemVel, ForceMode.VelocityChange);
     }
-    
-    [HarmonyPatch(typeof(Tameable), nameof(Tameable.GetHoverText))]
-    public static class Tameable_GetHoverText
-    {
-        private static void Postfix(Tameable __instance, ref string __result)
-        {
-            if (!__instance.TryGetComponent(out Saddle component)) return;
-            if (!__instance.IsTamed() || (component.HasSaddleItem() && !component.HaveSaddle())) return;
-            __result += component.GetHoverText();
-        }
-    }
 
     public string GetHoverText()
     {
         if (!m_nview.IsValid()) return "";
         StringBuilder sb = new();
-        bool usingGamepad = ZInput.IsGamepadActive();
-        
-        if (usingGamepad)
-        {
-            sb.Append($"\n[<color=yellow><b>{ZInput.instance.GetBoundKeyString(rideKey)} + $KEY_Use</b></color>] $hud_ride");
-            if (HasSaddleItem()) sb.Append($"\n[<color=yellow><b>{ZInput.instance.GetBoundKeyString(removeKey)} + $KEY_Use</b></color>] $hud_saddle_remove");
-        }
-        else
-        {
-            sb.Append("\n[<color=yellow><b>$button_lalt + $KEY_Use</b></color>] $hud_ride");
-            if (HasSaddleItem()) sb.Append("\n[<color=yellow><b>$button_lctrl + $KEY_Use</b></color>] $hud_saddle_remove");
-        }
-        
+        GetHoverText(sb, ZInput.IsNonClassicFunctionality() && ZInput.IsGamepadActive());
         return Localization.instance.Localize(sb.ToString());
+    }
+
+    public void GetHoverText(StringBuilder sb, bool gamepad)
+    {
+        sb.AppendFormat("\n[<color=yellow><b>{0} + $KEY_Use</b></color>] $hud_ride", 
+            gamepad ?  ZInput.instance.GetBoundKeyString(rideKey) : "$button_lalt");
+        if (HasSaddleItem()) 
+        {
+            sb.AppendFormat("\n[<color=yellow><b>{0} + $KEY_Use</b></color>] $hud_saddle_remove", 
+            gamepad ? ZInput.instance.GetBoundKeyString(removeKey) : "$button_lctrl");
+        }
     }
 
     public string GetHoverName()

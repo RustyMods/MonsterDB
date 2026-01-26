@@ -233,11 +233,6 @@ public static class CreatureManager
     public static GameObject? Clone(GameObject source, string cloneName, bool write = true)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out var clone)) return clone;
-
-        // if (source.name == "Volture")
-        // {
-        //     VultureOverride.Register(cloneName);
-        // }
         Clone c = new Clone(source, cloneName);
         c.OnCreated += prefab =>
         {

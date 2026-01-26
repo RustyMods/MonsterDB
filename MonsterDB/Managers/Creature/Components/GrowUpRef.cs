@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using BepInEx.Configuration;
 using HarmonyLib;
 
@@ -62,6 +63,19 @@ public static partial class Extensions
     }
 }
 
+[HarmonyPatch(typeof(Growup), nameof(Growup.GrowUpdate))]
+public static class GrowUp_ConditioanlGrow_Patch
+{
+    private static bool Prefix(Growup __instance)
+    {
+        if (!__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner()) return true;
+        if (!__instance.TryGetComponent(out Tameable component)) return true;
+        if (component.IsTamed()) return true;
+        __instance.m_nview.GetZDO().Set(ZDOVars.s_spawnTime, ZNet.instance.GetTime().Ticks);
+        return false;
+    }
+}
+
 public static class GrowUpText
 {
     private static ConfigEntry<Toggle> addGrowUpText = null!;
@@ -74,17 +88,61 @@ public static class GrowUpText
 
     private static bool AddGrowUpText() => addGrowUpText.Value is Toggle.On;
 
+    public static string GetGrowthPercentageText(this Growup __instance)
+    {
+        if (__instance.m_baseAI == null) return "$hud_growup_maturing 0%";
+        double startTime = __instance.m_baseAI.GetTimeSinceSpawned().TotalSeconds;
+        double percentage = startTime / __instance.m_growTime * 100f;
+        return $"$hud_growup_maturing {percentage:0}%";
+    }
+
     [HarmonyPatch(typeof(Character), nameof(Character.GetHoverText))]
     private static class Character_GetHoverText
     {
-        private static void Postfix(Character __instance, ref string __result)
+        private static bool Prefix(Character __instance, ref string __result)
         {
-            if (!AddGrowUpText()) return;
-            if (!__instance.TryGetComponent(out Growup component) || !string.IsNullOrEmpty(__result) || component.m_baseAI == null) return;
+            if (!__instance.m_nview.IsValid()) return true;
+            
+            StringBuilder sb = new();
+            if (__instance.TryGetComponent(out Tameable tameable))
+            {
+                sb.Append(tameable.GetName());
+                if (tameable.IsTamed())
+                {
+                    sb.AppendFormat(" ( {0}, {1}", "$hud_tame", tameable.GetStatusString());
+                    if (__instance.TryGetComponent(out Growup growup) && AddGrowUpText())
+                    {
+                        sb.Append($", {growup.GetGrowthPercentageText()}");
+                    }
+                    sb.Append(" )");
+                    sb.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $hud_pet");
+                    bool gamepad = ZInput.IsNonClassicFunctionality() && ZInput.IsGamepadActive();
 
-            double startTime = component.m_baseAI.GetTimeSinceSpawned().TotalSeconds;
-            double percentage = startTime / component.m_growTime * 100f;
-            __result = Localization.instance.Localize($"{__instance.m_name} ( $hud_growup_maturing {percentage:0}% )");
+                    sb.AppendFormat("\n[<color=yellow><b>{0} + $KEY_Use</b></color>] $hud_rename",
+                        gamepad ? 
+                            "$KEY_AltKeys" : 
+                            "$KEY_AltPlace");
+                
+                    if (__instance.TryGetComponent(out Saddle saddle) && (!saddle.HasSaddleItem() || saddle.HaveSaddle()))
+                    {
+                        saddle.GetHoverText(sb, gamepad);
+                    }
+                }
+                else
+                {
+                    int tameness = tameable.GetTameness();
+                    sb.AppendFormat(" ( {0}, {1} )", tameness <= 0 ? 
+                        "$hud_wild" : 
+                        $"$hud_tameness {tameness}%", tameable.GetStatusString());
+                }
+            }
+            else if (__instance.TryGetComponent(out Growup growup) && AddGrowUpText())
+            {
+                sb.Append($"{__instance.m_name} ( {growup.GetGrowthPercentageText()} )");
+            }
+
+            __result = Localization.instance.Localize(sb.ToString());
+            return false;
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿using HarmonyLib;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace MonsterDB;
 
 public class Human : Humanoid
 {
-    public ItemDrop.ItemData? m_weaponLoaded;
     public int m_modelIndex;
     public Vector3 m_skinColor;
     public Vector3 m_hairColor;
@@ -15,6 +14,11 @@ public class Human : Humanoid
     public string[]? m_hairColors;
     public string[]? m_beards;
     public string[]? m_hairs;
+
+    public bool m_reloading;
+    public bool m_weaponLoaded;
+    private readonly WaitForSeconds m_weaponLoadedDelay = new WaitForSeconds(1f);
+    private Coroutine? m_reloadCoroutine;
 
     public override void Start()
     {
@@ -60,42 +64,6 @@ public class Human : Humanoid
         string trigger = item.m_itemData.m_shared.m_isDrink ? "emote_drink" : "eat";
         m_animator.SetTrigger(trigger);
     }
-
-    public override bool StartAttack(Character? target, bool secondaryAttack)
-    {
-        if (InAttack() && !HaveQueuedChain() || InDodge() || !CanMove() || IsKnockedBack() || IsStaggering() || InMinorAction()) return false;
-    
-        ItemDrop.ItemData currentWeapon = GetCurrentWeapon();
-        if (currentWeapon == null || (!currentWeapon.HaveSecondaryAttack() && !currentWeapon.HavePrimaryAttack())) return false;
-
-        bool secondary = currentWeapon.HaveSecondaryAttack() && UnityEngine.Random.value > 0.5;
-        if (currentWeapon.m_shared.m_skillType is Skills.SkillType.Spears) secondary = false;
-        
-        if (m_currentAttack != null)
-        {
-            m_currentAttack.Stop();
-            m_previousAttack = m_currentAttack;
-            m_currentAttack = null;
-        }
-        Attack? attack = !secondary ? currentWeapon.m_shared.m_attack.Clone() : currentWeapon.m_shared.m_secondaryAttack.Clone();
-        if (!attack.Start(this, m_body, m_zanim, m_animEvent, m_visEquipment, currentWeapon, m_previousAttack,
-                m_timeSinceLastAttack, UnityEngine.Random.Range(0.5f, 1f))) return false;
-
-        if (currentWeapon.m_shared.m_attack.m_requiresReload) SetWeaponLoaded(null);
-        if (currentWeapon.m_shared.m_attack.m_bowDraw) currentWeapon.m_shared.m_attack.m_attackDrawPercentage = 0.0f;
-        if (currentWeapon.m_shared.m_itemType is not ItemDrop.ItemData.ItemType.Torch) currentWeapon.m_durability -= 1.5f;
-        
-        ClearActionQueue();
-        StartAttackGroundCheck();
-        m_currentAttack = attack;
-        m_currentAttackIsSecondary = secondary;
-        m_lastCombatTimer = 0.0f;
-        if (currentWeapon.m_shared.m_name == "$item_stafficeshards")
-        {
-            Invoke(nameof(StopCurrentAttack), 5f);
-        }
-        return true;
-    }
     
     public override void SetupVisEquipment(VisEquipment visEq, bool isRagdoll)
     {
@@ -119,58 +87,54 @@ public class Human : Humanoid
         visEq.SetHairColor(m_hairColor);
         visEq.SetModel(m_modelIndex);
     }
-    
-    private void SetWeaponLoaded(ItemDrop.ItemData? weapon)
-    {
-        if (weapon == m_weaponLoaded) return;
-        m_weaponLoaded = weapon;
-        m_nview.GetZDO().Set(ZDOVars.s_weaponLoaded, weapon != null);
-    }
-    
-    private void StopCurrentAttack()
-    {
-        if (m_currentAttack == null) return;
-        m_currentAttack.Stop();
-        m_previousAttack = m_currentAttack;
-        m_currentAttack = null;
-    }
+    public override float GetMaxEitr() => 9999f;
 
-    [HarmonyPatch(typeof(Attack), nameof(Attack.HaveAmmo))]
-    private static class Attack_HaveAmmo
+    public void LateUpdate()
     {
-        private static void Postfix(Humanoid character, ref bool __result)
+        if (m_currentAttack == null || !m_currentAttack.m_loopingAttack) return;
+        int projectilesFired = Mathf.CeilToInt(m_lastCombatTimer / m_currentAttack.m_burstInterval);
+        if (projectilesFired > 10)
         {
-            if (__result || character is not Human) return;
-            __result = true;
+            m_currentAttack.Stop();
+            m_previousAttack = m_currentAttack;
+            m_currentAttack = null;
         }
     }
 
-    [HarmonyPatch(typeof(Attack), nameof(Attack.FindAmmo))]
-    private static class Attack_FindAmmo_Patch
+    public override void ResetLoadedWeapon()
     {
-        private static void Postfix(Humanoid character, ItemDrop.ItemData weapon, ref ItemDrop.ItemData? __result)
+        m_weaponLoaded = false;
+        StartWeaponReload();
+    }
+
+    public override bool IsWeaponLoaded()
+    {
+        if (!m_weaponLoaded) StartWeaponReload();
+        return m_weaponLoaded;
+    }
+
+    public void StartWeaponReload()
+    {
+        if (m_reloading || m_weaponLoaded) return;
+        ItemDrop.ItemData? weapon = GetCurrentWeapon();
+        if (weapon == null || !weapon.m_shared.m_attack.m_requiresReload) return;
+        if (m_reloadCoroutine != null)
         {
-            if (__result != null || character is not Human viking) return;
-
-            if (string.IsNullOrEmpty(weapon.m_shared.m_ammoType)) return;
-
-            switch (weapon.m_shared.m_ammoType)
-            {
-                case "$ammo_arrows":
-                    ItemDrop.ItemData? arrow = viking.GetInventory().AddItem("ArrowWood", 10, 1, 0, 0L, "");
-                    if (arrow != null)
-                    {
-                        __result = arrow;
-                    }
-                    break;
-                case "$ammo_bolts":
-                    var bolt = viking.GetInventory().AddItem("BoltBone", 10, 1, 0, 0L, "");
-                    if (bolt != null)
-                    {
-                        __result = bolt;
-                    }
-                    break;
-            }
+            StopCoroutine(m_reloadCoroutine);
+            m_reloadCoroutine = null;
         }
+        m_reloadCoroutine = StartCoroutine(ReloadRoutine(weapon.m_shared.m_attack.m_reloadAnimation, weapon.m_shared.m_attack.m_reloadTime));
+    }
+
+    public IEnumerator ReloadRoutine(string reloadAnimation, float reloadTime)
+    {
+        m_reloading = true;
+        m_zanim.SetBool(reloadAnimation, true);
+        yield return new WaitForSeconds(reloadTime);
+        m_zanim.SetTrigger(reloadAnimation + "_done");
+        yield return m_weaponLoadedDelay;
+        m_weaponLoaded = true;
+        m_reloadCoroutine = null;
+        m_reloading = false;
     }
 }

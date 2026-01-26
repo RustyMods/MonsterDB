@@ -13,6 +13,10 @@ public static class TexturePackage
     static TexturePackage()
     {
         _chunkBuffers = new Dictionary<string, ChunkBuffer>();
+    }
+
+    public static void Setup()
+    {
         Harmony harmony = MonsterDBPlugin.instance._harmony;
         harmony.Patch(AccessTools.Method(typeof(ZNet), nameof(ZNet.OnNewConnection)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(TexturePackage), nameof(Patch_ZNet_OnNewConnection))));

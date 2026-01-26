@@ -10,7 +10,7 @@ namespace MonsterDB;
 public class MonsterDBPlugin : BaseUnityPlugin
 {
     internal const string ModName = "MonsterDB";
-    internal const string ModVersion = "0.2.2";
+    internal const string ModVersion = "0.2.3";
     internal const string Author = "RustyMods";
     public const string ModGUID = Author + "." + ModName;
     internal static string ConnectionError = "";
@@ -45,13 +45,17 @@ public class MonsterDBPlugin : BaseUnityPlugin
         ProcreateText.Setup();
         GrowUpText.Setup();
         Snapshot.Setup();
+        TexturePackage.Setup();
         
         Wiki.Write();
         Assembly assembly = Assembly.GetExecutingAssembly();
-        _harmony.PatchAll(assembly); 
+        _harmony.PatchAll(assembly);
     }
-
-    private void OnDestroy() => Config.Save();
+    
+    private void OnDestroy()
+    {
+        Config.Save();
+    }
 
     public static void LogInfo(string msg)
     {
