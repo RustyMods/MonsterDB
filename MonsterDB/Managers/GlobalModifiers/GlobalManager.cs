@@ -19,11 +19,14 @@ public static class GlobalManager
 
         if (File.Exists(filePath)) Read(filePath);
         
-        var harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ObjectDB), nameof(ObjectDB.Awake)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(GlobalManager), nameof(Patch_ObjectDB_Awake))));
         harmony.Patch(AccessTools.Method(typeof(Character), nameof(Character.Awake)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(GlobalManager), nameof(Patch_Character_Awake))));
+        harmony.Patch(AccessTools.Method(typeof(MonsterAI), nameof(MonsterAI.UpdateTarget)),
+            new HarmonyMethod(AccessTools.Method(typeof(GlobalManager), nameof(Patch_MonsterAI_FindTarget))));
+
     }
 
     private static void Read(string filePath)
@@ -33,6 +36,7 @@ public static class GlobalManager
         {
             Global data = ConfigManager.Deserialize<Global>(text);
             mods = data;
+            mods.Setup();
         }
         catch
         {
@@ -50,5 +54,23 @@ public static class GlobalManager
     private static void Patch_Character_Awake(Character __instance)
     {
         __instance.GetSEMan().AddStatusEffect("SE_GlobalModifiers".GetStableHashCode());
+    }
+
+    private static void Patch_BaseAI_Awake(MonsterAI __instance)
+    {
+        string? prefab = Utils.GetPrefabName(__instance.name);
+        if (mods.AttackPlayerObjects(prefab, out bool enable) && !enable)
+        {
+            __instance.m_attackPlayerObjects = false;
+        }
+    }
+
+    private static void Patch_MonsterAI_FindTarget(MonsterAI __instance)
+    {
+        string? prefab = Utils.GetPrefabName(__instance.name);
+        if (mods.AttackPlayerObjects(prefab, out bool enable) && !enable)
+        {
+            __instance.m_targetStatic = null;
+        }
     }
 }

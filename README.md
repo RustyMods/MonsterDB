@@ -41,7 +41,6 @@ v0.2.0 notes
 - define custom spawn data
 - modify creature visuals (e.g. texture, color, scale)
 - export textures as png
-- export sprites as png
 
 MonsterDB should be able to modify/clone any creatures, including added creatures from other mods
 
@@ -58,8 +57,6 @@ Visit MonsterDB Github for curated examples
 - Make `Neck` tameable and procreate `NeckEgg` which hatches into `Neck_hatchling` and grows up into a `Neck`
 - Make `Player` into a `Human` NPC
 
-Visit: https://github.com/RustyMods/MonsterDB/tree/main/MonsterDB/Wiki/Reference/Import
-
 ### Server sync
 
 1. Game load, plugin starts, reads all files from `Import` folder
@@ -72,3 +69,32 @@ Visit: https://github.com/RustyMods/MonsterDB/tree/main/MonsterDB/Wiki/Reference
         8. updates all
 9. if `FileWatcher` enabled, any changes made on server, will automatically be sent to all clients
     10. update specific prefab from file
+
+<div class="container"> 
+   <img src="https://i.imgur.com/yDQlQQP.png" alt="Screenshot 1" width="600"/>
+</div>
+<div class="container"> 
+   <img src="https://i.imgur.com/f7GPjiY.png" alt="Screenshot 2" width="600"/>
+</div>
+<div class="container"> 
+   <img src="https://i.imgur.com/R2mU5il.png" alt="Screenshot 3" width="600"/>
+</div>
+<div class="container"> 
+   <img src="https://i.imgur.com/JHPNKfu.png" alt="Screenshot 4" width="600"/>
+</div>
+<div class="container"> 
+   <img src="https://i.imgur.com/wjeJBbg.png" alt="Screenshot 5" width="600"/>
+</div>
+<div class="container"> 
+   <img src="https://i.imgur.com/j5CBR33.png" alt="Screenshot 6" width="600"/>
+</div>
+<div class="container"> 
+   <img src="https://i.imgur.com/1D3NPLO.png" alt="Screenshot 7" width="600"/>
+</div>
+
+<style>
+   .container {
+      text-align: center;
+   }
+</style>
+

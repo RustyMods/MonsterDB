@@ -23,6 +23,27 @@ public class Global
     };
     
     public Dictionary<string, GlobalModifiers> modifiers = new();
+
+    public void Setup()
+    {
+        if (groups == null) return;
+        foreach (KeyValuePair<string, string[]> group in groups)
+        {
+            if (!modifiers.TryGetValue(group.Key, out GlobalModifiers mod))
+            {
+                if (!modifiers.TryGetValue("all", out mod))
+                {
+                    continue;
+                }
+            }
+            for (int i = 0; i < group.Value.Length; ++i)
+            {
+                string creature = group.Value[i];
+                if (modifiers.ContainsKey(creature)) continue;
+                modifiers[creature] = mod;
+            }
+        }
+    }
     
     public bool GetHealthModifier(string prefabName, out float modifier)
     {
@@ -38,7 +59,8 @@ public class Global
         {
             foreach (KeyValuePair<string, GlobalModifiers> kvp in modifiers)
             {
-                if (kvp.Value.health.HasValue && groups.TryGetValue(kvp.Key, out string[] group) && group.Contains(prefabName))
+                if (kvp.Value.health.HasValue && groups.TryGetValue(kvp.Key, out string[] group) &&
+                    (prefabName == "all" || group.Contains(prefabName)))
                 {
                     modifier = kvp.Value.health.Value;
                     return true;
@@ -147,6 +169,31 @@ public class Global
 
         return false;
     }
+
+    public bool AttackPlayerObjects(string prefabName, out bool targetStatic)
+    {
+        targetStatic = true;
+        if (modifiers.TryGetValue(prefabName, out GlobalModifiers mods) && mods.attackPlayerObjects.HasValue)
+        {
+            targetStatic = mods.attackPlayerObjects.Value;
+            return true;
+        }
+
+        if (groups != null)
+        {
+            foreach (KeyValuePair<string, GlobalModifiers> kvp in modifiers)
+            {
+                if (kvp.Value.attackPlayerObjects.HasValue && groups.TryGetValue(kvp.Key, out string[] group) &&
+                    group.Contains(prefabName))
+                {
+                    targetStatic = kvp.Value.attackPlayerObjects.Value;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     
 
     [Serializable]
@@ -157,5 +204,6 @@ public class Global
         public List<HitData.DamageModPair>? mods;
         public float? speed;
         public float? staggerDamage;
+        public bool? attackPlayerObjects;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 
@@ -19,7 +18,7 @@ public static class TextureManager
         m_cachedTextures = new Dictionary<string, Texture2D>();
         m_customs = new Dictionary<string, TextureData>();
         
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.Awake)),
             new HarmonyMethod(AccessTools.Method(typeof(TextureManager), nameof(WriteAll))));
         
@@ -149,6 +148,7 @@ public static class TextureManager
 
     public static Texture? GetTexture(string name, Texture? defaultValue)
     {
+        if (name == "null") return null;
         if (string.IsNullOrEmpty(name)) return defaultValue;
         
         if (m_cachedTextures.TryGetValue(name, out Texture2D? texture))
@@ -224,7 +224,7 @@ public static class TextureManager
 
             RenderTexture.active = previous;
             RenderTexture.ReleaseTemporary(tmp);
-
+            
             byte[]? encoded = newTex.EncodeToPNG();
             File.WriteAllBytes(filePath, encoded);
             MonsterDBPlugin.LogInfo($"Exported texture: {filePath}");

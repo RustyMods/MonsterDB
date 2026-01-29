@@ -181,7 +181,7 @@ public class MiscComponent : Reference
                 else if (TType == typeof(List<ItemDrop>) && 
                          info.m_value is List<string> il)
                 {
-                    targetField.SetValue(target, il.FromRef());
+                    targetField.SetValue(target, il.ToItemDropList());
                 }
                 else if (TType == typeof(List<Growup.GrownEntry>) && 
                          info.m_value is List<GrowUpRef.GrownEntry> ge)

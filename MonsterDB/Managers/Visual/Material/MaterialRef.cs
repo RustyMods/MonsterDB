@@ -18,6 +18,7 @@ public class MaterialRef : Reference
     public string? m_emissionColor = "";
     public string? m_mainTexture = "";
     public string? m_tintColor = "";
+    public string? m_materialOverride;
 
     public MaterialRef(){}
 

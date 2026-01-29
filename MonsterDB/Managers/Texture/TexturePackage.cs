@@ -17,7 +17,7 @@ public static class TexturePackage
 
     public static void Setup()
     {
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ZNet), nameof(ZNet.OnNewConnection)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(TexturePackage), nameof(Patch_ZNet_OnNewConnection))));
     }

@@ -57,6 +57,8 @@ public class RendererRef : Reference
         }
     }
     
+    private static Dictionary<string, Material> _cachedMaterials = new Dictionary<string, Material>();
+    
     private static void UpdateMaterials(Renderer renderer, MaterialRef[] materialRefs, string targetName, bool log)
     {
         Dictionary<string, MaterialRef> dict = materialRefs
@@ -74,6 +76,22 @@ public class RendererRef : Reference
                 continue;
             }
 
+            if (matRef.m_materialOverride != null)
+            {
+                if (_cachedMaterials.TryGetValue(matRef.m_materialOverride, out Material matOverride))
+                {
+                    mat = matOverride;
+                }
+                else
+                {
+                    CacheMaterials();
+                    if (_cachedMaterials.TryGetValue(matRef.m_materialOverride, out matOverride))
+                    {
+                        mat = matOverride;
+                    }
+                }
+            }
+
             Material newMat = new Material(mat);
             newMat.name = matName;
 
@@ -84,11 +102,22 @@ public class RendererRef : Reference
         renderer.materials = materials;
         renderer.sharedMaterials = materials;
     }
+
+    private static void CacheMaterials()
+    {
+        Material[]? mats = Resources.FindObjectsOfTypeAll<Material>();
+        for (int i = 0; i < mats.Length; ++i)
+        {
+            Material? mat = mats[i];
+            if (mat == null || mat.GetInstanceID() <= 0 || _cachedMaterials.ContainsKey(mat.name)) continue;
+            _cachedMaterials[mat.name] = mat;
+        }
+    }
 }
 
 public partial class Extensions
 {
-    public static RendererRef[] ToRef(this Renderer[] renderers)
+    public static RendererRef[] ToRendererRefArray(this Renderer[] renderers)
     {
         RendererRef[] reference = renderers
         .Select(x => new RendererRef(x))

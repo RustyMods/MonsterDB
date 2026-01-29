@@ -12,16 +12,19 @@ public enum Toggle { On = 1, Off = 0 }
 
 public static class ConfigManager
 {
+    private static readonly FieldPrefixStrippingNamingConvention NamingConvention = new ("m_");
     private static readonly ISerializer serializer = new SerializerBuilder()
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
         .DisableAliases()
-        .WithNamingConvention(StrippedCase.Instance)
+        .WithNamingConvention(NamingConvention)
+        .WithTypeConverter(VectorConverter.Instance)
         .Build();
 
     private static readonly IDeserializer deserializer = new DeserializerBuilder()
         .IgnoreUnmatchedProperties()
-        .WithNamingConvention(StrippedCase.Instance)
-        .WithTypeConverter(FactionYamlConverter.Instance)
+        .WithNamingConvention(NamingConvention)
+        .WithTypeConverter(FactionConverter.Instance)
+        .WithTypeConverter(VectorConverter.Instance)
         .Build();
     
     public static T Deserialize<T>(string data) => deserializer.Deserialize<T>(data);
@@ -37,7 +40,6 @@ public static class ConfigManager
     public static readonly ConfigSync ConfigSync;
     private static readonly string ConfigFileName;
     private static readonly string ConfigFileFullPath;
-
     public static readonly string DirectoryPath;
     
     [Flags]
@@ -89,7 +91,7 @@ public static class ConfigManager
 
     public static void Start()
     {
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ZNet), nameof(ZNet.Awake)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(ConfigManager), 
                 nameof(Patch_ZNet_Awake))));

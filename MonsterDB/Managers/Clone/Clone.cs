@@ -10,9 +10,7 @@ public class Clone
     public readonly string PrefabName;
     private readonly string NewName;
     private bool Loaded;
-    
     public event Action<GameObject>? OnCreated;
-
     public Clone(string prefabName, string newName)
     {
         PrefabName = prefabName;
@@ -20,23 +18,16 @@ public class Clone
         CloneManager.clones[newName] = this;
     }
 
-    public Clone(GameObject prefab, string newName)
+    public Clone(GameObject prefab, string newName) : this(prefab.name, newName)
     {
-        PrefabName = prefab.name;
-        NewName = newName;
         Source = prefab;
-        CloneManager.clones[newName] = this;
     }
 
     internal GameObject? Create()
     {
         if (Loaded) return Prefab;
-
-        if (Source == null)
-        {
-            if (PrefabManager.GetPrefab(PrefabName) is not { } prefab) return Prefab;
-            Source = prefab;
-        }
+        Source ??= PrefabManager.GetPrefab(NewName);
+        if (Source == null) return null;
         
         Prefab = UnityEngine.Object.Instantiate(Source, CloneManager.GetRootTransform(), false);
         Prefab.name = NewName;

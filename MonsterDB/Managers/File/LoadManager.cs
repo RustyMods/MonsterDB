@@ -37,7 +37,7 @@ public static class LoadManager
             return true;
         }, adminOnly: true);
 
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(Game), nameof(Game.Logout)),
             new HarmonyMethod(AccessTools.Method(typeof(LoadManager), nameof(Patch_Game_Logout))));
         harmony.Patch(AccessTools.Method(typeof(FejdStartup), nameof(FejdStartup.OnStartGame)),
@@ -136,6 +136,7 @@ public static class LoadManager
         int ragdoll = 0;
         int spawnAbilities = 0;
         int visual = 0;
+        int spawners = 0;
         
         for (int i = 0; i < loadList.Count; ++i)
         {
@@ -200,11 +201,15 @@ public static class LoadManager
                         ++visual;
                         VisualManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
+                    case BaseType.CreatureSpawner:
+                        ++spawners;
+                        CreatureSpawnerManager.Clone(prefab, data.Prefab, false);
+                        break;
                 }
             }
         }
 
-        int count = players + humanoids + characters + eggs + items + fish + projectiles + ragdoll + spawnAbilities + visual;
+        int count = players + humanoids + characters + eggs + items + fish + projectiles + ragdoll + spawnAbilities + visual + spawners;
 
         StringBuilder sb = new();
         sb.Append("Loading clones: ");
@@ -218,6 +223,7 @@ public static class LoadManager
         if (ragdoll > 0) sb.Append($"{ragdoll} ragdolls, ");
         if (spawnAbilities > 0) sb.Append($"{spawnAbilities} abilities, ");
         if (visual > 0) sb.Append($"{visual} prefabs, ");
+        if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
         sb.Append($"(total: {count})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());
@@ -241,6 +247,7 @@ public static class LoadManager
         int ragdoll = 0;
         int spawnAbilities = 0;
         int visual = 0;
+        int spawners = 0;
         
         for (int i = 0; i < ordered.Count; ++i)
         {
@@ -279,12 +286,15 @@ public static class LoadManager
                 case BaseType.Visual:
                     ++visual;
                     break;
+                case BaseType.CreatureSpawner:
+                    ++spawners;
+                    break;
                     
             }
         }
 
         int count = characters + humanoids + players + eggs + items + fish + projectiles + ragdoll + spawnAbilities +
-                    visual;
+                    visual + spawners;
         
         StringBuilder sb = new();
         sb.Append("Modified: ");
@@ -298,6 +308,7 @@ public static class LoadManager
         if (ragdoll > 0) sb.Append($"{ragdoll} ragdolls, ");
         if (spawnAbilities > 0) sb.Append($"{spawnAbilities} abilities, ");
         if (visual > 0) sb.Append($"{visual} prefabs, ");
+        if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
         sb.Append($"(total: {count})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());

@@ -2,40 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <Import Project="environment.props" />
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{4358610B-F3F4-4843-B7AF-98B7BC60DCDE}</ProjectGuid>
-        <OutputType>Library</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>MonsterDB</RootNamespace>
-        <AssemblyName>MonsterDB</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
+    <Import Project="framework.props" />
     <Choose>
         <When Condition="($(OS) == 'Unix' OR $(OS) == 'OSX') AND $(GamePath) == ''">
             <PropertyGroup>
@@ -110,7 +77,7 @@
             <HintPath>$(CorlibPath)\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ImageConversionModule">
-          <HintPath>Libs\UnityEngine.ImageConversionModule.dll</HintPath>
+          <HintPath>$(CorlibPath)\UnityEngine.ImageConversionModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(CorlibPath)\UnityEngine.IMGUIModule.dll</HintPath>
@@ -137,6 +104,8 @@
     <ItemGroup>
         <Compile Include="assets\AssetBundleManager.cs" />
         <Compile Include="Behaviours\AnimalTameable.cs" />
+        <Compile Include="Behaviours\Character_HoverText_Patch.cs" />
+        <Compile Include="Behaviours\GrowUp_Update_Patch.cs" />
         <Compile Include="Behaviours\Human.cs" />
         <Compile Include="Behaviours\Saddle.cs" />
         <Compile Include="Legacy\ComponentData.cs" />
@@ -163,6 +132,10 @@
         <Compile Include="Managers\Config\ConfigManager.cs" />
         <Compile Include="Managers\Config\ConfigurationManagerAttributes.cs" />
         <Compile Include="Managers\Config\YamlSettings.cs" />
+        <Compile Include="Managers\CreatureSpawner\BaseCreatureSpawner.cs" />
+        <Compile Include="Managers\CreatureSpawner\CreatureSpawnerManager.cs" />
+        <Compile Include="Managers\CreatureSpawner\CreatureSpawnerRef.cs" />
+        <Compile Include="Managers\CreatureSpawner\RandomSpawnRef.cs" />
         <Compile Include="Managers\Creature\AI\AnimalAIRef.cs" />
         <Compile Include="Managers\Creature\AI\BaseAIRef.cs" />
         <Compile Include="Managers\Creature\AI\MonsterAIRef.cs" />
@@ -187,7 +160,6 @@
         <Compile Include="Managers\Creature\Creature\BaseHumanoid.cs" />
         <Compile Include="Managers\Creature\Creature\BaseHuman.cs" />
         <Compile Include="Managers\Creature\EffectListRef.cs" />
-        <Compile Include="Managers\Creature\Vector3Ref.cs" />
         <Compile Include="Managers\File\BaseAggregate.cs" />
         <Compile Include="Managers\File\FileManager.cs" />
         <Compile Include="Managers\Egg\BaseEgg.cs" />
@@ -209,6 +181,7 @@
         <Compile Include="Managers\Item\ItemManager.cs" />
         <Compile Include="Managers\Item\Components\AttackRef.cs" />
         <Compile Include="Managers\Item\Components\ItemDataSharedRef.cs" />
+        <Compile Include="Managers\Item\YamlConditional.cs" />
         <Compile Include="Managers\LocalizationManager.cs" />
         <Compile Include="Managers\Misc\MiscComponent.cs" />
         <Compile Include="Managers\PrefabManager.cs" />
@@ -246,6 +219,7 @@
         <Compile Include="Managers\Visual\ParticleSystem\CustomDataModuleRef.cs" />
         <Compile Include="Managers\Visual\ParticleSystem\ParticleSystemRef.cs" />
         <Compile Include="Managers\Visual\RendererRef.cs" />
+        <Compile Include="Managers\Visual\Vector3Ref.cs" />
         <Compile Include="Managers\Visual\VisualManager.cs" />
         <Compile Include="Managers\Visual\VisualRef.cs" />
         <Compile Include="Managers\Visual\VisualUtils.cs" />
@@ -260,6 +234,8 @@
           <Link>README.md</Link>
         </Content>
         <Content Include=".gitignore" />
+        <Content Include="framework.props" />
+        <Content Include="manifest.targets" />
         <Content Include="Wiki\Reference\Import\TameableVolture\translations.English.yml" />
         <Content Include="Wiki\Reference\Import\TameableVolture\Volture.yml" />
         <Content Include="Wiki\Reference\Import\TameableVolture\VoltureEgg.yml" />
@@ -272,7 +248,6 @@
         <Content Include="Libs\ServerSync.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Content Include="Libs\UnityEngine.ImageConversionModule.dll" />
         <Content Include="Thunderstore\icon.png" />
         <Content Include="Thunderstore\manifest.json" />
         <Content Include="Thunderstore\MonsterDB.dll" />
@@ -944,19 +919,17 @@
         <EmbeddedResource Include="Wiki\ItemData.md" />
         <EmbeddedResource Include="Wiki\Visuals.md" />
     </ItemGroup>
+    
     <ItemGroup>
         <None Include="App.config" />
     </ItemGroup>
+    
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
     </ItemGroup>
+    
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
-    <UsingTask AssemblyFile="KeyManager.dll" TaskName="KeyManager.Seal" Condition="'$(AfterTargets)' == 'KeyManager'" />
-    <Target Name="KeyManager" AfterTargets="ILRepack" Condition="'$(AfterTargets)' == 'KeyManager'">
-        <Seal DLL="$(TargetPath)" />
-    </Target>
     
     <Target Name="GetAssemblyVersion" AfterTargets="$(AfterTargets)">
         <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
@@ -984,4 +957,5 @@
         <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CopyOutputDLLPath3)" OverwriteReadOnlyFiles="true" Condition="Exists('$(CopyOutputDLLPath3)')" />
     </Target>
     
+    <Import Project="manifest.targets" />
 </Project>

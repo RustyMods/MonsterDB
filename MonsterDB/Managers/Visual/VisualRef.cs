@@ -27,12 +27,12 @@ public class VisualRef : Reference
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
         if (renderers.Length > 0)
         {
-            m_renderers = renderers.ToRef();
+            m_renderers = renderers.ToRendererRefArray();
         }
         ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
         if (particleSystems.Length > 0)
         {
-            m_particleSystems = particleSystems.ToRef();
+            m_particleSystems = particleSystems.ToParticleSystemRefArray();
         }
         Light[] lights = prefab.GetComponentsInChildren<Light>(true);
         if (lights.Length > 0)

@@ -13,7 +13,7 @@ public static class CloneManager
         prefabs = new Dictionary<string, GameObject>();
         clones =  new Dictionary<string, Clone>();
         root = new GameObject($"{MonsterDBPlugin.ModName}_prefab_root");
-        UnityEngine.Object.DontDestroyOnLoad(root);
+        Object.DontDestroyOnLoad(root);
         root.SetActive(false);
     }
 

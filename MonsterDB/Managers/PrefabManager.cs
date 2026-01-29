@@ -23,7 +23,7 @@ public static class PrefabManager
 
     public static void Start()
     {
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_FejdStartup))));
         harmony.Patch(AccessTools.DeclaredMethod(typeof(ZNetScene), nameof(ZNetScene.Awake)),
             prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ZNetScene_Awake))),
@@ -37,7 +37,6 @@ public static class PrefabManager
         if (_prefabs.ContainsKey(go.name) || go.GetInstanceID() < 0) return;
         _prefabs.Add(go.name, go);
     }
-    
     internal static List<string> GetAllPrefabNames<T>() where T : MonoBehaviour
     {
         if (ZNetScene.instance)
@@ -59,7 +58,6 @@ public static class PrefabManager
         }
         return new List<string>();
     }
-
     internal static List<GameObject> GetAllPrefabs<T>() where T : MonoBehaviour
     {
         if (ZNetScene.instance)
@@ -130,7 +128,6 @@ public static class PrefabManager
             _prefabs.Add(go.name, go);
         }
     }
-
     public static List<string> SearchCache<T>(string query) where T : MonoBehaviour
     {
         return _prefabs.Values
@@ -140,28 +137,24 @@ public static class PrefabManager
             .Select(x => x.name)
             .ToList();
     }
-    
     public static StatusEffect? GetStatusEffect(string name)
     {
         if (ObjectDB.instance) return ObjectDB.instance.GetStatusEffect(name.GetStableHashCode());
         if (_ObjectDB != null) return _ObjectDB.m_StatusEffects.FirstOrDefault(x => x.name == name);
         return null;
     }
-
     public static void Register(this ZNetScene scene, GameObject prefab)
     {
         if (scene.m_prefabs.Contains(prefab) || !prefab.GetComponent<ZNetView>()) return;
         scene.m_prefabs.Add(prefab);
         scene.m_namedPrefabs[prefab.name.GetStableHashCode()] = prefab;
     }
-
     public static void Register(this ObjectDB db, GameObject prefab)
     {
         if (db.m_items.Contains(prefab) || !prefab.GetComponent<ItemDrop>()) return;
         db.m_items.Add(prefab);
         db.m_itemByHash[prefab.name.GetStableHashCode()] = prefab;
     }
-    
     public static void RegisterPrefab(GameObject? prefab)
     {
         if (prefab == null) return;

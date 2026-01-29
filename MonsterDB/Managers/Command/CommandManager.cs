@@ -15,7 +15,7 @@ public static class CommandManager
     static CommandManager()
     {
         commands = new Dictionary<string, Command>();
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         startCommand = MonsterDBPlugin.ModName.ToLower();
 
         harmony.Patch(AccessTools.Method(typeof(Terminal), nameof(Terminal.Awake)),

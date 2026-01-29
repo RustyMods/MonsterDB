@@ -1,3 +1,8 @@
+## 0.2.4
+- cleaned up serialization
+- added support for scale to be set as a float instead of (x, y, z): e.g. `scale: 1.5` which will convert to: `scale: { x: 1.5, y: 1.5, z: 1.5 }` or `scale: { x: 1.5 }` which will convert to: `scale: x: 1.5, y: 1, z: 1`
+- fixed humanoid item sets not updating
+
 ## 0.2.3
 - improved custom saddle
 - new field for saddle: `attachParent` use this field to target specific creature bone to attach to

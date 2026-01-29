@@ -1,0 +1,40 @@
+<Project>
+    <UsingTask TaskName="WriteManifestFile" 
+               TaskFactory="CodeTaskFactory" 
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <ManifestFile ParameterType="System.String" Required="true"/>
+            <AssemblyName ParameterType="System.String" Required="true"/>
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+if (!System.IO.File.Exists(ManifestFile))
+{
+string content = @"{
+  ""name"": """ + AssemblyName + @""",
+  ""version_number"": ""1.0.0"",
+  ""website_url"": """",
+  ""description"": """",
+  ""dependencies"": [
+    ""denikson-BepInExPack_Valheim-5.4.2333""
+]
+}";
+System.IO.File.WriteAllText(ManifestFile, content);
+}
+]]>
+            </Code>
+        </Task>
+    </UsingTask>
+    <Target Name="UpdateManifestVersion" 
+            AfterTargets="CopyOutputDLL" 
+            Condition=" ('$(Configuration)|$(Platform)' == 'Release|AnyCPU') And ('$(OS)' == 'Windows_NT') ">
+        <WriteManifestFile ManifestFile="$(ProjectDir)Thunderstore\manifest.json" AssemblyName="$(AssemblyName)"/>
+        <ItemGroup>
+            <ManifestFile Include="$(ProjectDir)Thunderstore\manifest.json"/>
+        </ItemGroup>
+        <Message Text="ManifestFile is @(ManifestFile)"/>
+        <Message Text="Updating version number in Thunderstore\manifest.json" Condition="Exists(@(ManifestFile))"/>
+        <Exec Command="powershell.exe -ExecutionPolicy Bypass -Command &quot;&amp; { &amp; '$(ProjectDir)UpdateManifest.ps1' -manifestFile '@(ManifestFile)' -versionString '$(PackageVersion)' }&quot;"/>
+    </Target>
+</Project>

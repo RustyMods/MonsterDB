@@ -25,7 +25,7 @@ public static class LocalizationManager
         _fileWatcherEnabled = ConfigManager.config("File Watcher", FolderName, Toggle.On,
             $"If on, YML files under {FolderName} folder will trigger update on changed, created, or renamed", false);
         
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(Localization), nameof(Localization.LoadCSV)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(LocalizationManager),
                 nameof(Patch_Localization_LoadCSV))));

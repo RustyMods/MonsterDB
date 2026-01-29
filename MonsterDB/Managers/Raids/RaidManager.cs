@@ -29,7 +29,7 @@ public static class RaidManager
 
         Read();
         
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.SetupLocations)),
             postfix: new HarmonyMethod(typeof(RaidManager), nameof(Patch_ZoneSystem_SetupLocations)));
 

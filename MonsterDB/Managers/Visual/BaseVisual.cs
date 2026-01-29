@@ -45,12 +45,12 @@ public class BaseVisual : Header
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
         if (renderers.Length > 0)
         {
-            Visuals.m_renderers = renderers.ToRef();
+            Visuals.m_renderers = renderers.ToRendererRefArray();
         }
         ParticleSystem[] particleSystems = prefab.GetComponentsInChildren<ParticleSystem>(true);
         if (particleSystems.Length > 0)
         {
-            Visuals.m_particleSystems = particleSystems.ToRef();
+            Visuals.m_particleSystems = particleSystems.ToParticleSystemRefArray();
         }
         Light[] lights = prefab.GetComponentsInChildren<Light>(true);
         if (lights.Length > 0)

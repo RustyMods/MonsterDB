@@ -92,7 +92,7 @@ public static class SpawnManager
 
     public static void Setup()
     {
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(SpawnSystem), nameof(SpawnSystem.Awake)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(SpawnManager), nameof(Patch_SpawnSystem_Awake))));
     }

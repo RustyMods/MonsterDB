@@ -56,18 +56,18 @@ public class VultureOverride : MonoBehaviour
                 }
             }
 
-            List<KeyValuePair<AnimationClip, AnimationClip>> newOverrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+            List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
             AnimationClip[]? clips = controller.animationClips;
             for (int i = 0; i < clips.Length; ++i)
             {
                 AnimationClip clip = clips[i];
                 string name = clip.name.Replace("MOCK ", string.Empty);
-                newOverrides.Add(originalClips.TryGetValue(name, out AnimationClip? anim)
+                overrides.Add(originalClips.TryGetValue(name, out AnimationClip? anim)
                     ? new KeyValuePair<AnimationClip, AnimationClip>(clip, anim)
                     : new KeyValuePair<AnimationClip, AnimationClip>(clip, clip));
             }
             
-            overrideController.ApplyOverrides(newOverrides);
+            overrideController.ApplyOverrides(overrides);
 
             volture.AddComponent<VultureOverride>();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using JetBrains.Annotations;
 using YamlDotNet.Serialization;
 
@@ -8,43 +9,43 @@ namespace MonsterDB;
 [Serializable][UsedImplicitly]
 public class MonsterAIRef : BaseAIRef
 {
-    public float? m_alertRange;
-    public bool? m_fleeIfHurtWhenTargetCantBeReached;
-    public float? m_fleeUnreachableSinceAttacking;
-    public float? m_fleeUnreachableSinceHurt;
-    public bool? m_fleeIfNotAlerted;
-    public float? m_fleeIfLowHealth;
-    public float? m_fleeTimeSinceHurt;
-    public bool? m_fleeInLava;
-    public float? m_fleePheromoneMin;
-    public float? m_fleePheromoneMax;
-    public bool? m_circulateWhileCharging;
-    public bool? m_circulateWhileChargingFlying;
-    public bool? m_enableHuntPlayer;
-    public bool? m_attackPlayerObjects;
-    public int? m_privateAreaTriggerTreshold;
-    public float? m_interceptTimeMax;
-    public float? m_interceptTimeMin;
-    public float? m_maxChaseDistance;
-    public float? m_minAttackInterval;
-    public float? m_circleTargetInterval;
-    public float? m_circleTargetDuration;
-    public float? m_circleTargetDistance;
-    public bool? m_sleeping;
-    public float? m_wakeupRange;
-    public bool? m_noiseWakeup;
-    public float? m_maxNoiseWakeupRange;
+    [DefaultValue(9999f)] public float? m_alertRange;
+    [DefaultValue(true)] public bool? m_fleeIfHurtWhenTargetCantBeReached;
+    [DefaultValue(30f)] public float? m_fleeUnreachableSinceAttacking;
+    [DefaultValue(20f)] public float? m_fleeUnreachableSinceHurt;
+    [DefaultValue(false)] public bool? m_fleeIfNotAlerted;
+    [DefaultValue(0f)] public float? m_fleeIfLowHealth;
+    [DefaultValue(20f)] public float? m_fleeTimeSinceHurt;
+    [DefaultValue(true)] public bool? m_fleeInLava;
+    [DefaultValue(3f)] public float? m_fleePheromoneMin;
+    [DefaultValue(8f)] public float? m_fleePheromoneMax;
+    [DefaultValue(false)] public bool? m_circulateWhileCharging;
+    [DefaultValue(false)] public bool? m_circulateWhileChargingFlying;
+    [DefaultValue(false)] public bool? m_enableHuntPlayer;
+    [DefaultValue(true)] public bool? m_attackPlayerObjects;
+    [YamlMember(Alias = "m_privateAreaTriggerThreshold")] [DefaultValue(4)] public int? m_privateAreaTriggerTreshold;
+    [DefaultValue(0f)] public float? m_interceptTimeMax;
+    [DefaultValue(0f)] public float? m_interceptTimeMin;
+    [DefaultValue(0f)] public float? m_maxChaseDistance;
+    [DefaultValue(0f)] public float? m_minAttackInterval;
+    [DefaultValue(0f)] public float? m_circleTargetInterval;
+    [DefaultValue(5f)] public float? m_circleTargetDuration;
+    [DefaultValue(10f)] public float? m_circleTargetDistance;
+    [DefaultValue(false)] public bool? m_sleeping;
+    [DefaultValue(5f)] public float? m_wakeupRange;
+    [DefaultValue(false)] public bool? m_noiseWakeup;
+    [DefaultValue(50f)] public float? m_maxNoiseWakeupRange;
     public EffectListRef? m_wakeupEffects;
     public EffectListRef? m_sleepEffects;
-    public float? m_wakeUpDelayMin;
-    public float? m_wakeUpDelayMax;
-    public float? m_fallAsleepDistance;
-    public bool? m_avoidLand;
+    [DefaultValue(0f)] public float? m_wakeUpDelayMin;
+    [DefaultValue(0f)] public float? m_wakeUpDelayMax;
+    [DefaultValue(0f)] public float? m_fallAsleepDistance;
+    [DefaultValue(false)] public bool? m_avoidLand;
     [YamlMember(Description = "Tameable")]
     public List<string>? m_consumeItems;
-    public float? m_consumeRange;
-    public float? m_consumeSearchRange;
-    public float? m_consumeSearchInterval;
+    [DefaultValue(2f)] public float? m_consumeRange;
+    [DefaultValue(5f)] public float? m_consumeSearchRange;
+    [DefaultValue(10f)] public float? m_consumeSearchInterval;
     
     public MonsterAIRef(){}
     public MonsterAIRef(MonsterAI ai) => Setup(ai);

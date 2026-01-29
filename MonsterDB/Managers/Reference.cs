@@ -125,7 +125,7 @@ public abstract class Reference
     {
         try
         {
-            Type targetType = target.FieldType;
+            Type targetType = Nullable.GetUnderlyingType(target.FieldType) ?? target.FieldType;
             Type sourceType = source.FieldType;
             
             if (targetType.IsAssignableFrom(sourceType))
@@ -216,6 +216,10 @@ public abstract class Reference
                     targetType == typeof(List<SpawnDataRef>):
                     target.SetValue(this, sps.ToSpawnDataRefList());
                     break;
+                case Material mat when
+                    targetType == typeof(string):
+                    target.SetValue(this, mat.name);
+                    break;
             }
         }
         catch (Exception ex)
@@ -269,10 +273,8 @@ public abstract class Reference
         Type targetType = targetField.FieldType;
         Type sourceType = Nullable.GetUnderlyingType(sourceField.FieldType) ?? sourceField.FieldType;
         
-        if (string.IsNullOrEmpty(targetName))
-        {
-            targetName = "Unknown";
-        }
+        if (string.IsNullOrEmpty(targetName)) targetName = "Unknown";
+        
         if (targetType.IsAssignableFrom(sourceType))
         {
             UpdateAssignableType(target, targetField, targetType, newValue, targetName, log);
@@ -297,7 +299,7 @@ public abstract class Reference
         {
             UpdateGameObjectArray(target, targetField, goNames, targetName, log);
         }
-        else if (sourceType == typeof(Humanoid.ItemSet[]) && 
+        else if (targetType == typeof(Humanoid.ItemSet[]) && 
                  newValue is HumanoidRef.ItemSet[] isa)
         {
             UpdateItemSets(target, targetField, isa, targetName, log);
@@ -382,6 +384,12 @@ public abstract class Reference
         {
             UpdateDropTable(target, targetField, dt, targetName, log);
         }
+        else if (targetType == typeof(Material) && 
+                 newValue is string matName)
+
+        {
+            UpdateMaterial(target, targetField, matName, targetName, log);
+        }
     }
 
     protected virtual void UpdateAssignableType<T>(T target, FieldInfo targetField, Type targetType, object value, string targetName, bool log)
@@ -413,6 +421,11 @@ public abstract class Reference
         }
     }
 
+    protected virtual void UpdateMaterial<T>(T target, FieldInfo targetField, string materialName,
+        string targetName, bool log)
+    {
+        
+    }
     protected virtual void UpdateDropTable<T>(T target, FieldInfo targetField, DropTableRef dt, string targetName,
         bool log)
     {
@@ -534,7 +547,7 @@ public abstract class Reference
 
     private void UpdateItemList<T>(T target, FieldInfo targetField, List<string> itemNames, string  targetName, bool log)
     {
-        List<ItemDrop> itemList = itemNames.FromRef();
+        List<ItemDrop> itemList = itemNames.ToItemDropList();
         targetField.SetValue(target, itemList);
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: ItemDrop[{itemList.Count}]");
     }

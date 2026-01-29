@@ -29,7 +29,7 @@ public static class FactionManager
         _fileWatcherEnabled = ConfigManager.config("File Watcher", "Faction File", Toggle.On,
             "If on, Faction.yml changed, renamed or created will trigger update");
         
-        Harmony harmony = MonsterDBPlugin.instance._harmony;
+        Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(Enum), nameof(Enum.GetValues)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetValues))));
         harmony.Patch(AccessTools.Method(typeof(Enum), nameof(Enum.GetNames)),

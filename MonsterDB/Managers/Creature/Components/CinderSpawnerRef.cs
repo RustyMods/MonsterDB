@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
+[Serializable]
 public class CinderSpawnerRef : Reference
 {
     public string? m_cinderPrefab;

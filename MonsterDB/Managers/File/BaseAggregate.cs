@@ -18,7 +18,8 @@ public class BaseAggregate : Header
     [YamlMember(Order = 13)] public Dictionary<string, BaseRagdoll>? ragdolls;
     [YamlMember(Order = 14)] public Dictionary<string, BaseSpawnAbility>? spawnAbilities;
     [YamlMember(Order = 15)] public Dictionary<string, BaseVisual>? visuals;
-    [YamlMember(Order = 16)] public Dictionary<string, Dictionary<string, string>>? translations;
+    [YamlMember(Order = 16)] public Dictionary<string, BaseCreatureSpawner>? CreatureSpawners;
+    [YamlMember(Order = 17)] public Dictionary<string, Dictionary<string, string>>? translations;
 
     public string? PrefabToUpdate;
 
@@ -283,6 +284,12 @@ public class BaseAggregate : Header
     {
         visuals ??= new Dictionary<string, BaseVisual>();
         visuals[visual.Prefab] = visual;
+    }
+
+    public void Add(BaseCreatureSpawner spawner)
+    {
+        CreatureSpawners ??= new  Dictionary<string, BaseCreatureSpawner>();
+        CreatureSpawners[spawner.Prefab] = spawner;
     }
 
     public void Add(BaseSpawnAbility spawnAbility)

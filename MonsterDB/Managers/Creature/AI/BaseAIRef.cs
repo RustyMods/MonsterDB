@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using JetBrains.Annotations;
-using UnityEngine.Internal;
 using YamlDotNet.Serialization;
 
 namespace MonsterDB;
@@ -8,56 +8,56 @@ namespace MonsterDB;
 [Serializable][UsedImplicitly]
 public class BaseAIRef : Reference
 {
-    public float? m_viewRange;
-    public float? m_viewAngle;
-    public float? m_hearRange;
-    public bool? m_mistVision;
+    [DefaultValue(50f)] public float? m_viewRange;
+    [DefaultValue(90f)] public float? m_viewAngle;
+    [DefaultValue(9999f)] public float? m_hearRange;
+    [DefaultValue(false)] public bool? m_mistVision;
     
     public EffectListRef? m_alertedEffects;
     public EffectListRef? m_idleSound;
-    public float? m_idleSoundInterval;
-    public float? m_idleSoundChance;
+    [DefaultValue(5f)] public float? m_idleSoundInterval;
+    [DefaultValue(0.5f)] public float? m_idleSoundChance;
     
     public Pathfinding.AgentType? m_pathAgentType;
-    public float? m_moveMinAngle;
-    public bool? m_smoothMovement;
-    public bool? m_serpentMovement;
-    public float? m_serpentTurnRadius;
-    public float? m_jumpInterval;
+    [DefaultValue(10f)] public float? m_moveMinAngle;
+    [DefaultValue(true)] public bool? m_smoothMovement;
+    [DefaultValue(false)] public bool? m_serpentMovement;
+    [DefaultValue(20f)] public float? m_serpentTurnRadius;
+    [DefaultValue(0f)] public float? m_jumpInterval;
     
-    public float? m_randomCircleInterval;
-    public float? m_randomMoveInterval;
-    public float? m_randomMoveRange;
-    public bool? m_randomFly;
+    [DefaultValue(2f)] public float? m_randomCircleInterval;
+    [DefaultValue(5f)] public float? m_randomMoveInterval;
+    [DefaultValue(4f)] public float? m_randomMoveRange;
+    [DefaultValue(false)] public bool? m_randomFly;
     
-    public float? m_chanceToTakeoff;
-    public float? m_chanceToLand;
+    [DefaultValue(1f)] public float? m_chanceToTakeoff;
+    [DefaultValue(1f)] public float? m_chanceToLand;
     
     [YamlMember(Description = "Flying")]
-    public float? m_groundDuration;
-    public float? m_airDuration;
-    public float? m_maxLandAltitude;
-    public float? m_takeoffTime;
-    public float? m_flyAltitudeMin;
-    public float? m_flyAltitudeMax;
-    public float? m_flyAbsMinAltitude;
+    [DefaultValue(10f)] public float? m_groundDuration;
+    [DefaultValue(10f)] public float? m_airDuration;
+    [DefaultValue(5f)] public float? m_maxLandAltitude;
+    [DefaultValue(5f)] public float? m_takeoffTime;
+    [DefaultValue(3f)] public float? m_flyAltitudeMin;
+    [DefaultValue(10f)] public float? m_flyAltitudeMax;
+    [DefaultValue(32f)] public float? m_flyAbsMinAltitude;
     
-    public bool? m_avoidFire;
-    public bool? m_afraidOfFire;
-    public bool? m_avoidWater;
-    public bool? m_avoidLava;
-    public bool? m_skipLavaTargets;
-    public bool? m_avoidLavaFlee;
+    [DefaultValue(false)] public bool? m_avoidFire;
+    [DefaultValue(false)] public bool? m_afraidOfFire;
+    [DefaultValue(true)] public bool? m_avoidWater;
+    [DefaultValue(true)] public bool? m_avoidLava;
+    [DefaultValue(false)] public bool? m_skipLavaTargets;
+    [DefaultValue(true)] public bool? m_avoidLavaFlee;
     
-    public bool? m_aggravatable;
-    public bool? m_passiveAggresive;
+    [DefaultValue(false)] public bool? m_aggravatable;
+    [DefaultValue(false)] public bool? m_passiveAggresive;
     
     public string? m_spawnMessage;
     public string? m_deathMessage;
     public string? m_alertedMessage;
     
-    public float? m_fleeRange;
-    public float? m_fleeAngle;
-    public float? m_fleeInterval;
-    public bool? m_patrol;
+    [DefaultValue(25f)] public float? m_fleeRange;
+    [DefaultValue(45f)] public float? m_fleeAngle;
+    [DefaultValue(2f)] public float? m_fleeInterval;
+    [DefaultValue(false)] public bool? m_patrol;
 }

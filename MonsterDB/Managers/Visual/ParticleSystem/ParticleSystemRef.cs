@@ -16,7 +16,26 @@ public class ParticleSystemRef : Reference
     
     public ParticleSystemRef(){}
 
-    public ParticleSystemRef(ParticleSystem ps) => Set(ps);
+    public ParticleSystemRef(ParticleSystem ps)
+    {
+        m_prefab = ps.gameObject.name;
+        m_parent = ps.transform.parent?.name;
+        m_index = ps.transform.GetSiblingIndex();
+        m_startColor = new MinMaxGradientRef(ps.main.startColor);
+        
+        ParticleSystem.CustomDataModule custom = ps.customData;
+        if (custom.enabled)
+        {
+            m_customData = new CustomDataModuleRef(custom);
+        }
+        
+        ParticleSystem.ColorOverLifetimeModule colorOverLifetime = ps.colorOverLifetime;
+        if (colorOverLifetime.enabled)
+        {
+            ParticleSystem.MinMaxGradient color = colorOverLifetime.color;
+            m_colorOverLifetime = new MinMaxGradientRef(color);
+        }
+    }
     
     public void Update(ParticleSystem ps, string targetName, bool log)
     {
@@ -58,32 +77,11 @@ public class ParticleSystemRef : Reference
             }
         }
     }
-
-    public void Set(ParticleSystem ps)
-    {
-        m_prefab = ps.gameObject.name;
-        m_parent = ps.transform.parent?.name;
-        m_index = ps.transform.GetSiblingIndex();
-        m_startColor = new MinMaxGradientRef(ps.main.startColor);
-        
-        ParticleSystem.CustomDataModule custom = ps.customData;
-        if (custom.enabled)
-        {
-            m_customData = new CustomDataModuleRef(custom);
-        }
-        
-        ParticleSystem.ColorOverLifetimeModule colorOverLifetime = ps.colorOverLifetime;
-        if (colorOverLifetime.enabled)
-        {
-            ParticleSystem.MinMaxGradient color = colorOverLifetime.color;
-            m_colorOverLifetime = new MinMaxGradientRef(color);
-        }
-    }
 }
 
 public static partial class Extensions
 {
-    public static ParticleSystemRef[] ToRef(this ParticleSystem[] particleSystems)
+    public static ParticleSystemRef[] ToParticleSystemRefArray(this ParticleSystem[] particleSystems)
     {
         return particleSystems
             .Select(x => new ParticleSystemRef(x))

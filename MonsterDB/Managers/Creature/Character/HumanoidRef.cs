@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class HumanoidRef : CharacterRef
 {
     [YamlMember(Order = 100)] public string[]? m_defaultItems;
@@ -50,9 +50,10 @@ public static partial class Extensions
                 .SelectMany(x => x.m_items)
                 .ToArray());
             
-        attacks.RemoveWhere(x => x == null || 
-                                 !x.TryGetComponent(out ItemDrop component) || 
-                                 string.IsNullOrEmpty(component.m_itemData.m_shared.m_attack.m_attackAnimation));
+        attacks.RemoveWhere(x => 
+            x == null || 
+            !x.TryGetComponent(out ItemDrop component) || 
+            string.IsNullOrEmpty(component.m_itemData.m_shared.m_attack.m_attackAnimation));
         return attacks;
     }
 
@@ -76,7 +77,7 @@ public static partial class Extensions
         return items;
     }
 
-    public static ItemDataSharedRef[] ToRef(this HashSet<GameObject> items)
+    public static ItemDataSharedRef[] ToItemDataSharedRefArray(this HashSet<GameObject> items)
     {
         List<ItemDataSharedRef> attackRefs = new();
             

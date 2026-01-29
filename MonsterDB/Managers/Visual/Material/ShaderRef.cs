@@ -53,19 +53,23 @@ public static class ShaderRef
                 m_shaders[shader.name] = shader;
             }
         }
+        
+        var shaders = Resources.FindObjectsOfTypeAll<Shader>();
+        foreach (Shader? shader in shaders)
+        {
+            if (shader == null) continue;
+            if (!m_shaders.ContainsKey(shader.name))
+            {
+                m_shaders[shader.name] = shader;
+            }
+        }
     }
 
     private static Command search = new Command("search_shader",
         "[query]: returns list of shader names that contains query",
         args =>
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-                
-            string query = args[2];
+            string query = args.GetString(2);
             if (string.IsNullOrEmpty(query))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");

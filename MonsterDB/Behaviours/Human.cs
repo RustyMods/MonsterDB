@@ -126,12 +126,13 @@ public class Human : Humanoid
         m_reloadCoroutine = StartCoroutine(ReloadRoutine(weapon.m_shared.m_attack.m_reloadAnimation, weapon.m_shared.m_attack.m_reloadTime));
     }
 
-    public IEnumerator ReloadRoutine(string reloadAnimation, float reloadTime)
+    private IEnumerator ReloadRoutine(string reloadAnimation, float reloadTime)
     {
         m_reloading = true;
         m_zanim.SetBool(reloadAnimation, true);
         yield return new WaitForSeconds(reloadTime);
         m_zanim.SetTrigger(reloadAnimation + "_done");
+        m_zanim.SetBool(reloadAnimation, false);
         yield return m_weaponLoadedDelay;
         m_weaponLoaded = true;
         m_reloadCoroutine = null;

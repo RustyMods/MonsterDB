@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Reflection;
+using HarmonyLib;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -29,7 +31,7 @@ public class TextureData
     {
         if (m_tex != null) return m_tex;
         Texture2D tex = new Texture2D(original?.width ?? 4, original?.height ?? 4, original?.format ?? TextureFormat.RGBA32, original?.mipmapCount > 1);
-        tex.LoadImage(m_bytes);
+        tex.LoadImage4x(m_bytes);
         tex.Apply();
         tex.name = m_name;
         m_tex = tex;
@@ -53,5 +55,14 @@ public class TextureData
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
         string filePath = Path.Combine(folderPath, m_name + ".png");
         File.WriteAllBytes(filePath, m_bytes);
+    }
+}
+
+public static partial class Extensions
+{
+    private static readonly MethodInfo LoadImage = AccessTools.Method(typeof(ImageConversion), nameof(ImageConversion.LoadImage), new [] { typeof(Texture2D), typeof(byte[]) });
+    public static bool LoadImage4x(this Texture2D tex, byte[] data)
+    {
+        return (bool)LoadImage.Invoke(null, new object[] { tex , data});
     }
 }

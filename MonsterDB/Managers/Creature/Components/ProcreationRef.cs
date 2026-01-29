@@ -30,37 +30,3 @@ public class ProcreationRef : Reference
     public ProcreationRef(Procreation component) => Setup(component);
 }
 
-public static class ProcreateText
-{
-    private static ConfigEntry<Toggle> addProcreateProgressText = null!;
-
-    public static void Setup()
-    {
-        addProcreateProgressText = ConfigManager.config("Procreation", "Add Progress Text", Toggle.Off,
-            "If on, will add procreation progress info to hover text");
-    }
-
-    private static bool AddProgressText() => addProcreateProgressText.Value is Toggle.On;
-
-
-    [HarmonyPatch(typeof(Tameable), nameof(Tameable.GetStatusString))]
-    private static class Tameable_GetStatusString
-    {
-        private static void Postfix(Tameable __instance, ref string __result)
-        {
-            if (!AddProgressText()) return;
-            if (!__instance.IsTamed() || !__instance.TryGetComponent(out Procreation component)) return;
-
-            if (component.IsPregnant())
-            {
-                __result += ", $hud_procreate_pregnant";
-            }
-            else
-            {
-                int points = component.GetLovePoints();
-                float percentage = (float)points / component.m_requiredLovePoints * 100f;
-                __result += $", $hud_procreate_bonding {percentage}%";
-            }
-        }
-    }
-}
