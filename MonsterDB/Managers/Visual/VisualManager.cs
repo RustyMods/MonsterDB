@@ -31,7 +31,7 @@ public static class VisualManager
             if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
             {
                 isClone = true;
-                source = c.PrefabName;
+                source = c.SourceName;
             }
             
             Write(prefab, isClone, source);

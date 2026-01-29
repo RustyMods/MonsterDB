@@ -181,7 +181,6 @@
         <Compile Include="Managers\Item\ItemManager.cs" />
         <Compile Include="Managers\Item\Components\AttackRef.cs" />
         <Compile Include="Managers\Item\Components\ItemDataSharedRef.cs" />
-        <Compile Include="Managers\Item\YamlConditional.cs" />
         <Compile Include="Managers\LocalizationManager.cs" />
         <Compile Include="Managers\Misc\MiscComponent.cs" />
         <Compile Include="Managers\PrefabManager.cs" />
@@ -224,6 +223,7 @@
         <Compile Include="Managers\Visual\VisualRef.cs" />
         <Compile Include="Managers\Visual\VisualUtils.cs" />
         <Compile Include="Managers\VultureOverride.cs" />
+        <Compile Include="Managers\YamlConditional.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="VersionHandshake.cs" />

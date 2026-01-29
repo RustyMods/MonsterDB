@@ -197,7 +197,7 @@ public static class ItemManager
                 if (CloneManager.clones.TryGetValue(sharedData.m_attack.m_attackProjectile.name, out Clone c))
                 {
                     isProjectileClone = true;
-                    projectileSource = c.PrefabName;
+                    projectileSource = c.SourceName;
                 }
 
                 ProjectileManager.Write(sharedData.m_attack.m_attackProjectile, isProjectileClone, projectileSource, dirPath);
@@ -210,7 +210,7 @@ public static class ItemManager
                 if (CloneManager.clones.TryGetValue(sharedData.m_secondaryAttack.m_attackProjectile.name, out Clone c))
                 {
                     isProjectileClone = true;
-                    projectileSource = c.PrefabName;
+                    projectileSource = c.SourceName;
                 }
 
                 ProjectileManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone, projectileSource, dirPath);

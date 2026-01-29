@@ -109,7 +109,7 @@ public static class CreatureManager
             return true;
         }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>, adminOnly: true);
 
-        Command hierarchy = new Command("export_bones", "[prefabName]: export creature hierarchy", args =>
+        Command hierarchy = new Command("export_bones", "[prefabName]: export prefab hierarchy", args =>
         {
             string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
@@ -130,7 +130,7 @@ public static class CreatureManager
             string filePath = Path.Combine(folderPath, $"{prefabName}.bones.yml");
             ExportHierarchy(prefab, filePath);
             return true;
-        }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>);
+        }, optionsFetcher: PrefabManager.GetAllPrefabNames);
     }
 
     public static bool TrySave(GameObject prefab, out Base? data, bool isClone = false, string source = "")
@@ -199,7 +199,7 @@ public static class CreatureManager
                         if (CloneManager.clones.TryGetValue(effect.m_prefab.name, out Clone ragdollClone))
                         {
                             isRagdollClone = true;
-                            ragdollSource = ragdollClone.PrefabName;
+                            ragdollSource = ragdollClone.SourceName;
                         }
                         RagdollManager.Write(effect.m_prefab, isRagdollClone, ragdollSource, folder);
                     }
@@ -221,7 +221,7 @@ public static class CreatureManager
                         if (CloneManager.clones.TryGetValue(item.name, out Clone d))
                         {
                             isItemClone = true;
-                            itemSource = d.PrefabName;
+                            itemSource = d.SourceName;
                         }
 
                         ItemManager.Write(item, isItemClone, itemSource, itemFolder);
@@ -385,7 +385,7 @@ public static class CreatureManager
         return newItems.ToArray();
     }
 
-    private static void ExportHierarchy(GameObject root, string filePath)
+    public static void ExportHierarchy(GameObject root, string filePath)
     {
         if (root == null) return;
 

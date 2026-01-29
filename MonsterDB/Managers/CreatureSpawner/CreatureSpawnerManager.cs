@@ -16,7 +16,7 @@ public static class CreatureSpawnerManager
                 if (CloneManager.clones.TryGetValue(prefab.name, out Clone clone))
                 {
                     isClone = true;
-                    source = clone.PrefabName;
+                    source = clone.SourceName;
                 }
                 Write(prefab, isClone, source);
             }
@@ -34,7 +34,7 @@ public static class CreatureSpawnerManager
             if (CloneManager.clones.TryGetValue(prefab.name, out Clone clone))
             {
                 isClone = true;
-                source = clone.PrefabName;
+                source = clone.SourceName;
             }
             Write(prefab, isClone, source);
             return true;

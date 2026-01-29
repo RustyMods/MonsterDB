@@ -7,13 +7,13 @@ public class Clone
 {
     private GameObject? Source;
     private GameObject? Prefab;
-    public readonly string PrefabName;
+    public readonly string SourceName;
     private readonly string NewName;
     private bool Loaded;
     public event Action<GameObject>? OnCreated;
     public Clone(string prefabName, string newName)
     {
-        PrefabName = prefabName;
+        SourceName = prefabName;
         NewName = newName;
         CloneManager.clones[newName] = this;
     }

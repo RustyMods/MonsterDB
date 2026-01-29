@@ -30,18 +30,7 @@ public static class TextureManager
             GameObject? prefab = PrefabManager.GetPrefab(prefabName);
             if (prefab == null) return false;
 
-            Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-            HashSet<Material> materials = new HashSet<Material>();
-            for (int i = 0; i < renderers.Length; ++i)
-            {
-                Renderer? renderer = renderers[i];
-                for (int y = 0; y < renderer.sharedMaterials.Length; ++y)
-                {
-                    Material? material = renderer.sharedMaterials[y];
-                    if (material == null) continue;
-                    materials.Add(material);
-                }
-            }
+            HashSet<Material> materials = prefab.GetAllMaterials();
 
             foreach (Material? material in materials)
             {
@@ -117,6 +106,30 @@ public static class TextureManager
             
             return true;
         }, m_cachedSprites.Keys.ToList);
+    }
+
+    public static HashSet<Material> GetAllMaterials(this GameObject prefab)
+    {
+        Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
+        HashSet<Material> materials = new HashSet<Material>();
+        for (int i = 0; i < renderers.Length; ++i)
+        {
+            Renderer renderer = renderers[i];
+            for (int y = 0; y < renderer.sharedMaterials.Length; ++y)
+            {
+                Material? material = renderer.sharedMaterials[y];
+                if (material == null) continue;
+                materials.Add(material);
+            }
+        }
+
+        return materials;
+    }
+
+    public static bool TryGetTexture(string name, out Texture2D texture)
+    {
+        if (m_cachedTextures.TryGetValue(name, out texture)) return true;
+        return false;
     }
     public static void Start()
     {
@@ -205,7 +218,7 @@ public static class TextureManager
         return m_cachedSprites;
     }
 
-    private static void Export(Texture texture, string path)
+    public static void Export(Texture texture, string path)
     {
         string fileName = texture.name;
         string filePath = Path.Combine(path, fileName + ".png");
@@ -291,7 +304,7 @@ public static class TextureManager
         }
     }
     
-    private static void Save(Material material, string path)
+    public static void Save(Material material, string path)
     {
         if (material == null) return;
         if (material.GetInstanceID() < 0) return;

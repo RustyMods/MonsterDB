@@ -40,7 +40,7 @@ public static class SpawnAbilityManager
             if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
             {
                 isClone = true;
-                source = c.PrefabName;
+                source = c.SourceName;
             }
 
             Write(prefab, isClone, source);
@@ -50,20 +50,14 @@ public static class SpawnAbilityManager
 
         Command clone = new Command("clone_spawnability", "[prefabName]: clone spawn ability YML file", args =>
         {
-            if (args.Length < 4)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
+            string prefabName = args.GetString(2);
             if (string.IsNullOrEmpty(prefabName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
                 return false;
             }
-            
-            string newName = args[3];
+
+            string newName = args.GetString(3);
             if (string.IsNullOrEmpty(newName))
             {
                 MonsterDBPlugin.LogWarning("Invalid parameters");
@@ -77,9 +71,7 @@ public static class SpawnAbilityManager
                 MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
                 return true;
             }
-
-
-
+            
             if (!prefab.GetComponent<SpawnAbility>())
             {
                 MonsterDBPlugin.LogWarning("Invalid prefab, missing SpawnAbility component");

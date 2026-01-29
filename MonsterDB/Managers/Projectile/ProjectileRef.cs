@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 using JetBrains.Annotations;
 using YamlDotNet.Serialization;
 
@@ -11,44 +13,53 @@ public class ProjectileRef : Reference
     public string m_prefab = "";
     public ProjectileType? m_type;
     public HitData.DamageTypes? m_damage;
-    public float? m_aoe;
-    public bool? m_dodgeable;
-    public bool? m_blockable;
-    public float? m_attackForce;
-    public float? m_backstabBonus;
+    [DefaultValue(0f)] public float? m_aoe;
+    [DefaultValue(false)] public bool? m_dodgeable;
+    [DefaultValue(false)] public bool? m_blockable;
+    [DefaultValue(false)] public float? m_adrenaline;
+    [DefaultValue(0f)] public float? m_attackForce;
+    [DefaultValue(4f)] public float? m_backstabBonus;
     public string? m_statusEffect;
-    public float? m_healthReturn;
-    public float? m_ttl;
-    public float? m_hitNoise;
+    [DefaultValue(0f)] public float? m_healthReturn;
+    [DefaultValue(4f)] public float? m_ttl;
+    [DefaultValue(50f)] public float? m_hitNoise;
     public EffectListRef? m_hitEffects;
     public EffectListRef? m_hitWaterEffects;
     [YamlMember(Description = "Bounce")]
-    public bool? m_bounce;
-    public bool? m_bounceOnWater;
+    [DefaultValue(false)] public bool? m_bounce;
+    [DefaultValue(false)][Condition(bounce = true)] public bool? m_bounceOnWater;
+    [YamlMember(Description = "0.0 - 1.0")]
+    [DefaultValue(0.85f)]
+    [Condition(bounce = true)] 
+    public float? m_bouncePower;
+    [DefaultValue(0.3f)][Condition(bounce = true)] public float? m_bounceRoughness;
+    [DefaultValue(99f)][Condition(bounce = true)] public int? m_maxBounces;
+    [DefaultValue(0.25f)][Condition(bounce = true)] public float? m_minBounceVel;
     [YamlMember(Description = "Spawn on Hit")]
-    public bool? m_respawnItemOnHit;
-    public bool? m_spawnOnTtl;
+    [DefaultValue(false)] public bool? m_respawnItemOnHit;
+    [DefaultValue(false)] public bool? m_spawnOnTtl;
     public string? m_spawnOnHit;
+    [YamlMember(Description = "0.0 - 1.0")][DefaultValue(1f)][Condition(spawnOnHit = true)] 
     public float? m_spawnOnHitChance;
-    public int? m_spawnCount;
+    [DefaultValue(1)][Condition(spawnOnHit = true)] public int? m_spawnCount;
     public List<string>? m_randomSpawnOnHit;
-    public int? m_randomSpawnOnHitCount;
-    public bool? m_randomSpawnSkipLava;
-    public bool? m_staticHitOnly;
-    public bool? m_groundHitOnly;
+    [DefaultValue(1)][Condition(randomSpawnOnHit = true)] public int? m_randomSpawnOnHitCount;
+    [DefaultValue(false)][Condition(randomSpawnOnHit = true)] public bool? m_randomSpawnSkipLava;
+    [DefaultValue(false)] public bool? m_staticHitOnly;
+    [DefaultValue(false)] public bool? m_groundHitOnly;
     public Vector3Ref? m_spawnOffset;
-    public bool? m_spawnRandomRotation;
-    public bool? m_spawnFacingRotation;
+    [DefaultValue(false)] public bool? m_spawnRandomRotation;
+    [DefaultValue(false)] public bool? m_spawnFacingRotation;
     public EffectListRef? m_spawnOnHitEffects;
     [YamlMember(Description = "Projectile Spawning")]
-    public bool? m_spawnProjectileNewVelocity;
-    public float? m_spawnProjectileMinVel;
-    public float? m_spawnProjectileMaxVel;
-    public float? m_spawnProjectileRandomDir;
-    public bool? m_spawnProjectileHemisphereDir;
-    public bool? m_projectilesInheritHitData;
-    public bool? m_onlySpawnedProjectilesDealDamage;
-    public bool? m_divideDamageBetweenProjectiles;
+    [DefaultValue(false)] public bool? m_spawnProjectileNewVelocity;
+    [DefaultValue(1f)] public float? m_spawnProjectileMinVel;
+    [DefaultValue(5f)] public float? m_spawnProjectileMaxVel;
+    [DefaultValue(0f)] public float? m_spawnProjectileRandomDir;
+    [DefaultValue(false)] public bool? m_spawnProjectileHemisphereDir;
+    [DefaultValue(false)] public bool? m_projectilesInheritHitData;
+    [DefaultValue(false)] public bool? m_onlySpawnedProjectilesDealDamage;
+    [DefaultValue(false)] public bool? m_divideDamageBetweenProjectiles;
     
     public ProjectileRef(){}
 
@@ -56,5 +67,16 @@ public class ProjectileRef : Reference
     {
         Setup(projectile);
         m_prefab = projectile.name;
+    }
+
+    public override bool ShouldSetupField<V>(FieldInfo targetField, V source)
+    {
+        if (source is Projectile projectile)
+        {
+            Condition? conditions = targetField.GetCustomAttribute<Condition>();
+            if (conditions == null) return true;
+            return conditions.ShouldSetupField(projectile);
+        }
+        return true;
     }
 }

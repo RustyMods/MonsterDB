@@ -37,6 +37,8 @@ public static class PrefabManager
         if (_prefabs.ContainsKey(go.name) || go.GetInstanceID() < 0) return;
         _prefabs.Add(go.name, go);
     }
+
+    internal static List<string> GetAllPrefabNames() => _prefabs.Keys.ToList();
     internal static List<string> GetAllPrefabNames<T>() where T : MonoBehaviour
     {
         if (ZNetScene.instance)

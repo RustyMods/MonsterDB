@@ -87,7 +87,7 @@ public static class ProjectileManager
             if (CloneManager.clones.TryGetValue(component.m_spawnOnHit.name, out Clone c))
             {
                 isSpawnClone = true;
-                spawnSource = c.PrefabName;
+                spawnSource = c.SourceName;
             }
             
             SpawnAbilityManager.Write(component.m_spawnOnHit, isSpawnClone, spawnSource, dirPath);

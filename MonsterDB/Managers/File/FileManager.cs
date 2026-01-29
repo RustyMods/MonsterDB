@@ -9,8 +9,8 @@ namespace MonsterDB;
 
 public static class FileManager
 {
-    private const string ExportFolderName = "Export";
-    private const string ImportFolderName = "Import";
+    public const string ExportFolderName = "Export";
+    public const string ImportFolderName = "Import";
     public static readonly string ExportFolder;
     public static readonly string ImportFolder;
     private static readonly ConfigEntry<Toggle> _fileWatcherEnabled;

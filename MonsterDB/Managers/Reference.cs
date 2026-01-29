@@ -115,6 +115,7 @@ public abstract class Reference
         {
             FieldInfo sourceField = sourceFields[i];
             if (!targetFields.TryGetValue(sourceField.Name, out FieldInfo targetField)) continue;
+            if (!ShouldSetupField(targetField, source)) continue;
             object? sourceValue = sourceField.GetValue(source);
             if (sourceValue == null) continue;
             SetupField(sourceField, targetField, sourceValue);
@@ -227,6 +228,8 @@ public abstract class Reference
             MonsterDBPlugin.LogDebug(ex.Message);
         }
     }
+
+    public virtual bool ShouldSetupField<V>(FieldInfo targetField, V source) => true;
     
     public virtual void UpdateFields<T>(T target, string targetName, bool log)
     {

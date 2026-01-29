@@ -118,7 +118,7 @@ public static class FishManager
         return ConfigManager.Serialize(reference);
     }
 
-    private static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
+    public static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {
         string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);

@@ -20,7 +20,7 @@ public class Command
         return false;
     }
     public bool IsSecret() => m_isSecret;
-    public List<string> FetchOptions() => m_optionFetcher == null ? new() :  m_optionFetcher();
+    public List<string> FetchOptions() => m_optionFetcher == null ? new List<string>() : m_optionFetcher();
     public bool HasOptions() => m_optionFetcher != null;
         
     public Command(string input, string description, Func<Terminal.ConsoleEventArgs, bool> command, Func<List<string>>? optionsFetcher = null, bool isSecret = false, bool adminOnly = false)

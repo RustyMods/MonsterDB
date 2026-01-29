@@ -66,7 +66,7 @@ public static class EggManager
                 if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
                 {
                     isClone = true;
-                    source = c.PrefabName;
+                    source = c.SourceName;
                 }
 
                 Write(prefab, isClone, source);
@@ -172,7 +172,7 @@ public static class EggManager
         return ConfigManager.Serialize(reference);
     }
 
-    private static void Write(GameObject prefab,  bool isClone = false, string clonedFrom = "")
+    public static void Write(GameObject prefab,  bool isClone = false, string clonedFrom = "")
     {
         string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);
