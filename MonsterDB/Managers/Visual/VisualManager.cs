@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -6,62 +7,48 @@ namespace MonsterDB;
 
 public static class VisualManager
 {
-    public static void Setup()
+    [Obsolete]
+    public static void WriteVisualYML(Terminal.ConsoleEventArgs args)
     {
-        Command export = new Command("write_visual", "[prefabName]: write prefab visual data YML file", args =>
+        string? prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            string? prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
 
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            if (prefab == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
-                return true;
-            }
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
 
-            bool isClone = false;
-            string source = "";
-
-            if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
-            {
-                isClone = true;
-                source = c.SourceName;
-            }
-            
-            Write(prefab, isClone, source);
-            return true;
-        });
-
-        Command clone = new Command("clone_visual", "[prefabName]: clone prefab and write visual YML file",
-            args =>
-            {
-                string prefabName = args.GetString(2);
-                string newName = args.GetString(3);
-                if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return true;
-                }
-
-                GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-                if (prefab == null)
-                {
-                    MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
-                    return true;
-                }
-
-                TryClone(prefab, newName, out _);
-                
-                return true;
-            }, adminOnly: true);
+        bool isClone = CloneManager.IsClone(prefab.name, out string source);
+        Write(prefab, isClone, source);
     }
 
+    [Obsolete]
+    public static void CloneVisual(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        TryClone(prefab, newName, out _);
+    }
     public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;

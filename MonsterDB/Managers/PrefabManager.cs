@@ -24,11 +24,13 @@ public static class PrefabManager
     public static void Start()
     {
         Harmony harmony = MonsterDBPlugin.harmony;
-        harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_FejdStartup))));
+        harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)),
+            postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_FejdStartup))));
         harmony.Patch(AccessTools.DeclaredMethod(typeof(ZNetScene), nameof(ZNetScene.Awake)),
             prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ZNetScene_Awake))),
             postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(LoadManager), nameof(LoadManager.Start))));
-        harmony.Patch(AccessTools.DeclaredMethod(typeof(ObjectDB), nameof(ObjectDB.Awake)), prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ObjectDB_Awake))));
+        harmony.Patch(AccessTools.DeclaredMethod(typeof(ObjectDB), nameof(ObjectDB.Awake)),
+            prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ObjectDB_Awake))));
     }
     
     public static void AddToCache(GameObject go)
@@ -160,7 +162,7 @@ public static class PrefabManager
     public static void RegisterPrefab(GameObject? prefab)
     {
         if (prefab == null) return;
-
+        
         if (ZNetScene.instance)
         {
             ZNetScene.instance.Register(prefab);

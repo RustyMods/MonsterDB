@@ -8,49 +8,39 @@ public static class Snapshot
 {
     private const int layer = 3;
 
-    public static void Setup()
+    public static void Run(Terminal.ConsoleEventArgs args)
     {
-        Command snapshot = new Command("snapshot", "[prefabName] [optional<float>: lightIntensity] [optional<Vector3>: cameraRotation]: Generates and exports a prefab icon", args =>
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
 
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-
-            if (prefab == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
-                return true;
-            }
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
             
-            float lightIntensity = args.GetFloat(3, 1.3f);
+        float lightIntensity = args.GetFloat(3, 1.3f);
 
-            float x = args.GetFloat(4);
-            float y = args.GetFloat(5, 180f);
-            float z = args.GetFloat(6);
-            Quaternion rotation = Quaternion.Euler(x, y, z);
+        float x = args.GetFloat(4);
+        float y = args.GetFloat(5, 180f);
+        float z = args.GetFloat(6);
+        Quaternion rotation = Quaternion.Euler(x, y, z);
             
-            if (TryCreate(prefab, out Sprite icon, lightIntensity, rotation))
-            {
-                icon.name = $"{prefab.name}_icon";
-                byte[]? bytes = icon.texture.EncodeToPNG();
-                string filePath = Path.Combine(FileManager.ExportFolder, icon.name + ".png");
-                File.WriteAllBytes(filePath, bytes);
-                MonsterDBPlugin.LogInfo($"Exported texture: {filePath}");
-                TextureManager.RegisterNewIcon(icon);
-            }
-            return true;
-        });
+        if (TryCreate(prefab, out Sprite icon, lightIntensity, rotation))
+        {
+            icon.name = $"{prefab.name}_icon";
+            byte[]? bytes = icon.texture.EncodeToPNG();
+            string filePath = Path.Combine(FileManager.ExportFolder, icon.name + ".png");
+            File.WriteAllBytes(filePath, bytes);
+            args.Context.AddString($"Exported texture: {filePath}");
+            TextureManager.RegisterNewIcon(icon);
+        }
     }
 
     private static void CleanupVisual(GameObject visual)

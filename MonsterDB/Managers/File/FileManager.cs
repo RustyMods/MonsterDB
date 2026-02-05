@@ -25,16 +25,15 @@ public static class FileManager
 
         if (!Directory.Exists(ExportFolder)) Directory.CreateDirectory(ExportFolder);
         if (!Directory.Exists(ImportFolder)) Directory.CreateDirectory(ImportFolder);
-
-        Command export = new Command("export_all", "exports all files in import folder into a single file", _ =>
-        {
-            Export(ImportFolder);
-            return true;
-        });
     }
 
     private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
-    
+
+    public static void ExportAggregate(Terminal.ConsoleEventArgs args)
+    {
+        Export(ImportFolder);
+        args.Context.AddString("Exported all MonsterDB imported files into a single aggregated file.");
+    }
     public static List<string> GetModFileNames() => Directory
             .GetFiles(ImportFolder, "*.yml", SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)
@@ -113,6 +112,11 @@ public static class FileManager
                         BaseVisual visual = ConfigManager.Deserialize<BaseVisual>(text);
                         LoadManager.loadList.Add(visual);
                         LoadManager.files.Add(visual);
+                        break;
+                    case BaseType.SpawnArea:
+                        BaseSpawnArea area = ConfigManager.Deserialize<BaseSpawnArea>(text);
+                        LoadManager.loadList.Add(area);
+                        LoadManager.files.Add(area);
                         break;
                     case BaseType.All:
                         BaseAggregate all = ConfigManager.Deserialize<BaseAggregate>(text);
@@ -228,6 +232,11 @@ public static class FileManager
                     visual.Update();
                     LoadManager.UpdateSync();
                     break;
+                case BaseType.SpawnArea:
+                    BaseSpawnArea area = ConfigManager.Deserialize<BaseSpawnArea>(text);
+                    area.Update();
+                    LoadManager.UpdateSync();
+                    break;
             }
         }
         catch (Exception ex)
@@ -238,7 +247,7 @@ public static class FileManager
         }
     }
 
-    private static void Export(string dirPath)
+    public static void Export(string dirPath)
     {
         try
         {

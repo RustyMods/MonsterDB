@@ -29,26 +29,26 @@ public class Human : Humanoid
         }
         if (m_nview.IsValid() && !m_nview.GetZDO().GetBool(ZDOVars.s_addedDefaultItems))
         {
-            if (m_models != null)
+            if (m_models != null && m_models.Length > 0)
             {
                 m_modelIndex = m_models[UnityEngine.Random.Range(0, m_models.Length)];
             }
 
-            if (m_beards != null)
+            if (m_beards != null &&  m_beards.Length > 0)
             {
                 m_beardItem = m_beards[UnityEngine.Random.Range(0, m_beards.Length)];
             }
 
-            if (m_hairs != null)
+            if (m_hairs != null && m_hairs.Length > 0)
             {
                 m_hairItem = m_hairs[UnityEngine.Random.Range(0, m_hairs.Length)];
             }
-            if (m_skinColors != null)
+            if (m_skinColors != null &&  m_skinColors.Length > 0)
             {
                 string color = m_skinColors[UnityEngine.Random.Range(0, m_skinColors.Length)];
                 m_skinColor = Utils.ColorToVec3(color.FromHexOrRGBA(Color.white));
             }
-            if (m_hairColors != null)
+            if (m_hairColors != null &&  m_hairColors.Length > 0)
             {
                 string color = m_hairColors[UnityEngine.Random.Range(0, m_hairColors.Length)];
                 m_hairColor = Utils.ColorToVec3(color.FromHexOrRGBA(Color.black));

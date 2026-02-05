@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using HarmonyLib;
@@ -21,92 +22,169 @@ public static class TextureManager
         Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.Awake)),
             new HarmonyMethod(AccessTools.Method(typeof(TextureManager), nameof(WriteAll))));
-        
-        Command export = new Command("export_main_tex", "[prefabName]: export creature main texture", args =>
+    }
+
+    public static void ExportTextureOrPrefabTextures(Terminal context, string input)
+    {
+        if (string.IsNullOrEmpty(input))
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName)) return false;
-            
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null) return false;
+            context.LogWarning("Specify name");
+            return;
+        }
+
+        if (GetAllTextures().TryGetValue(input, out Texture2D? texture))
+        {
+            Export(texture, FileManager.ExportFolder);
+            context.AddString("Exported texture: " + texture.name);
+        }
+        else
+        {
+            GameObject? prefab = PrefabManager.GetPrefab(input);
+            if (prefab == null)
+            {
+                context.LogWarning($"Failed to find prefab: {input}");
+                return;
+            }
 
             HashSet<Material> materials = prefab.GetAllMaterials();
 
+            int count = 0;
             foreach (Material? material in materials)
             {
-                Save(material, FileManager.ExportFolder);
+                if (Save(material, FileManager.ExportFolder)) ++count;
             }
-            
-            return true;
-        }, PrefabManager.GetAllPrefabNames<Character>);
-
-        Command save = new Command("export_tex", "[textureName]: export texture as png", args =>
-        {   
-            if (args.Length < 3) return false;
-
-            string texName = string.Join(" ", args.Args.Skip(2));
-            if (string.IsNullOrEmpty(texName)) return false;
-
-            if (!m_cachedTextures.TryGetValue(texName, out Texture2D? texture))
-            {
-                MonsterDBPlugin.LogWarning("Failed to find texture");
-                return true;
-            }
-            Export(texture, FileManager.ExportFolder);
-            return true;
-        }, m_cachedTextures.Keys.ToList);
-
-        Command search = new Command("search_tex", "search texture names", args =>
-        {
-            if (args.Length < 3) return true;
-
-            string query = string.Join(" ", args.Args.Skip(2));
-            List<string> names = m_cachedTextures.Keys.ToList();
-            for (int i = 0; i < names.Count; ++i)
-            {
-                string? name = names[i];
-                if (name.ToLower().Contains(query.ToLower()))
-                {
-                    MonsterDBPlugin.LogInfo(name);
-                }
-            }
-            return true;
-        }, () => m_cachedTextures.Keys.ToList());
-
-        Command searchSprite = new Command("search_sprite", "search sprite names", args =>
-        {
-            if (args.Length < 3) return true;
-
-            string query = string.Join(" ", args.Args.Skip(2));
-            List<string> names = m_cachedSprites.Keys.ToList();
-            for (int i = 0; i < names.Count; ++i)
-            {
-                var name = names[i];
-                if (name.ToLower().Contains(query.ToLower()))
-                {
-                    MonsterDBPlugin.LogInfo(name);
-                }
-            }
-            return true;
-        }, m_cachedSprites.Keys.ToList);
-
-        Command exportSprite = new Command("export_sprite", "[spriteName]: export sprite texture as png", args =>
-        {
-            if (args.Length < 3) return true;
-
-            string name = string.Join(" ", args.Args.Skip(2));
-            Sprite? sprite = GetSprite(name, null);
-            if (sprite == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find sprite: {args[2]}");
-                return true;
-            }
-            
-            ExportSprite(sprite, FileManager.ExportFolder);
-            
-            return true;
-        }, m_cachedSprites.Keys.ToList);
+            context.AddString($"Exported prefab: {prefab.name} textures (total: {count})");
+        }
     }
+    
+    [Obsolete]
+    public static void ExportMainTextures(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetStringFrom(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+            
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        HashSet<Material> materials = prefab.GetAllMaterials();
+
+        foreach (Material? material in materials)
+        {
+            Save(material, FileManager.ExportFolder);
+        }
+    }
+
+    [Obsolete]
+    public static void ExportTexture(Terminal.ConsoleEventArgs args)
+    {
+        string texName = args.GetStringFrom(2);
+        if (string.IsNullOrEmpty(texName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        if (!m_cachedTextures.TryGetValue(texName, out Texture2D? texture))
+        {
+            args.Context.LogWarning("Failed to find texture");
+            return;
+        }
+        Export(texture, FileManager.ExportFolder);
+    }
+
+    [Obsolete]
+    public static List<string> GetTextureOptions(int i, string word) => i switch
+    {
+        2 => m_cachedTextures.Keys.ToList(),
+        _ => new List<string>()
+    };
+    
+    [Obsolete]
+    public static void SearchTextures(Terminal.ConsoleEventArgs args)
+    {
+        string query = args.GetStringFrom(2);
+        List<string> names = m_cachedTextures.Keys.ToList();
+        for (int i = 0; i < names.Count; ++i)
+        {
+            string? name = names[i];
+            if (name.ToLower().Contains(query.ToLower()))
+            {
+                args.Context.AddString("- " + name);
+                MonsterDBPlugin.LogInfo(name);
+            }
+        }
+    }
+
+    [Obsolete]
+    public static void SearchSprites(Terminal.ConsoleEventArgs args)
+    {
+        string query = args.GetStringFrom(2);
+        List<string> names = m_cachedSprites.Keys.ToList();
+        for (int i = 0; i < names.Count; ++i)
+        {
+            string? name = names[i];
+            if (name.ToLower().Contains(query.ToLower()))
+            {
+                args.Context.AddString("- " + name);
+                MonsterDBPlugin.LogInfo(name);
+            }
+        }
+    }
+
+    [Obsolete]
+    public static List<string> GetSpriteOptions(int i, string word) => i switch
+    {
+        2 => GetSpriteNames(),
+        _ => new List<string>()
+    };
+
+    public static List<string> GetSpriteNames() => m_cachedSprites.Keys.ToList();
+
+    public static void ExportSprite(Terminal context, string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            context.LogWarning("Specify sprite name");
+            return;
+        }
+        
+        Sprite? sprite = GetSprite(input, null);
+        if (sprite == null)
+        {
+            context.LogWarning($"Failed to find sprite: {input}");
+            return;
+        }
+            
+        ExportSprite(sprite, FileManager.ExportFolder);
+    }
+    
+    [Obsolete]
+    public static void ExportSprite(Terminal.ConsoleEventArgs args)
+    {
+        string name = args.GetStringFrom(2);
+        if (string.IsNullOrEmpty(name))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+        Sprite? sprite = GetSprite(name, null);
+        if (sprite == null)
+        {
+            args.Context.LogWarning($"Failed to find sprite: {name}");
+            return;
+        }
+            
+        ExportSprite(sprite, FileManager.ExportFolder);
+    }
+
 
     public static HashSet<Material> GetAllMaterials(this GameObject prefab)
     {
@@ -206,7 +284,7 @@ public static class TextureManager
         return defaultValue;
     }
 
-    private static Dictionary<string, Sprite> GetAllSprites(bool clear = false)
+    public static Dictionary<string, Sprite> GetAllSprites(bool clear = false)
     {
         if (clear) m_cachedSprites.Clear();
         if (m_cachedSprites.Count > 0) return m_cachedSprites;
@@ -218,7 +296,7 @@ public static class TextureManager
         return m_cachedSprites;
     }
 
-    public static void Export(Texture texture, string path)
+    private static void Export(Texture texture, string path)
     {
         string fileName = texture.name;
         string filePath = Path.Combine(path, fileName + ".png");
@@ -226,12 +304,14 @@ public static class TextureManager
         
         try
         {
+            
             RenderTexture tmp = RenderTexture.GetTemporary(texture.width, texture.height, 0,
-                RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+                RenderTextureFormat.Default, RenderTextureReadWrite.sRGB);
             Graphics.Blit(texture, tmp);
             RenderTexture previous = RenderTexture.active;
             RenderTexture.active = tmp;
             Texture2D newTex = new Texture2D(texture.width, texture.height);
+            
             newTex.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
             newTex.Apply();
 
@@ -278,7 +358,7 @@ public static class TextureManager
                 atlas.height, 
                 0,
                 RenderTextureFormat.Default, 
-                RenderTextureReadWrite.Linear);
+                RenderTextureReadWrite.sRGB);
         
             Graphics.Blit(atlas, tmp);
             RenderTexture previous = RenderTexture.active;
@@ -303,16 +383,17 @@ public static class TextureManager
             MonsterDBPlugin.LogWarning("Failed to save sprite: " + fileName);
         }
     }
-    
-    public static void Save(Material material, string path)
+
+    private static bool Save(Material material, string path)
     {
-        if (material == null) return;
-        if (material.GetInstanceID() < 0) return;
+        if (material == null) return false;
+        if (material.GetInstanceID() < 0) return false;
         
         Texture? texture = material.mainTexture;
-        if (texture == null) return;
+        if (texture == null) return false;
 
         Export(texture, path);
+        return true;
     }
 
     private static void ReadTexture(string filePath)

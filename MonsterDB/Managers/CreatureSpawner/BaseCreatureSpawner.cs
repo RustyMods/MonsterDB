@@ -5,10 +5,15 @@ using YamlDotNet.Serialization;
 namespace MonsterDB;
 
 [Serializable]
-public class BaseCreatureSpawner : Header
+public sealed class BaseCreatureSpawner : Header
 {
     [YamlMember(Order = 6)] public CreatureSpawnerRef? CreatureSpawner;
     [YamlMember(Order = 7)] public RandomSpawnRef? RandomSpawn;
+    
+    public BaseCreatureSpawner(){}
+
+    public BaseCreatureSpawner(GameObject prefab, bool isClone = false, string clonedFrom = "") =>
+        Setup(prefab, isClone, clonedFrom);
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
         base.Setup(prefab, isClone, source);

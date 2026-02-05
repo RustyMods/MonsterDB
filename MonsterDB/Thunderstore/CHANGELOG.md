@@ -1,3 +1,8 @@
+## 0.2.5
+- overhauled commands, instead of individual commands for each type, now you can do `monsterdb export Character Greydwarf` | `monsterdb export Item SwordIron` instead of `monsterdb write Greydwarf` | `monsterdb write_item SwordIron`
+- improved terminal output when commands are ran
+
+
 ## 0.2.4
 - cleaned up serialization
 - added support for scale to be set as a float instead of (x, y, z): e.g. `scale: 1.5` which will convert to: `scale: { x: 1.5, y: 1.5, z: 1.5 }` or `scale: { x: 1.5 }` which will convert to: `scale: x: 1.5, y: 1, z: 1`

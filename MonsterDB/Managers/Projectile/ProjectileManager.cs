@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -6,59 +7,61 @@ namespace MonsterDB;
 
 public static class ProjectileManager
 {
-    public static void Setup()
+    [Obsolete]
+    public static void WriteProjectileYML(Terminal.ConsoleEventArgs args)
     {
-        var save = new Command("write_projectile", "[prefabName]", args =>
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
             
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            if (prefab == null)
-            {
-                return true;
-            }
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
 
-            if (!prefab.GetComponent<Projectile>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid, missing projectile component");
-                return true;
-            }
+        if (!prefab.GetComponent<Projectile>())
+        {
+            args.Context.LogWarning("Invalid, missing projectile component");
+            return;
+        }
 
-            Write(prefab);
-            
-            return true;
-        }, PrefabManager.GetAllPrefabNames<Projectile>);
-
-        var clone = new Command("clone_projectile", "[prefabName][newName]: clones projectile and writes YML file",
-            args =>
-            {
-                string prefabName = args.GetString(2);
-                string newName = args.GetString(3);
-                if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return false;
-                }
-            
-                GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-
-                if (prefab == null)
-                {
-                    return true;
-                }
-
-                TryClone(prefab, newName, out _);
-                
-                return true;
-            }, PrefabManager.GetAllPrefabNames<Projectile>, adminOnly: true);
+        Write(prefab);
     }
-    
+
+    [Obsolete]
+    public static List<string> GetProjectileOptions(int i, string word) => i switch
+    {
+        2 => PrefabManager.GetAllPrefabNames<Projectile>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void CloneProjectile(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+            
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        TryClone(prefab, newName, out _);
+    }
     public static bool TrySave(GameObject prefab, out BaseProjectile data, bool isClone = false, string source = "")
     {
 #pragma warning disable CS8601 // Possible null reference assignment.

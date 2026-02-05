@@ -100,6 +100,7 @@ public static class VersionHandshake
             __instance.m_connectionFailedError.fontSizeMax = 25;
             __instance.m_connectionFailedError.fontSizeMin = 15;
             __instance.m_connectionFailedError.text += "\n" + ConnectionError;
+            MonsterDBPlugin.LogFatal(ConnectionError);
         }
     }
 

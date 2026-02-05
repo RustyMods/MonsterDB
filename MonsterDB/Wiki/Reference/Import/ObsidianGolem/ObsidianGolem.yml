@@ -7,23 +7,23 @@ IsCloned: true
 Character:
   name: $enemy_obsidiangolem
   randomArmor:
-  - MDB_ObsidianGolem_StoneGolem_hat
+  - ObsidianGolem_hat
   randomSets:
   - name: Spike
     items:
     - stonegolem_attack1_spike
     - stonegolem_attack3_spikesweep
-    - MDB_ObsidianGolem_StoneGolem_spikes
+    - ObsidianGolem_spikes
   - name: Sledge
     items:
     - stonegolem_attack2_left_groundslam
     - stonegolem_attack_doublesmash
-    - MDB_ObsidianGolem_StoneGolem_clubs
+    - ObsidianGolem_clubs
   deathEffects:
     effectPrefabs:
     - prefab: sfx_stonegolem_death
     - prefab: ObsidianGolem_ragdoll
-    - prefab: vfx_stonegolem_death
+    - prefab: vfx_obsidiangolem_death
 Visuals:
   renderers:
   - prefab: Cube.001

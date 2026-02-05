@@ -24,7 +24,7 @@ public static class FactionManager
         customFactions = new Dictionary<Character.Faction, Faction>();
         factions = new  Dictionary<string, Character.Faction>();
         FilePath = Path.Combine(ConfigManager.DirectoryPath, FileName);
-        sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Factions", "");
+        sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, $"{MonsterDBPlugin.ModName}.ServerSync.Factions", "");
         sync.ValueChanged += OnSyncChange;
         _fileWatcherEnabled = ConfigManager.config("File Watcher", "Faction File", Toggle.On,
             "If on, Faction.yml changed, renamed or created will trigger update");

@@ -26,7 +26,7 @@ public class Clone
     internal GameObject? Create()
     {
         if (Loaded) return Prefab;
-        Source ??= PrefabManager.GetPrefab(NewName);
+        Source ??= PrefabManager.GetPrefab(SourceName);
         if (Source == null) return null;
         
         Prefab = UnityEngine.Object.Instantiate(Source, CloneManager.GetRootTransform(), false);

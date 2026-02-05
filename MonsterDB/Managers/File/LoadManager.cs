@@ -23,32 +23,36 @@ public static class LoadManager
         files = new BaseAggregate();
         sync =  new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Files", "");
         sync.ValueChanged += OnSyncChange;
-        
-        Command reload = new Command("reload", "reloads all files in import folder", _ =>
-        {
-            ResetAll();
-            loadList.Clear();
-            SpawnManager.Clear();
-            CloneManager.Clear();
-            FileManager.started = false;
-            FileManager.Start();
-            LoadClones();
-            Load();
-            return true;
-        }, adminOnly: true);
 
         Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(Game), nameof(Game.Logout)),
             new HarmonyMethod(AccessTools.Method(typeof(LoadManager), nameof(Patch_Game_Logout))));
         harmony.Patch(AccessTools.Method(typeof(FejdStartup), nameof(FejdStartup.OnStartGame)),
             new HarmonyMethod(AccessTools.Method(typeof(FileManager), nameof(FileManager.Start))));
+    }
 
+    public static void ReloadAll(Terminal.ConsoleEventArgs args)
+    {
+        Reload();
+        args.Context.AddString("Reloaded all files");
+    }
+
+    private static void Reload()
+    {
+        ResetAll<Header>();
+        loadList.Clear();
+        SpawnManager.Clear();
+        CloneManager.Clear();
+        FileManager.started = false;
+        FileManager.Start();
+        LoadClones();
+        Load();
     }
 
     private static void Patch_Game_Logout()
     {
         files = new BaseAggregate();
-        ResetAll();
+        ResetAll<Header>();
         loadList.Clear();
         SpawnManager.Clear();
         CloneManager.Clear();
@@ -64,27 +68,48 @@ public static class LoadManager
         .Select(x => x.Key)
         .ToList();
 
-    public static void UpdateSync()
+    public static List<T> GetOriginals<T>() where T : Header => originals
+            .Where(x => x.Value is T)
+            .Select(x => x.Value as T)
+            .ToList()!;
+
+    public static bool TryGetOriginal<T>(string prefabName, out T output) where T : Header
     {
-        if (!ZNet.instance || !ZNet.instance.IsServer()) return;
-        sync.Value = ConfigManager.Serialize(files);
+        output = null;
+        if (!originals.TryGetValue(prefabName, out Header header)) return false;
+        if (header is not T result) return false;
+        output = result;
+        return true;
     }
 
-    private static void ResetAll()
+    public static void ResetAll<T>() where T : Header
     {
         if (loadList.Count <= 0 || originals.Count <= 0) return;
-        
-        MonsterDBPlugin.LogInfo("Starting reset");
         resetting = true;
-
         foreach (Header? data in loadList)
         {
+            if (data is not T) continue;
             if (!originals.TryGetValue(data.Prefab, out Header? original)) continue;
-            
             data.CopyFields(original);
             data.Update();
         }
         resetting = false;
+    }
+
+    public static bool Reset<T>(string prefabName) where T : Header
+    {
+        Header? target = loadList.Find(x => x.Prefab == prefabName);
+        if (target == null) return false;
+        if (!TryGetOriginal(prefabName, out T result)) return false;
+        target.CopyFields(result);
+        target.Update();
+        return true;
+    }
+
+    public static void UpdateSync()
+    {
+        if (!ZNet.instance || !ZNet.instance.IsServer()) return;
+        sync.Value = ConfigManager.Serialize(files);
     }
     
     private static void OnSyncChange()
@@ -96,7 +121,7 @@ public static class LoadManager
             BaseAggregate data = ConfigManager.Deserialize<BaseAggregate>(sync.Value);
             if (string.IsNullOrEmpty(data.PrefabToUpdate))
             {
-                ResetAll();
+                ResetAll<Header>();
                 loadList.Clear();
                 loadList.AddRange(data.Load());
                 LoadClones();
@@ -137,6 +162,7 @@ public static class LoadManager
         int spawnAbilities = 0;
         int visual = 0;
         int spawners = 0;
+        int spawnAreas = 0;
         
         for (int i = 0; i < loadList.Count; ++i)
         {
@@ -205,11 +231,15 @@ public static class LoadManager
                         ++spawners;
                         CreatureSpawnerManager.Clone(prefab, data.Prefab, false);
                         break;
+                    case BaseType.SpawnArea:
+                        ++spawnAreas;
+                        SpawnAreaManager.Clone(prefab, data.Prefab, false);
+                        break;
                 }
             }
         }
 
-        int count = players + humanoids + characters + eggs + items + fish + projectiles + ragdoll + spawnAbilities + visual + spawners;
+        int count = players + humanoids + characters + eggs + items + fish + projectiles + ragdoll + spawnAbilities + visual + spawners + spawnAreas;
 
         StringBuilder sb = new();
         sb.Append("Loading clones: ");
@@ -224,6 +254,7 @@ public static class LoadManager
         if (spawnAbilities > 0) sb.Append($"{spawnAbilities} abilities, ");
         if (visual > 0) sb.Append($"{visual} prefabs, ");
         if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
+        if (spawnAreas > 0) sb.Append($"{spawnAreas} spawn areas, ");
         sb.Append($"(total: {count})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());
@@ -248,6 +279,7 @@ public static class LoadManager
         int spawnAbilities = 0;
         int visual = 0;
         int spawners = 0;
+        int spawnAreas = 0;
         
         for (int i = 0; i < ordered.Count; ++i)
         {
@@ -289,12 +321,14 @@ public static class LoadManager
                 case BaseType.CreatureSpawner:
                     ++spawners;
                     break;
-                    
+                case BaseType.SpawnArea:
+                    ++spawnAreas;
+                    break;
             }
         }
 
         int count = characters + humanoids + players + eggs + items + fish + projectiles + ragdoll + spawnAbilities +
-                    visual + spawners;
+                    visual + spawners + spawnAreas;
         
         StringBuilder sb = new();
         sb.Append("Modified: ");
@@ -309,6 +343,7 @@ public static class LoadManager
         if (spawnAbilities > 0) sb.Append($"{spawnAbilities} abilities, ");
         if (visual > 0) sb.Append($"{visual} prefabs, ");
         if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
+        if (spawnAreas > 0) sb.Append($"{spawnAreas} spawn areas, ");
         sb.Append($"(total: {count})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());

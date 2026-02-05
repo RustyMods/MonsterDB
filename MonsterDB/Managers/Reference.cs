@@ -221,6 +221,10 @@ public abstract class Reference
                     targetType == typeof(string):
                     target.SetValue(this, mat.name);
                     break;
+                case List<SpawnArea.SpawnData> spawns when
+                    targetType == typeof(List<SpawnAreaRef.SpawnDataRef>):
+                    target.SetValue(this, spawns.ToSpawnDataRefList());
+                    break;
             }
         }
         catch (Exception ex)
@@ -389,9 +393,13 @@ public abstract class Reference
         }
         else if (targetType == typeof(Material) && 
                  newValue is string matName)
-
         {
             UpdateMaterial(target, targetField, matName, targetName, log);
+        }
+        else if (targetType == typeof(List<SpawnArea.SpawnData>) &&
+                 newValue is List<SpawnAreaRef.SpawnDataRef> spawns)
+        {
+            UpdateSpawnDataList(target, targetField, spawns, targetName, log);
         }
     }
 
@@ -483,6 +491,14 @@ public abstract class Reference
             if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {string.Join(", ", sprites.Select(x => x.name))}");
             targetField.SetValue(target, sprites);
         }
+    }
+
+    private void UpdateSpawnDataList<T>(T target, FieldInfo targetField, List<SpawnAreaRef.SpawnDataRef> spawns,
+        string targetName, bool log)
+    {
+        var output = spawns.ToSpawnAreaSpawnDataList();
+        targetField.SetValue(target, output);
+        if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: SpawnArea.SpawnData[{spawns.Count}]");
     }
 
     private void UpdateVector3<T>(T target, FieldInfo targetField, Vector3Ref vector, string targetName, bool log)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -6,106 +7,133 @@ namespace MonsterDB;
 
 public static class FishManager
 {
-    public static void Setup()
+    [Obsolete]
+    public static void WriteFishYML(Terminal.ConsoleEventArgs args)
     {
-        Command save = new Command("write_fish", $"[prefabName]: write fish YML to {FileManager.ExportFolder} folder", args =>
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
             
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            if (prefab == null)
-            {
-                return true;
-            }
-
-            if (!prefab.GetComponent<ItemDrop>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid, missing ItemDrop component");
-                return true;
-            }
-
-            Write(prefab);
-            return true;
-        });
-
-        Command saveAll = new Command("write_all_fish", $"write all fish YML to {FileManager.ExportFolder} folder", _ =>
+        if (prefab == null)
         {
-            List<GameObject> list = PrefabManager.GetAllPrefabs<Fish>();
-            foreach (GameObject? fish in list)
-            {
-                Write(fish);
-            }
-            return true;
-        });
-        
-        Command read = new Command("mod_fish", $"[fileName]: read fish reference from {FileManager.ImportFolder} folder", args =>
+            return;
+        }
+
+        if (!prefab.GetComponent<ItemDrop>())
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
-            Read(filePath);
-            return true;
-        }, FileManager.GetModFileNames, adminOnly: true);
+            args.Context.LogWarning("Invalid, missing ItemDrop component");
+            return;
+        }
+        Write(prefab);
+    }
 
-        Command revert = new Command("revert_fish", "[prefabName]: revert fish to factory settings", args =>
+    [Obsolete]
+    public static List<string> GetFishOptions(int i, string word) => i switch
+    {
+        2 => PrefabManager.GetAllPrefabNames<Fish>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void WriteAllFishYML(Terminal.ConsoleEventArgs args)
+    {
+        List<GameObject> list = PrefabManager.GetAllPrefabs<Fish>();
+        foreach (GameObject? fish in list)
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogInfo("Invalid prefab");
-                return true;
-            }
+            Write(fish);
+        }
+    }
 
-            if (LoadManager.GetOriginal<BaseFish>(prefabName) is not {} fish)
-            {
-                MonsterDBPlugin.LogInfo("Original data not found");
-                return true;
-            }
-            
-            fish.Update();
-            LoadManager.UpdateSync();
-            
-            return true;
-        }, optionsFetcher: LoadManager.GetOriginalKeys<BaseFish>, adminOnly: true);
-
-        Command clone = new Command("clone_fish", "[prefabName][newName]: must be a fish", args =>
+    [Obsolete]
+    public static void UpdateFishYML(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            string prefabName = args.GetString(2);
-            string newName = args.GetString(3);
-            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null)
-            {
-                return true;
-            }
-
-            if (!prefab.GetComponent<ItemDrop>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing ItemDrop component");
-                return true;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
             
-            Clone(prefab, newName);
-            return true;
-        }, optionsFetcher: PrefabManager.GetAllPrefabNames<Fish>, adminOnly: true);
+        string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
+        Read(filePath);
+    }
+
+    [Obsolete]
+    public static void ResetFish(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid prefab");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<BaseFish>(prefabName) is not {} fish)
+        {
+            args.Context.LogWarning("Original data not found");
+            return;
+        }
+            
+        fish.Update();
+        LoadManager.UpdateSync();
+    }
+
+    public static void ResetFish(Terminal context, string prefabName)
+    {
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            context.LogWarning("Invalid prefab");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<BaseFish>(prefabName) is not {} fish)
+        {
+            context.LogWarning("Original data not found");
+            return;
+        }
+            
+        fish.Update();
+        LoadManager.UpdateSync();
+    }
+
+    [Obsolete]
+    public static List<string> GetResetFishOptions(int i, string word) => i switch
+    {
+        2 => LoadManager.GetOriginalKeys<BaseFish>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void CloneFish(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        if (!prefab.GetComponent<ItemDrop>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing ItemDrop component");
+            return;
+        }
+            
+        Clone(prefab, newName);
     }
     
-
     public static string? Save(GameObject prefab, bool isClone = false, string source = "")
     {
         if (!prefab.GetComponent<ItemDrop>()) return null;

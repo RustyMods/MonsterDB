@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace MonsterDB;
 
 public static class RagdollManager
 {
-    public static bool TrySave(GameObject prefab, out BaseRagdoll ragdoll, bool isClone = false, string source = "")
+    private static bool TrySave(GameObject prefab, out BaseRagdoll ragdoll, bool isClone = false, string source = "")
     {
 #pragma warning disable CS8601 // Possible null reference assignment.
         ragdoll = LoadManager.GetOriginal<BaseRagdoll>(prefab.name);

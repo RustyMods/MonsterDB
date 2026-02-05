@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -20,7 +21,7 @@ public static class LocalizationManager
     {
         FolderPath = Path.Combine(ConfigManager.DirectoryPath, FolderName);
         localizations = new Dictionary<string, string[]>();
-        sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Localization", "");
+        sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, $"{MonsterDBPlugin.ModName}.ServerSync.Localization", "");
         sync.ValueChanged += OnSyncChange;
         _fileWatcherEnabled = ConfigManager.config("File Watcher", FolderName, Toggle.On,
             $"If on, YML files under {FolderName} folder will trigger update on changed, created, or renamed", false);
@@ -33,6 +34,23 @@ public static class LocalizationManager
     
     private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
 
+    private static List<string> ReadAssemblyFile(string resourceName, string folder)
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string path = $"{MonsterDBPlugin.ModName}.{folder}.{resourceName}";
+        using Stream? stream = assembly.GetManifestResourceStream(path);
+        if (stream == null)
+            throw new FileNotFoundException($"Embedded resource '{resourceName}' not found in assembly '{assembly.FullName}'.");
+
+        using StreamReader reader = new StreamReader(stream);
+        List<string> lines = new List<string>();
+        while (!reader.EndOfStream)
+        {
+            lines.Add(reader.ReadLine() ?? string.Empty);
+        }
+        return lines;
+    }
+    
     public static void Start()
     {
         if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
@@ -41,17 +59,7 @@ public static class LocalizationManager
         if (files.Length <= 0)
         {
             string filePath = Path.Combine(FolderPath, "English.yml");
-            List<string> defaultLines = new()
-            {
-                "# Insert key: value translation pairs",
-                "# Name of file without extension dictates language (e.g. English.yml)",
-                "# Any lines that start with # will be ignored",
-                "enemy_human: Human",
-                "hud_ride: Ride",
-                "hud_procreate_pregnant: Expecting",
-                "hud_procreate_bonding: Bonding",
-                "hud_growup_maturing: Maturing"
-            };
+            List<string> defaultLines = ReadAssemblyFile("English.yml", "translations");
             File.WriteAllLines(filePath, defaultLines);
             localizations["English"] = defaultLines.ToArray();
         }

@@ -2,6 +2,7 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
+using BepInEx.Logging;
 using HarmonyLib;
 using ServerSync;
 using YamlDotNet.Serialization;
@@ -42,17 +43,6 @@ public static class ConfigManager
     private static readonly string ConfigFileFullPath;
     public static readonly string DirectoryPath;
     
-    [Flags]
-    public enum LogLevel
-    {
-        None = 0,
-        Debug = 1, 
-        Warning = 2, 
-        Error = 4,
-        Info = 8,
-        All = Debug | Warning | Error | Info
-    }
-
     private static readonly ConfigEntry<LogLevel> logLevels;
     private static readonly ConfigEntry<Toggle> detailedDebugLogs;
 
@@ -86,7 +76,7 @@ public static class ConfigManager
         _ = ConfigSync.AddLockingConfigEntry(serverConfigLocked);
 
         logLevels = config("1 - General", "Log Levels", LogLevel.All, "Set log levels", false);
-        detailedDebugLogs = config("1 - General", "Detailed Debug Logs", Toggle.Off, "If on, debug logs will be detailed");
+        detailedDebugLogs = config("1 - General", "Detailed Debug Logs", Toggle.Off, "If on, debug logs will be detailed", false);
     }
 
     public static void Start()

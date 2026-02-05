@@ -11,7 +11,7 @@ namespace MonsterDB;
 
 public static class RaidManager
 {
-    private const string FolderName = "Raids";
+    public const string FolderName = "Raids";
     private static readonly string FolderPath;
     private static Dictionary<string, RandomEventRef> raids;
     private static readonly Dictionary<string, bool> defaultEnable;
@@ -28,79 +28,104 @@ public static class RaidManager
         if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
 
         Read();
-        
-        Harmony harmony = MonsterDBPlugin.harmony;
-        harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.SetupLocations)),
-            postfix: new HarmonyMethod(typeof(RaidManager), nameof(Patch_ZoneSystem_SetupLocations)));
 
         disableAll = ConfigManager.config("Raids", "Disable All", Toggle.Off, "If on, all raids are disabled");
         disableAll.SettingChanged += OnDisableAllChanged;
     }
+
+    [Obsolete]
+    public static void WriteAllRaidYML(Terminal.ConsoleEventArgs args)
+    {
+        if (!RandEventSystem.m_instance)
+        {
+            args.Context.LogWarning("Random Event System not active");
+            return;
+        }
+
+        List<RandomEvent> list = RandEventSystem.instance.m_events;
+        for (int i = 0; i < list.Count; ++i)
+        {
+            RandomEvent? raid = list[i];
+            Write(raid);
+        }
+    }
+
+    public static void WriteRaidYML(Terminal context, string input)
+    {
+        if (!RandEventSystem.m_instance)
+        {
+            context.LogWarning("Random Event System not active");
+            return;
+        }
+        
+        if (string.IsNullOrEmpty(input))
+        {
+            context.LogWarning("Invalid parameters");
+            return;
+        }
+        List<RandomEvent> list = RandEventSystem.instance.m_events;
+            
+        RandomEvent? raid = list.FirstOrDefault(x => string.Equals(x.m_name, input, StringComparison.CurrentCultureIgnoreCase));
+        if (raid == null)
+        {
+            context.LogWarning($"Failed to find raid: {input}");
+            return;
+        }
+
+        Write(raid);
+    }
+
+    [Obsolete]
+    public static void WriteRaidYML(Terminal.ConsoleEventArgs args)
+    {
+        if (!RandEventSystem.m_instance)
+        {
+            args.Context.LogWarning("Random Event System not active");
+            return;
+        }
+        
+        string name = args.GetStringFrom(2);
+        if (string.IsNullOrEmpty(name))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+        List<RandomEvent> list = RandEventSystem.instance.m_events;
+            
+        RandomEvent? raid = list.FirstOrDefault(x => string.Equals(x.m_name, name, StringComparison.CurrentCultureIgnoreCase));
+        if (raid == null)
+        {
+            args.Context.LogWarning($"Failed to find raid: {name}");
+            return;
+        }
+
+        Write(raid);
+    }
+
+    [Obsolete]
+    public static List<string> GetRaidOptions(int i, string word) => i switch
+    {
+        2 => GetRaidNames(),
+        _ => new List<string>()
+    };
+
+    public static List<string> GetRaidNames() => RandEventSystem.instance
+        ? RandEventSystem.instance.m_events.Select(x => x.m_name).ToList()
+        : new List<string>();
+
+    [Obsolete]
+    public static void UpdateRaid(Terminal.ConsoleEventArgs args)
+    {
+        Read();
+        Update();
+        args.Context.AddString("Updated all raids");
+    }
     
     public static void Start()
     {
-        Command exportAll = new Command("write_all_raids", "", _ =>
-        {
-            if (!RandEventSystem.m_instance)
-            {
-                MonsterDBPlugin.LogWarning("Random Event System not active");
-                return true;
-            }
-
-            List<RandomEvent> list = RandEventSystem.instance.m_events;
-            for (int i = 0; i < list.Count; ++i)
-            {
-                var raid = list[i];
-                Write(raid);
-            }
-            return true;
-        });
-
-        Command export = new Command("write_raid", "", args =>
-        {
-            if (!RandEventSystem.m_instance)
-            {
-                MonsterDBPlugin.LogWarning("Random Event System not active");
-                return true;
-            }
-            
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-
-            string name = string.Join(" ", args.Args.Skip(2));
-            if (string.IsNullOrEmpty(name))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
-            List<RandomEvent> list = RandEventSystem.instance.m_events;
-            
-            RandomEvent? raid = list.FirstOrDefault(x => string.Equals(x.m_name, name, StringComparison.CurrentCultureIgnoreCase));
-            if (raid == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find raid: {name}");
-                return true;
-            }
-
-            Write(raid);
-            
-            return true;
-        }, () =>
-        {
-            return RandEventSystem.instance ? RandEventSystem.instance.m_events.Select(x => x.m_name).ToList() : new List<string>();
-        });
-
-        Command update = new Command("update_raids",
-            $"Read all raid files from {FolderName} and update Random Event System",
-            _ =>
-            {
-                Read();
-                Update();
-                return true;
-            }, adminOnly: true);
+        Harmony harmony = MonsterDBPlugin.harmony;
+        harmony.Patch(AccessTools.Method(typeof(ZoneSystem), nameof(ZoneSystem.SetupLocations)),
+            postfix: new HarmonyMethod(typeof(RaidManager), nameof(Patch_ZoneSystem_SetupLocations)));
     }
 
     public static void Init(ZNet net)
@@ -128,7 +153,7 @@ public static class RaidManager
         File.WriteAllText(filePath, text);
     }
 
-    private static void Read()
+    public static void Read()
     {
         string[] files = Directory.GetFiles(FolderPath, "*.yml");
         for (int i = 0; i < files.Length; ++i)
@@ -148,7 +173,7 @@ public static class RaidManager
         }
     }
 
-    private static void Update()
+    public static void Update()
     {
         if (!RandEventSystem.instance) return;
         

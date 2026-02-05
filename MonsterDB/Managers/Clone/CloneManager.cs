@@ -47,4 +47,15 @@ public static class CloneManager
         prefabs.Clear();
         clones.Clear();
     }
+
+    public static bool IsClone(string prefabName, out string sourceName)
+    {
+        if (!clones.TryGetValue(prefabName, out Clone clone))
+        {
+            sourceName = "";
+            return false;
+        }
+        sourceName = clone.SourceName;
+        return true;
+    }
 }

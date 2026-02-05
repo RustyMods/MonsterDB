@@ -1,163 +1,187 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace MonsterDB;
 
 public static class ItemManager
 {
-    public static void Setup()
+    [Obsolete]
+    public static void WriteItemYML(Terminal.ConsoleEventArgs args)
     {
-        Command save = new Command("write_item", $"[prefabName]: write item YML to {FileManager.ExportFolder} folder", args =>
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
             
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            if (prefab == null)
-            {
-                return true;
-            }
-
-            if (!prefab.GetComponent<ItemDrop>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid, missing ItemDrop component");
-                return true;
-            }
-
-            Write(prefab);
-            return true;
-        }, PrefabManager.GetAllPrefabNames<ItemDrop>);
-        
-        Command read = new Command("mod_item", $"[fileName]: read item YML from {FileManager.ImportFolder} folder", args =>
+        if (prefab == null)
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
-            Read(filePath);
-            return true;
-        }, FileManager.GetModFileNames, adminOnly: true);
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
 
-        Command revert = new Command("revert_item", "[prefabName]: revert item to factory settings", args =>
+        if (!prefab.GetComponent<ItemDrop>())
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogInfo("Invalid prefab");
-                return true;
-            }
+            args.Context.LogWarning("Invalid, missing ItemDrop component");
+            return;
+        }
 
-            if (LoadManager.GetOriginal<BaseItem>(prefabName) is not {} item)
-            {
-                MonsterDBPlugin.LogInfo("Original data not found");
-                return true;
-            }
-            
-            item.Update();
-            LoadManager.files.Add(item);
-            LoadManager.UpdateSync();
-            
-            return true;
-        }, optionsFetcher: LoadManager.GetOriginalKeys<BaseItem>, adminOnly: true);
-
-        Command clone = new Command("clone_item", "[prefabName][newName]: must be an item", args =>
-        {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-
-            string prefabName = args.GetString(2);
-            string newName = args.GetString(3);
-            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null)
-            {
-                return true;
-            }
-
-            if (!prefab.GetComponent<ItemDrop>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing ItemDrop component");
-                return true;
-            }
-            
-            TryClone(prefab, newName, out _);
-            return true;
-        }, optionsFetcher: PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
-
-        Command search = new Command("search_item", "search item by name", args =>
-        {
-            string query = args.GetString(2);
-            List<string> names = PrefabManager.SearchCache<ItemDrop>(query);
-            for (int i = 0; i < names.Count; ++i)
-            {
-                MonsterDBPlugin.LogInfo(names[i]);
-            }
-            
-            return true;
-        }, () => PrefabManager.SearchCache<ItemDrop>(""));
-
-        Command create = new Command("create_item", "[prefabName]: create item from non-item prefabs", args =>
-        {
-            string prefabName = args.GetString(2);
-            string newName = args.GetString(3);
-            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null)
-            {
-                return true;
-            }
-
-            if (prefab.GetComponent<Character>())
-            {
-                MonsterDBPlugin.LogWarning("Cannot convert creature into an item");
-                return true;
-            }
-
-            if (prefab.GetComponent<ItemDrop>())
-            {
-                TryClone(prefab, newName, out _);
-                return true;
-            }
-
-            if (!prefab.GetComponent<ZNetView>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing ZNetView");
-                return true;
-            }
-
-            var colliders = prefab.GetComponentInChildren<Collider>();
-            if (colliders == null)
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing colliders");
-                return true;
-            }
-
-            TryCreateItem(prefab, newName, out _);
-            return true;
-        }, PrefabManager.GetAllPrefabNames<ZNetView>, adminOnly: true);
+        Write(prefab);
     }
 
+    [Obsolete]
+    public static void UpdateItemYML(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+            
+        string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
+        Read(filePath);
+    }
+
+    [Obsolete]
+    public static void ResetItem(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid prefab");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<BaseItem>(prefabName) is not {} item)
+        {
+            args.Context.LogWarning("Original data not found");
+            return;
+        }
+            
+        item.Update();
+        LoadManager.files.Add(item);
+        LoadManager.UpdateSync();
+    }
+
+    public static void ResetItem(Terminal context, string prefabName)
+    {
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            context.LogWarning("Invalid prefab");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<BaseItem>(prefabName) is not {} item)
+        {
+            context.LogWarning("Original data not found");
+            return;
+        }
+            
+        item.Update();
+        LoadManager.files.Add(item);
+        LoadManager.UpdateSync();    
+    }
+    [Obsolete]
+    public static List<string> GetResetItemOptions(int i, string word) => i switch
+    {
+        2 => LoadManager.GetOriginalKeys<BaseItem>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void CloneItem(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        if (!prefab.GetComponent<ItemDrop>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing ItemDrop component");
+            return ;
+        }
+            
+        TryClone(prefab, newName, out _);
+    }
+
+    [Obsolete]
+    public static void SearchItem(Terminal.ConsoleEventArgs args)
+    {
+        string query = args.GetString(2);
+        List<string> names = PrefabManager.SearchCache<ItemDrop>(query);
+        for (int i = 0; i < names.Count; ++i)
+        {
+            args.Context.AddString("- " + names[i]);
+        }
+    }
+
+    [Obsolete]
+    public static List<string> GetSearchItemOptions(int i, string word) => i switch
+    {
+        2 => PrefabManager.SearchCache<ItemDrop>(""),
+        _ => new List<string>()
+    };
+
+    public static void CreateItem(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        if (prefab.GetComponent<Character>())
+        {
+            args.Context.LogWarning("Cannot convert creature into an item");
+            return;
+        }
+
+        if (prefab.GetComponent<ItemDrop>())
+        {
+            TryClone(prefab, newName, out _);
+            return;
+        }
+
+        if (!prefab.GetComponent<ZNetView>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing ZNetView");
+            return;
+        }
+
+        Collider? colliders = prefab.GetComponentInChildren<Collider>();
+        if (colliders == null)
+        {
+            args.Context.LogWarning("Invalid prefab, missing colliders");
+            return;
+        }
+
+        TryCreateItem(prefab, newName, out _);
+    }
     public static bool TrySave(GameObject prefab, out BaseItem item, bool isClone = false, string source = "")
     {
 #pragma warning disable CS8601 // Possible null reference assignment.

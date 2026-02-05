@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using BepInEx.Configuration;
@@ -34,126 +35,145 @@ public static class EggManager
             new HarmonyMethod(AccessTools.Method(typeof(EggManager), nameof(Patch_EggGrow_UpdateEffects))));
     }
 
-    public static void Setup()
+    [Obsolete]
+    public static void WriteEggYML(Terminal.ConsoleEventArgs args)
     {
-        Command save = new Command("write_egg", $"[prefabName]: save egg reference to {FileManager.ExportFolder} folder",
-            args =>
-            {
-                string prefabName = args.GetString(2);
-                if (string.IsNullOrEmpty(prefabName))
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return false;
-                }
-
-                GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-
-                if (prefab == null)
-                {
-                    MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
-                    return true;
-                }
-
-                if (!prefab.GetComponent<ItemDrop>())
-                {
-                    MonsterDBPlugin.LogWarning("Invalid, missing ItemDrop component");
-                    return true;
-                }
-                
-                bool isClone = false;
-                string source = "";
-
-                if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
-                {
-                    isClone = true;
-                    source = c.SourceName;
-                }
-
-                Write(prefab, isClone, source);
-                return true;
-            }, PrefabManager.GetAllPrefabNames<ItemDrop>);
-
-        Command saveAll = new Command("write_all_egg", $"save all egg references to {FileManager.ExportFolder} folder", _ =>
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            List<GameObject> prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
-            for (var i = 0; i < prefabs.Count; ++i)
-            {
-                var prefab = prefabs[i];
-                Write(prefab);
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
 
-            return true;
-        });
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-        Command read = new Command("mod_egg", $"[fileName]: read egg reference from {FileManager.ImportFolder} folder",
-            args =>
-            {
-                string prefabName = args.GetString(2);
-                if (string.IsNullOrEmpty(prefabName))
-                {
-                    MonsterDBPlugin.LogWarning("Invalid parameters");
-                    return true;
-                }
-
-                string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
-                Read(filePath);
-                return true;
-            }, FileManager.GetModFileNames, adminOnly: true);
-
-        Command revert = new Command("revert_egg", "[prefabName]: revert egg to factory settings", args =>
+        if (prefab == null)
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogInfo("Invalid parameters");
-                return true;
-            }
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
 
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogInfo("Invalid prefab");
-                return true;
-            }
-
-            if (LoadManager.GetOriginal<BaseEgg>(prefabName) is not { } egg)
-            {
-                MonsterDBPlugin.LogInfo("Original data not found");
-                return true;
-            }
-
-            egg.Update();
-            LoadManager.UpdateSync();
-
-            return true;
-        }, LoadManager.GetOriginalKeys<BaseEgg>, adminOnly: true);
-
-        Command clone = new Command("clone_egg", "[prefabName][newName]: must be an item", args =>
+        if (!prefab.GetComponent<ItemDrop>())
         {
-            string prefabName = args.GetString(2);
-            string newName = args.GetString(3);
-            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
+            args.Context.LogWarning("Invalid, missing ItemDrop component");
+            return;
+        }
 
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
-                return true;
-            }
-
-            if (!prefab.GetComponent<ItemDrop>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing ItemDrop component");
-                return true;
-            }
-
-            Clone(prefab, newName);
-            return true;
-        }, PrefabManager.GetAllPrefabNames<ItemDrop>, adminOnly: true);
+        bool isClone = CloneManager.IsClone(prefab.name, out string source);
+        Write(prefab, isClone, source);
     }
+
+    [Obsolete]
+    public static List<string> GetEggOptions(int i, string word) => i switch
+    {
+        2 => PrefabManager.GetAllPrefabNames<ItemDrop>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void WriteAllEggYML(Terminal.ConsoleEventArgs args)
+    {
+        List<GameObject> prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
+        for (int i = 0; i < prefabs.Count; ++i)
+        {
+            GameObject? prefab = prefabs[i];
+            Write(prefab);
+        }
+        args.Context.AddString($"Exported {prefabs.Count} egg files");
+    }
+
+    [Obsolete]
+    public static void ReadEgg(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        string filePath = Path.Combine(FileManager.ImportFolder, prefabName + ".yml");
+        Read(filePath);
+    }
+
+    [Obsolete]
+    public static void ResetEgg(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid prefab");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<BaseEgg>(prefabName) is not { } egg)
+        {
+            args.Context.LogWarning("Original data not found");
+            return;
+        }
+
+        egg.Update();
+        LoadManager.UpdateSync();
+    }
+
+    public static void ResetEgg(Terminal context, string prefabName)
+    {
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        if (prefabName.Equals("all", StringComparison.InvariantCultureIgnoreCase))
+        {
+            LoadManager.ResetAll<BaseEgg>();
+            LoadManager.UpdateSync();
+            return;
+        }
+
+        if (!LoadManager.Reset<BaseEgg>(prefabName))
+        {
+            context.LogWarning("Original data not found");
+            return;
+        }
+        
+        LoadManager.UpdateSync();
+    }
+
+    [Obsolete]
+    public static List<string> GetResetOptions(int i, string word) => i switch
+    {
+        2 => LoadManager.GetOriginalKeys<BaseEgg>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void CloneEgg(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+
+        if (!prefab.GetComponent<ItemDrop>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing ItemDrop component");
+            return;
+        }
+
+        Clone(prefab, newName);
+    }
+    
 
     public static string? Save(GameObject prefab, bool isClone = false, string clonedFrom = "")
     {

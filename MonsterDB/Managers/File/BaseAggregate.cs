@@ -20,11 +20,12 @@ public class BaseAggregate : Header
     [YamlMember(Order = 15)] public Dictionary<string, BaseVisual>? visuals;
     [YamlMember(Order = 16)] public Dictionary<string, BaseCreatureSpawner>? CreatureSpawners;
     [YamlMember(Order = 17)] public Dictionary<string, Dictionary<string, string>>? translations;
+    [YamlMember(Order = 18)] public Dictionary<string, BaseSpawnArea>? SpawnAreas;
 
     public string? PrefabToUpdate;
 
     public int Count() => humanoids?.Count + characters?.Count + humans?.Count + eggs?.Count + items?.Count +
-        fishes?.Count + projectiles?.Count + ragdolls?.Count + spawnAbilities?.Count + visuals?.Count ?? 0;
+        fishes?.Count + projectiles?.Count + ragdolls?.Count + spawnAbilities?.Count + visuals?.Count + SpawnAreas?.Count ?? 0;
 
     public bool GetPrefabToUpdate(out Header header)
     {
@@ -87,6 +88,12 @@ public class BaseAggregate : Header
         if (visuals != null && visuals.TryGetValue(PrefabToUpdate, out BaseVisual? visual))
         {
             header = visual;
+            return true;
+        }
+
+        if (SpawnAreas != null && SpawnAreas.TryGetValue(PrefabToUpdate, out BaseSpawnArea? area))
+        {
+            header = area;
             return true;
         }
 
@@ -178,6 +185,10 @@ public class BaseAggregate : Header
                 case BaseType.Visual:
                     BaseVisual visual = ConfigManager.Deserialize<BaseVisual>(text);
                     Add(visual);
+                    break;
+                case BaseType.SpawnArea:
+                    BaseSpawnArea area = ConfigManager.Deserialize<BaseSpawnArea>(text);
+                    Add(area);
                     break;
             }
         }
@@ -277,9 +288,22 @@ public class BaseAggregate : Header
             }
         }
 
+        if (SpawnAreas != null)
+        {
+            foreach (BaseSpawnArea area in SpawnAreas.Values)
+            {
+                list.Add(area);
+            }
+        }
+
         return list;
     }
 
+    public void Add(BaseSpawnArea area)
+    {
+        SpawnAreas ??= new Dictionary<string, BaseSpawnArea>();
+        SpawnAreas[area.Prefab] = area;
+    }
     public void Add(BaseVisual visual)
     {
         visuals ??= new Dictionary<string, BaseVisual>();

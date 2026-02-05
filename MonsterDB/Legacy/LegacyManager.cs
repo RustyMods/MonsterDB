@@ -5,18 +5,69 @@ using MonsterDB.Solution.Methods;
 using UnityEngine;
 using YamlDotNet.Serialization;
 
-namespace MonsterDB.Solution;
+namespace MonsterDB;
 
 public static class LegacyManager
 {
     private static readonly string LegacyFolderPath;
-    private static readonly Dictionary<string, CreatureData> creaturesToConvert;
+    public static readonly Dictionary<string, CreatureData> creaturesToConvert;
 
     static LegacyManager()
     {
         LegacyFolderPath = Path.Combine(ConfigManager.DirectoryPath, "Legacy");
         creaturesToConvert = new Dictionary<string, CreatureData>();
     }
+
+    public static void ConvertAll(Terminal.ConsoleEventArgs args)
+    {
+        if (creaturesToConvert.Count <= 0)
+        {
+            args.Context.LogWarning("No legacy files found.");
+            return;
+        }
+        Load();
+    }
+
+    public static void Convert(Terminal context, string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        if (!creaturesToConvert.TryGetValue(input, out CreatureData data))
+        {
+            context.AddString($"No legacy creature data found for {input}");
+            return;
+        }
+
+        Convert(data);
+    }
+
+    public static void Convert(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        if (!creaturesToConvert.TryGetValue(prefabName, out CreatureData data))
+        {
+            args.Context.LogWarning($"No legacy creature data found for {prefabName}");
+            return;
+        }
+
+        Convert(data);
+    }
+
+    public static List<string> GetConversionOptions(int i, string word) => i switch
+    {
+        2 => creaturesToConvert.Keys.ToList(),
+        _ => new List<string>()
+    };
     
     public static void Start()
     {
@@ -27,45 +78,6 @@ public static class LegacyManager
         {
             MonsterDBPlugin.LogInfo($"Loaded {creaturesToConvert.Count} legacy files. Use command convert_all, to export to new file structure.");
         }
-
-        Command convertAll = new Command("convert_all", "", _ =>
-        {
-            if (creaturesToConvert.Count <= 0)
-            {
-                MonsterDBPlugin.LogInfo("No legacy files found.");
-                return true;
-            }
-
-            Load();
-            
-            return true;
-        });
-
-        Command convert = new Command("convert", "", args =>
-        {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string prefabName = args[2];
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
-
-            if (!creaturesToConvert.TryGetValue(prefabName, out CreatureData data))
-            {
-                MonsterDBPlugin.LogWarning($"No legacy creature data found for {prefabName}");
-                return true;
-            }
-
-            Convert(data);
-            
-            return true;
-        }, creaturesToConvert.Keys.ToList);
     }
 
     private static void Load()

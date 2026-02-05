@@ -25,7 +25,7 @@ hue: float                    # Only works with Custom/Creature shader
 saturation: float             # Only works with Custom/Creature shader
 value: float                  # Only works with Custom/Creature shader
 setEmissiveColor: boolean
-emissiveColor: string         # Hex code
+emissiveColor: string         # Hex code or RGBA
 enableObject: string          # Child Transform Name
 ```
 
@@ -33,7 +33,7 @@ enableObject: string          # Child Transform Name
 ```yml
 name: string                  # name of material, do not change or will not be able to target specific material
 shader: string                
-color: string                 # Hex code, does not work with Custom/Player shader
+color: string                 # Hex code or RGBA(), does not work with Custom/Player shader
 hue: float                    # Only works with Custom/Creature shader
 saturation: float             # Only works with Custom/Creature shader
 value: float                  # Only works with Custom/Creature shader

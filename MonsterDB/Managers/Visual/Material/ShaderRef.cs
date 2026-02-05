@@ -65,50 +65,57 @@ public static class ShaderRef
         }
     }
 
-    private static Command search = new Command("search_shader",
-        "[query]: returns list of shader names that contains query",
-        args =>
+    public static void SearchShaders(Terminal.ConsoleEventArgs args)
+    {
+        string query = args.GetStringFrom(2);
+        if (string.IsNullOrEmpty(query))
         {
-            string query = args.GetString(2);
-            if (string.IsNullOrEmpty(query))
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        foreach (string? name in m_shaders.Keys)
+        {
+            if (name.ToLower().Contains(query.ToLower()))
             {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
+                MonsterDBPlugin.LogInfo(name);
             }
+        }
+    }
 
-            foreach (string? name in m_shaders.Keys)
-            {
-                if (name.ToLower().Contains(query.ToLower()))
-                {
-                    MonsterDBPlugin.LogInfo(name);
-                }
-            }
+    public static List<string> GetShaderOptions(int i, string word) => i switch
+    {
+        2 => GetShaderNames(),
+        _ => new List<string>()
+    };
 
-            return true;
-        });
+    public static List<string> GetShaderNames() => m_shaders.Keys.ToList();
 
-    private static Command print = new Command("print_shader_properties", "[shaderName]", args =>
+    public static void PrintShaderProperties(Terminal.ConsoleEventArgs args)
     {
         if (args.Length < 3)
         {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
+            args.Context.LogWarning("Invalid parameters");
+            return;
         }
 
-        var line = args.Args;
+        string[]? line = args.Args;
         string query = string.Join(" ", line, 2, line.Length - 2);
         
         if (string.IsNullOrEmpty(query))
         {
-            MonsterDBPlugin.LogWarning("Invalid parameters");
-            return true;
+            args.Context.LogWarning("Invalid parameters");
+            return;
         }
 
         if (!m_shaders.TryGetValue(query, out Shader? shader))
         {
-            MonsterDBPlugin.LogInfo($"Failed to find shader: {query}");
-            return true;
+            args.Context.LogWarning($"Failed to find shader: {query}");
+            return;
         }
+        
+        MonsterDBPlugin.LogInfo($"Shader: {shader.name}");
+        args.Context.AddString($"Shader: {shader.name}");
 
         int count = shader.GetPropertyCount();
         for (int i = 0; i < count; ++i)
@@ -117,10 +124,9 @@ public static class ShaderRef
             ShaderPropertyType type = shader.GetPropertyType(i);
             if (prop != null)
             {
+                args.Context.AddString($"{prop}: {type}");
                 MonsterDBPlugin.LogInfo($"{prop}: {type}");
             }
         }
-        
-        return true;
-    }, () => m_shaders.Keys.ToList());
+    }
 }

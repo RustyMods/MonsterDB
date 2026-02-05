@@ -1,89 +1,80 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace MonsterDB;
 
 public static class SpawnAbilityManager
 {
-    public static void Setup()
+    [Obsolete]
+    public static void WriteSpawnAbilityYML(Terminal.ConsoleEventArgs args)
     {
-        Command write = new Command("write_spawnability", "[prefabName]: write spawn ability YML file", args =>
+        string prefabName = args[2];
+        if (string.IsNullOrEmpty(prefabName))
         {
-            if (args.Length < 3)
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
             
-            string prefabName = args[2];
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
-            
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            if (prefab == null)
-            {
-                return true;
-            }
-
-            if (!prefab.GetComponent<SpawnAbility>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing SpawnAbility component");
-                return true;
-            }
-
-            bool isClone = false;
-            string source = "";
-            if (CloneManager.clones.TryGetValue(prefabName, out Clone c))
-            {
-                isClone = true;
-                source = c.SourceName;
-            }
-
-            Write(prefab, isClone, source);
-
-            return true;
-        }, PrefabManager.GetAllPrefabNames<SpawnAbility>);
-
-        Command clone = new Command("clone_spawnability", "[prefabName]: clone spawn ability YML file", args =>
+        if (prefab == null)
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
 
-            string newName = args.GetString(3);
-            if (string.IsNullOrEmpty(newName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
-            
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (!prefab.GetComponent<SpawnAbility>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing SpawnAbility component");
+            return;
+        }
 
-            if (prefab == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find prefab: {prefabName}");
-                return true;
-            }
-            
-            if (!prefab.GetComponent<SpawnAbility>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing SpawnAbility component");
-                return true;
-            }
-
-            TryClone(prefab, newName, out _, true);
-            
-            return true;
-        }, PrefabManager.GetAllPrefabNames<SpawnAbility>, adminOnly: true);
+        bool isClone = CloneManager.IsClone(prefab.name, out string source);
+        Write(prefab, isClone, source);
     }
 
+    [Obsolete]
+    public static List<string> GetSpawnAbilityOptions(int i, string word) => i switch
+    {
+        2 => PrefabManager.GetAllPrefabNames<SpawnAbility>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void CloneSpawnAbility(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+            
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
+            
+        if (!prefab.GetComponent<SpawnAbility>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing SpawnAbility component");
+            return;
+        }
+
+        TryClone(prefab, newName, out _, true);
+    }
     public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;

@@ -7,7 +7,20 @@ namespace MonsterDB;
 
 public enum BaseType
 {
-    None, Humanoid, Character, Egg, Human, Item, Fish, Projectile, Ragdoll, SpawnAbility, Visual, CreatureSpawner, All
+    None, 
+    Humanoid, 
+    Character, 
+    Egg, 
+    Human, 
+    Item, 
+    Fish, 
+    Projectile, 
+    Ragdoll, 
+    SpawnAbility, 
+    Visual, 
+    CreatureSpawner, 
+    SpawnArea,
+    All
 }
 
 [Serializable][UsedImplicitly]
@@ -40,8 +53,10 @@ public class Header
         else
         {
             MonsterDBPlugin.LogInfo($"Updated {Prefab}");
-
         }
+
+        if (LoadManager.loadList.Exists(x => x.Prefab == Prefab)) return;
+        LoadManager.loadList.Add(this);
     }
     
     public virtual void CopyFields(Header original)

@@ -1,0 +1,93 @@
+GameVersion: 0.221.4
+ModVersion: 0.2.4
+Type: Visual
+Prefab: vfx_obsidiangolem_death
+ClonedFrom: vfx_stonegolem_death
+IsCloned: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Cube.005
+    parent: Mountain_Golem_Fragmentation
+    index: 0
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.006
+    parent: Mountain_Golem_Fragmentation
+    index: 1
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.007
+    parent: Mountain_Golem_Fragmentation
+    index: 2
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.008
+    parent: Mountain_Golem_Fragmentation
+    index: 3
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.009
+    parent: Mountain_Golem_Fragmentation
+    index: 4
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.010
+    parent: Mountain_Golem_Fragmentation
+    index: 5
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.011
+    parent: Mountain_Golem_Fragmentation
+    index: 6
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.012
+    parent: Mountain_Golem_Fragmentation
+    index: 7
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.013
+    parent: Mountain_Golem_Fragmentation
+    index: 8
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.014
+    parent: Mountain_Golem_Fragmentation
+    index: 9
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.015
+    parent: Mountain_Golem_Fragmentation
+    index: 10
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.016
+    parent: Mountain_Golem_Fragmentation
+    index: 11
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.017
+    parent: Mountain_Golem_Fragmentation
+    index: 12
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d
+  - prefab: Cube.018
+    parent: Mountain_Golem_Fragmentation
+    index: 13
+    materials:
+    - name: Material.001
+      mainTexture: ObsidianGolem_d

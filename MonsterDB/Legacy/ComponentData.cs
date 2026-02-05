@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonsterDB.Solution.Methods;
 
-namespace MonsterDB.Solution;
+namespace MonsterDB;
 
 [Serializable]
 public class CharacterData

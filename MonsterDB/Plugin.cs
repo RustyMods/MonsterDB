@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using BepInEx;
+using BepInEx.Logging;
 using HarmonyLib;
-using MonsterDB.Solution;
 
 namespace MonsterDB;
 
@@ -9,7 +9,7 @@ namespace MonsterDB;
 public class MonsterDBPlugin : BaseUnityPlugin
 {
     internal const string ModName = "MonsterDB";
-    internal const string ModVersion = "0.2.4";
+    internal const string ModVersion = "0.2.5";
     internal const string Author = "RustyMods";
     public const string ModGUID = Author + "." + ModName;
     private readonly Harmony _harmony = new(ModGUID);
@@ -29,15 +29,6 @@ public class MonsterDBPlugin : BaseUnityPlugin
         FactionManager.Start();
         RaidManager.Start();
         
-        CreatureManager.Setup();
-        ItemManager.Setup();
-        FishManager.Setup();
-        EggManager.Setup();
-        VisualManager.Setup();
-        ProjectileManager.Setup();
-        SpawnAbilityManager.Setup();
-        CreatureSpawnerManager.Setup();
-        
         FileManager.Start();
         PrefabManager.Start();
         SpawnManager.Setup();
@@ -45,11 +36,12 @@ public class MonsterDBPlugin : BaseUnityPlugin
         ProcreateText.Setup();
         GrowUpText.Setup();
         
-        Snapshot.Setup();
         TexturePackage.Setup();
         
         Wiki.Write();
         VersionHandshake.Setup();
+        
+        Commands.Init();
         
         Assembly assembly = Assembly.GetExecutingAssembly();
         _harmony.PatchAll(assembly);
@@ -62,30 +54,31 @@ public class MonsterDBPlugin : BaseUnityPlugin
 
     public static void LogInfo(string msg)
     {
-        if (!ConfigManager.ShouldLog(ConfigManager.LogLevel.Info)) return;
+        if (!ConfigManager.ShouldLog(LogLevel.Info)) return;
         instance.Logger.LogInfo(msg);
     }
 
     public static void LogError(string msg)
     {
-        if (!ConfigManager.ShouldLog(ConfigManager.LogLevel.Error)) return;
+        if (!ConfigManager.ShouldLog(LogLevel.Error)) return;
         instance.Logger.LogError(msg);
     }
 
     public static void LogWarning(string msg)
     {
-        if (!ConfigManager.ShouldLog(ConfigManager.LogLevel.Warning)) return;
+        if (!ConfigManager.ShouldLog(LogLevel.Warning)) return;
         instance.Logger.LogWarning(msg);
     }
 
     public static void LogDebug(string msg)
     {
-        if (!ConfigManager.ShouldLog(ConfigManager.LogLevel.Debug)) return;
+        if (!ConfigManager.ShouldLog(LogLevel.Debug)) return;
         instance.Logger.LogDebug(msg);
     }
 
     public static void LogFatal(string msg)
     {
+        if (!ConfigManager.ShouldLog(LogLevel.Fatal)) return;
         instance.Logger.LogFatal(msg);
     }
 }

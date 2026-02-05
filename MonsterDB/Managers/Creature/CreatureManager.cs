@@ -8,131 +8,168 @@ namespace MonsterDB;
 
 public static class CreatureManager
 {
-    public static void Setup()
+    [Obsolete]
+    public static void WriteCreatureYML(Terminal.ConsoleEventArgs args)
     {
-        Command save = new Command("write", 
-            $"[prefabName]: save creature YML to {FileManager.ExportFolder} folder", 
-            args =>
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
         {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return false;
-            }
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
                 
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
 
-            if (prefab == null)
-            {
-                return true;
-            }
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab: {prefabName}");
+            return;
+        }
                 
+        Write(prefab);
+    }
+    
+    [Obsolete]
+    public static List<string> GetCreatureOptions(int i, string word) => i switch
+    {
+        2 => PrefabManager.GetAllPrefabNames<Character>(),
+        _ => new List<string>()
+    };
+
+    [Obsolete]
+    public static void WriteAllCreatureYML(Terminal.ConsoleEventArgs args)
+    {
+        List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
+        for (int i = 0; i < prefabs.Count; ++i)
+        {
+            GameObject? prefab = prefabs[i];
             Write(prefab);
-
-            return true;
-        }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>);
-        
-        Command saveAll = new Command("write_all", 
-            $"save all creatures YML to {FileManager.ExportFolder} folder", 
-            _ =>
-        {
-            List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
-            for (int i = 0; i < prefabs.Count; ++i)
-            {
-                GameObject? prefab = prefabs[i];
-                Write(prefab);
-            }
-            return true;
-        });
-
-        Command read = new Command("mod", 
-            $"[fileName]: read YML file from {FileManager.ImportFolder} and update", 
-            args =>
-        {
-            string fileName = args.GetString(2);
-            if (string.IsNullOrEmpty(fileName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            
-            string filePath = Path.Combine(FileManager.ImportFolder, fileName + ".yml");
-            FileManager.Read(filePath);
-            return true;
-        }, FileManager.GetModFileNames, adminOnly: true);
-
-        Command revert = new Command("revert", 
-            "[prefabName]: revert creature to factory settings", 
-            args =>
-        {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogInfo("Invalid prefab");
-                return true;
-            }
-
-            if (LoadManager.GetOriginal<Base>(prefabName) is not { } creature)
-            {
-                MonsterDBPlugin.LogInfo("Original data not found");
-                return true;
-            }
-            creature.Update();
-            LoadManager.UpdateSync();
-            return true;
-        }, LoadManager.GetOriginalKeys<Base>, adminOnly: true);
-
-        Command clone = new Command("clone", 
-            "[prefabName][newName]: must be a character", 
-            args =>
-        {
-            string prefabName = args.GetString(2);
-            string newName = args.GetString(3);
-            if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
-            {
-                MonsterDBPlugin.LogWarning("Invalid parameters");
-                return true;
-            }
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null)
-            {
-                return true;
-            }
-            
-            if (!prefab.GetComponent<Character>())
-            {
-                MonsterDBPlugin.LogWarning("Invalid prefab, missing character component");
-                return true;
-            }
-            Clone(prefab, newName);
-            return true;
-        }, optionsFetcher: PrefabManager.GetAllPrefabNames<Character>, adminOnly: true);
-
-        Command hierarchy = new Command("export_bones", "[prefabName]: export prefab hierarchy", args =>
-        {
-            string prefabName = args.GetString(2);
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                MonsterDBPlugin.LogInfo("Invalid parameters");
-                return true;
-            }
-
-            GameObject? prefab = PrefabManager.GetPrefab(prefabName);
-            if (prefab == null)
-            {
-                MonsterDBPlugin.LogWarning($"Failed to find prefab {prefabName}");
-                return true;
-            }
-
-            string folderPath = Path.Combine(FileManager.ExportFolder, prefabName);
-            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-            string filePath = Path.Combine(folderPath, $"{prefabName}.bones.yml");
-            ExportHierarchy(prefab, filePath);
-            return true;
-        }, optionsFetcher: PrefabManager.GetAllPrefabNames);
+        }
+        args.Context.AddString($"Exported {prefabs.Count} creature YML files");
     }
 
+    [Obsolete]
+    public static void ReadCreatureYML(Terminal.ConsoleEventArgs args)
+    {
+        string fileName = args.GetString(2);
+        if (string.IsNullOrEmpty(fileName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+            
+        string filePath = Path.Combine(FileManager.ImportFolder, fileName + ".yml");
+        FileManager.Read(filePath);
+        args.Context.AddString($"Updated {fileName}");
+    }
+
+    [Obsolete]
+    public static void ResetCreature(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid prefab");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<Base>(prefabName) is not { } creature)
+        {
+            args.Context.LogWarning("Original data not found");
+            return;
+        }
+        creature.Update();
+        LoadManager.UpdateSync();
+        args.Context.AddString($"Reverted {prefabName}");
+    }
+
+    public static void ResetCreature(Terminal context, string prefabName)
+    {
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        if (LoadManager.GetOriginal<Base>(prefabName) is not { } creature)
+        {
+            context.LogWarning("Original data not found");
+            return;
+        }
+        
+        creature.Update();
+        LoadManager.UpdateSync();
+        context.AddString("Reverted " + prefabName);
+    }
+
+    [Obsolete]
+    public static void CloneCreature(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        string newName = args.GetString(3);
+        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            return;
+        }
+            
+        if (!prefab.GetComponent<Character>())
+        {
+            args.Context.LogWarning("Invalid prefab, missing character component");
+            return;
+        }
+        Clone(prefab, newName);
+    }
+
+    [Obsolete]
+    public static void WriteHierarchy(Terminal.ConsoleEventArgs args)
+    {
+        string prefabName = args.GetString(2);
+        if (string.IsNullOrEmpty(prefabName))
+        {
+            args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        GameObject? prefab = PrefabManager.GetPrefab(prefabName);
+        if (prefab == null)
+        {
+            args.Context.LogWarning($"Failed to find prefab {prefabName}");
+            return;
+        }
+
+        string folderPath = Path.Combine(FileManager.ExportFolder, prefabName);
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+        string filePath = Path.Combine(folderPath, $"{prefabName}.bones.yml");
+        ExportHierarchy(prefab, filePath);
+    }
+
+    public static void WriteHierarchy(Terminal context, string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        GameObject? prefab = PrefabManager.GetPrefab(input);
+        if (prefab == null)
+        {
+            context.LogWarning($"Failed to find prefab {input}");
+            return;
+        }
+
+        string folderPath = Path.Combine(FileManager.ExportFolder, input);
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+        string filePath = Path.Combine(folderPath, $"{input}.bones.yml");
+        ExportHierarchy(prefab, filePath);
+    }
+    
     public static bool TrySave(GameObject prefab, out Base? data, bool isClone = false, string source = "")
     {
         data = LoadManager.GetOriginal<Base>(prefab.name);
@@ -194,13 +231,7 @@ public static class CreatureManager
                     EffectList.EffectData? effect = character.m_deathEffects.m_effectPrefabs[i];
                     if (effect.m_prefab != null && effect.m_prefab.GetComponent<Ragdoll>())
                     {
-                        bool isRagdollClone = false;
-                        string ragdollSource = "";
-                        if (CloneManager.clones.TryGetValue(effect.m_prefab.name, out Clone ragdollClone))
-                        {
-                            isRagdollClone = true;
-                            ragdollSource = ragdollClone.SourceName;
-                        }
+                        bool isRagdollClone = CloneManager.IsClone(effect.m_prefab.name, out string ragdollSource);
                         RagdollManager.Write(effect.m_prefab, isRagdollClone, ragdollSource, folder);
                     }
                 }
@@ -215,14 +246,7 @@ public static class CreatureManager
                     if (!Directory.Exists(itemFolder)) Directory.CreateDirectory(itemFolder);
                     foreach (GameObject? item in items)
                     {
-                        bool isItemClone = false;
-                        string itemSource = "";
-                        
-                        if (CloneManager.clones.TryGetValue(item.name, out Clone d))
-                        {
-                            isItemClone = true;
-                            itemSource = d.SourceName;
-                        }
+                        bool isItemClone = CloneManager.IsClone(item.name, out string itemSource);
 
                         ItemManager.Write(item, isItemClone, itemSource, itemFolder);
                     }
@@ -385,7 +409,7 @@ public static class CreatureManager
         return newItems.ToArray();
     }
 
-    public static void ExportHierarchy(GameObject root, string filePath)
+    private static void ExportHierarchy(GameObject root, string filePath)
     {
         if (root == null) return;
 
