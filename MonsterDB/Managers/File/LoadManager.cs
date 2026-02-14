@@ -75,7 +75,7 @@ public static class LoadManager
 
     public static bool TryGetOriginal<T>(string prefabName, out T output) where T : Header
     {
-        output = null;
+        output = null!;
         if (!originals.TryGetValue(prefabName, out Header header)) return false;
         if (header is not T result) return false;
         output = result;
@@ -98,9 +98,9 @@ public static class LoadManager
 
     public static bool Reset<T>(string prefabName) where T : Header
     {
+        if (!TryGetOriginal(prefabName, out T result)) return false;
         Header? target = loadList.Find(x => x.Prefab == prefabName);
         if (target == null) return false;
-        if (!TryGetOriginal(prefabName, out T result)) return false;
         target.CopyFields(result);
         target.Update();
         return true;
@@ -280,6 +280,7 @@ public static class LoadManager
         int visual = 0;
         int spawners = 0;
         int spawnAreas = 0;
+        int spawnDatas = 0;
         
         for (int i = 0; i < ordered.Count; ++i)
         {
@@ -324,11 +325,14 @@ public static class LoadManager
                 case BaseType.SpawnArea:
                     ++spawnAreas;
                     break;
+                case BaseType.SpawnData:
+                    ++spawnDatas;
+                    break;
             }
         }
 
         int count = characters + humanoids + players + eggs + items + fish + projectiles + ragdoll + spawnAbilities +
-                    visual + spawners + spawnAreas;
+                    visual + spawners + spawnAreas + spawnDatas;
         
         StringBuilder sb = new();
         sb.Append("Modified: ");
@@ -344,6 +348,7 @@ public static class LoadManager
         if (visual > 0) sb.Append($"{visual} prefabs, ");
         if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
         if (spawnAreas > 0) sb.Append($"{spawnAreas} spawn areas, ");
+        if (spawnDatas > 0) sb.Append($"{spawnDatas} spawn datas, ");
         sb.Append($"(total: {count})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());

@@ -5,8 +5,6 @@ namespace MonsterDB;
 
 public static class SpawnAreaManager
 {
-
-
     public static string? Save(GameObject prefab, bool isClone = false, string source = "")
     {
         if (LoadManager.GetOriginal<BaseSpawnArea>(prefab.name) is { } area) return ConfigManager.Serialize(area);

@@ -107,11 +107,13 @@ public static partial class Commands
             adminOnly: true,
             isSecret: true);
 
+        // obsolete
         _ = new Command("clone_character",
             "[prefabName][newName]: must be a character",
             CreatureManager.CloneCreature,
             CreatureManager.GetCreatureOptions,
-            adminOnly: true);
+            adminOnly: true,
+            isSecret: true);
 
         // obsolete
         _ = new Command("export_bones", 

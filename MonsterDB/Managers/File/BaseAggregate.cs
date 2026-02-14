@@ -21,6 +21,7 @@ public class BaseAggregate : Header
     [YamlMember(Order = 16)] public Dictionary<string, BaseCreatureSpawner>? CreatureSpawners;
     [YamlMember(Order = 17)] public Dictionary<string, Dictionary<string, string>>? translations;
     [YamlMember(Order = 18)] public Dictionary<string, BaseSpawnArea>? SpawnAreas;
+    [YamlMember(Order = 19)] public Dictionary<string, BaseSpawnData>? SpawnDatas;
 
     public string? PrefabToUpdate;
 
@@ -296,7 +297,21 @@ public class BaseAggregate : Header
             }
         }
 
+        if (SpawnDatas != null)
+        {
+            foreach (BaseSpawnData data in SpawnDatas.Values)
+            {
+                list.Add(data);
+            }
+        }
+
         return list;
+    }
+
+    public void Add(BaseSpawnData spawnData)
+    {
+        SpawnDatas ??= new Dictionary<string, BaseSpawnData>();
+        SpawnDatas[spawnData.Prefab] = spawnData;
     }
 
     public void Add(BaseSpawnArea area)
@@ -488,6 +503,30 @@ public class BaseAggregate : Header
                     {
                         translations.Add(kvp.Key, kvp.Value);
                     }
+                }
+            }
+        }
+
+        if (other.SpawnAreas != null)
+        {
+            if (SpawnAreas == null) SpawnAreas = other.SpawnAreas;
+            else
+            {
+                foreach (var area in other.SpawnAreas.Values)
+                {
+                    Add(area);
+                }
+            }
+        }
+
+        if (other.SpawnDatas != null)
+        {
+            if (SpawnDatas == null) SpawnDatas = other.SpawnDatas;
+            else
+            {
+                foreach (var data in other.SpawnDatas.Values)
+                {
+                    Add(data);
                 }
             }
         }

@@ -20,6 +20,7 @@ public enum BaseType
     Visual, 
     CreatureSpawner, 
     SpawnArea,
+    SpawnData,
     All
 }
 

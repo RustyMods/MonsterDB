@@ -54,6 +54,7 @@ public static partial class Commands
         BaseType.SpawnArea => PrefabManager.GetAllPrefabNames<SpawnArea>().Append("all").ToList(),
         BaseType.Human => new List<string> { "Player" },
         BaseType.All => new List<string>(),
+        BaseType.SpawnData => SpawnManager.GetCachedSpawnDataIds(),
         _ => PrefabManager.GetAllPrefabNames()
     };
 
@@ -120,6 +121,13 @@ public static partial class Commands
         if (string.IsNullOrEmpty(prefabName))
         {
             args.Context.LogWarning("Invalid parameters");
+            return;
+        }
+
+        if (baseType == BaseType.SpawnData)
+        {
+            prefabName = args.GetStringFrom(3);
+            SpawnManager.Export(prefabName);
             return;
         }
                 

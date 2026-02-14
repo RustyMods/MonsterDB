@@ -211,6 +211,7 @@
         <Compile Include="Managers\SpawnArea\DestructibleRef.cs" />
         <Compile Include="Managers\SpawnArea\SpawnAreaManager.cs" />
         <Compile Include="Managers\SpawnArea\SpawnAreaRef.cs" />
+        <Compile Include="Managers\SpawnSystem\BaseSpawnData.cs" />
         <Compile Include="Managers\SpawnSystem\SpawnDataRef.cs" />
         <Compile Include="Managers\SpawnSystem\SpawnManager.cs" />
         <Compile Include="Managers\File\Header.cs" />

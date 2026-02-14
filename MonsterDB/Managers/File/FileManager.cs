@@ -123,6 +123,11 @@ public static class FileManager
                         LoadManager.loadList.AddRange(all.Load());
                         LoadManager.files.Add(all);
                         break;
+                    case BaseType.SpawnData:
+                        BaseSpawnData spawnData = ConfigManager.Deserialize<BaseSpawnData>(text);
+                        LoadManager.loadList.Add(spawnData);
+                        LoadManager.files.Add(spawnData);
+                        break;
                 }
 
             }
@@ -235,6 +240,11 @@ public static class FileManager
                 case BaseType.SpawnArea:
                     BaseSpawnArea area = ConfigManager.Deserialize<BaseSpawnArea>(text);
                     area.Update();
+                    LoadManager.UpdateSync();
+                    break;
+                case BaseType.SpawnData:
+                    BaseSpawnData spawnData = ConfigManager.Deserialize<BaseSpawnData>(text);
+                    spawnData.Update();
                     LoadManager.UpdateSync();
                     break;
             }

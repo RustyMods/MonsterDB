@@ -1,7 +1,10 @@
+## 0.2.6
+- new command to export SpawnData
+- feature to modify vanilla spawn data
+
 ## 0.2.5
 - overhauled commands, instead of individual commands for each type, now you can do `monsterdb export Character Greydwarf` | `monsterdb export Item SwordIron` instead of `monsterdb write Greydwarf` | `monsterdb write_item SwordIron`
 - improved terminal output when commands are ran
-
 
 ## 0.2.4
 - cleaned up serialization
