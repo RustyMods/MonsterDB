@@ -15,6 +15,17 @@ public static class ShaderRef
     public static readonly int _EmissionColor = Shader.PropertyToID("_EmissionColor");
     public static readonly int _TintColor = Shader.PropertyToID("_TintColor");
     public static readonly int _EmissionMap = Shader.PropertyToID("_EmissionMap");
+    public static readonly int _Glossiness = Shader.PropertyToID("_Glossiness");
+    public static readonly int _Metallic = Shader.PropertyToID("_Metallic");
+    public static readonly int _BumpScale = Shader.PropertyToID("_BumpScale");
+    public static readonly int _BumpMap = Shader.PropertyToID("_BumpMap");
+    public static readonly int _FlowSpeedAll = Shader.PropertyToID("_FlowSpeedAll");
+    public static readonly int _FlowSpeedY = Shader.PropertyToID("_FlowSpeedY");
+    public static readonly int _FlowTexture = Shader.PropertyToID("_FlowTexture");
+    public static readonly int _FlowColor = Shader.PropertyToID("_FlowColor");
+    public static readonly int _SSS = Shader.PropertyToID("_SSS");
+    public static readonly int _FlowMaskTex = Shader.PropertyToID("_FlowMaskTex");
+    public static readonly int _EmissiveColor = Shader.PropertyToID("_EmissiveColor");
 
     private static readonly Dictionary<string, Shader> m_shaders = new();
 

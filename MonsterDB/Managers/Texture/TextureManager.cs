@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BepInEx;
 using HarmonyLib;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ public static class TextureManager
             int count = 0;
             foreach (Material? material in materials)
             {
-                if (Save(material, FileManager.ExportFolder)) ++count;
+                Save(material, FileManager.ExportFolder, ref count);
             }
             context.AddString($"Exported prefab: {prefab.name} textures (total: {count})");
         }
@@ -148,6 +149,23 @@ public static class TextureManager
 
     public static List<string> GetSpriteNames() => m_cachedSprites.Keys.ToList();
 
+    public static void SetupFileWatcher()
+    {
+        FileSystemWatcher watcher = new(FileManager.ImportFolder, "*.png");
+        watcher.Created += OnNewImage;
+        watcher.IncludeSubdirectories = true;
+        watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
+        watcher.EnableRaisingEvents = true;
+    }
+
+    private static void OnNewImage(object sender, FileSystemEventArgs e)
+    {
+        string filename = Path.GetFileNameWithoutExtension(e.FullPath);
+        if (m_customs.ContainsKey(filename)) return;
+        ReadTexture(e.FullPath);
+        MonsterDBPlugin.LogInfo($"Loaded {Path.GetFileName(e.FullPath)}");
+    }
+
     public static void ExportSprite(Terminal context, string input)
     {
         if (string.IsNullOrEmpty(input))
@@ -218,6 +236,7 @@ public static class TextureManager
             ReadTexture(filePath);
         }
         MonsterDBPlugin.LogInfo($"Loaded {files.Length} PNG files");
+        SetupFileWatcher();
     }
 
     public static void WriteAll()
@@ -384,10 +403,70 @@ public static class TextureManager
         }
     }
 
+    private static void Save(Material material, string path, ref int count)
+    {
+        if (material == null) return;
+        if (material.GetInstanceID() < 0) return;
+
+        if (material.HasProperty(ShaderRef._FlowMaskTex))
+        {
+            Texture? flow = material.GetTexture(ShaderRef._FlowMaskTex);
+            if (flow != null)
+            {
+                Export(flow, path);
+                ++count;
+            }
+        }
+
+        if (material.HasProperty(ShaderRef._BumpMap))
+        {
+            Texture? bump = material.GetTexture(ShaderRef._BumpMap);
+            if (bump != null)
+            {
+                Export(bump, path);
+                ++count;
+            }
+        }
+
+        if (material.HasProperty(ShaderRef._EmissionMap))
+        {
+            Texture? emission = material.GetTexture(ShaderRef._EmissionMap);
+            if (emission != null)
+            {
+                Export(emission, path);
+                ++count;
+            }
+        }
+        
+        Texture? texture = material.mainTexture;
+        if (texture != null)
+        {
+            Export(texture, path);
+            ++count;
+        }
+    }
     private static bool Save(Material material, string path)
     {
         if (material == null) return false;
         if (material.GetInstanceID() < 0) return false;
+
+        if (material.HasProperty(ShaderRef._FlowMaskTex))
+        {
+            Texture? flow = material.GetTexture(ShaderRef._FlowMaskTex);
+            if (flow != null) Export(flow, path);
+        }
+
+        if (material.HasProperty(ShaderRef._BumpMap))
+        {
+            Texture? bump = material.GetTexture(ShaderRef._BumpMap);
+            if (bump != null) Export(bump, path);
+        }
+
+        if (material.HasProperty(ShaderRef._EmissionMap))
+        {
+            Texture? emission = material.GetTexture(ShaderRef._EmissionMap);
+            if (emission != null) Export(emission, path);
+        }
         
         Texture? texture = material.mainTexture;
         if (texture == null) return false;

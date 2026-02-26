@@ -180,7 +180,17 @@ public static partial class Extensions
 
     public static void LogWarning(this Terminal terminal, string msg)
     {
-        terminal.AddString($"<color=yellow>{msg}</color>");
+        terminal.Log("yellow", msg);
+    }
+
+    public static void LogError(this Terminal terminal, string msg)
+    {
+        terminal.Log("red", msg);
+    }
+
+    public static void Log(this Terminal terminal, string hex, string msg)
+    {
+        terminal.AddString($"<color={hex}>{msg}</color>");
     }
 }
 

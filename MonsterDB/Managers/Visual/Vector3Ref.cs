@@ -32,7 +32,7 @@ public struct Vector3Ref
 
     public static Vector3Ref Parse(string value)
     {
-        var parts = value.Split(',');
+        string[] parts = value.Split(',');
         if (parts.Length != 3)
             throw new FormatException("Invalid Vector3 format");
 

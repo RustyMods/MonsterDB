@@ -401,6 +401,16 @@ public abstract class Reference
         {
             UpdateSpawnDataList(target, targetField, spawns, targetName, log);
         }
+        else if (targetType == typeof(Piece.Requirement[]) &&
+                 newValue is RequirementRef[] requirements)
+        {
+            UpdateRequirements(target, targetField, requirements, targetName, log);
+        }
+        else if (targetType == typeof(CraftingStation) &&
+                 newValue is string craftingStationName)
+        {
+            UpdateCraftingStation(target, targetField, craftingStationName, targetName, log);
+        }
     }
 
     protected virtual void UpdateAssignableType<T>(T target, FieldInfo targetField, Type targetType, object value, string targetName, bool log)
@@ -436,6 +446,34 @@ public abstract class Reference
         string targetName, bool log)
     {
         
+    }
+
+    public static void UpdateCraftingStation<T>(T target, FieldInfo targetField, string name, string targetName,
+        bool log)
+    {
+        var prefab = PrefabManager.GetPrefab(name);
+        if (prefab == null) return;
+        if (!prefab.TryGetComponent(out CraftingStation craftingStation))
+        {
+            MonsterDBPlugin.LogWarning($"[{targetName}] {targetField.Name}: {name} missing CraftingStation component");
+            return;
+        }
+        targetField.SetValue(target, craftingStation);
+        if (log)
+        {
+            MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {name}");
+        }
+    }
+
+    protected void UpdateRequirements<T>(T target, FieldInfo targetField, RequirementRef[] requirements,
+        string targetName, bool log)
+    {
+        Piece.Requirement[] reqs = requirements.ToPieceRequirements();
+        targetField.SetValue(target, reqs);
+        if (log)
+        {
+            MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: Piece.Requirements[{reqs.Length}]");
+        }
     }
     protected virtual void UpdateDropTable<T>(T target, FieldInfo targetField, DropTableRef dt, string targetName,
         bool log)

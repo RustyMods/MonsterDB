@@ -97,7 +97,6 @@ public class BaseAggregate : Header
             header = area;
             return true;
         }
-
         return false;
     }
 

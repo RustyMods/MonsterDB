@@ -98,30 +98,39 @@ public static partial class Commands
                 break;
             case BaseType.Egg:
                 EggManager.Clone(prefab, newName);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.Item:
                 ItemManager.TryClone(prefab, newName, out _);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.Fish:
                 FishManager.Clone(prefab, newName);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.Projectile:
                 ProjectileManager.TryClone(prefab, newName, out _);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.SpawnAbility:
                 SpawnAbilityManager.TryClone(prefab, newName, out _);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.Visual:
                 VisualManager.TryClone(prefab, newName, out _);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.CreatureSpawner:
                 CreatureSpawnerManager.Clone(prefab, newName);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.Ragdoll:
                 RagdollManager.TryClone(prefab, newName, out _);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             case BaseType.SpawnArea:
                 SpawnAreaManager.Clone(prefab, newName);
+                args.Context.AddString($"Cloned {baseType} {prefab.name} as {newName}");
                 break;
             default:
                 args.Context.LogWarning("Invalid type");

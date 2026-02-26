@@ -30,7 +30,8 @@ public static class PrefabManager
             prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ZNetScene_Awake))),
             postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(LoadManager), nameof(LoadManager.Start))));
         harmony.Patch(AccessTools.DeclaredMethod(typeof(ObjectDB), nameof(ObjectDB.Awake)),
-            prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ObjectDB_Awake))));
+            prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(PrefabManager), nameof(Patch_ObjectDB_Awake))),
+            postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(RecipeManager), nameof(RecipeManager.MapRecipes))));
     }
     
     public static void AddToCache(GameObject go)
@@ -200,6 +201,7 @@ public static class PrefabManager
     {
         _ZNetScene = __instance.m_objectDBPrefab.GetComponent<ZNetScene>();
         _ObjectDB = __instance.m_objectDBPrefab.GetComponent<ObjectDB>();
+        RecipeManager.MapRecipes(_ObjectDB);
         ShaderRef.CacheShaders();
         VultureOverride.Setup();
         foreach (Clone clone in CloneManager.clones.Values)

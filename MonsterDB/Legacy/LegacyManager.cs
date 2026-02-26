@@ -26,6 +26,7 @@ public static class LegacyManager
             return;
         }
         Load();
+        args.Context.AddString($"Converted {creaturesToConvert.Count} legacy file into v.0.2.x format");
     }
 
     public static void Convert(Terminal context, string input)
@@ -61,6 +62,7 @@ public static class LegacyManager
         }
 
         Convert(data);
+        args.Context.AddString($"Converted {prefabName} legacy file into v.0.2.x format");
     }
 
     public static List<string> GetConversionOptions(int i, string word) => i switch

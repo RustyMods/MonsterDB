@@ -1,3 +1,13 @@
+## 0.2.7
+- tweaked emission color to multiply color by alpha to control intensity
+- added Custom/Blob Shader material properties to modify
+- `monsterdb export Texture [prefab]` now exports normal map, flow texture map, and emission map
+- improved commands feedback
+- added config toggle `full file` to control output of YML files. if on, will write entire YML file, instead of omitting default or null values
+- added `Recipe` field to Item, Egg, Fish Types to modify/add recipes
+- added `Conversions` field to Item, Egg, Fish Types to add conversions to `Fermenter`, `CookingStation`, `Smelter`
+- added PNG file watcher to load new images while in-game
+
 ## 0.2.6
 - new command to export SpawnData
 - feature to modify vanilla spawn data

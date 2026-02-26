@@ -109,7 +109,7 @@ public static class LoadManager
     public static void UpdateSync()
     {
         if (!ZNet.instance || !ZNet.instance.IsServer()) return;
-        sync.Value = ConfigManager.Serialize(files);
+        sync.Value = ConfigManager.Serialize(files, false);
     }
     
     private static void OnSyncChange()
@@ -151,18 +151,7 @@ public static class LoadManager
     
     private static void LoadClones()
     {
-        int characters = 0;
-        int humanoids = 0;
-        int players = 0;
-        int eggs = 0;
-        int items = 0;
-        int fish = 0;
-        int projectiles = 0;
-        int ragdoll = 0;
-        int spawnAbilities = 0;
-        int visual = 0;
-        int spawners = 0;
-        int spawnAreas = 0;
+        Dictionary<BaseType, int> count = new  Dictionary<BaseType, int>();
         
         for (int i = 0; i < loadList.Count; ++i)
         {
@@ -171,22 +160,20 @@ public static class LoadManager
             {
                 GameObject? prefab = PrefabManager.GetPrefab(data.ClonedFrom);
                 if (prefab == null) continue;
+                if (count.ContainsKey(data.Type)) ++count[data.Type];
+                else count[data.Type] = 1;
                 switch (data.Type)
                 {
                     case BaseType.Human:
-                        ++players;
                         CreatureManager.Clone(prefab, data.Prefab, false);
                         break;
                     case BaseType.Humanoid:
-                        ++humanoids;
                         CreatureManager.Clone(prefab, data.Prefab, false);
                         break;
                     case BaseType.Character:
-                        ++characters;
                         CreatureManager.Clone(prefab, data.Prefab, false);
                         break;
                     case BaseType.Egg:
-                        ++eggs;
                         if (!prefab.GetComponent<ItemDrop>())
                         {
                             ItemManager.TryCreateItem(prefab, data.Prefab, out _, false);
@@ -197,7 +184,6 @@ public static class LoadManager
                         }
                         break;
                     case BaseType.Item:
-                        ++items;
                         if (!prefab.GetComponent<ItemDrop>())
                         {
                             ItemManager.TryCreateItem(prefab, data.Prefab, out _, false);
@@ -208,54 +194,37 @@ public static class LoadManager
                         }
                         break;
                     case BaseType.Fish:
-                        ++fish;
                         FishManager.Clone(prefab, data.Prefab, false);
                         break;
                     case BaseType.Projectile:
-                        ++projectiles;
                         ProjectileManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                     case BaseType.Ragdoll:
-                        ++ragdoll;
                         RagdollManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                     case BaseType.SpawnAbility:
-                        ++spawnAbilities;
                         SpawnAbilityManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                     case BaseType.Visual:
-                        ++visual;
                         VisualManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                     case BaseType.CreatureSpawner:
-                        ++spawners;
                         CreatureSpawnerManager.Clone(prefab, data.Prefab, false);
                         break;
                     case BaseType.SpawnArea:
-                        ++spawnAreas;
                         SpawnAreaManager.Clone(prefab, data.Prefab, false);
                         break;
                 }
             }
         }
-
-        int count = players + humanoids + characters + eggs + items + fish + projectiles + ragdoll + spawnAbilities + visual + spawners + spawnAreas;
-
+        
         StringBuilder sb = new();
         sb.Append("Loading clones: ");
-        if (characters > 0) sb.Append($"{characters} characters, ");
-        if (humanoids > 0) sb.Append($"{humanoids} humanoids, ");
-        if (players > 0) sb.Append($"{players} humans, ");
-        if (eggs > 0) sb.Append($"{eggs} eggs, ");
-        if (items > 0) sb.Append($"{items} items, ");
-        if (fish > 0) sb.Append($"{fish} fishes, ");
-        if (projectiles > 0) sb.Append($"{projectiles} projectiles, ");
-        if (ragdoll > 0) sb.Append($"{ragdoll} ragdolls, ");
-        if (spawnAbilities > 0) sb.Append($"{spawnAbilities} abilities, ");
-        if (visual > 0) sb.Append($"{visual} prefabs, ");
-        if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
-        if (spawnAreas > 0) sb.Append($"{spawnAreas} spawn areas, ");
-        sb.Append($"(total: {count})");
+        foreach (KeyValuePair<BaseType, int> kvp in count)
+        {
+            sb.Append($"{kvp.Value} {kvp.Key}, ");
+        }
+        sb.Append($"(total: {count.Sum(x => x.Value)})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());
     }
@@ -267,89 +236,25 @@ public static class LoadManager
             .ThenBy(x => x.Type is not BaseType.Projectile)
             .ThenBy(x => x.Type is not BaseType.Item)
             .ToList();
-        
-        int characters = 0;
-        int humanoids = 0;
-        int players = 0;
-        int eggs = 0;
-        int items = 0;
-        int fish = 0;
-        int projectiles = 0;
-        int ragdoll = 0;
-        int spawnAbilities = 0;
-        int visual = 0;
-        int spawners = 0;
-        int spawnAreas = 0;
-        int spawnDatas = 0;
+
+        Dictionary<BaseType, int> count = new Dictionary<BaseType, int>();
         
         for (int i = 0; i < ordered.Count; ++i)
         {
             Header data = ordered[i];
             if (data.Type == BaseType.None) continue;
             data.Update();
-            switch (data.Type)
-            {
-                case BaseType.Character:
-                    ++characters;
-                    break;
-                case BaseType.Human:
-                    ++players;
-                    break;
-                case BaseType.Humanoid:
-                    ++humanoids;
-                    break;
-                case BaseType.Egg:
-                    ++eggs;
-                    break;
-                case BaseType.Item:
-                    ++items;
-                    break;
-                case BaseType.Fish:
-                    ++fish;
-                    break;
-                case BaseType.Projectile:
-                    ++projectiles;
-                    break;
-                case BaseType.Ragdoll:
-                    ++ragdoll;
-                    break;
-                case BaseType.SpawnAbility:
-                    ++spawnAbilities;
-                    break;
-                case BaseType.Visual:
-                    ++visual;
-                    break;
-                case BaseType.CreatureSpawner:
-                    ++spawners;
-                    break;
-                case BaseType.SpawnArea:
-                    ++spawnAreas;
-                    break;
-                case BaseType.SpawnData:
-                    ++spawnDatas;
-                    break;
-            }
+            if (count.ContainsKey(data.Type)) ++count[data.Type];
+            else count[data.Type] = 1;
         }
-
-        int count = characters + humanoids + players + eggs + items + fish + projectiles + ragdoll + spawnAbilities +
-                    visual + spawners + spawnAreas + spawnDatas;
         
         StringBuilder sb = new();
         sb.Append("Modified: ");
-        if (characters > 0) sb.Append($"{characters} characters, ");
-        if (humanoids > 0) sb.Append($"{humanoids} humanoids, ");
-        if (players > 0) sb.Append($"{players} humans, ");
-        if (eggs > 0) sb.Append($"{eggs} eggs, ");
-        if (items > 0) sb.Append($"{items} items, ");
-        if (fish > 0) sb.Append($"{fish} fishes, ");
-        if (projectiles > 0) sb.Append($"{projectiles} projectiles, ");
-        if (ragdoll > 0) sb.Append($"{ragdoll} ragdolls, ");
-        if (spawnAbilities > 0) sb.Append($"{spawnAbilities} abilities, ");
-        if (visual > 0) sb.Append($"{visual} prefabs, ");
-        if (spawners > 0) sb.Append($"{spawners} creature spawners, ");
-        if (spawnAreas > 0) sb.Append($"{spawnAreas} spawn areas, ");
-        if (spawnDatas > 0) sb.Append($"{spawnDatas} spawn datas, ");
-        sb.Append($"(total: {count})");
+        foreach (KeyValuePair<BaseType, int> kvp in count)
+        {
+            sb.Append($"{kvp.Value} {kvp.Key}, ");
+        }
+        sb.Append($"(total: {count.Sum(x => x.Value)})");
         
         MonsterDBPlugin.LogInfo(sb.ToString());
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -18,7 +17,15 @@ public static class ConfigManager
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
         .DisableAliases()
         .WithNamingConvention(NamingConvention)
+        .WithTypeConverter(InvariantCultureFloatConverter.Instance)
         .WithTypeConverter(VectorConverter.Instance)
+        .Build();
+
+    private static readonly ISerializer fullSerializer = new SerializerBuilder()
+        .DisableAliases()
+        .WithNamingConvention(NamingConvention)
+        .WithTypeConverter(VectorConverter.Instance)
+        .WithTypeConverter(InvariantCultureFloatConverter.Instance)
         .Build();
 
     private static readonly IDeserializer deserializer = new DeserializerBuilder()
@@ -26,14 +33,16 @@ public static class ConfigManager
         .WithNamingConvention(NamingConvention)
         .WithTypeConverter(FactionConverter.Instance)
         .WithTypeConverter(VectorConverter.Instance)
+        .WithTypeConverter(InvariantCultureFloatConverter.Instance)
         .Build();
     
     public static T Deserialize<T>(string data) => deserializer.Deserialize<T>(data);
-    public static string Serialize<T>(T obj)
+    public static string Serialize<T>(T obj, bool full = true)
     {
         if (obj == null) return "";
         using StringWriter sw = new StringWriter();
-        serializer.Serialize(sw, obj, obj.GetType());
+        if (fullFile.Value is Toggle.On && full) fullSerializer.Serialize(sw, obj, obj.GetType());
+        else serializer.Serialize(sw, obj, obj.GetType());
         return sw.ToString();
     }
     
@@ -45,7 +54,7 @@ public static class ConfigManager
     
     private static readonly ConfigEntry<LogLevel> logLevels;
     private static readonly ConfigEntry<Toggle> detailedDebugLogs;
-
+    private static readonly ConfigEntry<Toggle> fullFile;
     public static bool ShouldLog(LogLevel type)
     {
         return logLevels.Value.HasFlag(type);
@@ -77,6 +86,7 @@ public static class ConfigManager
 
         logLevels = config("1 - General", "Log Levels", LogLevel.All, "Set log levels", false);
         detailedDebugLogs = config("1 - General", "Detailed Debug Logs", Toggle.Off, "If on, debug logs will be detailed", false);
+        fullFile = config("1 - General", "Full File", Toggle.Off, "If on, exported YML will display all fields", false);
     }
 
     public static void Start()

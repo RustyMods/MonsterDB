@@ -12,7 +12,7 @@ public static partial class Commands
     public static void Init()
     {
         _ = new Command("export",
-            $"<color={HEX_Gray}>[Type]</color>: Export YML file",
+            $"<color={HEX_Gray}>[Type][ID]</color>: Export YML file",
             Export,
             GetExportOptions,
             descriptions: GetExportDescriptions);
@@ -23,7 +23,7 @@ public static partial class Commands
             adminOnly: true);
         
         _ = new Command("convert",
-            $"<color={HEX_Gray}>[Name]</color>: Convert specific legacy file into v.0.2.x format",
+            $"<color={HEX_Gray}>[Name]</color>: Convert specific or all legacy file into v.0.2.x format",
             Convert,
             GetConvertOptions,
             descriptions: GetConvertDescription);
@@ -35,32 +35,32 @@ public static partial class Commands
             adminOnly: true);
 
         _ = new Command("reset",
-            $"<color={HEX_Gray}>[Name]</color>: Reset prefab to factory settings",
+            $"<color={HEX_Gray}>[Type][Name]</color>: Reset prefab to factory settings",
             Revert,
             GetRevertOptions,
             adminOnly: true);
 
         _ = new Command("clone",
-            $"<color={HEX_Gray}>[PrefabID][Name]</color>: Clone prefab and export YML file",
+            $"<color={HEX_Gray}>[Type][ID][Name]</color>: Clone prefab and export YML file",
             Clone,
             GetCloneOptions,
             descriptions: GetCloneDescriptions,
             adminOnly: true);
 
         _ = new Command("search",
-            $"<color={HEX_Gray}></color>: Search item, texture or shader by name",
+            $"<color={HEX_Gray}>[Type][ID]</color>: Search item, texture or shader by name",
             Search,
             GetSearchOptions,
             descriptions: GetSearchDescriptions);
         
         _ = new Command("create",
-            "[prefabName]: create item from non-item prefabs",
+            $"<color={HEX_Gray}>[ID]</color>: create item from non-item prefabs",
             ItemManager.CreateItem,
             GetZNetPrefabNames,
             adminOnly: true);
         
         _ = new Command("snapshot",
-            $"<color={HEX_Gray}>[prefabName][optional<float>: lightIntensity][optional<Vector3>: cameraRotation]</color>: Generates and exports a prefab icon",
+            $"<color={HEX_Gray}>[ID][lightIntensity?][x?][y?][z?][w?]</color>: Generates and exports a prefab icon",
             Snapshot.Run,
             GetAllPrefabOptions);
         

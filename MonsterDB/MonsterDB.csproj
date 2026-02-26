@@ -140,6 +140,7 @@
         <Compile Include="Managers\Config\ConfigManager.cs" />
         <Compile Include="Managers\Config\ConfigurationManagerAttributes.cs" />
         <Compile Include="Managers\Config\YamlSettings.cs" />
+        <Compile Include="Managers\Conversion\ItemConversionRef.cs" />
         <Compile Include="Managers\CreatureSpawner\BaseCreatureSpawner.cs" />
         <Compile Include="Managers\CreatureSpawner\CreatureSpawnerManager.cs" />
         <Compile Include="Managers\CreatureSpawner\CreatureSpawnerRef.cs" />
@@ -203,6 +204,9 @@
         <Compile Include="Managers\Ragdoll\RagdollRef.cs" />
         <Compile Include="Managers\Raids\RaidManager.cs" />
         <Compile Include="Managers\Raids\RandomEventRef.cs" />
+        <Compile Include="Managers\Recipe\RecipeManager.cs" />
+        <Compile Include="Managers\Recipe\RecipeRef.cs" />
+        <Compile Include="Managers\Recipe\RequirementRef.cs" />
         <Compile Include="Managers\Reference.cs" />
         <Compile Include="Managers\SpawnAbility\BaseSpawnAbility.cs" />
         <Compile Include="Managers\SpawnAbility\SpawnAbilityRef.cs" />
