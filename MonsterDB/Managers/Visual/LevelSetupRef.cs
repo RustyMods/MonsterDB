@@ -9,12 +9,12 @@ namespace MonsterDB;
 [Serializable]
 public class LevelSetupRef : Reference
 {
-    [DefaultValue(1f)] public float m_scale = 1f;
+    public float m_scale = 1f;
     public float m_hue;
     public float m_saturation;
     public float m_value;
     public bool m_setEmissiveColor;
-    [DefaultValue("#FFFFFFFF")] public string m_emissiveColor = "#FFFFFFFF";
+    public string m_emissiveColor = "#FFFFFFFF";
     public string m_enableObject = "";
     
     public LevelSetupRef(){}

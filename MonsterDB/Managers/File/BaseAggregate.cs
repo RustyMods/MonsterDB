@@ -312,7 +312,6 @@ public class BaseAggregate : Header
         SpawnDatas ??= new Dictionary<string, BaseSpawnData>();
         SpawnDatas[spawnData.Prefab] = spawnData;
     }
-
     public void Add(BaseSpawnArea area)
     {
         SpawnAreas ??= new Dictionary<string, BaseSpawnArea>();
@@ -323,43 +322,36 @@ public class BaseAggregate : Header
         visuals ??= new Dictionary<string, BaseVisual>();
         visuals[visual.Prefab] = visual;
     }
-
     public void Add(BaseCreatureSpawner spawner)
     {
         CreatureSpawners ??= new  Dictionary<string, BaseCreatureSpawner>();
         CreatureSpawners[spawner.Prefab] = spawner;
     }
-
     public void Add(BaseSpawnAbility spawnAbility)
     {
         spawnAbilities ??= new Dictionary<string, BaseSpawnAbility>();
         spawnAbilities[spawnAbility.Prefab] = spawnAbility;
     }
-
     public void Add(BaseHumanoid humanoid)
     {
         humanoids ??= new Dictionary<string, BaseHumanoid>();
         humanoids[humanoid.Prefab] = humanoid;
     }
-
     public void Add(BaseCharacter character)
     {
         characters ??= new Dictionary<string, BaseCharacter>();
         characters[character.Prefab] = character;
     }
-
     public void Add(BaseHuman human)
     {
         humans ??= new Dictionary<string, BaseHuman>();
         humans[human.Prefab] = human;
     }
-
     public void Add(BaseFish fish)
     {
         fishes ??= new Dictionary<string, BaseFish>();
         fishes[fish.Prefab] = fish;
     }
-
     public void Add(BaseProjectile projectile)
     {
         projectiles ??= new Dictionary<string, BaseProjectile>();

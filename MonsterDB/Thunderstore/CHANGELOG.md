@@ -1,3 +1,9 @@
+## 0.2.8
+- added `VisEquipment` fields
+- added `FootStep` fields
+- added check on character m_boss field, if character is instance, then skips it as it causes EnemyHud errors when live changing Hud elements
+- removed default value check
+
 ## 0.2.7
 - tweaked emission color to multiply color by alpha to control intensity
 - added Custom/Blob Shader material properties to modify

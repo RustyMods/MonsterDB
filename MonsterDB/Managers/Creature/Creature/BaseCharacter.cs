@@ -42,8 +42,9 @@ public class BaseCharacter : Base
         base.UpdatePrefab(prefab, isInstance);
         UpdateCharacter(prefab, isInstance);
         UpdateAnimalTameable(prefab, isInstance);
+        UpdateFootStep(prefab, isInstance);
     }
-
+    
     private void UpdateCharacter(GameObject prefab, bool isInstance = false)
     {
         Character? character = prefab.GetComponent<Character>();
@@ -59,7 +60,7 @@ public class BaseCharacter : Base
             AI.UpdateFields(ai, prefab.name, !isInstance);
         }
     }
-
+    
     private void UpdateAnimalTameable(GameObject prefab, bool isInstance = false)
     {
         if (AI == null) return;

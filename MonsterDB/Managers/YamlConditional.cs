@@ -11,6 +11,7 @@ public class Condition : Attribute
     public bool bounce;
     public bool spawnOnHit;
     public bool randomSpawnOnHit;
+    public bool noInstance;
 
     public bool ShouldSetupField(ItemDrop.ItemData.SharedData sharedData)
     {

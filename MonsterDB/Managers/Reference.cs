@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using HarmonyLib;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -225,6 +226,10 @@ public abstract class Reference
                     targetType == typeof(List<SpawnAreaRef.SpawnDataRef>):
                     target.SetValue(this, spawns.ToSpawnDataRefList());
                     break;
+                case List<FootStep.StepEffect> stepEffects when
+                    targetType == typeof(List<StepEffectRef>):
+                    target.SetValue(this, stepEffects.ToStepEffectRefList());
+                    break;
             }
         }
         catch (Exception ex)
@@ -411,10 +416,21 @@ public abstract class Reference
         {
             UpdateCraftingStation(target, targetField, craftingStationName, targetName, log);
         }
+        else if (targetType == typeof(List<FootStep.StepEffect>) &&
+                 newValue is List<StepEffectRef> stepEffects)
+        {
+            UpdateStepEffect(target, targetField, stepEffects, targetName, log);
+        }
     }
 
     protected virtual void UpdateAssignableType<T>(T target, FieldInfo targetField, Type targetType, object value, string targetName, bool log)
     {
+        if (target is Character character && character.name.Contains("(Clone)") && targetField.Name == "m_boss")
+        {
+            MonsterDBPlugin.LogDebug("Skipping m_boss, prefab is an instance");
+            return;
+        }
+        
         targetField.SetValue(target, value);
         if (log)
         {
@@ -465,6 +481,23 @@ public abstract class Reference
         }
     }
 
+    public void UpdateStepEffect<T>(T target, FieldInfo targetField, List<StepEffectRef> effects, string targetName,
+        bool log)
+    {
+        if (targetField.GetValue(target) is not List<FootStep.StepEffect> defaultValues) return;
+        List<FootStep.StepEffect> stepEffects = effects.ToFootStepEffects(defaultValues);
+        targetField.SetValue(target, stepEffects);
+        if (log)
+        {
+            MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: FootStep.StepEffect[{stepEffects.Count}]");
+            for (int i = 0; i < stepEffects.Count; ++i)
+            {
+                FootStep.StepEffect? effect = stepEffects[i];
+                string joined = string.Join(", ", effect.m_effectPrefabs.Select(e => e.name));
+                MonsterDBPlugin.LogDebug($"[{targetName}][{targetField.Name}] {effect.m_name}: {joined}");
+            }
+        }
+    }
     protected void UpdateRequirements<T>(T target, FieldInfo targetField, RequirementRef[] requirements,
         string targetName, bool log)
     {

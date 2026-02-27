@@ -156,6 +156,7 @@
         <Compile Include="Managers\Creature\Components\CinderRef.cs" />
         <Compile Include="Managers\Creature\Components\CinderSpawnerRef.cs" />
         <Compile Include="Managers\Creature\Components\DropProjectileOverDistanceRef.cs" />
+        <Compile Include="Managers\Creature\Components\FootStepRef.cs" />
         <Compile Include="Managers\Creature\Components\GrowUpRef.cs" />
         <Compile Include="Managers\Creature\Components\MovementDamageRef.cs" />
         <Compile Include="Managers\Creature\Components\NPCTalkRef.cs" />
@@ -163,6 +164,7 @@
         <Compile Include="Managers\Creature\Components\RandomAnimationRef.cs" />
         <Compile Include="Managers\Creature\Components\SaddleRef.cs" />
         <Compile Include="Managers\Creature\Components\TameableRef.cs" />
+        <Compile Include="Managers\Creature\Components\VisEquipmentRef.cs" />
         <Compile Include="Managers\Creature\CreatureManager.cs" />
         <Compile Include="Managers\Creature\Creature\Base.cs" />
         <Compile Include="Managers\Creature\Creature\BaseCharacter.cs" />

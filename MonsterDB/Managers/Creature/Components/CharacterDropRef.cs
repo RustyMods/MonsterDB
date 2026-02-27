@@ -21,12 +21,12 @@ public class CharacterDropRef : Reference
 public class DropRef : Reference
 {
     public string? m_prefab;
-    [DefaultValue(1)] public int? m_amountMin;
-    [DefaultValue(1)] public int? m_amountMax;
-    [DefaultValue(1f)] public float? m_chance;
-    [DefaultValue(false)] public bool? m_onePerPlayer;
-    [DefaultValue(true)] public bool? m_levelMultiplier;
-    [DefaultValue(false)] public bool? m_dontScale;
+    public int? m_amountMin;
+    public int? m_amountMax;
+    public float? m_chance;
+    public bool? m_onePerPlayer;
+    public bool? m_levelMultiplier;
+    public bool? m_dontScale;
     
     public DropRef(){}
 

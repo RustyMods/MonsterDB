@@ -31,6 +31,7 @@ public class Base : Header
     [YamlMember(Order = 17)] public CinderSpawnerRef? CinderSpawner;
     [YamlMember(Order = 18)] public CharacterTimedDestructionRef? TimedDestruction;
     [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled too false to disable")] public SpawnDataRef[]? SpawnData;
+    [YamlMember(Order = 20)] public FootStepRef? FootStep;
     [YamlMember(Order = 100)] public MiscComponent? Extra;
     [YamlMember(Order = 101, Description = "Reference only, these are attack animation triggers")] public List<string>? AnimationTriggers;
 
@@ -66,6 +67,7 @@ public class Base : Header
         if (DropProjectileOverDistance != null && originalBase.DropProjectileOverDistance != null) DropProjectileOverDistance.ResetTo(originalBase.DropProjectileOverDistance);
         if (CinderSpawner != null && originalBase.CinderSpawner != null)  CinderSpawner.ResetTo(originalBase.CinderSpawner);
         if (TimedDestruction != null && originalBase.TimedDestruction != null)  TimedDestruction.ResetTo(originalBase.TimedDestruction);
+        if (FootStep != null && originalBase.FootStep != null) FootStep.ResetTo(originalBase.FootStep);
     }
 
     protected void SetupAnimationTriggers(GameObject prefab)
@@ -141,6 +143,11 @@ public class Base : Header
         }
         
         SetupAnimationTriggers(prefab);
+
+        if (prefab.TryGetComponent(out FootStep footStep))
+        {
+            FootStep = new FootStepRef(footStep);
+        }
         
         if (isClone)
         {
@@ -212,6 +219,14 @@ public class Base : Header
         UpdateDropProjectile(prefab, isInstance);
         UpdateCinderSpawner(prefab, isInstance);
         UpdateTimedDestruction(prefab, isInstance);
+        UpdateFootStep(prefab, isInstance);
+    }
+    
+    public void UpdateFootStep(GameObject prefab, bool isInstance)
+    {
+        if (FootStep == null) return;
+        if (!prefab.TryGetComponent(out FootStep component)) return;
+        FootStep.UpdateFields(component, prefab.name, !isInstance);
     }
     
     protected virtual void UpdateVisual(GameObject prefab, bool isInstance = false)

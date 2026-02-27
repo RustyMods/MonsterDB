@@ -10,9 +10,9 @@ public class MinMaxGradientRef : Reference
 {
     [YamlMember(Description = "Color, Gradient, TwoColors, TwoGradients, RandomColor")] 
     public ParticleSystemGradientMode? m_mode;
-    [DefaultValue("#00000000")] public string? m_color;
-    [DefaultValue("#00000000")] public string? m_colorMin;
-    [DefaultValue("#00000000")] public string? m_colorMax;
+    public string? m_color;
+    public string? m_colorMin;
+    public string? m_colorMax;
     public GradientRef? m_gradient;
     public GradientRef? m_gradientMin;
     public GradientRef? m_gradientMax;

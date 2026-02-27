@@ -10,6 +10,7 @@ public class BaseHumanoid : Base
 {
     [YamlMember(Order = 6)] public HumanoidRef? Character;
     [YamlMember(Order = 7)] public MonsterAIRef? AI;
+    [YamlMember(Order = 8)] public VisEquipmentRef? VisEquipment;
     
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
@@ -20,6 +21,7 @@ public class BaseHumanoid : Base
         Type = BaseType.Humanoid;
         Character = new HumanoidRef(character);
         AI = new MonsterAIRef(ai);
+        if (prefab.TryGetComponent(out VisEquipment visEq)) VisEquipment = new  VisEquipmentRef(visEq);
     }
     
     public override void CopyFields(Header original)
@@ -28,6 +30,7 @@ public class BaseHumanoid : Base
         if (original is not BaseHumanoid originalCharacter) return;
         if (Character != null && originalCharacter.Character != null) Character.ResetTo(originalCharacter.Character);
         if (AI != null && originalCharacter.AI != null) AI.ResetTo(originalCharacter.AI);
+        if (VisEquipment != null && originalCharacter.VisEquipment != null)  VisEquipment.ResetTo(originalCharacter.VisEquipment);
     }
 
     public override void Update()
@@ -47,7 +50,15 @@ public class BaseHumanoid : Base
         else
         {
             UpdateHumanoid(prefab);
+            UpdateVisEquipment(prefab);
         }
+    }
+
+    private void UpdateVisEquipment(GameObject prefab)
+    {
+        if (VisEquipment == null) return;
+        if (!prefab.TryGetComponent(out VisEquipment visEq)) return;
+        VisEquipment.UpdateFields(visEq, prefab.name, true);
     }
 
     private void UpdateHumanoid(GameObject prefab)
