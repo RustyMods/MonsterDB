@@ -1,3 +1,6 @@
+## 0.2.9
+- hotfix full file serialization
+
 ## 0.2.8
 - added `VisEquipment` fields
 - added `FootStep` fields

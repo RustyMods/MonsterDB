@@ -24,7 +24,6 @@ public static class ConfigManager
     private static readonly ISerializer fullSerializer = new SerializerBuilder()
         .DisableAliases()
         .WithNamingConvention(NamingConvention)
-        .WithTypeConverter(VectorConverter.Instance)
         .WithTypeConverter(InvariantCultureFloatConverter.Instance)
         .Build();
 
