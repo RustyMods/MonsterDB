@@ -24,7 +24,7 @@ public class GrowUpRef : Reference
     public class GrownEntry : Reference
     {
         public string m_prefab = "";
-        [DefaultValue(1f)] public float m_weight;
+        public float m_weight;
         
         public GrownEntry(){}
 

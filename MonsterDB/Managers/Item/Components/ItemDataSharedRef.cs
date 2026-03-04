@@ -119,8 +119,8 @@ public sealed class ItemDataSharedRef : Reference
     public bool? m_aiPrioritized;
     public bool? m_aiInDungeonOnly;
     public bool? m_aiInMistOnly;
-    [DefaultValue(1f)] public float? m_aiMaxHealthPercentage;
-    [DefaultValue(0f)]public float? m_aiMinHealthPercentage;
+    public float? m_aiMaxHealthPercentage;
+    public float? m_aiMinHealthPercentage;
     public ItemDrop.ItemData.AiTarget? m_aiTargetType;
     
     [YamlMember(Description = "Item Effects")]

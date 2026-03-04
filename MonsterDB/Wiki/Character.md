@@ -158,11 +158,6 @@ randomItems: List<RandomItem>
 consumeItemEffects: EffectList
 equipEffects: EffectList
 perfectBlockEffect: EffectList
-
-# Direct list of attack ItemData
-# NOTE: Player clones should not use this list. They use player items (e.g., SwordIron) as attacks.
-# Changing this will affect player items globally.
-attacks: List<ItemData>
 ```
 
 ### ItemSet

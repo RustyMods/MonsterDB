@@ -11,7 +11,7 @@ public class RagdollRef : Reference
     public EffectListRef? m_removeEffect;
     public bool? m_float;
     public float? m_floatOffset;
-    [DefaultValue(true)] public bool? m_dropItems;
+    public bool? m_dropItems;
     
     public RagdollRef(){}
     public RagdollRef(Ragdoll doll) => Setup(doll);

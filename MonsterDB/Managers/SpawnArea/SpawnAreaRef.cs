@@ -12,15 +12,15 @@ public class SpawnAreaRef : Reference
 {
     public List<SpawnDataRef>? m_prefabs;
     [YamlMember(Alias = "m_levelUpChance")] public float? m_levelupChance = 15f;
-     public float? m_spawnIntervalSec = 30f;
-     public float? m_triggerDistance = 256f;
-     public bool? m_setPatrolSpawnPoint = true;
-     public float? m_spawnRadius = 2f;
-     public float? m_nearRadius = 10f;
-     public float? m_farRadius = 1000f;
-     public int? m_maxNear = 3;
-     public int? m_maxTotal = 20;
-     public bool? m_onGroundOnly;
+    public float? m_spawnIntervalSec = 30f;
+    public float? m_triggerDistance = 256f;
+    public bool? m_setPatrolSpawnPoint = true;
+    public float? m_spawnRadius = 2f;
+    public float? m_nearRadius = 10f;
+    public float? m_farRadius = 1000f;
+    public int? m_maxNear = 3;
+    public int? m_maxTotal = 20;
+    public bool? m_onGroundOnly;
     public EffectListRef? m_spawnEffects;
 
     public SpawnAreaRef(){}

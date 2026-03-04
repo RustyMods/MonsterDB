@@ -8,7 +8,6 @@ namespace MonsterDB;
 [Serializable]
 public class MaterialRef : Reference
 {
-
     public string m_name = "";
     public string m_shader = "";
     public string? m_color = "";

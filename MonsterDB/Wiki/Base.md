@@ -15,6 +15,9 @@ Projectile
 Ragdoll
 SpawnAbility
 Visual
+CreatureSpawner
+SpawnArea
+SpawnData
 All
 ```
 
@@ -63,6 +66,20 @@ SpawnAbility is a prefab with component `SpawnAbility`
 ### Visual
 
 Visual is a prefab renderer, particle system and light data. Use this if you wish to modify just the visual of a prefab. Useful for targeting effect prefabs.
+
+### CreatureSpawner
+
+Creature spawner is a prefab with component `CreatureSpawner` and optionally `RandomSpawn`, (i.e `Spawner_Bat` `Spawner_Charred`).
+These prefabs typically do not have a mesh thus are invisible.
+
+### SpawnArea
+
+Spawn area is a prefab with component `SpawnArea`. These prefabs are similar to creature spawner, but do have a mesh. (i.e: `BonePileSpawner`)
+
+### SpawnData
+
+Spawn data contains fields to manipulate SpawnSystem spawn data. SpawnData is exported along side new cloned creatures to keep relevant edits within the same file,
+but you can have it exist in its own file by using `SpawnData` type.
 
 ### All
 

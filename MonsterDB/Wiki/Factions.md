@@ -2,7 +2,7 @@
 
 MonsterDB allows to define custom factions. Be careful when modifying a character faction field. Any values that isn't part of the default Valheim factions, will automatically be generated as a custom faction.
 
-You will need to define the faction properties in `Faction.yml` in MonsterDB top directory (e.g `BepInEx/config/MonsterDB/Faction.yml`)
+You will need to define the faction properties in `Factions.yml` in MonsterDB top directory (e.g `BepInEx/config/MonsterDB/Factions.yml`)
 
 ### Example
 ```yml

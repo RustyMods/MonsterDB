@@ -7,10 +7,17 @@ namespace MonsterDB;
 [Serializable]
 public class GradientRef : Reference
 {
-    [YamlMember(Description = "Blend, Fixed, PerceptualBlend")] public GradientMode? m_mode;
-    [YamlMember(Description = "Set opacity over time")] public GradientAlphaKeyRef[]? m_alphaKeys;
-    [YamlMember(Description = "Set color over time")] public GradientColorKeyRef[]? m_colorKeys;
-    [YamlMember(Description = "Uninitialized, Gamma, Linear")] public ColorSpace? m_colorSpace;
+    [YamlMember(Description = "Blend, Fixed, PerceptualBlend")] 
+    public GradientMode? m_mode;
+    
+    [YamlMember(Description = "Set opacity over time")] 
+    public GradientAlphaKeyRef[]? m_alphaKeys;
+    
+    [YamlMember(Description = "Set color over time")] 
+    public GradientColorKeyRef[]? m_colorKeys;
+    
+    [YamlMember(Description = "Uninitialized, Gamma, Linear")] 
+    public ColorSpace? m_colorSpace;
 
     public void Update(Gradient grad)
     {

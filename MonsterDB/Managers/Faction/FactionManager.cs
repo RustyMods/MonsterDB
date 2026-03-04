@@ -214,10 +214,12 @@ public static class FactionManager
 
         if (data == null && !customFactions.TryGetValue(faction, out data))
         {
-            data = new Faction()
+            data = new Faction
             {
                 name = name,
             };
+            MonsterDBPlugin.LogInfo($"Loading faction: {name} ( missing YML data, will be enemy to everyone! )");
+            
         }
         // Register data
         customFactions[faction] = data;

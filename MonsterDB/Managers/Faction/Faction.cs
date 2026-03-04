@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonsterDB;
 
@@ -15,6 +16,12 @@ public class Faction
     {
         if (string.IsNullOrEmpty(name)) return;
         FactionManager.GetFaction(name, this);
+        MonsterDBPlugin.LogInfo("Loading faction: " + name);
+        if (ConfigManager.ShouldLogDetails())
+        {
+            MonsterDBPlugin.LogDebug($"[ Faction: {name} ] m_targetTamed: {targetTamed}, m_targetTameables: {targetTameables}");
+            MonsterDBPlugin.LogDebug($"[ Faction: {name} ] m_allies: {string.Join(", ", allies.Select(s => s.ToString()))}");
+        }
     }
     
     public bool IsEnemy(Character custom, Character other)

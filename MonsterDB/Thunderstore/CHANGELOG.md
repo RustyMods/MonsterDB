@@ -1,3 +1,8 @@
+## 0.3.0
+- added logs for factions.yml loading / updates
+- updated Factions.md to correct name of file: `Factions.yml`
+- updated READMEs to include new features and their details
+
 ## 0.2.9
 - hotfix full file serialization
 

@@ -932,13 +932,17 @@
         <EmbeddedResource Include="Wiki\Egg.md" />
         <EmbeddedResource Include="Wiki\Factions.md" />
         <EmbeddedResource Include="Wiki\Fish.md" />
+        <EmbeddedResource Include="Wiki\FootStep.md" />
+        <EmbeddedResource Include="Wiki\Item.md" />
         <EmbeddedResource Include="Wiki\MovementDamage.md" />
         <EmbeddedResource Include="Wiki\NPCTalk.md" />
+        <EmbeddedResource Include="Wiki\Raids.md" />
         <EmbeddedResource Include="Wiki\README.md" />
         <EmbeddedResource Include="Wiki\Saddle.md" />
         <EmbeddedResource Include="Wiki\SpawnData.md" />
         <EmbeddedResource Include="Wiki\Tameable.md" />
         <EmbeddedResource Include="Wiki\ItemData.md" />
+        <EmbeddedResource Include="Wiki\VisEquipment.md" />
         <EmbeddedResource Include="Wiki\Visuals.md" />
     </ItemGroup>
     
