@@ -8,37 +8,24 @@
 
 <br/>
 
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/frostling.png?raw=true" alt="Frostling" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/volture.png?raw=true" alt="Volture" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/deer.png?raw=true" alt="Deer" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/seeker.png?raw=true" alt="Seeker" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/obsidian-golem.png?raw=true" alt="Obsidian Golem" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/seeker-egg.png?raw=true" alt="Seeker Egg" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/neck-egg.png?raw=true" alt="Neck Egg" width="800"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/bear.png?raw=true" alt="Bear" width="800"/>
-</p>
+<table align="center">
+  <tr>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/frostling.png?raw=true" alt="Frostling" width="380" height="380" style="object-fit:cover"/></td>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/volture.png?raw=true" alt="Volture" width="380" height="380" style="object-fit:cover"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/deer.png?raw=true" alt="Deer" width="380" height="380" style="object-fit:cover"/></td>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/seeker.png?raw=true" alt="Seeker" width="380" height="380" style="object-fit:cover"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/obsidian-golem.png?raw=true" alt="Obsidian Golem" width="380" height="380" style="object-fit:cover"/></td>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/seeker-egg.png?raw=true" alt="Seeker Egg" width="380" height="380" style="object-fit:cover"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/skeleton.png?raw=true" alt="Bronze Skeleton" width="380" height="380" style="object-fit:cover"/></td>
+    <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/bear.png?raw=true" alt="Bear" width="380" height="380" style="object-fit:cover"/></td>
+  </tr>
+</table>
 
 <br/>
 
