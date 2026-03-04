@@ -256,6 +256,17 @@
         <Content Include="framework.props" />
         <Content Include="manifest.targets" />
         <EmbeddedResource Include="translations\English.yml" />
+        <Content Include="Screenshots\frostling.png" />
+        <Content Include="Screenshots\frostling-trophy.png" />
+        <Content Include="Screenshots\volture.png" />
+        <Content Include="Screenshots\deer.png" />
+        <Content Include="Screenshots\seeker.png" />
+        <Content Include="Screenshots\obsidian-golem.png" />
+        <Content Include="Screenshots\seeker-egg.png" />
+        <Content Include="Screenshots\neck-egg.png" />
+        <Content Include="Screenshots\polar-lox.png" />
+        <Content Include="Screenshots\bear.png" />
+        <Content Include="Screenshots\skeleton.png" />
         <Content Include="Wiki\Reference\Import\ObsidianGolem\items\ObsidianGolem_clubs.yml" />
         <Content Include="Wiki\Reference\Import\ObsidianGolem\items\ObsidianGolem_hat.yml" />
         <Content Include="Wiki\Reference\Import\ObsidianGolem\items\ObsidianGolem_spikes.yml" />
