@@ -2,6 +2,7 @@
 - added logs for factions.yml loading / updates
 - updated Factions.md to correct name of file: `Factions.yml`
 - updated READMEs to include new features and their details
+- added RRR Converter, required dependency for command to show up and work: https://thunderstore.io/c/valheim/p/ValheimModding/JsonDotNET/
 
 ## 0.2.9
 - hotfix full file serialization

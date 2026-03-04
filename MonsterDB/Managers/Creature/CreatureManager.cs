@@ -170,9 +170,11 @@ public static class CreatureManager
         ExportHierarchy(prefab, filePath);
     }
     
-    public static bool TrySave(GameObject prefab, out Base? data, bool isClone = false, string source = "")
+    public static bool TrySave(GameObject prefab, out Base data, bool isClone = false, string source = "")
     {
+#pragma warning disable CS8601 // Possible null reference assignment.
         data = LoadManager.GetOriginal<Base>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
         if (data != null) return true;
         
         Character? character = prefab.GetComponent<Character>();
@@ -215,7 +217,7 @@ public static class CreatureManager
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         string filePath = Path.Combine(folder, prefab.name + ".yml");
 
-        if (!TrySave(prefab, out Base? data, isClone, source)) return;
+        if (!TrySave(prefab, out Base data, isClone, source)) return;
         
         string text = ConfigManager.Serialize(data);
         File.WriteAllText(filePath, text);

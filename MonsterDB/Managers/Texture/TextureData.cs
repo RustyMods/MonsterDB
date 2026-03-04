@@ -49,12 +49,15 @@ public class TextureData
         return sprite;
     }
 
-    public void Write()
+    public void Write(string filepath = "")
     {
-        var folderPath = Path.Combine(FileManager.ImportFolder, "textures");
-        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-        string filePath = Path.Combine(folderPath, m_name + ".png");
-        File.WriteAllBytes(filePath, m_bytes);
+        if (string.IsNullOrEmpty(filepath))
+        {
+            string folderPath = Path.Combine(FileManager.ImportFolder, "textures");
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            filepath = Path.Combine(folderPath, m_name + ".png");
+        }
+        File.WriteAllBytes(filepath, m_bytes);
     }
 }
 

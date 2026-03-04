@@ -18,7 +18,8 @@ public class CharacterRef : Reference
     [YamlMember(Order = 6)] public string? m_defeatSetGlobalKey;
     [YamlMember(Order = 7)] public bool? m_aiSkipTarget;
 
-    [YamlMember(Order = 8, Description = "Speed")][DefaultValue(2f)]   public float? m_crouchSpeed;
+    [YamlMember(Order = 8, Description = "Speed")]
+    public float? m_crouchSpeed;
     [YamlMember(Order = 9)] public float? m_walkSpeed;
     [YamlMember(Order = 10)] public float? m_speed;
     [YamlMember(Order = 11)] public float? m_turnSpeed;
@@ -26,13 +27,15 @@ public class CharacterRef : Reference
     [YamlMember(Order = 13)] public float? m_runTurnSpeed;
     [YamlMember(Order = 14)] public float? m_acceleration;
 
-    [YamlMember(Order = 15, Description = "Jumping")][DefaultValue(10f)]  public float? m_jumpForce;
+    [YamlMember(Order = 15, Description = "Jumping")]
+    public float? m_jumpForce;
     [YamlMember(Order = 16)] public float? m_jumpForceForward;
     [YamlMember(Order = 17)] public float? m_jumpForceTiredFactor;
     [YamlMember(Order = 18)] public float? m_airControl;
     [YamlMember(Order = 19)] public float? m_jumpStaminaUsage;
 
-    [YamlMember(Order = 20, Description = "Flying")][DefaultValue(false)]  public bool? m_flying;
+    [YamlMember(Order = 20, Description = "Flying")]
+    public bool? m_flying;
     [YamlMember(Order = 21)] public float? m_flySlowSpeed;
     [YamlMember(Order = 22)] public float? m_flyFastSpeed;
     [YamlMember(Order = 23)] public float? m_flyTurnSpeed;
@@ -46,7 +49,8 @@ public class CharacterRef : Reference
     [YamlMember(Order = 29)] public Character.GroundTiltType? m_groundTilt;
     [YamlMember(Order = 30)] public float? m_groundTiltSpeed;
 
-    [YamlMember(Order = 31, Description = "Gravity disabled while sleeping")][DefaultValue(false)]  public bool? m_disableWhileSleeping;
+    [YamlMember(Order = 31, Description = "Gravity disabled while sleeping")]
+    public bool? m_disableWhileSleeping;
     [YamlMember(Order = 32)] public bool? m_useAltStatusEffectScaling;
     [YamlMember(Order = 33)]public bool? m_tolerateWater;
     [YamlMember(Order = 34)]  public bool? m_tolerateFire;

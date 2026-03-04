@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BepInEx.Bootstrap;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -69,6 +70,11 @@ public static partial class Commands
             ShaderRef.PrintShaderProperties,
             ShaderRef.GetShaderOptions,
             isSecret: true);
+
+        if (Chainloader.PluginInfos.ContainsKey("com.ValheimModding.NewtonsoftJsonDetector"))
+        {
+            _ = new Command("rrr", "read and convert all rrr files found in RRR folder", RRRConvert);
+        }
         
 #pragma warning disable CS0612 // Type or member is obsolete
         InitOldCommands();

@@ -135,6 +135,7 @@
         <Compile Include="Managers\Command\Commands\Convert.cs" />
         <Compile Include="Managers\Command\Commands\Export.cs" />
         <Compile Include="Managers\Command\Commands\Revert.cs" />
+        <Compile Include="Managers\Command\Commands\RRR.cs" />
         <Compile Include="Managers\Command\Commands\Search.cs" />
         <Compile Include="Managers\Command\Commands\Update.cs" />
         <Compile Include="Managers\Config\ConfigManager.cs" />
@@ -245,6 +246,25 @@
         <Compile Include="Managers\YamlConditional.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="RRR\Classes\RRR_CustomAttacks.cs" />
+        <Compile Include="RRR\Classes\RRR_Appearance.cs" />
+        <Compile Include="RRR\Classes\RRR_BaseAI.cs" />
+        <Compile Include="RRR\Classes\RRR_Character.cs" />
+        <Compile Include="RRR\Classes\RRR_CharacterDrop.cs" />
+        <Compile Include="RRR\Classes\RRR_Humanoid.cs" />
+        <Compile Include="RRR\Classes\RRR_MonsterAI.cs" />
+        <Compile Include="RRR\Classes\RRR_NPC.cs" />
+        <Compile Include="RRR\Classes\RRR_Special.cs" />
+        <Compile Include="RRR\Classes\RRR_Damages.cs" />
+        <Compile Include="RRR\Classes\RRR_Color.cs" />
+        <Compile Include="RRR\Classes\RRR_DamageModifiers.cs" />
+        <Compile Include="RRR\Classes\RRR_Drop.cs" />
+        <Compile Include="RRR\Classes\RRR_RandomSet.cs" />
+        <Compile Include="RRR\Classes\RRR_Main.cs" />
+        <Compile Include="RRR\Classes\RRR_Scale.cs" />
+        <Compile Include="RRR\DropThat\DropThat.cs" />
+        <Compile Include="RRR\DropThat\DropThat_Parser.cs" />
+        <Compile Include="RRR\RRRConverter.cs" />
         <Compile Include="VersionHandshake.cs" />
         <Compile Include="Wiki\Wiki.cs" />
     </ItemGroup>
@@ -963,6 +983,7 @@
     
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
     </ItemGroup>
     
