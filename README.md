@@ -1,71 +1,128 @@
-# MonsterDB
-Plugin allows users to manipulate variables of monsters in the game and clone them
+<div align="center">
 
-### Features
+<br/>
 
-- modify creatures, items, egg items, fish items
-- clone creature, items, egg items, fish items
-- make any creature tameable
-- make any item into an egg
-- make any item into a fish
-- define custom factions
-- define custom spawn data
-- modify creature visuals (e.g. texture, color, scale)
-- export textures as png
+<h1 align="center">MonsterDB</h1>
 
-MonsterDB should be able to modify/clone any creatures, including added creatures from other mods
+<h3 align="center">Manipulate, clone, and customize any creature or item in Valheim — including those added by other mods.</h3>
 
-### Use cases
+<br/>
 
-- create variants of any creatures with custom textures or audio
-- make creatures more engaging by adding effects or attacks
-- modify specific aspects of creatures
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/frostling.png?raw=true" alt="Frostling" width="800"/>
+</p>
 
-### Examples
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/volture.png?raw=true" alt="Volture" width="800"/>
+</p>
 
-Visit MonsterDB Github for curated examples
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/deer.png?raw=true" alt="Deer" width="800"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/seeker.png?raw=true" alt="Seeker" width="800"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/obsidian-golem.png?raw=true" alt="Obsidian Golem" width="800"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/seeker-egg.png?raw=true" alt="Seeker Egg" width="800"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/neck-egg.png?raw=true" alt="Neck Egg" width="800"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/bear.png?raw=true" alt="Bear" width="800"/>
+</p>
+
+<br/>
+
+<table><tr><td width="900">
+<br/>
+
+MonsterDB is a Valheim plugin that gives you full control over creatures and items in the game. Modify stats, visuals, and behaviors — or clone any prefab to create entirely new variants. MonsterDB works with any creature or item, including those added by other mods.
+
+<br/>
+</td></tr></table>
+
+<br/>
+
+<h1 align="center">Features</h1>
+
+<table><tr><td width="900">
+<br/>
+
+### Modify & Clone
+- Modify or clone **creatures, items, egg items, and fish items**
+- Modify **creature visuals** — texture, color, and scale
+- Export **textures as PNG**
+
+### Creature Customization
+- Make any creature **tameable**
+- Define **custom factions** and **custom spawn data**
+- Add effects, attacks, and audio to make creatures more engaging
+
+### Item Customization
+- Turn any item into an **egg** or a **fish**
+
+<br/>
+</td></tr></table>
+
+<br/>
+
+<h1 align="center">Use Cases</h1>
+
+<table><tr><td width="900">
+<br/>
+
+- Create **variants of any creature** with custom textures or audio
+- Make creatures more engaging by adding **effects or attacks**
+- Modify specific aspects of creatures for balance or gameplay purposes
+- Build entirely new creature ecosystems using **clones and spawn data**
+
+<br/>
+</td></tr></table>
+
+<br/>
+
+<h1 align="center">Examples</h1>
+
+<table><tr><td width="900">
+<br/>
+
+Visit the [MonsterDB GitHub](https://github.com/RustyMods/MonsterDB) for curated examples.
 
 - Make `Neck` tameable and procreate `NeckEgg` which hatches into `Neck_hatchling` and grows up into a `Neck`
 - Make `Player` into a `Human` NPC
 
-### Server sync
+<br/>
+</td></tr></table>
 
-1. Game load, plugin starts, reads all files from `Import` folder
-2. ZNet starts (Multiplayer)
-    3. if server: loads all imported files
-        4. creates clones
-        5. updates all
-    6. if connecting to server: waits for files from server
-        7. creates clones
-        8. updates all
-9. if `FileWatcher` enabled, any changes made on server, will automatically be sent to all clients
-    10. update specific prefab from file
+<br/>
 
-<div class="container"> 
-   <img src="https://i.imgur.com/yDQlQQP.png" alt="Screenshot 1" width="600"/>
-</div>
-<div class="container"> 
-   <img src="https://i.imgur.com/f7GPjiY.png" alt="Screenshot 2" width="600"/>
-</div>
-<div class="container"> 
-   <img src="https://i.imgur.com/R2mU5il.png" alt="Screenshot 3" width="600"/>
-</div>
-<div class="container"> 
-   <img src="https://i.imgur.com/JHPNKfu.png" alt="Screenshot 4" width="600"/>
-</div>
-<div class="container"> 
-   <img src="https://i.imgur.com/wjeJBbg.png" alt="Screenshot 5" width="600"/>
-</div>
-<div class="container"> 
-   <img src="https://i.imgur.com/j5CBR33.png" alt="Screenshot 6" width="600"/>
-</div>
-<div class="container"> 
-   <img src="https://i.imgur.com/1D3NPLO.png" alt="Screenshot 7" width="600"/>
-</div>
+<h1 align="center">Sync</h1>
 
-<style>
-   .container {
-      text-align: center;
-   }
-</style>
+<table><tr><td width="900">
+<br/>
 
+MonsterDB includes full server synchronization support so all clients stay consistent with the server's configuration.
+
+| Step | Description |
+|:---|:---|
+| **Game Load** | Plugin starts and reads all files from the `Import` folder |
+| **Server** | Loads imported files, creates clones, and applies all updates |
+| **Client** | Waits for files from the server, then creates clones and applies updates |
+| **FileWatcher** | If enabled, any changes made on the server are automatically sent to all connected clients |
+
+<br/>
+</td></tr></table>
+
+<br/>
+
+
+</div>
