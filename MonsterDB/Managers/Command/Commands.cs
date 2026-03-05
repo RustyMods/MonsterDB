@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BepInEx.Bootstrap;
 using UnityEngine;
@@ -74,6 +75,7 @@ public static partial class Commands
         if (Chainloader.PluginInfos.ContainsKey("com.ValheimModding.NewtonsoftJsonDetector"))
         {
             _ = new Command("rrr", "read and convert all rrr files found in RRR folder", RRRConvert);
+
         }
         
 #pragma warning disable CS0612 // Type or member is obsolete

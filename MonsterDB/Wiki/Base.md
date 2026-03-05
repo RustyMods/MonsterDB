@@ -1,6 +1,6 @@
 # Main files
 
-MonsterDB supports nine Base Types, defined by the Type field in each file.
+MonsterDB supports 13 Base Types, defined by the Type field in each file.
 This field determines how MonsterDB parses and processes the file and must not be changed.
 
 ### BaseType

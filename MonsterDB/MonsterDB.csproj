@@ -983,7 +983,6 @@
     
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
     </ItemGroup>
     

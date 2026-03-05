@@ -53,7 +53,7 @@ public class EffectListRef
     public class EffectDataRef : Reference
     {
         public string m_prefab = "";
-        [DefaultValue(-1)] public int m_variant = -1;
+        public int m_variant = -1;
         public bool m_attach;
         public bool m_follow;
         public bool m_inheritParentRotation;

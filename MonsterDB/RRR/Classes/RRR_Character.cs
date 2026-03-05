@@ -1,9 +1,8 @@
 ﻿using System;
-using Newtonsoft.Json;
 
 namespace MonsterDB;
 
-[Serializable][JsonObject]
+[Serializable]
 public class RRR_Character
 {
     public string? sName ;

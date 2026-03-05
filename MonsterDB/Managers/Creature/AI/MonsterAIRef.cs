@@ -23,7 +23,8 @@ public class MonsterAIRef : BaseAIRef
      public bool? m_circulateWhileChargingFlying;
      public bool? m_enableHuntPlayer;
      public bool? m_attackPlayerObjects;
-    [YamlMember(Alias = "m_privateAreaTriggerThreshold")] [DefaultValue(4)] public int? m_privateAreaTriggerTreshold;
+    [YamlMember(Alias = "m_privateAreaTriggerThreshold")]
+     public int? m_privateAreaTriggerTreshold;
      public float? m_interceptTimeMax;
      public float? m_interceptTimeMin;
      public float? m_maxChaseDistance;

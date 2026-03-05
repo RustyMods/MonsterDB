@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 
 namespace MonsterDB;
 
+[BepInDependency("com.ValheimModding.NewtonsoftJsonDetector", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(ModGUID, ModName, ModVersion)]
 public class MonsterDBPlugin : BaseUnityPlugin
 {

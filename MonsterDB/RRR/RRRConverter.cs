@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Reflection;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -14,6 +14,8 @@ public static class RRRConverter
     private static readonly Dictionary<string, RRR_Main> files;
     private static readonly Dictionary<string, TextureData> textures;
     private static readonly DropDict drops;
+
+    private static readonly MethodInfo? JsonDeserializeMethod;
     
     static RRRConverter()
     {
@@ -21,6 +23,16 @@ public static class RRRConverter
         files = new Dictionary<string, RRR_Main>();
         textures = new Dictionary<string, TextureData>();
         drops = new DropDict();
+
+        JsonDeserializeMethod = AppDomain.CurrentDomain.GetAssemblies()
+            .FirstOrDefault(a => a.GetName().Name == "Newtonsoft.Json")
+            ?.GetType("Newtonsoft.Json.JsonConvert")
+            ?.GetMethod("DeserializeObject", new[] { typeof(string), typeof(Type) });
+    }
+
+    private static T? DeserializeObject<T>(string json) where T : class
+    {
+        return JsonDeserializeMethod?.Invoke(null, new object[] { json, typeof(T) }) as T;
     }
     
     public static void Read()
@@ -33,7 +45,8 @@ public static class RRRConverter
             try
             {
                 string text = File.ReadAllText(path);
-                RRR_Main? data = JsonConvert.DeserializeObject<RRR_Main>(text);
+                RRR_Main? data = DeserializeObject<RRR_Main>(text);
+                
                 if (data == null) continue;
                 files[path] = data;
             }
