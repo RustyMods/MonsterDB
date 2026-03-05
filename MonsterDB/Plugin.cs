@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using BepInEx;
-using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -11,7 +10,7 @@ namespace MonsterDB;
 public class MonsterDBPlugin : BaseUnityPlugin
 {
     internal const string ModName = "MonsterDB";
-    internal const string ModVersion = "0.3.0";
+    internal const string ModVersion = "0.3.1";
     internal const string Author = "RustyMods";
     public const string ModGUID = Author + "." + ModName;
     private readonly Harmony _harmony = new(ModGUID);

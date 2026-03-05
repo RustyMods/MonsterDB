@@ -1,3 +1,6 @@
+## 0.3.1
+- newton missing file error hotfix
+
 ## 0.3.0
 - added logs for factions.yml loading / updates
 - updated Factions.md to correct name of file: `Factions.yml`
