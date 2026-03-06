@@ -2,14 +2,16 @@ GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Character
 Prefab: Hare
+
 AI:
   consumeItems:
   - Carrot
   consumeRange: 1
   consumeSearchRange: 10
   consumeSearchInterval: 10
-# If field removed, will remove component
+
 Drops: {}
+
 Tameable:
   fedDuration: 600
   tamingTime: 1800

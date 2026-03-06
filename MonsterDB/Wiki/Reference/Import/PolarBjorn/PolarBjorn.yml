@@ -4,6 +4,7 @@ Type: Humanoid
 Prefab: PolarBjorn
 ClonedFrom: Bjorn
 IsCloned: true
+
 Character:
   name: $enemy_polarbjorn
   deathEffects:
@@ -18,6 +19,7 @@ Character:
   - bjorn_swipe_r
   - bjorn_swipe_combo
   - bjorn_slam
+
 Visuals:
   renderers:
   - prefab: arrow
@@ -57,7 +59,7 @@ Visuals:
     materials:
     - name: Bjorn_mat
       mainTexture: PolarBjorn_d
-# If field removed, will remove component
+
 Drops:
   drops:
   - prefab: PolarBjornPaw
@@ -70,7 +72,7 @@ Drops:
   - prefab: TrophyPolarBjorn
     chance: 0.1
     levelMultiplier: false
-# If entries removed, will still be registered, set enabled to false to disable
+
 SpawnData:
 - name: MDB PolarBjorn Spawn Data
   enabled: true

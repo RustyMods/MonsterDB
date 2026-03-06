@@ -4,16 +4,18 @@ Type: Humanoid
 Prefab: SeekerLarva
 ClonedFrom: SeekerBrood
 IsCloned: true
+
 Character:
   name: $enemy_babyseeker
   faction: MistlandsMonsters
   defaultItems:
   - babyseeker_attack
+
 AI:
   attackPlayerObjects: false
-# If field removed, will remove component
+
 Drops: {}
-# If field removed, will remove component
+
 GrowUp:
   growTime: 3000
   inheritTame: true

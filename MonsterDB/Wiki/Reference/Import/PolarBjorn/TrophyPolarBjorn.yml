@@ -4,11 +4,13 @@ Type: Item
 Prefab: TrophyPolarBjorn
 ClonedFrom: TrophyBjorn
 IsCloned: true
+
 ItemData:
   name: $item_trophy_polarbjorn
   description: $item_trophy_polarbjorn_description
   icons:
   - PolarTrophyBjorn
+
 Visuals:
   renderers:
   - prefab: default

@@ -1,7 +1,7 @@
 GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Item
-Prefab: MDB_Frostling_imp_fireball_attack
+Prefab: Frostling_fireball_attack
 ClonedFrom: imp_fireball_attack
 IsCloned: true
 ItemData:
@@ -9,4 +9,4 @@ ItemData:
     blunt: 10
     frost: 40
   attack:
-    attackProjectile: MDB_Frostling_Imp_fireball_projectile
+    attackProjectile: Frostling_fireball_projectile

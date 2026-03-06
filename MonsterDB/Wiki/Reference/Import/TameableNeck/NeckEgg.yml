@@ -4,14 +4,13 @@ Type: Egg
 Prefab: NeckEgg
 ClonedFrom: AsksvinEgg
 IsCloned: true
+
 ItemData:
   name: $item_neck_egg
   description: $item_neck_egg_description
+  
 Visuals:
-  scale:
-    x: 0.5
-    y: 0.5
-    z: 0.5
+  scale: 0.5
   renderers:
   - prefab: default
     parent: attach
@@ -20,7 +19,6 @@ Visuals:
     - name: Asksvinegg_mat
       mainTexture: asksvinegg_d
 
-# If field removed, will remove component
 EggGrow:
   growTime: 1800
   grownPrefab: Neck_hatchling

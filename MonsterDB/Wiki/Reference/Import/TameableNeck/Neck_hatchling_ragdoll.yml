@@ -4,11 +4,9 @@ Type: Ragdoll
 Prefab: Neck_hatchling_ragdoll
 ClonedFrom: Neck_Ragdoll
 IsCloned: true
+
 Visuals:
-  scale:
-    x: 0.15
-    y: 0.15
-    z: 0.15
+  scale: 0.15
   renderers:
   - prefab: Lillies
     parent: Neck_hatchling_ragdoll

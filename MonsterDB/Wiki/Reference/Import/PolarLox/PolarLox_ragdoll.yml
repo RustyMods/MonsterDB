@@ -4,6 +4,7 @@ Type: Ragdoll
 Prefab: PolarLox_ragdoll
 ClonedFrom: lox_ragdoll
 IsCloned: true
+
 Visuals:
   renderers:
   - prefab: Body

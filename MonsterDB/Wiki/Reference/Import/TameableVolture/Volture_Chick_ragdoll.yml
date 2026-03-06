@@ -4,11 +4,9 @@ Type: Ragdoll
 Prefab: Volture_Chick_ragdoll
 ClonedFrom: Volture_ragdoll
 IsCloned: true
+
 Visuals:
-  scale:
-    x: 0.5
-    y: 0.5
-    z: 0.5
+  scale: 0.5
   renderers:
   - prefab: Feathers
     parent: Volture

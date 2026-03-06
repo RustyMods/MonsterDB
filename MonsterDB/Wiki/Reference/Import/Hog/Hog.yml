@@ -4,9 +4,9 @@ Type: Humanoid
 Prefab: Hog
 ClonedFrom: Boar
 IsCloned: true
+
 Character:
   name: $enemy_hog
-  # Base Health
   health: 20
   damageModifiers:
     chop: Ignore
@@ -14,17 +14,15 @@ Character:
     spirit: Immune
     blunt: Resistant
   defaultItems:
-  - MDB_Hog_boar_base_attack
+  - Hog_base_attack
   deathEffects:
     effectPrefabs:
     - prefab: vfx_boar_death
     - prefab: Hog_ragdoll
     - prefab: sfx_boar_death
+    
 Visuals:
-  scale:
-    x: 1.5
-    y: 1.5
-    z: 1.5
+  scale: 1.5
   levelSetups:
   - scale: 1.1
     hue: 0.05
@@ -51,7 +49,6 @@ Visuals:
     active: true
     enabled: true
 
-# If field removed, will remove component
 Drops:
   drops:
   - prefab: RawMeat
@@ -61,12 +58,13 @@ Drops:
   - prefab: TrophyBoar
     chance: 0.15
     levelMultiplier: false
-# If field removed, will remove component
+
 Tameable:
   commandable: true
-# If field removed, will remove component
+
 Procreation:
   offspring: Boar
+  
 Saddle:
   maxUseRange: 6
   attachAnimation: attach_asksvin
@@ -81,33 +79,15 @@ Saddle:
     z: 0.0
   attachParent: Spine1
   mountIcon: TrophyBoar
-# If entries removed, will still be registered, set enabled too false to disable
+
 SpawnData:
 - name: MDB Hog Spawn Data
   enabled: true
   prefab: Hog
   biome: None
-  # Edge, Median, Everything
   biomeArea: Everything
   maxSpawned: 1
   spawnInterval: 4
   spawnChance: 100
   spawnAtNight: true
   spawnAtDay: true
-# Reference only, these are attack animation triggers
-AnimationTriggers:
-- forward_speed
-- sideway_speed
-- turn_speed
-- jump
-- inWater
-- dead
-- wakeup
-- footstep
-- base_attack0
-- base_attack1
-- base_attack2
-- base_attack3
-- idle
-- stagger
-- consume

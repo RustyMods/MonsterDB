@@ -4,12 +4,14 @@ Type: Egg
 Prefab: SeekerEggItem
 ClonedFrom: SeekerEgg
 IsCloned: true
+
 ItemData:
   name: $item_seekeregg
   description: $item_seekeregg_description
   icons:
   - SeekerEgg_icon
   maxStackSize: 20
+  
 EggGrow:
   growTime: 1800
   grownPrefab: SeekerLarva

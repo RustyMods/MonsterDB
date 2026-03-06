@@ -4,11 +4,13 @@ Type: Item
 Prefab: TrophyFrostling
 ClonedFrom: TrophySurtling
 IsCloned: true
+
 ItemData:
   name: $item_trophy_frostling
   description: $item_trophy_frostling_description
   icons:
   - TrophyFrostling
+  
 Visuals:
   renderers:
   - prefab: model

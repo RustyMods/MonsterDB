@@ -1,14 +1,16 @@
 GameVersion: 0.221.4
 ModVersion: 0.2.0
 Type: Projectile
-Prefab: MDB_Frostling_Imp_fireball_projectile
+Prefab: Frostling_fireball_projectile
 ClonedFrom: Imp_fireball_projectile
 IsCloned: true
+
 ProjectileData:
   hitEffects:
     effectPrefabs:
     - prefab: vfx_ice_hit
     - prefab: sfx_imp_fireball_explode
+      
 Visuals:
   renderers:
   - prefab: Sphere

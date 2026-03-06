@@ -4,11 +4,13 @@ Type: Item
 Prefab: TrophyPolarLox
 ClonedFrom: TrophyLox
 IsCloned: true
+
 ItemData:
   name: $item_trophy_polarlox
   description: $item_trophy_polarlox_description
   icons:
   - PolarTrophyLox
+
 Visuals:
   renderers:
   - prefab: model

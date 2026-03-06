@@ -4,8 +4,6 @@ Type: Ragdoll
 Prefab: Bjorn_Cub_ragdoll
 ClonedFrom: Bjorn_ragdoll
 IsCloned: true
+
 Visuals:
-  scale:
-    x: 0.5
-    y: 0.5
-    z: 0.5
+  scale: 0.5

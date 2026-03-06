@@ -4,8 +4,8 @@ Type: Visual
 Prefab: vfx_obsidiangolem_death
 ClonedFrom: vfx_stonegolem_death
 IsCloned: true
+
 Visuals:
-  scale: 1
   renderers:
   - prefab: Cube.005
     parent: Mountain_Golem_Fragmentation

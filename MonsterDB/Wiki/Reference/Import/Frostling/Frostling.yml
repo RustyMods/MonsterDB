@@ -4,17 +4,16 @@ Type: Humanoid
 Prefab: Frostling
 ClonedFrom: Surtling
 IsCloned: true
+
 Character:
   name: $enemy_frostling
   faction: Demon
   defeatSetGlobalKey: ''
-  # Effects
   deathEffects:
     effectPrefabs:
     - prefab: vfx_ice_hit
     - prefab: vfx_frostarrow_hit
     - prefab: sfx_imp_death
-  # Base Health
   health: 20
   regenAllHPTime: 3600
   damageModifiers:
@@ -25,7 +24,8 @@ Character:
     poison: Immune
     spirit: Immune
   defaultItems:
-  - MDB_Frostling_imp_fireball_attack
+  - Frostling_fireball_attack
+
 Visuals:
   renderers:
   - prefab: Kakari
@@ -34,7 +34,6 @@ Visuals:
     materials:
     - name: imp_mat
       emissionTexture: frostling_flame_blue
-
   lights:
   - prefab: Point light
     parent: Frostling
@@ -235,7 +234,7 @@ Visuals:
       custom2:
         mode: Color
         color: '#FFFFFFFF'
-# If field removed, will remove component
+
 Drops:
   drops:
   - prefab: Coal
@@ -243,33 +242,18 @@ Drops:
     amountMax: 5
   - prefab: Crystal
     chance: 0.5
-  # - prefab: TrophySurtling
-  #   chance: 0.05
-  #   levelMultiplier: false
-# If entries removed, will still be registered, set enabled to false to disable
+  - prefab: TrophyFrostling
+    chance: 0.05
+    levelMultiplier: false
+
 SpawnData:
 - name: MDB Frostling Spawn Data
   enabled: true
   prefab: Frostling
   biome: None
-  # Edge, Median, Everything
   biomeArea: Everything
   maxSpawned: 1
   spawnInterval: 4
   spawnChance: 100
   spawnAtNight: true
   spawnAtDay: true
-# Reference only, these are attack animation triggers
-AnimationTriggers:
-- forward_speed
-- sideway_speed
-- turn_speed
-- jump
-- inWater
-- dead
-- wakeup
-- footstep
-- random
-- idle
-- attack
-- stagger

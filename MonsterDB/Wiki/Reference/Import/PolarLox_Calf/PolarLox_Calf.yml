@@ -4,12 +4,14 @@ Type: Character
 Prefab: PolarLox_Calf
 ClonedFrom: Lox_Calf
 IsCloned: true
+
 Character:
   name: $enemy_polarloxcalf
   deathEffects:
     effectPrefabs:
     - prefab: fx_loxcalf_death
     - prefab: PolarLox_Calf_ragdoll
+
 Visuals:
   renderers:
   - prefab: Body
@@ -26,8 +28,8 @@ Visuals:
     materials:
     - name: lox_calf
       mainTexture: PolarLox_calf_d
-# If field removed, will remove component
+
 Drops: {}
-# If field removed, will remove component
+
 GrowUp:
   grownPrefab: PolarLox

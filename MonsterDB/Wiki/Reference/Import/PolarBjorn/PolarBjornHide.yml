@@ -4,11 +4,13 @@ Type: Item
 Prefab: PolarBjornHide
 ClonedFrom: BjornHide
 IsCloned: true
+
 ItemData:
   name: $item_polarbjornhide
   description: $item_polarbjornhide_description
   icons:
   - PolarBjornHide
+
 Visuals:
   renderers:
   - prefab: model

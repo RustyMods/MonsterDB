@@ -4,6 +4,7 @@ Type: Humanoid
 Prefab: Bjorn_Cub
 ClonedFrom: Bjorn
 IsCloned: true
+
 Character:
   name: $enemy_bjorn_cub
   deathEffects:
@@ -11,15 +12,12 @@ Character:
     - prefab: vfx_boar_death
     - prefab: Bjorn_Cub_ragdoll
     - prefab: sfx_bear_death
-  # Base Health
   health: 100
   defaultItems: []
+
 Visuals:
-  scale:
-    x: 0.5
-    y: 0.5
-    z: 0.5
-# If field removed, will remove component
+  scale: 0.5
+
 GrowUp:
   growTime: 3000
   inheritTame: true

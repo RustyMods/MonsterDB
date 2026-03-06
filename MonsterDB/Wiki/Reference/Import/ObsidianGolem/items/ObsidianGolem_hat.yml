@@ -4,6 +4,7 @@ Type: Item
 Prefab: ObsidianGolem_StoneGolem_hat
 ClonedFrom: StoneGolem_hat
 IsCloned: true
+
 Visuals:
   renderers:
   - prefab: Cube.000

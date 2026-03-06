@@ -4,6 +4,7 @@ Type: Item
 Prefab: ObsidianGolem_clubs
 ClonedFrom: StoneGolem_clubs
 IsCloned: true
+
 Visuals:
   renderers:
   - prefab: Cube.002

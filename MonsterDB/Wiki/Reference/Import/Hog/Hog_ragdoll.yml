@@ -4,11 +4,9 @@ Type: Ragdoll
 Prefab: Hog_ragdoll
 ClonedFrom: boar_ragdoll
 IsCloned: true
+
 Visuals:
-  scale:
-    x: 1.5
-    y: 1.5
-    z: 1.5
+  scale: 1.5
   renderers:
   - prefab: Fangs 001
     parent: Hog_ragdoll

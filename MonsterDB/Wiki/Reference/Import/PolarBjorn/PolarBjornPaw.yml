@@ -4,11 +4,13 @@ Type: Item
 Prefab: PolarBjornPaw
 ClonedFrom: BjornPaw
 IsCloned: true
+
 ItemData:
   name: $item_polarbjornpaw
   description: $item_polarbjornpaw_description
   icons:
   - PolarBjornPaw
+
 Visuals:
   renderers:
   - prefab: default

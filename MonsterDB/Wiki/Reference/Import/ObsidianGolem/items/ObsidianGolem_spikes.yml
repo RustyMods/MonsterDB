@@ -4,13 +4,12 @@ Type: Item
 Prefab: ObsidianGolem_spikes
 ClonedFrom: StoneGolem_spikes
 IsCloned: true
+
 Visuals:
   renderers:
   - prefab: Cube.003
     parent: Mountain_Golem_Spike_Arm
     index: 1
-    active: true
-    enabled: true
     materials:
     - name: MountainGolem_mat
       mainTexture: ObsidianGolem_d

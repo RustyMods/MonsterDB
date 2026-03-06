@@ -4,6 +4,7 @@ Type: Ragdoll
 Prefab: ObsidianGolem_ragdoll
 ClonedFrom: Stonegolem_ragdoll
 IsCloned: true
+
 Visuals:
   renderers:
   - prefab: Cube.001

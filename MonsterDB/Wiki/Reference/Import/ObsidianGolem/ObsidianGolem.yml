@@ -4,6 +4,7 @@ Type: Humanoid
 Prefab: ObsidianGolem
 ClonedFrom: StoneGolem
 IsCloned: true
+
 Character:
   name: $enemy_obsidiangolem
   randomArmor:
@@ -24,6 +25,7 @@ Character:
     - prefab: sfx_stonegolem_death
     - prefab: ObsidianGolem_ragdoll
     - prefab: vfx_obsidiangolem_death
+      
 Visuals:
   renderers:
   - prefab: Cube.001
@@ -32,46 +34,24 @@ Visuals:
     materials:
     - name: MountainGolem_mat
       mainTexture: ObsidianGolem_d
-# If field removed, will remove component
+      
 Drops:
   drops:
-  # - prefab: TrophySGolem
-  #   chance: 0.05
-  #   levelMultiplier: false
   - prefab: Stone
     amountMin: 5
     amountMax: 10
   - prefab: Obsidian
     amountMin: 8
     amountMax: 12
-# If entries removed, will still be registered, set enabled to false to disable
+
 SpawnData:
 - name: MDB ObsidianGolem Spawn Data
   enabled: true
   prefab: ObsidianGolem
   biome: None
-  # Edge, Median, Everything
   biomeArea: Everything
   maxSpawned: 1
   spawnInterval: 4
   spawnChance: 100
   spawnAtNight: true
   spawnAtDay: true
-# Reference only, these are attack animation triggers
-AnimationTriggers:
-- sideway_speed
-- forward_speed
-- turn_speed
-- jump
-- inWater
-- dead
-- footstep
-- random
-- idle
-- attack
-- attack2
-- attack3
-- doublesmash
-- sonicboom
-- stagger
-- sleeping

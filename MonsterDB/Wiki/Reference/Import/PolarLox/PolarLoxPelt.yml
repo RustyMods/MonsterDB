@@ -4,11 +4,13 @@ Type: Item
 Prefab: PolarLoxPelt
 ClonedFrom: LoxPelt
 IsCloned: true
+
 ItemData:
   name: $item_polarloxpelt
   description: $item_polarloxpelt_description
   icons:
   - Polarloxpelt
+
 Visuals:
   renderers:
   - prefab: model

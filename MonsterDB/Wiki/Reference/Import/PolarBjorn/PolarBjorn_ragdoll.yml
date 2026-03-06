@@ -4,6 +4,7 @@ Type: Ragdoll
 Prefab: PolarBjorn_ragdoll
 ClonedFrom: Bjorn_ragdoll
 IsCloned: true
+
 Visuals:
   renderers:
   - prefab: arrow
