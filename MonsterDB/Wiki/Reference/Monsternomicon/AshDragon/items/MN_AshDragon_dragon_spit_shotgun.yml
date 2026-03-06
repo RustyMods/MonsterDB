@@ -1,0 +1,24 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.0
+Type: Item
+Prefab: MN_AshDragon_dragon_spit_shotgun
+ClonedFrom: dragon_spit_shotgun
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 60
+    chop: 110
+    pickaxe: 110
+    fire: 100
+  attackForce: 30
+  attack:
+    attackProjectile: DvergerStaffFire_clusterbomb_projectile
+    projectileVel: 25
+    projectileVelMin: 2
+  aiAttackRange: 25
+  aiAttackRangeMin: 5
+  aiAttackInterval: 6
+  triggerEffect:
+    effectPrefabs:
+    - prefab: fx_fireball_staff_explosion

@@ -1,0 +1,27 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.0
+Type: Item
+Prefab: MN_AshDragon_troll_groundslam
+ClonedFrom: troll_groundslam
+IsCloned: true
+
+ItemData:
+  damages:
+    slash: 120
+    chop: 50
+    pickaxe: 50
+  attackForce: 100
+  spawnOnHit: troll_groundslam_aoe
+  attack:
+    attackType: Vertical
+    attackAnimation: attack_claw_right
+  aiAttackRange: 5
+  aiAttackRangeMin: 0
+  aiAttackInterval: 8
+  aiAttackMaxAngle: 30
+  hitEffect:
+    effectPrefabs:
+    - prefab: fx_dragon_land
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_dragon_melee_start
