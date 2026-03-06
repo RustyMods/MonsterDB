@@ -1,0 +1,62 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.0
+Type: Humanoid
+Prefab: MN_AshDragon
+ClonedFrom: Dragon
+IsCloned: true
+
+Character:
+  name: Fire-breathing Drake
+  faction: Demon
+  boss: false
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_babyseeker_death
+    - prefab: sfx_dragon_hurt
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_Queen_Death
+    - prefab: sfx_dragon_death
+  health: 1850
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Immune
+    frost: Weak
+    spirit: Weak
+  defaultItems:
+  - MN_AshDragon_troll_groundslam
+  - MN_AshDragon_troll_groundslam
+  - MN_AshDragon_dragon_bite
+  - MN_AshDragon_Fenring_attack_flames
+  - MN_AshDragon_dragon_spit_shotgun
+  - dragon_taunt
+
+AI:
+  minAttackInterval: 4
+
+Visuals:
+  scale: 0.6
+  renderers:
+  - prefab: DragonQueen
+    parent: Visual
+    index: 1
+    materials:
+    - name: DragonQueen_mat
+      mainTexture: rrrtex.MN_AshDragon
+
+Drops:
+  drops:
+  - prefab: FlametalOre
+    amountMin: 1
+    amountMax: 1
+    chance: 100
+    onePerPlayer: false
+    dontScale: true
+  - prefab: Coal
+    amountMin: 3
+    amountMax: 6
+    chance: 100
+    onePerPlayer: false
+    dontScale: true

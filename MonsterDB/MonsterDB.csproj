@@ -301,6 +301,12 @@
         <Content Include="Wiki\Reference\Import\TameableVolture\VoltureEgg.yml" />
         <Content Include="Wiki\Reference\Import\TameableVolture\Volture_Chick.yml" />
         <Content Include="Wiki\Reference\Import\TameableVolture\Volture_Chick_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_dragon_bite.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_dragon_spit_shotgun.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_Fenring_attack_flames.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_troll_groundslam.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\MN_AshDragon.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\textures\rrrtex.MN_AshDragon.png" />
         <Content Include="Wiki\Snapshot.md" />
         <EmbeddedResource Include="assets\volture_fix" />
         <Content Include="assets\volture_fix.manifest" />
