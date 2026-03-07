@@ -27,12 +27,12 @@ public static class RRRConverter
         JsonDeserializeMethod = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "Newtonsoft.Json")
             ?.GetType("Newtonsoft.Json.JsonConvert")
-            ?.GetMethod("DeserializeObject", new[] { typeof(string), typeof(Type) });
+            ?.GetMethod("DeserializeObject", [typeof(string), typeof(Type)]);
     }
 
     private static T? DeserializeObject<T>(string json) where T : class
     {
-        return JsonDeserializeMethod?.Invoke(null, new object[] { json, typeof(T) }) as T;
+        return JsonDeserializeMethod?.Invoke(null, [json, typeof(T)]) as T;
     }
     
     public static void Read()
@@ -80,20 +80,20 @@ public static class RRRConverter
 
     public static void ConvertAll(Terminal.ConsoleEventArgs args)
     {
-        int count = 0;
+        int success = 0;
         int failures = 0;
         foreach (KeyValuePair<string, RRR_Main> kvp in files)
         {
             if (Convert(kvp.Key, kvp.Value))
             {
-                ++count;
+                ++success;
             }
             else
             {
                 ++failures;
             }
         }
-        args.Context.Log("#FFCCCB", $"> Converted {count} RRR files ( failures: {failures} )");
+        args.Context.Log("#FFCCCB", $"> Converted {success} RRR files ( failures: {failures} )");
     }
 
     private static bool Convert(string filepath, RRR_Main main)
@@ -127,6 +127,8 @@ public static class RRRConverter
             data.IsCloned = true;
         }
 
+        BaseRagdoll? ragdoll = null;
+
         if (main.Category_Appearance != null && data.Visuals != null)
         {
             main.Category_Appearance.Setup(data.Visuals);
@@ -137,17 +139,39 @@ public static class RRRConverter
                 SkinnedMeshRenderer? skin = prefab.GetComponentInChildren<SkinnedMeshRenderer>();
                 if (skin != null)
                 {
-                    if (data.Visuals.m_renderers != null)
+                    string textureName = "rrrtex." + main.Category_Appearance.sCustomTexture;
+                    RendererRef? skinRenderer = data.Visuals.m_renderers?.FirstOrDefault(r => r.m_prefab == skin.name);
+                    if (skinRenderer is { m_materials: not null })
                     {
-                        RendererRef? skinRenderer = data.Visuals.m_renderers.FirstOrDefault(r => r.m_prefab == skin.name);
-                        if (skinRenderer != null && skinRenderer.m_materials != null)
+                        foreach (MaterialRef mat in skinRenderer.m_materials)
                         {
-                            string textureName = "rrrtex." + main.Category_Appearance.sCustomTexture;
-                            foreach (var mat in skinRenderer.m_materials)
+                            mat.m_mainTexture = textureName;
+                        }
+                        textureNames.Add(textureName);
+                    }
+                    
+                    if (RagdollManager.TryGetRagdoll(prefab, out GameObject ragdollPrefab))
+                    {
+                        ragdoll = new BaseRagdoll();
+                        ragdoll.Setup(ragdollPrefab, data.IsCloned, data.IsCloned ? ragdollPrefab.name : "");
+                        if (data.IsCloned)
+                        {
+                            ragdoll.Prefab = data.Prefab + "_ragdoll";
+                        }
+                        if (ragdoll.Visuals is { m_renderers.Length: > 0 })
+                        {
+                            var ragSkin = ragdollPrefab.GetComponentInChildren<SkinnedMeshRenderer>();
+                            if (ragSkin != null)
                             {
-                                mat.m_mainTexture = textureName;
+                                var ragSkinRenderer = ragdoll.Visuals.m_renderers.FirstOrDefault(r => r.m_prefab == ragSkin.name);
+                                if (ragSkinRenderer is { m_materials: not null })
+                                {
+                                    foreach (MaterialRef mat in ragSkinRenderer.m_materials)
+                                    {
+                                        mat.m_mainTexture = textureName;
+                                    }
+                                }
                             }
-                            textureNames.Add(textureName);
                         }
                     }
                 }
@@ -174,7 +198,7 @@ public static class RRRConverter
         {
             if (main.sNewPrefabName != null && main.Category_Humanoid.aAdvancedCustomAttacks != null)
             {
-                List<string> newItemNames = new();
+                List<string> newItemNames = [];
                 for (int i = 0; i < main.Category_Humanoid.aAdvancedCustomAttacks.Count; i++)
                 {
                     RRR_CustomAttacks attack = main.Category_Humanoid.aAdvancedCustomAttacks[i];
@@ -276,9 +300,9 @@ public static class RRRConverter
             File.WriteAllText(itemFilepath, content);
         }
 
-        foreach (string? texname in textureNames)
+        foreach (string? textureName in textureNames)
         {
-            var textureFilename = texname + ".png";
+            string textureFilename = textureName + ".png";
             if (textures.TryGetValue(textureFilename, out TextureData pkg))
             {
                 string textureFilepath = Path.Combine(textureFolderPath, textureFilename);
@@ -290,6 +314,15 @@ public static class RRRConverter
         filename = main.sNewPrefabName + ".yml";
         filepath = Path.Combine(folderPath, filename);
         File.WriteAllText(filepath, text);
+
+        if (ragdoll != null)
+        {
+            text = ConfigManager.Serialize(ragdoll);
+            filename = main.sNewPrefabName + "_ragdoll.yml";
+            filepath = Path.Combine(folderPath, filename);
+            File.WriteAllText(filepath, text);
+        }
+        
         MonsterDBPlugin.LogInfo($"Converted RRR file: {filename}");
 
         return true;

@@ -68,7 +68,7 @@ public static partial class Extensions
             .ToList();
     }
     
-    private static readonly Dictionary<string, bool> canFlyToggleCache = new Dictionary<string, bool>();
+    private static readonly Dictionary<string, bool> canFlyToggleCache = new();
 
     public static bool CanToggleFly(this Character character)
     {
@@ -76,7 +76,7 @@ public static partial class Extensions
         if (canFlyToggleCache.TryGetValue(prefabName, out bool value)) return value;
 
         bool canToggle = character.m_animator.parameters
-            .Any(p => p.name == "fly_takeoff" || p.name == "fly_land");
+            .Any(p => p.name is "fly_takeoff" or "fly_land");
 
         canFlyToggleCache[prefabName] = canToggle;
         return canToggle;

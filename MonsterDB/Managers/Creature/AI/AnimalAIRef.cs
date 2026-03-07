@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using JetBrains.Annotations;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class AnimalAIRef : BaseAIRef
 {
     public float? m_timeToSafe;

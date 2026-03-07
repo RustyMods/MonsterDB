@@ -117,7 +117,7 @@ public class DropThat_Parser
                         block.max = parts.GetInt(1, 1);
                         break;
                     case "SetChanceToDrop":
-                        block.chance = parts.GetFloat(1, 100f);
+                        block.chance = parts.GetFloat(1, 100f) / 100f;
                         break;
                     case "SetDropOnePerPlayer":
                         block.onePerPlayer = parts.GetBool(1, false);

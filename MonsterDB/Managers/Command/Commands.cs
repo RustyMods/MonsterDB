@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using BepInEx.Bootstrap;
-using UnityEngine;
 
 namespace MonsterDB;
 
@@ -72,10 +69,19 @@ public static partial class Commands
             ShaderRef.GetShaderOptions,
             isSecret: true);
 
+        _ = new Command("cleanall", "cleans all modified prefabs against original values to output smallest files",
+            CleanAll, 
+            adminOnly: true);
+
+        _ = new Command("clean", 
+            "cleans modified prefab against original values to output smallest file necessary",
+            Clean, 
+            GetModifiedPrefabNames, 
+            adminOnly: true);
+
         if (Chainloader.PluginInfos.ContainsKey("com.ValheimModding.NewtonsoftJsonDetector"))
         {
             _ = new Command("rrr", "read and convert all rrr files found in RRR folder", RRRConvert);
-
         }
         
 #pragma warning disable CS0612 // Type or member is obsolete
@@ -366,25 +372,25 @@ public static partial class Commands
     private static List<string> GetZNetPrefabNames(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<ZNetView>(),
-        _ => new List<string>()
+        _ => []
     };
 
     private static List<string> GetOriginalCreatureOptions(int i, string word) => i switch
     {
         2 => LoadManager.GetOriginalKeys<Base>(),
-        _ => new List<string>()
+        _ => []
     };
 
     private static List<string> GetAllPrefabOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames(),
-        _ => new List<string>()
+        _ => []
     };
 
     private static List<string> GetItemOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<ItemDrop>(),
-        _ => new List<string>()
+        _ => []
     };
 
 }

@@ -15,7 +15,7 @@ public static class RecipeManager
         recipes = new  Dictionary<string, Recipe>();
         recipeByItem = new Dictionary<string, Recipe>();
         recipeBySharedItemName = new Dictionary<string, Recipe>();
-        recipesToRegister = new List<Recipe>();
+        recipesToRegister = [];
     }
     
     [HarmonyPriority(Priority.Last)]
@@ -36,7 +36,7 @@ public static class RecipeManager
             Recipe recipe =  __instance.m_recipes[i];
             if (recipe.m_item == null)
             {
-                MonsterDBPlugin.LogWarning($"Mapping recipes, item is null: {recipe.name}");
+                MonsterDBPlugin.LogDebug($"Mapping recipes, item is null: {recipe.name}");
                 continue;
             }
             recipes[recipe.name] = recipe;

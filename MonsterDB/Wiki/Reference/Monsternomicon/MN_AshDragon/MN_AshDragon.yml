@@ -1,5 +1,5 @@
 GameVersion: 0.221.12
-ModVersion: 0.3.0
+ModVersion: 0.3.1
 Type: Humanoid
 Prefab: MN_AshDragon
 ClonedFrom: Dragon
@@ -18,24 +18,20 @@ Character:
     - prefab: fx_Queen_Death
     - prefab: sfx_dragon_death
   health: 1850
-  regenAllHPTime: 3600
-  damageModifiers:
-    chop: Ignore
-    pickaxe: Ignore
-    fire: Immune
-    frost: Weak
-    spirit: Weak
   defaultItems:
   - MN_AshDragon_troll_groundslam
   - MN_AshDragon_troll_groundslam
   - MN_AshDragon_dragon_bite
   - MN_AshDragon_Fenring_attack_flames
   - MN_AshDragon_dragon_spit_shotgun
-  - dragon_taunt
+  - MN_AshDragon_dragon_taunt
 
 AI:
+  enableHuntPlayer: false
   minAttackInterval: 4
-
+  startMessage: ''
+  deathMessage: ''
+  
 Visuals:
   scale: 0.6
   renderers:
@@ -51,12 +47,12 @@ Drops:
   - prefab: FlametalOre
     amountMin: 1
     amountMax: 1
-    chance: 100
+    chance: 1
     onePerPlayer: false
     dontScale: true
   - prefab: Coal
     amountMin: 3
     amountMax: 6
-    chance: 100
+    chance: 1
     onePerPlayer: false
     dontScale: true

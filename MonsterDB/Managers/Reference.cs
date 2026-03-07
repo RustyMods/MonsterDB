@@ -98,6 +98,244 @@ public abstract class Reference
     }
     
     /// <summary>
+    /// this reference will compare against target reference, if values match, will set to null
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="targetName"></param>
+    /// <param name="log"></param>
+    /// <returns>number of fields set to null</returns>
+    public int Clean(Reference target, string targetName, bool log)
+    {
+        int count = 0;
+        if (target.GetType() != GetType())
+        {
+            MonsterDBPlugin.LogWarning($"[Clean] Type mismatch: target={target.GetType().Name} != source={GetType().Name}");
+            return count;
+        }
+        if (string.IsNullOrEmpty(targetName)) targetName = "Unknown";
+        FieldInfo[] fields = GetType().GetFields(FieldBindingFlags);
+        for (int i = 0; i < fields.Length; ++i)
+        {
+            FieldInfo field = fields[i];
+            object? t_value = field.GetValue(target);
+            object? m_value = field.GetValue(this);
+
+            if (t_value is TransformRef t_transform && m_value is TransformRef m_transform)
+            {
+                if (t_transform.m_position == m_transform.m_position) continue;
+                if (!t_transform.m_position.HasValue || !m_transform.m_position.HasValue) continue;
+                if (t_transform.m_position.Value.x.Equals(m_transform.m_position.Value.x)) continue;
+                if (t_transform.m_position.Value.y.Equals(m_transform.m_position.Value.y)) continue;
+                if (t_transform.m_position.Value.z.Equals(m_transform.m_position.Value.z)) continue;
+                t_transform.m_position = null;
+                ++count;
+                if (log)
+                {
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}.m_position: [ CLEAN ]");
+                }
+            }
+            else if (t_value is Reference tr && m_value is Reference mr)
+            {
+                count += mr.Clean(tr, targetName, log);
+            }
+            else
+            {
+                if (m_value == null || t_value == null) continue;
+                if (field.GetCustomAttribute<Persistent>() != null) continue;
+                if (CleanField(target, field, m_value, t_value, targetName, log))
+                {
+                    ++count;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private bool CleanField(Reference target, FieldInfo field, object originalValue, object targetValue, string targetName, bool log)
+    {
+        Type type = Nullable.GetUnderlyingType(field.FieldType) ?? field.FieldType;
+                
+        if (type.IsArray)
+        {
+            if (originalValue is not Array m_array || targetValue is not Array t_array) return false;
+            if (m_array.Length != t_array.Length) return false;
+            
+            if (m_array.Length > 0)
+            {
+                if (m_array.GetValue(0) is Reference)
+                {
+                    for (int i = 0; i < m_array.Length; ++i)
+                    {
+                        Reference? m_arrayValue = m_array.GetValue(i) as Reference;
+                        Reference? t_arrayValue = t_array.GetValue(i) as Reference;
+                        if (m_arrayValue == null || t_arrayValue == null) continue;
+                        m_arrayValue.Clean(t_arrayValue, targetName, log);
+                    }
+                }
+                else
+                {
+                    bool isSame = true;
+                    for (int j = 0; j < m_array.Length - 1; ++j)
+                    {
+                        object? m_arrayValue = m_array.GetValue(j);
+                        object? t_arrayValue = t_array.GetValue(j);
+                        
+                        if (t_arrayValue != m_arrayValue)
+                        {
+                            isSame = false;
+                            break;
+                        }
+                    }
+
+                    if (isSame)
+                    {
+                        field.SetValue(target, null);
+                        if (log)
+                        {
+                            MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}");
+                        }
+
+                        return true;
+                    }
+                }
+            }
+        }
+        else if (targetValue is EffectListRef t_effects && originalValue is EffectListRef m_effects)
+        {
+            List<string> t_effectNames = t_effects.m_effectPrefabs.Select(t => t.m_prefab).ToList();
+            List<string> m_effectNames = m_effects.m_effectPrefabs.Select(m => m.m_prefab).ToList();
+            if (t_effectNames.Count != m_effectNames.Count) return false;
+            bool isSame = true;
+            for (int j = 0; j < t_effectNames.Count; ++j)
+            {
+                string? t_name = t_effectNames[j];
+                string? m_name = m_effectNames[j];
+                if (t_name.Equals(m_name)) continue;
+                isSame = false;
+                break;
+            }
+
+            if (isSame)
+            {
+                field.SetValue(target, null);
+                if (log)
+                {
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}");
+                }
+
+                return true;
+            }
+        }
+        else if (targetValue is List<StepEffectRef> t_steps && originalValue is List<StepEffectRef> m_steps)
+        {
+            if (t_steps.Count != m_steps.Count) return false;
+            bool isSame = true;
+            for (int i = 0; i < m_steps.Count; ++i)
+            {
+                StepEffectRef t_step = t_steps[i];
+                StepEffectRef m_step = m_steps[i];
+                if (t_step.m_effectPrefabs == null || m_step.m_effectPrefabs == null) continue;
+                if (t_step.m_effectPrefabs.Length != m_step.m_effectPrefabs.Length) continue;
+                
+                for (int j = 0; j < m_step.m_effectPrefabs.Length; ++j)
+                {
+                    var t_effectName = t_step.m_effectPrefabs[j];
+                    var m_effectName = m_step.m_effectPrefabs[j];
+                    if (t_effectName.Equals(m_effectName)) continue;
+                    isSame = false;
+                    break;
+                }
+
+                if (!isSame) break;
+
+                if (t_step.m_name.Equals(m_step.m_name) && t_step.m_motionType.Equals(m_step.m_motionType) &&
+                    t_step.m_material.Equals(m_step.m_material)) continue;
+                
+                isSame = false;
+                break;
+            }
+
+            if (isSame)
+            {
+                field.SetValue(target, null);
+                if (log)
+                {
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}");
+                }
+
+                return true;
+            }
+        }
+        else if (targetValue is List<LevelSetupRef> t_lvls && originalValue is List<LevelSetupRef> m_lvls)
+        {
+            if (t_lvls.Count != m_lvls.Count) return false;
+            bool isSame = true;
+            for (int i = 0; i < m_lvls.Count; ++i)
+            {
+                LevelSetupRef t_lvl = m_lvls[i];
+                LevelSetupRef m_lvl = m_lvls[i];
+                if (t_lvl.Equals(m_lvl)) continue;
+                isSame = false;
+                break;
+            }
+
+            if (isSame)
+            {
+                field.SetValue(target, null);
+                if (log)
+                {
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}");
+                }
+
+                return true;
+            }
+        }
+        else
+        {
+            if (targetValue.Equals(originalValue))
+            {
+                field.SetValue(target, null);
+                if (log)
+                {
+                    MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}");
+                }
+
+                return true;
+            }
+
+            if (targetValue is float t_float && originalValue is float m_float)
+            {
+                if (Mathf.Approximately(t_float, m_float))
+                {
+                    field.SetValue(target, null);
+                    if (log)
+                    {
+                        MonsterDBPlugin.LogDebug($"[{targetName}] {field.Name}");
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public virtual bool Equals<T>(T other) where T : Reference => other == this;
+
+    public virtual bool IsNull()
+    {
+        FieldInfo[] fields = GetType().GetFields(FieldBindingFlags);
+        for (int i = 0; i < fields.Length; ++i)
+        {
+            FieldInfo field = fields[i];
+            object? value = field.GetValue(this);
+            if (value != null) return false;
+        }
+        return true;
+    }
+    /// <summary>
     /// Grabs all values that matches reference fields and sets value
     /// </summary>
     /// <param name="source"></param>
@@ -196,7 +434,7 @@ public abstract class Reference
                     break;
                 case List<LevelEffects.LevelSetup> ls when 
                     targetType == typeof(List<LevelSetupRef>):
-                    target.SetValue(this, ls.ToRef());
+                    target.SetValue(this, ls.ToLevelSetupRefList());
                     break;
                 case List<CharacterDrop.Drop> cd when 
                     targetType == typeof(List<DropRef>):
@@ -423,7 +661,13 @@ public abstract class Reference
         }
     }
 
-    protected virtual void UpdateAssignableType<T>(T target, FieldInfo targetField, Type targetType, object value, string targetName, bool log)
+    protected virtual void UpdateAssignableType<T>(
+        T target, 
+        FieldInfo targetField, 
+        Type targetType, 
+        object value, 
+        string targetName, 
+        bool log)
     {
         if (target is Character character && character.name.Contains("(Clone)") && targetField.Name == "m_boss")
         {
@@ -458,10 +702,27 @@ public abstract class Reference
         }
     }
 
-    protected virtual void UpdateMaterial<T>(T target, FieldInfo targetField, string materialName,
-        string targetName, bool log)
+    protected virtual void UpdateMaterial<T>(
+        T target, 
+        FieldInfo targetField, 
+        string materialName,
+        string targetName, 
+        bool log)
     {
-        
+        if (string.IsNullOrEmpty(materialName))
+        {
+            targetField.SetValue(target, null);
+            if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: null");
+        }
+        else if (MaterialManager.TryGetMaterial(materialName, out Material material))
+        {
+            targetField.SetValue(target, material);
+            if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {material.name}");
+        }
+        else
+        {
+            MonsterDBPlugin.LogWarning($"Failed to find material: {materialName}");
+        }
     }
 
     public static void UpdateCraftingStation<T>(T target, FieldInfo targetField, string name, string targetName,

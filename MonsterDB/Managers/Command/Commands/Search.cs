@@ -5,12 +5,12 @@ namespace MonsterDB;
 
 public static partial class Commands
 {
-    private static readonly List<string> SearchTypes = new() { "item", "texture", "tex", "sprite", "shader" };
+    private static readonly List<string> SearchTypes = ["item", "texture", "tex", "sprite", "shader"];
     private static List<string> GetSearchOptions(int i, string word) => i switch
     {
         2 => SearchTypes,
         3 => GetSearchTypeOptions(word),
-        _ => new List<string>()
+        _ => []
     };
 
     private static List<string> GetSearchTypeOptions(string word) => word switch
@@ -19,7 +19,7 @@ public static partial class Commands
         "texture" or "tex" => TextureManager.GetAllTextures().Keys.ToList(),
         "shader" => ShaderRef.GetShaderNames(),
         "sprite" => TextureManager.GetSpriteNames(),
-        _ => new List<string>(),
+        _ => [],
     };
 
     private static string GetSearchDescriptions(string[] args, string defaultValue)

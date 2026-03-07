@@ -1,0 +1,16 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Ragdoll
+Prefab: MN_PolarWolf_ragdoll
+ClonedFrom: Wolf_Ragdoll
+IsCloned: true
+
+Visuals:
+  scale: 1.2
+  renderers:
+  - prefab: M
+    parent: WolfSmooth
+    index: 1
+    materials:
+    - name: Wolf Skin Grey
+      mainTexture: rrrtex.MN_PolarWolf

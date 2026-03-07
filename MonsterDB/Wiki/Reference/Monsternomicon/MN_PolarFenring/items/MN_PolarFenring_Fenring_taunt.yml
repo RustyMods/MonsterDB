@@ -1,0 +1,10 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarFenring_Fenring_taunt
+ClonedFrom: Fenring_taunt
+IsCloned: true
+
+ItemData:
+  aiAttackInterval: 25
+  aiPrioritized: true

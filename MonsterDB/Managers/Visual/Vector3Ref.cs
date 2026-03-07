@@ -5,24 +5,14 @@ using UnityEngine;
 namespace MonsterDB;
 
 [Serializable]
-public struct Vector3Ref
+public record struct Vector3Ref(float x, float y, float z)
 {
-    public float x;
-    public float y;
-    public float z;
+    public float x = x;
+    public float y = y;
+    public float z = z;
 
-    public Vector3Ref(float x, float y, float z)
+    public Vector3Ref(Vector3 v) : this(v.x, v.y, v.z)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public Vector3Ref(Vector3 v)
-    {
-        x = v.x;
-        y = v.y;
-        z = v.z;
     }
 
     public Vector3 ToVector3() => new(x, y, z);
@@ -42,7 +32,6 @@ public struct Vector3Ref
             float.Parse(parts[2], CultureInfo.InvariantCulture)
         );
     }
-
     public static implicit operator Vector3(Vector3Ref v) => v.ToVector3();
     public static implicit operator Vector3Ref(Vector3 v) => new(v);
 }

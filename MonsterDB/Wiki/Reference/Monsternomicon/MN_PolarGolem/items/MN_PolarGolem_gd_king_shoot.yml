@@ -1,0 +1,19 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarGolem_gd_king_shoot
+ClonedFrom: gd_king_shoot
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 80
+    chop: 150
+    pickaxe: 150
+  attack:
+    attackAnimation: attack3
+    attackProjectile: troll_throw_projectile
+  aiAttackInterval: 20
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_stonegolem_primary_start

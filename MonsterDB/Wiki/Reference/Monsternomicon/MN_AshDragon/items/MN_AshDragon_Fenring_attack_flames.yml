@@ -1,31 +1,20 @@
 GameVersion: 0.221.12
-ModVersion: 0.3.0
+ModVersion: 0.3.1
 Type: Item
 Prefab: MN_AshDragon_Fenring_attack_flames
 ClonedFrom: Fenring_attack_flames
 IsCloned: true
+
 ItemData:
   damages:
     blunt: 40
     fire: 100
-  attackForce: 0
   attack:
-    attackType: Projectile
     attackAnimation: attack_breath
-    attackOriginJoint: Hips
-  aiAttackRange: 6
-  aiAttackRangeMin: 2
   aiAttackInterval: 22
-  aiAttackMaxAngle: 12
-  aiWhenFlying: true
-  aiWhenFlyingAltitudeMin: 0
-  aiWhenFlyingAltitudeMax: 999999
+  aiPrioritized: true
   startEffect:
     effectPrefabs:
     - prefab: fx_DvergerMage_Fire_hit
     - prefab: fx_fenring_flames
     - prefab: sfx_dragon_coldbreath_start
-  triggerEffect:
-    effectPrefabs:
-    - prefab: fx_fenring_flames
-      variant: 0

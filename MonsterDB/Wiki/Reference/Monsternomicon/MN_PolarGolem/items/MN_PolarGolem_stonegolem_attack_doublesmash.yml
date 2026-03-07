@@ -1,0 +1,25 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarGolem_stonegolem_attack_doublesmash
+ClonedFrom: stonegolem_attack_doublesmash
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 100
+    chop: 150
+    pickaxe: 150
+    frost: 80
+  aiAttackInterval: 20
+  hitEffect:
+    effectPrefabs:
+    - prefab: fx_dragon_land
+    - prefab: fx_icefloor_destruction
+    - prefab: vfx_ice_destroyed
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_stonegolem_primary_start
+  triggerEffect:
+    effectPrefabs:
+    - prefab: vfx_dragon_coldbreath

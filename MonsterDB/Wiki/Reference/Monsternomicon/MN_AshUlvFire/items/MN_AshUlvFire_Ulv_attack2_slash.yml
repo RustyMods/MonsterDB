@@ -1,0 +1,20 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_AshUlvFire_Ulv_attack2_slash
+ClonedFrom: Ulv_attack2_slash
+IsCloned: true
+
+ItemData:
+  damages:
+    slash: 120
+    fire: 80
+  aiAttackInterval: 8
+  hitEffect:
+    effectPrefabs:
+    - prefab: DvergerStaffFire_clusterbomb_aoe
+    - prefab: fx_goblinbrute_groundslam
+    - prefab: sfx_fenring_claw_hit
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_claw_start

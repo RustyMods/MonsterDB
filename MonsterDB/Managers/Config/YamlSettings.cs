@@ -11,13 +11,8 @@ using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace MonsterDB;
 
-public sealed class FieldPrefixStrippingNamingConvention : INamingConvention
+public sealed class FieldPrefixStrippingNamingConvention(string prefix) : INamingConvention
 {
-    private readonly string prefix;
-    public FieldPrefixStrippingNamingConvention(string prefix)
-    {
-        this.prefix = prefix;
-    }
     public string Apply(string value)
     {
         return value.StartsWith(prefix) ? value.Substring(prefix.Length) : value;

@@ -45,23 +45,26 @@ public class BaseItem : Header
 
     public void SetupConversions(ItemDrop item)
     {
-        List<ItemConversionRef> conversions = new();
+        List<ItemConversionRef> conversions = [];
         List<GameObject> prefabs = PrefabManager.GetAllPrefabs<ZNetView>();
         for (int i = 0; i < prefabs.Count; ++i)
         {
             GameObject? go = prefabs[i];
             if (go.TryGetComponent(out Fermenter fermenter))
             {
-                foreach (Fermenter.ItemConversion? conversion in fermenter.m_conversion)
+                for (int index = 0; index < fermenter.m_conversion.Count; ++index)
                 {
+                    Fermenter.ItemConversion? conversion = fermenter.m_conversion[index];
                     if (conversion.m_from == item || conversion.m_to == item)
                     {
-                        var reference = new ItemConversionRef();
-                        reference.m_prefab = fermenter.name;
-                        reference.m_type = ConversionType.Fermenter;
-                        reference.m_from = conversion.m_from.name;
-                        reference.m_to = conversion.m_to.name;
-                        reference.m_producedItems = conversion.m_producedItems;
+                        ItemConversionRef reference = new ItemConversionRef
+                        {
+                            m_prefab = fermenter.name,
+                            m_type = ConversionType.Fermenter,
+                            m_from = conversion.m_from.name,
+                            m_to = conversion.m_to.name,
+                            m_producedItems = conversion.m_producedItems
+                        };
                         conversions.Add(reference);
                     }
                 }
@@ -73,12 +76,14 @@ public class BaseItem : Header
                 {
                     if (conversion.m_from == item || conversion.m_to == item)
                     {
-                        ItemConversionRef reference = new ItemConversionRef();
-                        reference.m_type = ConversionType.CookingStation;
-                        reference.m_prefab = cookingStation.name;
-                        reference.m_from = conversion.m_from.name;
-                        reference.m_to = conversion.m_to.name;
-                        reference.m_cookTime = conversion.m_cookTime;
+                        ItemConversionRef reference = new ItemConversionRef
+                        {
+                            m_type = ConversionType.CookingStation,
+                            m_prefab = cookingStation.name,
+                            m_from = conversion.m_from.name,
+                            m_to = conversion.m_to.name,
+                            m_cookTime = conversion.m_cookTime
+                        };
                         conversions.Add(reference);
                     }
                 }
@@ -90,11 +95,13 @@ public class BaseItem : Header
                 {
                     if (conversion.m_from == item || conversion.m_to == item)
                     {
-                        ItemConversionRef reference = new ItemConversionRef();
-                        reference.m_type = ConversionType.Smelter;
-                        reference.m_prefab = smelter.name;
-                        reference.m_from = conversion.m_from.name;
-                        reference.m_to = conversion.m_to.name;
+                        ItemConversionRef reference = new ItemConversionRef
+                        {
+                            m_type = ConversionType.Smelter,
+                            m_prefab = smelter.name,
+                            m_from = conversion.m_from.name,
+                            m_to = conversion.m_to.name
+                        };
                         conversions.Add(reference);
                     }
                 }
@@ -128,7 +135,10 @@ public class BaseItem : Header
 
     protected virtual void SaveDefault(GameObject prefab)
     {
-        ItemManager.TrySave(prefab, out _, IsCloned, ClonedFrom);
+        if (ItemManager.TrySave(prefab, out BaseItem og, IsCloned, ClonedFrom))
+        {
+            LoadManager.originalToModifiedList.Add(og, this);
+        }
     }
 
     protected virtual void UpdatePrefab(GameObject prefab)

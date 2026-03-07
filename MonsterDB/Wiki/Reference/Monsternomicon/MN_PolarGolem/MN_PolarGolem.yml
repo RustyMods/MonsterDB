@@ -1,0 +1,49 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_PolarGolem
+ClonedFrom: StoneGolem
+IsCloned: true
+
+Character:
+  name: Silver Golem
+  faction: MountainMonsters
+  health: 2200
+  staggerWhenBlocked: false
+  defaultItems:
+  - MN_PolarGolem_stonegolem_attack2_left_groundslam
+  - MN_PolarGolem_stonegolem_attack_doublesmash
+  - MN_PolarGolem_stonegolem_attack_doublesmash
+  - MN_PolarGolem_gd_king_shoot
+  randomArmor:
+  - StoneGolem_hat
+
+AI:
+  minAttackInterval: 2
+  pathAgentType: HugeSize
+  randomCircleInterval: 5
+  randomMoveRange: 35
+
+Visuals:
+  scale: 2
+  
+Drops:
+  drops:
+  - prefab: Stone
+    amountMin: 10
+    amountMax: 20
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+  - prefab: Crystal
+    amountMin: 3
+    amountMax: 6
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+  - prefab: SilverOre
+    amountMin: 4
+    amountMax: 8
+    chance: 1
+    onePerPlayer: false
+    dontScale: true

@@ -168,6 +168,7 @@ public static class CreatureManager
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
         string filePath = Path.Combine(folderPath, $"{input}.bones.yml");
         ExportHierarchy(prefab, filePath);
+        context.AddString($"Exported {prefab.name} bones");
     }
     
     public static bool TrySave(GameObject prefab, out Base data, bool isClone = false, string source = "")

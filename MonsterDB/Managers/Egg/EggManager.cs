@@ -24,7 +24,7 @@ public static class EggManager
     {
         _addPercentage = ConfigManager.config("Eggs", "Growth Percentage", Toggle.On,
             "If on, will add growth percentage to hover text");
-        newEggComponentPrefabs = new List<string>();
+        newEggComponentPrefabs = [];
         
         Harmony harmony = MonsterDBPlugin.harmony;
         harmony.Patch(AccessTools.Method(typeof(ItemDrop), nameof(ItemDrop.GetHoverText)),
@@ -172,6 +172,19 @@ public static class EggManager
         }
 
         Clone(prefab, newName);
+    }
+
+    public static bool TrySave(GameObject prefab, out BaseEgg egg, bool isClone = false, string source = "")
+    {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        egg = LoadManager.GetOriginal<BaseEgg>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
+        if (egg != null) return true;
+
+        egg = new BaseEgg();
+        egg.Setup(prefab, isClone, source);
+        LoadManager.originals.Add(prefab.name, egg);
+        return true;
     }
     
 

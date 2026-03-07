@@ -43,16 +43,15 @@ public static partial class Commands
     private static List<string> GetYMLFileOptions(int i, string word) => i switch
     {
         2 => FileManager.GetModFileNames().ToList(),
-        _ => new List<string>()
+        _ => []
     };
     
     private static List<string> GetUpdateOptions(int i, string word) => i switch
     {
-        2 => FileManager.GetModFileNames().Union(new []
-        {
+        2 => FileManager.GetModFileNames().Union([
             "all",
             "raids"
-        }).ToList(),
+        ]).ToList(),
         _ => new List<string>()
     };
 }

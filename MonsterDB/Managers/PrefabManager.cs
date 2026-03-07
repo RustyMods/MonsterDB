@@ -18,7 +18,7 @@ public static class PrefabManager
     static PrefabManager()
     {
         _prefabs = new Dictionary<string, GameObject>();
-        PrefabsToRegister = new List<GameObject>();
+        PrefabsToRegister = [];
     }
 
     public static void Start()

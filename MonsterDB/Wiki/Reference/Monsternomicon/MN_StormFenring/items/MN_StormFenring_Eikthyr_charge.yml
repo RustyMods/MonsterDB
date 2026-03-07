@@ -1,0 +1,14 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_StormFenring_Eikthyr_charge
+ClonedFrom: Eikthyr_charge
+IsCloned: true
+
+ItemData:
+  damages:
+    lightning: 120
+  attack:
+    attackAnimation: attack_taunt
+  aiAttackInterval: 20
+

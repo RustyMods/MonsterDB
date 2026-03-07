@@ -195,14 +195,25 @@ public class VisEquipmentRef : Reference
         }
     }
 
+    public override bool IsNull() => m_leftHand == null && 
+                                     m_rightHand == null && 
+                                     m_helmet == null &&
+                                     m_backShield == null && 
+                                     m_backMelee == null && 
+                                     m_backTwohandedMelee == null &&
+                                     m_backBow == null && 
+                                     m_backTool == null && 
+                                     m_backAtgeir == null;
+    
+
     [HarmonyPatch(typeof(VisEquipment), nameof(VisEquipment.AttachItem))]
     private static class VisEquipment_AttachItem_Patch
     {
         private static void Postfix(VisEquipment __instance, Transform joint, GameObject __result)
         {
             if (__result == null) return;
-            if (LoadManager.files.humanoids == null) return;
-            if (!LoadManager.files.humanoids.TryGetValue(Utils.GetPrefabName(__instance.name), out BaseHumanoid? data)) return;
+            if (!LoadManager.modified.TryGetValue(Utils.GetPrefabName(__instance.name), out Header modded)) return;
+            if (modded is not BaseHumanoid data) return;
             if (data.VisEquipment == null) return;
             TransformRef? reference = data.VisEquipment.Get(joint);
             if (reference == null || !reference.m_scale.HasValue) return;
@@ -215,9 +226,9 @@ public class VisEquipmentRef : Reference
 [Serializable]
 public class TransformRef : Reference
 {
-    public string? m_name;
-    public string? m_parent;
-    public int? m_index;
+    [Persistent] public string? m_name;
+    [Persistent] public string? m_parent;
+    [Persistent] public int? m_index;
     public Vector3Ref? m_position;
     public Vector3Ref? m_rotation;
     public Vector3Ref? m_scale;
@@ -292,5 +303,33 @@ public class TransformRef : Reference
                 MonsterDBPlugin.LogDebug($"[{targetName}][{transform.name}] m_localScale: {m_scale.Value}");
             }
         }
+    }
+
+    public override bool Equals<T>(T other)
+    {
+        if (other is not TransformRef otherRef) return false;
+        bool isSame = otherRef.m_name == m_name &&
+               otherRef.m_parent == m_parent &&
+               otherRef.m_index == m_index;
+
+        if (isSame)
+        {
+            if (m_position != null && otherRef.m_position != null)
+            {
+                isSame &= m_position.Equals(otherRef.m_position);
+            }
+
+            if (m_rotation != null && otherRef.m_rotation != null)
+            {
+                isSame &= m_rotation.Equals(otherRef.m_rotation);
+            }
+
+            if (m_scale != null && otherRef.m_scale != null)
+            {
+                isSame &= m_scale.Equals(otherRef.m_scale);
+            }
+        }
+        
+        return isSame;
     }
 }

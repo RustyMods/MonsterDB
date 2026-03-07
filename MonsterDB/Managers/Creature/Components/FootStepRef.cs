@@ -45,9 +45,9 @@ public static partial class Extensions
     public static List<FootStep.StepEffect> ToFootStepEffects(this List<StepEffectRef> effects, List<FootStep.StepEffect> defaultValues)
     {
         Dictionary<(string m_name, FootStep.MotionType m_motionType, FootStep.GroundMaterial m_material),
-            FootStep.StepEffect> map = defaultValues.ToDictionary(x => (x.m_name, x.m_motionType, x.m_material));
+            FootStep.StepEffect> map = defaultValues.ToDict(x => (x.m_name, x.m_motionType, x.m_material));
 
-        List<FootStep.StepEffect> output = new List<FootStep.StepEffect>();
+        List<FootStep.StepEffect> output = [];
         for (int i = 0; i < effects.Count; ++i)
         {
             StepEffectRef? reference = effects[i];

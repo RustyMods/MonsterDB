@@ -133,6 +133,20 @@ public static class FishManager
             
         Clone(prefab, newName);
     }
+
+    public static bool TrySave(GameObject prefab, out BaseFish fish, bool isClone = false, string source = "")
+    {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        fish = LoadManager.GetOriginal<BaseFish>(prefab.name);
+#pragma warning restore CS8601 // Possible null reference assignment.
+        if (fish != null) return true;
+
+        fish = new BaseFish();
+        fish.Setup(prefab, isClone, source);
+        LoadManager.originals.Add(prefab.name, fish);
+
+        return true;
+    }
     
     public static string? Save(GameObject prefab, bool isClone = false, string source = "")
     {

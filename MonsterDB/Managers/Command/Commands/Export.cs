@@ -26,7 +26,7 @@ public static partial class Commands
     {
         2 => ExportOptions,
         3 => GetExportTypeOptions(word),
-        _ => new List<string>()
+        _ => []
     };
 
     private static List<string> GetExportTypeOptions(string word) =>
@@ -52,8 +52,8 @@ public static partial class Commands
         BaseType.CreatureSpawner => PrefabManager.GetAllPrefabNames<CreatureSpawner>().Append("all")
             .ToList(),
         BaseType.SpawnArea => PrefabManager.GetAllPrefabNames<SpawnArea>().Append("all").ToList(),
-        BaseType.Human => new List<string> { "Player" },
-        BaseType.All => new List<string>(),
+        BaseType.Human => ["Player"],
+        BaseType.All => [],
         BaseType.SpawnData => SpawnManager.GetCachedSpawnDataIds(),
         _ => PrefabManager.GetAllPrefabNames()
     };
@@ -64,22 +64,17 @@ public static partial class Commands
 
         string type = args[2];
         if (string.IsNullOrEmpty(type)) return defaultValue;
-        
-        switch (type)
+
+        return type switch
         {
-            case "texture":
-                return $"<color={HEX_Gray}>[TextureID]</color>: Export texture png";
-            case "sprite":
-                return $"<color={HEX_Gray}>[SpriteID]</color>: Export sprite png";
-            case "raid":
-                return $"<color={HEX_Gray}>[EventName]</color>: Export raid YML file";
-            case "bones":
-                return $"<color={HEX_Gray}>[PrefabID]</color>: Export prefab hierarchy";
-            default:
-                return Enum.TryParse(type, true, out BaseType baseType) ? 
-                    $"<color={HEX_Gray}>[PrefabID]</color>: Export {baseType} YML file" : 
-                    defaultValue;
-        }
+            "texture" => $"<color={HEX_Gray}>[TextureID]</color>: Export texture png",
+            "sprite" => $"<color={HEX_Gray}>[SpriteID]</color>: Export sprite png",
+            "raid" => $"<color={HEX_Gray}>[EventName]</color>: Export raid YML file",
+            "bones" => $"<color={HEX_Gray}>[PrefabID]</color>: Export prefab hierarchy",
+            _ => Enum.TryParse(type, true, out BaseType baseType)
+                ? $"<color={HEX_Gray}>[PrefabID]</color>: Export {baseType} YML file"
+                : defaultValue
+        };
     }
 
     private static void Export(Terminal.ConsoleEventArgs args)

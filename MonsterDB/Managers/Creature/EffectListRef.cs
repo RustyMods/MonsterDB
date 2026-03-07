@@ -9,10 +9,10 @@ namespace MonsterDB;
 [Serializable]
 public class EffectListRef
 {
-    public List<EffectDataRef> m_effectPrefabs = new();
+    public List<EffectDataRef> m_effectPrefabs = [];
     
     [YamlIgnore, NonSerialized] 
-    private readonly List<EffectList.EffectData> data = new();
+    private readonly List<EffectList.EffectData> data = [];
     [YamlIgnore, NonSerialized] 
     private EffectList? _effects;
 
@@ -26,8 +26,10 @@ public class EffectListRef
             {
                 data.Add(dataRef.ToEffectData());
             }
-            _effects = new EffectList();
-            _effects.m_effectPrefabs = data.ToArray();
+            _effects = new EffectList
+            {
+                m_effectPrefabs = data.ToArray()
+            };
             return _effects;
         }
     }

@@ -10,7 +10,7 @@ public class Faction
     public string name = "";
     public bool targetTamed = true;
     public bool targetTameables = true;
-    public List<Character.Faction> allies = new();
+    public List<Character.Faction> allies = [];
 
     public void Setup()
     {

@@ -1,0 +1,20 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_StormFenring_troll_groundslam
+ClonedFrom: troll_groundslam
+IsCloned: true
+ItemData:
+  damages:
+    blunt: 60
+    lightning: 40
+  attack:
+    attackAnimation: attack_jump
+  aiAttackInterval: 16
+  hitEffect:
+    effectPrefabs:
+    - prefab: fx_eikthyr_stomp
+    - prefab: sfx_fenring_jump_trigger
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_jump_trailstart

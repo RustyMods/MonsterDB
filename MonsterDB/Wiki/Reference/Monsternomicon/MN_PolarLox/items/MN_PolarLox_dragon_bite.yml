@@ -1,0 +1,22 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarLox_dragon_bite
+ClonedFrom: dragon_bite
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 60
+    frost: 100
+  attack: {}
+  aiAttackInterval: 20
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_ColdBall_Hit
+    - prefab: sfx_ice_hit
+  startEffect:
+    effectPrefabs:
+    - prefab: vfx_dragon_coldbreath
+    - prefab: sfx_lox_attack_stomp
+    - prefab: sfx_dragon_coldbreath_trailon

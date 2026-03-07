@@ -1,0 +1,24 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_StormFenring_Eikthyr_stomp
+ClonedFrom: Eikthyr_stomp
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 40
+    lightning: 60
+  attack:
+    attackAnimation: attack_taunt
+  aiAttackInterval: 20
+  hitEffect:
+    effectPrefabs:
+    - prefab: fx_himminafl_hit
+      variant: -1
+    - prefab: fx_goblinbrute_groundslam
+      variant: -1
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_howl
+      variant: -1

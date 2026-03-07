@@ -1,0 +1,16 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Ragdoll
+Prefab: MN_PolarFenring_ragdoll
+ClonedFrom: Fenring_ragdoll
+IsCloned: true
+
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Fenring.001
+    parent: Fenring_ragdoll
+    index: 1
+    materials:
+    - name: fenring
+      mainTexture: rrrtex.MN_PolarFenring

@@ -39,7 +39,7 @@ public static partial class Commands
     {
         2 => GetBaseTypes(BaseType.None, BaseType.All),
         3 => GetCloneTypeOptions(word),
-        _ => new List<string>()
+        _ => []
     };
 
     private static List<string> GetCloneTypeOptions(string word)

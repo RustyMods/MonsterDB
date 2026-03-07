@@ -7,7 +7,8 @@ namespace MonsterDB;
 [Serializable]
 public class BaseSpawnArea : Header
 {
-    [YamlMember(Order = 6, Description = "If removed, will remove component")] public SpawnAreaRef? SpawnArea;
+    [YamlMember(Order = 6, Description = "If removed, will remove component")] 
+    public SpawnAreaRef? SpawnArea;
     [YamlMember(Order = 7)] public DestructibleRef? Destructible;
     [YamlMember(Order = 8)] public VisualRef? Visuals;
 

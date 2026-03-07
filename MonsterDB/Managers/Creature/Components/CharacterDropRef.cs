@@ -10,7 +10,9 @@ namespace MonsterDB;
 public class CharacterDropRef : Reference
 {
     public List<DropRef>? m_drops;
-    [YamlMember(Description = "Only works if Character Death Effects do not have a ragdoll")] public bool? m_dropsEnabled;
+    
+    [YamlMember(Description = "Only works if Character Death Effects do not have a ragdoll")] 
+    public bool? m_dropsEnabled;
     
     public CharacterDropRef(){}
 

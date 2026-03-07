@@ -1,0 +1,17 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarLox_lox_stomp
+ClonedFrom: lox_stomp
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 140
+    chop: 100
+    pickaxe: 100
+  aiPrioritized: true
+  hitEffect:
+    effectPrefabs:
+    - prefab: fx_dragon_land
+    - prefab: vfx_ice_destroyed

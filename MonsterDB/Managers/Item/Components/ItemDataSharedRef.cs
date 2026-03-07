@@ -155,22 +155,24 @@ public sealed class ItemDataSharedRef : Reference
         {
             targetField.SetValue(target, mat);
         }
-
-        IEnumerable<Material> armorMaterials = PrefabManager.GetAllPrefabs<ItemDrop>()
-            .Select(p => p.GetComponent<ItemDrop>().m_itemData.m_shared.m_armorMaterial)
-            .Where(m => m != null);
-        foreach (Material material in armorMaterials)
+        else
         {
-            if (material.name == materialName)
+            IEnumerable<Material> armorMaterials = PrefabManager.GetAllPrefabs<ItemDrop>()
+                .Select(p => p.GetComponent<ItemDrop>().m_itemData.m_shared.m_armorMaterial)
+                .Where(m => m != null);
+            foreach (Material material in armorMaterials)
             {
-                targetField.SetValue(target, material);
+                _cachedArmorMaterials[material.name] = material;
+                if (material.name == materialName)
+                {
+                    targetField.SetValue(target, material);
+                    break;
+                }
             }
-            if (_cachedArmorMaterials.ContainsKey(material.name)) continue;
-            _cachedArmorMaterials.Add(material.name, material);
         }
         
-        var newValue = targetField.GetValue(target);
-        var matName = "null";
+        object? newValue = targetField.GetValue(target);
+        string matName = "null";
         if (newValue is Material newMat) matName = newMat.name;
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: {matName}");
     }

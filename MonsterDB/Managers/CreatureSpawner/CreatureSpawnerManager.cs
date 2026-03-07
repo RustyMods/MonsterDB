@@ -53,7 +53,7 @@ public static class CreatureSpawnerManager
     public static List<string> GetCreatureSpawnersOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<CreatureSpawner>(),
-        _ => new List<string>()
+        _ => []
     };
 
     public static void Write(GameObject prefab, bool isClone, string source)

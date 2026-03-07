@@ -1,0 +1,20 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_StormFenring_Fenring_attack_claw
+ClonedFrom: Fenring_attack_claw
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 70
+    lightning: 20
+  attack: {}
+  aiAttackInterval: 4
+  aiPrioritized: true
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_BloodHit
+      variant: -1
+    - prefab: sfx_fenring_claw_hit
+      variant: -1

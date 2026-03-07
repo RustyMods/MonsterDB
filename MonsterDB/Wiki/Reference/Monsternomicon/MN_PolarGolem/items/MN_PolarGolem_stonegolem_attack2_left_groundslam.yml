@@ -1,0 +1,19 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarGolem_stonegolem_attack2_left_groundslam
+ClonedFrom: stonegolem_attack2_left_groundslam
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 120
+    chop: 150
+    pickaxe: 150
+  aiAttackInterval: 4
+  aiPrioritized: true
+  hitEffect:
+    effectPrefabs:
+    - prefab: fx_dragon_land
+    - prefab: fx_icefloor_destruction
+    - prefab: vfx_ice_destroyed

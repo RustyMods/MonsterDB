@@ -1,0 +1,64 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_PolarWolf
+ClonedFrom: Wolf
+IsCloned: true
+Character:
+  name: Pale-coat Wolf
+  health: 140
+  deathEffects:
+    effectPrefabs:
+      - prefab: vfx_wolf_death
+      - prefab: MN_PolarWolf_ragdoll
+      - prefab: sfx_wolf_death
+  defaultItems:
+  - MN_PolarWolf_Wolf_Attack1
+  - MN_PolarWolf_Wolf_Attack2
+  - MN_PolarWolf_Wolf_Attack3
+
+Visuals:
+  scale: 1.2
+  renderers:
+  - prefab: M
+    parent: WolfSmooth
+    index: 1
+    materials:
+    - name: Wolf Skin Grey
+      mainTexture: rrrtex.MN_PolarWolf
+
+Drops:
+  drops:
+  - prefab: TrophyWolf
+    amountMin: 1
+    amountMax: 1
+    chance: 0.1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: WolfMeat
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: WolfPelt
+    amountMin: 1
+    amountMax: 2
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: WolfFang
+    amountMin: 1
+    amountMax: 1
+    chance: 0.4
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+
+Tameable:
+  commandable: false
+
+Procreation: {}

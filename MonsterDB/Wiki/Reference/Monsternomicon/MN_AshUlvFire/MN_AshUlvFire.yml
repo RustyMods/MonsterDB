@@ -1,0 +1,59 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_AshUlvFire
+ClonedFrom: Ulv
+IsCloned: true
+
+Character:
+  name: Garmring
+  faction: Demon
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_stonegolem_hurt
+    - prefab: sfx_wolf_hit
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_DvergerMage_Fire_hit
+    - prefab: DvergerStaffFire_clusterbomb_aoe
+    - prefab: sfx_ulv_death
+    - prefab: MN_AshUlvFire_ragdoll
+  health: 320
+  defaultItems:
+  - MN_AshUlvFire_Ulv_attack1_bite
+  - MN_AshUlvFire_Ulv_attack2_slash
+
+AI:
+  randomMoveInterval: 20
+  randomMoveRange: 15
+  
+Visuals:
+  scale: 1.5
+  renderers:
+  - prefab: Fenring.001
+    parent: Ulv
+    index: 1
+    materials:
+    - name: Ulv_mat
+      mainTexture: rrrtex.MN_AshUlvFire
+
+Drops:
+  drops:
+  - prefab: WolfFang
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+  - prefab: Coal
+    amountMin: 4
+    amountMax: 8
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+  - prefab: RRRM_MN_AshUlvFire
+    amountMin: 1
+    amountMax: 1
+    chance: 0.2
+    onePerPlayer: false
+    dontScale: true

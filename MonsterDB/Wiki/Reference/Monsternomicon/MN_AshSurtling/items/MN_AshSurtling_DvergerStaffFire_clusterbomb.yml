@@ -1,0 +1,19 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_AshSurtling_DvergerStaffFire_clusterbomb
+ClonedFrom: DvergerStaffFire_clusterbomb
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 60
+    fire: 80
+  attack:
+    attackAnimation: attack
+    attackProjectile: DvergerStaffFire_clusterbomb_projectile
+  aiAttackInterval: 8
+  startEffect:
+    effectPrefabs:
+    - prefab: DvergerStaffFire_clusterbomb_aoe
+    - prefab: sfx_dverger_fireball_rain_shot

@@ -5,7 +5,7 @@ namespace MonsterDB;
 public class AudioRef
 {
     public string filePath;
-    public AudioClip? clip;
+    private readonly AudioClip? clip;
     public GameObject? sfx;
 
     public AudioRef(string filePath)
@@ -22,7 +22,7 @@ public class AudioRef
                     component.m_captionType = ClosedCaptions.CaptionType.Enemy;
                     component.m_closedCaptionToken = clip.name;
                     component.m_secondaryCaptionToken = "";
-                    component.m_audioClips = new AudioClip[] { clip };
+                    component.m_audioClips = [clip];
                     sfx = p;
                 }
 

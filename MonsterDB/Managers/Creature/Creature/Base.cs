@@ -2,40 +2,55 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using MonsterDB.Misc;
 using UnityEngine;
 using YamlDotNet.Serialization;
+using Object = UnityEngine.Object;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
+[UsedImplicitly]
 public class Base : Header
 {
-    [YamlMember(Order = 8)] 
-    public VisualRef? Visuals;
-    [YamlMember(Order = 9, Description = "If field removed, will remove component")] 
+    [YamlMember(Order = 8)] public VisualRef? Visuals;
+
+    [YamlMember(Order = 9, Description = "If field removed, will remove component")]
     public CharacterDropRef? Drops;
-    [YamlMember(Order = 10, Description = "If field removed, will remove component")] 
+
+    [YamlMember(Order = 10, Description = "If field removed, will remove component")]
     public TameableRef? Tameable;
-    [YamlMember(Order = 11, Description = "If field removed, will remove component")] 
+
+    [YamlMember(Order = 11, Description = "If field removed, will remove component")]
     public ProcreationRef? Procreation;
-    [YamlMember(Order = 12, Description = "If field removed, will remove component")] 
+
+    [YamlMember(Order = 12, Description = "If field removed, will remove component")]
     public GrowUpRef? GrowUp;
-    [YamlMember(Order = 13, Description = "If field removed, will remove component")] 
+
+    [YamlMember(Order = 13, Description = "If field removed, will remove component")]
     public NPCTalkRef? NPCTalk;
-    [YamlMember(Order = 14)] 
-    public MovementDamageRef? MovementDamage;
+
+    [YamlMember(Order = 14)] public MovementDamageRef? MovementDamage;
     [YamlMember(Order = 15)] public SaddleRef? Saddle;
-    [YamlMember(Order = 16, Description = "If field removed, will remove component")] 
+
+    [YamlMember(Order = 16, Description = "If field removed, will remove component")]
     public DropProjectileOverDistanceRef? DropProjectileOverDistance;
+
     [YamlMember(Order = 17)] public CinderSpawnerRef? CinderSpawner;
     [YamlMember(Order = 18)] public CharacterTimedDestructionRef? TimedDestruction;
-    [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled too false to disable")] public SpawnDataRef[]? SpawnData;
-    [YamlMember(Order = 20)] public FootStepRef? FootStep;
-    [YamlMember(Order = 100)] public MiscComponent? Extra;
-    [YamlMember(Order = 101, Description = "Reference only, these are attack animation triggers")] public List<string>? AnimationTriggers;
 
-    public override VisualRef? GetVisualData() => Visuals;
+    [YamlMember(Order = 19,
+        Description = "If entries removed, will still be registered, set enabled too false to disable")]
+    public SpawnDataRef[]? SpawnData;
+
+    [YamlMember(Order = 20)] public FootStepRef? FootStep;
+
+    [YamlMember(Order = 101, Description = "Reference only, these are attack animation triggers")]
+    public List<string>? AnimationTriggers;
+
+    public override VisualRef? GetVisualData()
+    {
+        return Visuals;
+    }
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
@@ -53,116 +68,80 @@ public class Base : Header
         if (originalBase.Drops == null) Drops = null;
         if (originalBase.Tameable == null) Tameable = null;
         if (originalBase.Procreation == null) Procreation = null;
-        if (originalBase.GrowUp == null)  GrowUp = null;
+        if (originalBase.GrowUp == null) GrowUp = null;
         if (originalBase.NPCTalk == null) NPCTalk = null;
         if (originalBase.Saddle == null) Saddle = null;
-        
+
         if (Drops != null && originalBase.Drops != null) Drops.ResetTo(originalBase.Drops);
-        if (Tameable != null  && originalBase.Tameable != null) Tameable.ResetTo(originalBase.Tameable);
+        if (Tameable != null && originalBase.Tameable != null) Tameable.ResetTo(originalBase.Tameable);
         if (Procreation != null && originalBase.Procreation != null) Procreation.ResetTo(originalBase.Procreation);
-        if (GrowUp != null &&  originalBase.GrowUp != null) GrowUp.ResetTo(originalBase.GrowUp);
-        if (NPCTalk != null && originalBase.NPCTalk != null)  NPCTalk.ResetTo(originalBase.NPCTalk);
-        if (MovementDamage != null && originalBase.MovementDamage != null)  MovementDamage.ResetTo(originalBase.MovementDamage);
-        if (Saddle != null && originalBase.Saddle != null)  Saddle.ResetTo(originalBase.Saddle);
-        if (DropProjectileOverDistance != null && originalBase.DropProjectileOverDistance != null) DropProjectileOverDistance.ResetTo(originalBase.DropProjectileOverDistance);
-        if (CinderSpawner != null && originalBase.CinderSpawner != null)  CinderSpawner.ResetTo(originalBase.CinderSpawner);
-        if (TimedDestruction != null && originalBase.TimedDestruction != null)  TimedDestruction.ResetTo(originalBase.TimedDestruction);
+        if (GrowUp != null && originalBase.GrowUp != null) GrowUp.ResetTo(originalBase.GrowUp);
+        if (NPCTalk != null && originalBase.NPCTalk != null) NPCTalk.ResetTo(originalBase.NPCTalk);
+        if (MovementDamage != null && originalBase.MovementDamage != null)
+            MovementDamage.ResetTo(originalBase.MovementDamage);
+        if (Saddle != null && originalBase.Saddle != null) Saddle.ResetTo(originalBase.Saddle);
+        if (DropProjectileOverDistance != null && originalBase.DropProjectileOverDistance != null)
+            DropProjectileOverDistance.ResetTo(originalBase.DropProjectileOverDistance);
+        if (CinderSpawner != null && originalBase.CinderSpawner != null)
+            CinderSpawner.ResetTo(originalBase.CinderSpawner);
+        if (TimedDestruction != null && originalBase.TimedDestruction != null)
+            TimedDestruction.ResetTo(originalBase.TimedDestruction);
         if (FootStep != null && originalBase.FootStep != null) FootStep.ResetTo(originalBase.FootStep);
     }
 
     protected void SetupAnimationTriggers(GameObject prefab)
     {
         if (!prefab.GetComponentInChildren<Animator>()) return;
-        
+
         ZNetView.m_forceDisableInit = true;
-        GameObject? instance = UnityEngine.Object.Instantiate(prefab);
+        GameObject instance = Object.Instantiate(prefab);
         ZNetView.m_forceDisableInit = false;
-        
+
         Animator? animator = instance.GetComponentInChildren<Animator>();
         AnimationTriggers = animator.parameters.Select(x => x.name).ToList();
 
-        UnityEngine.Object.DestroyImmediate(instance);
+        Object.DestroyImmediate(instance);
     }
 
     protected void SetupSharedFields(GameObject prefab, bool isClone = false, string source = "")
     {
         Prefab = prefab.name;
-        
-        if (prefab.TryGetComponent(out CharacterDrop characterDrop))
-        {
-            Drops = new CharacterDropRef(characterDrop);
-        }
 
-        if (prefab.TryGetComponent(out Growup growUp))
-        {
-            GrowUp = new GrowUpRef(growUp);
-        }
-        
-        if (prefab.TryGetComponent(out Tameable tameable))
-        {
-            Tameable = new TameableRef(tameable);
-        }
-        
-        if (prefab.TryGetComponent(out Procreation procreation))
-        {
-            Procreation = new ProcreationRef(procreation);
-        }
+        if (prefab.TryGetComponent(out CharacterDrop characterDrop)) Drops = new CharacterDropRef(characterDrop);
 
-        if (prefab.TryGetComponent(out NpcTalk npcTalk))
-        {
-            NPCTalk = new NPCTalkRef(npcTalk);
-        }
+        if (prefab.TryGetComponent(out Growup growUp)) GrowUp = new GrowUpRef(growUp);
 
-        if (prefab.TryGetComponent(out MovementDamage md))
-        {
-            MovementDamage = new MovementDamageRef(md);
-        }
+        if (prefab.TryGetComponent(out Tameable tameable)) Tameable = new TameableRef(tameable);
 
-        Sadle? saddle = prefab.GetComponentInChildren<Sadle>(true);
-        if (saddle != null)
-        {
-            Saddle = new SaddleRef(saddle);
-        }
+        if (prefab.TryGetComponent(out Procreation procreation)) Procreation = new ProcreationRef(procreation);
+
+        if (prefab.TryGetComponent(out NpcTalk npcTalk)) NPCTalk = new NPCTalkRef(npcTalk);
+
+        if (prefab.TryGetComponent(out MovementDamage md)) MovementDamage = new MovementDamageRef(md);
+
+        var saddle = prefab.GetComponentInChildren<Sadle>(true);
+        if (saddle != null) Saddle = new SaddleRef(saddle);
 
         if (prefab.TryGetComponent(out DropProjectileOverDistance dp))
-        {
             DropProjectileOverDistance = new DropProjectileOverDistanceRef(dp);
-        }
 
         Visuals = new VisualRef(prefab);
-        
+
 
         if (prefab.TryGetComponent(out CinderSpawner cinderSpawner))
-        {
             CinderSpawner = new CinderSpawnerRef(cinderSpawner);
-        }
 
         if (prefab.TryGetComponent(out CharacterTimedDestruction ctd))
-        {
             TimedDestruction = new CharacterTimedDestructionRef(ctd);
-        }
-        
+
         SetupAnimationTriggers(prefab);
 
-        if (prefab.TryGetComponent(out FootStep footStep))
-        {
-            FootStep = new FootStepRef(footStep);
-        }
-        
+        if (prefab.TryGetComponent(out FootStep footStep)) FootStep = new FootStepRef(footStep);
+
         if (isClone)
         {
             IsCloned = true;
             ClonedFrom = source;
-        }
-    }
-
-    protected void SetupUnknowns(GameObject prefab)
-    {
-        MiscComponent misc = new MiscComponent();
-        misc.Setup(prefab);
-        if (misc.components != null)
-        {
-            Extra = misc;
         }
     }
 
@@ -173,22 +152,26 @@ public class Base : Header
             m_name = $"MDB {Prefab} Spawn Data",
             m_prefab = Prefab
         };
-        SpawnData = new[] { data };
+        SpawnData = [data];
     }
+
     public override void Update()
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
         if (prefab == null) return;
 
-        CreatureManager.TrySave(prefab, out _, IsCloned, ClonedFrom);
+        if (CreatureManager.TrySave(prefab, out Base og, IsCloned, ClonedFrom))
+        {
+            LoadManager.originalToModifiedList.Add(og, this);
+        }
         
         UpdatePrefab(prefab);
         List<Character>? characters = Character.GetAllCharacters();
         for (int i = 0; i < characters.Count; ++i)
         {
-            Character? character = characters[i];
+            Character character = characters[i];
             if (character == null || character.gameObject == null) continue;
-            string? prefabName = Utils.GetPrefabName(character.name);
+            string prefabName = Utils.GetPrefabName(character.name);
             if (Prefab != prefabName) continue;
             UpdatePrefab(character.gameObject, true);
         }
@@ -197,11 +180,11 @@ public class Base : Header
         {
             for (int i = 0; i < SpawnData.Length; ++i)
             {
-                SpawnDataRef data = SpawnData[i];
+                var data = SpawnData[i];
                 SpawnManager.Update(data);
             }
         }
-        
+
         base.Update();
     }
 
@@ -221,20 +204,17 @@ public class Base : Header
         UpdateTimedDestruction(prefab, isInstance);
         UpdateFootStep(prefab, isInstance);
     }
-    
+
     public void UpdateFootStep(GameObject prefab, bool isInstance)
     {
         if (FootStep == null) return;
         if (!prefab.TryGetComponent(out FootStep component)) return;
         FootStep.UpdateFields(component, prefab.name, !isInstance);
     }
-    
+
     protected virtual void UpdateVisual(GameObject prefab, bool isInstance = false)
     {
-        if (Visuals != null)
-        {
-            Visuals.Update(prefab, isInstance, false);
-        }
+        Visuals?.Update(prefab, isInstance, false);
     }
 
     protected void UpdateTimedDestruction(GameObject prefab, bool isInstance = false)
@@ -245,32 +225,30 @@ public class Base : Header
 
     protected void UpdateCinderSpawner(GameObject prefab, bool isInstance = false)
     {
-        if (CinderSpawner != null)
-        {
-            CinderSpawner.Update(prefab, isInstance);
-        }
+        CinderSpawner?.Update(prefab, isInstance);
     }
-    
+
     protected void UpdateLevelEffects(GameObject prefab, bool isInstance = false)
     {
         LevelEffects? levelEffects = prefab.GetComponentInChildren<LevelEffects>();
         if (levelEffects == null) return;
-        if (levelEffects != null && Visuals != null && Visuals.m_levelSetups != null)
+        if (levelEffects != null && Visuals is { m_levelSetups: not null })
         {
             Dictionary<string, Renderer> renderers = prefab
                 .GetComponentsInChildren<Renderer>(true)
                 .ToDict(f => f.name);
             List<LevelEffects.LevelSetup> setups = new();
-            foreach (LevelSetupRef? levelRef in Visuals.m_levelSetups)
+            foreach (LevelSetupRef levelRef in Visuals.m_levelSetups)
             {
                 LevelEffects.LevelSetup levelSetup = new LevelEffects.LevelSetup();
                 levelRef.Set(levelSetup, renderers);
                 setups.Add(levelSetup);
             }
+
             levelEffects.m_levelSetups = setups;
         }
     }
-    
+
     protected void UpdateCharacterDrop(GameObject prefab, bool isInstance = false)
     {
         CharacterDrop? drops = prefab.GetComponent<CharacterDrop>();
@@ -287,16 +265,13 @@ public class Base : Header
                 drops = null;
             }
         }
-        
-        if (drops != null && Drops != null)
-        {
-            Drops.UpdateFields(drops, prefab.name, !isInstance);
-        }
+
+        if (drops != null && Drops != null) Drops.UpdateFields(drops, prefab.name, !isInstance);
     }
 
     protected void UpdateGrowUp(GameObject prefab, bool isInstance = false)
     {
-        Growup? growUp = prefab.GetComponent<Growup>();
+        var growUp = prefab.GetComponent<Growup>();
 
         if (!isInstance)
         {
@@ -309,14 +284,11 @@ public class Base : Header
                 prefab.Remove<Growup>();
                 growUp = null;
             }
-        }        
-        
-        if (growUp != null && GrowUp != null)
-        {
-            GrowUp.UpdateFields(growUp, prefab.name, !isInstance);
         }
+
+        if (growUp != null && GrowUp != null) GrowUp.UpdateFields(growUp, prefab.name, !isInstance);
     }
-    
+
     protected void UpdateTameable(GameObject prefab, bool isInstance = false)
     {
         Tameable? tameable = prefab.GetComponent<Tameable>();
@@ -332,16 +304,13 @@ public class Base : Header
                 tameable = null;
             }
         }
-        
-        if (tameable != null && Tameable != null)
-        {
-            Tameable.UpdateFields(tameable, prefab.name, !isInstance);
-        }
+
+        if (tameable != null && Tameable != null) Tameable.UpdateFields(tameable, prefab.name, !isInstance);
     }
 
     protected void UpdateProcreation(GameObject prefab, bool isInstance = false)
     {
-        Procreation? procreation = prefab.GetComponent<Procreation>();
+        var procreation = prefab.GetComponent<Procreation>();
 
         if (!isInstance)
         {
@@ -355,11 +324,8 @@ public class Base : Header
                 procreation = null;
             }
         }
-        
-        if (procreation != null && Procreation != null)
-        {
-            Procreation.UpdateFields(procreation, prefab.name, !isInstance);
-        }
+
+        if (procreation != null && Procreation != null) Procreation.UpdateFields(procreation, prefab.name, !isInstance);
     }
 
     protected void UpdateNpcTalk(GameObject prefab, bool isInstance = false)
@@ -378,11 +344,8 @@ public class Base : Header
                 npcTalk = null;
             }
         }
-        
-        if (npcTalk != null && NPCTalk != null)
-        {
-            NPCTalk.UpdateFields(npcTalk, prefab.name, !isInstance);
-        }
+
+        if (npcTalk != null && NPCTalk != null) NPCTalk.UpdateFields(npcTalk, prefab.name, !isInstance);
     }
 
     protected void UpdateSaddle(GameObject prefab, bool isInstance = false)
@@ -408,30 +371,31 @@ public class Base : Header
             Saddle.UpdateFields(custom, prefab.name, !isInstance);
             custom.Restart();
         }
-        
+
         if (saddle == null || Saddle == null) return;
         Saddle.UpdateFields(saddle, prefab.name, !isInstance);
     }
-    
+
     protected void UpdateMovementDamage(GameObject prefab, bool isInstance = false)
     {
-        if (MovementDamage == null || MovementDamage.m_areaOfEffect == null || !prefab.TryGetComponent(out MovementDamage movementDamage)) return;
+        if (MovementDamage == null || MovementDamage.m_areaOfEffect == null ||
+            !prefab.TryGetComponent(out MovementDamage movementDamage)) return;
         MovementDamage.m_areaOfEffect.UpdateFields(movementDamage, prefab.name, !isInstance);
     }
 
     protected void UpdateDropProjectile(GameObject prefab, bool isInstance = false)
     {
-        if (DropProjectileOverDistance == null || 
+        if (DropProjectileOverDistance == null ||
             !prefab.TryGetComponent(out DropProjectileOverDistance dp)) return;
         DropProjectileOverDistance.UpdateFields(dp, prefab.name, !isInstance);
     }
-    
+
     protected Dictionary<string, GameObject> GetDefaultItems(Humanoid humanoid)
     {
         Dictionary<string, GameObject> attacks = new();
         if (humanoid.m_defaultItems != null)
         {
-            foreach (GameObject? item in humanoid.m_defaultItems)
+            foreach (GameObject item in humanoid.m_defaultItems)
             {
                 if (item == null) continue;
                 attacks[item.name] = item;
@@ -440,18 +404,18 @@ public class Base : Header
 
         if (humanoid.m_randomWeapon != null)
         {
-            foreach (GameObject? item in humanoid.m_randomWeapon)
+            foreach (var item in humanoid.m_randomWeapon)
             {
                 if (item == null) continue;
                 attacks[item.name] = item;
             }
         }
-        
+
         if (humanoid.m_randomSets != null)
         {
-            foreach (Humanoid.ItemSet? set in humanoid.m_randomSets)
+            foreach (Humanoid.ItemSet set in humanoid.m_randomSets)
             {
-                foreach (GameObject? item in set.m_items)
+                foreach (GameObject item in set.m_items)
                 {
                     if (item == null) continue;
                     attacks[item.name] = item;
@@ -461,5 +425,4 @@ public class Base : Header
 
         return attacks;
     }
-    
 }

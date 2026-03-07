@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using JetBrains.Annotations;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class TameableRef : Reference
 {
     public float? m_fedDuration;
-     public float? m_tamingTime;
+    public float? m_tamingTime;
     public bool? m_startsTamed;
     public EffectListRef? m_tamedEffect;
     public EffectListRef? m_sootheEffect;
@@ -30,7 +28,13 @@ public class TameableRef : Reference
     public float? m_tamingBoostMultiplier;
     public bool? m_nameBeforeText;
     public string? m_tameText;
-    
-    public TameableRef(){}
-    public TameableRef(Tameable component) => Setup(component);
+
+    public TameableRef()
+    {
+    }
+
+    public TameableRef(Tameable component)
+    {
+        Setup(component);
+    }
 }

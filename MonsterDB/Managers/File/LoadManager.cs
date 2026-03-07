@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HarmonyLib;
@@ -8,18 +7,62 @@ using UnityEngine;
 
 namespace MonsterDB;
 
+public class NameToHeader : Dictionary<string, Header>
+{
+    public void Add(Header header)
+    {
+        this[header.Prefab] = header;
+    }
+
+    public void AddRange(List<Header> headers)
+    {
+        for (int i = 0; i < headers.Count; ++i)
+        {
+            Header header = headers[i];
+            Add(header);
+        }
+    }
+}
+
+public class HeaderToHeader : Dictionary<Header, List<Header>>
+{
+    public void Add(Header key, Header value)
+    {
+        if (!ContainsKey(key)) this[key] = [];
+        if (this[key].Contains(value)) return;
+        this[key].Add(value);
+    }
+
+    public bool TryGetKey(Header value, out Header key)
+    {
+        foreach (KeyValuePair<Header, List<Header>> kvp in this)
+        {
+            if (!kvp.Value.Contains(value)) continue;
+            key = kvp.Key;
+            return true;
+        }
+
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        key = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        return false;
+    }
+}
+
 public static class LoadManager
 {
-    public static readonly Dictionary<string, Header> originals;
-    public static readonly List<Header> loadList;
+    public static readonly NameToHeader originals;
+    public static readonly NameToHeader modified;
+    public static readonly HeaderToHeader originalToModifiedList;
     private static readonly CustomSyncedValue<string> sync;
     public static BaseAggregate files;
     public static bool resetting;
 
     static LoadManager()
     {
-        originals = new Dictionary<string, Header>();
-        loadList = new List<Header>();
+        originals = new NameToHeader();
+        modified = new NameToHeader();
+        originalToModifiedList = new HeaderToHeader();
         files = new BaseAggregate();
         sync =  new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.Files", "");
         sync.ValueChanged += OnSyncChange;
@@ -40,7 +83,7 @@ public static class LoadManager
     private static void Reload()
     {
         ResetAll<Header>();
-        loadList.Clear();
+        modified.Clear();
         SpawnManager.Clear();
         CloneManager.Clear();
         FileManager.started = false;
@@ -53,7 +96,7 @@ public static class LoadManager
     {
         files = new BaseAggregate();
         ResetAll<Header>();
-        loadList.Clear();
+        modified.Clear();
         SpawnManager.Clear();
         CloneManager.Clear();
         RaidManager.Reset();
@@ -84,9 +127,9 @@ public static class LoadManager
 
     public static void ResetAll<T>() where T : Header
     {
-        if (loadList.Count <= 0 || originals.Count <= 0) return;
+        if (modified.Count <= 0 || originals.Count <= 0) return;
         resetting = true;
-        foreach (Header? data in loadList)
+        foreach (Header data in modified.Values)
         {
             if (data is not T) continue;
             if (!originals.TryGetValue(data.Prefab, out Header? original)) continue;
@@ -99,7 +142,7 @@ public static class LoadManager
     public static bool Reset<T>(string prefabName) where T : Header
     {
         if (!TryGetOriginal(prefabName, out T result)) return false;
-        Header? target = loadList.Find(x => x.Prefab == prefabName);
+        if (!modified.TryGetValue(prefabName, out Header target)) return false;
         if (target == null) return false;
         target.CopyFields(result);
         target.Update();
@@ -122,8 +165,8 @@ public static class LoadManager
             if (string.IsNullOrEmpty(data.PrefabToUpdate))
             {
                 ResetAll<Header>();
-                loadList.Clear();
-                loadList.AddRange(data.Load());
+                modified.Clear();
+                modified.AddRange(data.Load());
                 LoadClones();
                 Load();
             }
@@ -152,10 +195,11 @@ public static class LoadManager
     private static void LoadClones()
     {
         Dictionary<BaseType, int> count = new  Dictionary<BaseType, int>();
+        List<Header> list = modified.Values.ToList();
         
-        for (int i = 0; i < loadList.Count; ++i)
+        for (int i = 0; i < list.Count; ++i)
         {
-            Header? data = loadList[i];
+            Header? data = list[i];
             if (data.IsCloned)
             {
                 GameObject? prefab = PrefabManager.GetPrefab(data.ClonedFrom);
@@ -231,7 +275,7 @@ public static class LoadManager
     
     private static void Load()
     {
-        List<Header> ordered = loadList
+        List<Header> ordered = modified.Values
             .OrderBy(x => x.Type is not BaseType.SpawnAbility)
             .ThenBy(x => x.Type is not BaseType.Projectile)
             .ThenBy(x => x.Type is not BaseType.Item)

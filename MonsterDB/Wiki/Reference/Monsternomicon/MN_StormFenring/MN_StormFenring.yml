@@ -1,0 +1,50 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_StormFenring
+ClonedFrom: Fenring
+IsCloned: true
+
+Character:
+  name: The One Who Hunts in the Rain
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_eikthyr_stomp
+    - prefab: vfx_fenring_death
+    - prefab: sfx_fenring_death
+    - prefab: MN_StormFenring_ragdoll
+  health: 600
+  defaultItems:
+  - MN_StormFenring_Fenring_attack_claw
+  - MN_StormFenring_troll_groundslam
+  - MN_StormFenring_Eikthyr_stomp
+  - MN_StormFenring_Eikthyr_charge
+
+AI:
+  interceptTimeMax: 2
+  minAttackInterval: 3
+  
+Visuals:
+  scale: 1.3
+  renderers:
+  - prefab: Fenring.001
+    parent: Visual
+    index: 1
+    materials:
+    - name: fenring
+      mainTexture: rrrtex.MN_StormFenring
+
+Drops:
+  drops:
+  - prefab: WolfClaw
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+  - prefab: WolfHairBundle
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    dontScale: true

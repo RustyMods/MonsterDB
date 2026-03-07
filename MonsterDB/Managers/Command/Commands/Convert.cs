@@ -9,7 +9,7 @@ public static partial class Commands
     private static List<string> GetConvertOptions(int i, string word) => i switch
     {
         2 => LegacyManager.creaturesToConvert.Keys.Append("all").ToList(),
-        _ => new List<string>()
+        _ => []
     };
 
     private static string GetConvertDescription(string[] args, string defaultValue)

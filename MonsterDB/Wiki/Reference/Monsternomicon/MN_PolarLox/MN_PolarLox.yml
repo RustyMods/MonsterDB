@@ -1,0 +1,60 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_PolarLox
+ClonedFrom: Lox
+IsCloned: true
+
+Character:
+  name: Icebreaker Lox
+  faction: MountainMonsters
+  health: 1400
+  staggerWhenBlocked: false
+  deathEffects:
+    effectPrefabs:
+      - prefab: fx_lox_death
+      - prefab: MN_PolarLox_ragdoll
+  defaultItems:
+  - MN_PolarLox_lox_stomp
+  - MN_PolarLox_lox_bite
+  - MN_PolarLox_dragon_bite
+
+AI:
+  consumeItems:
+  - Cloudberry
+  - Barley
+  - Flax
+  pathAgentType: HugeSize
+  
+Visuals:
+  scale: 1.2
+  renderers:
+  - prefab: Body
+    parent: offset
+    index: 1
+    materials:
+    - name: lox
+      mainTexture: rrrtex.MN_PolarLox
+    - name: lox
+      mainTexture: rrrtex.MN_PolarLox
+  - prefab: Furr1
+    parent: offset
+    index: 2
+    materials:
+    - name: lox
+      mainTexture: rrrtex.MN_PolarLox
+
+Drops:
+  drops:
+  - prefab: LoxMeat
+    amountMin: 4
+    amountMax: 6
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+
+Tameable: {}
+
+Procreation: {}
+
+Saddle: {}

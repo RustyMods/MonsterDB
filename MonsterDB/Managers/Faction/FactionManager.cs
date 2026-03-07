@@ -34,7 +34,7 @@ public static class FactionManager
             postfix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetValues))));
         harmony.Patch(AccessTools.Method(typeof(Enum), nameof(Enum.GetNames)),
             postfix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetNames))));
-        harmony.Patch(AccessTools.Method(typeof(BaseAI), nameof(BaseAI.IsEnemy), new Type[]{typeof(Character), typeof(Character)}),
+        harmony.Patch(AccessTools.Method(typeof(BaseAI), nameof(BaseAI.IsEnemy), [typeof(Character), typeof(Character)]),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_BaseAI_IsEnemy))));
         harmony.Patch(AccessTools.Method(typeof(Enum), nameof(Enum.GetName)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(FactionManager), nameof(Patch_Enum_GetName))));

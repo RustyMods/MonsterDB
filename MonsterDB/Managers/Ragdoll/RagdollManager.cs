@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
 
 namespace MonsterDB;
@@ -69,5 +67,21 @@ public static class RagdollManager
         clone = c.Create();
 #pragma warning restore CS8601 // Possible null reference assignment.
         return clone != null;
+    }
+
+    public static bool TryGetRagdoll(GameObject prefab, out GameObject output)
+    {
+        output = prefab;
+        if (!prefab.TryGetComponent(out Character character)) return false;
+        for (int i = 0; i < character.m_deathEffects.m_effectPrefabs.Length; ++i)
+        {
+            var effect = character.m_deathEffects.m_effectPrefabs[i];
+            if (effect.m_prefab.GetComponent<Ragdoll>())
+            {
+                output = effect.m_prefab;
+                return true;
+            }
+        }
+        return false;
     }
 }

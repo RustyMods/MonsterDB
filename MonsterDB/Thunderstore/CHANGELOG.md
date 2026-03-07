@@ -1,3 +1,6 @@
+## 0.3.2
+- added new command: `clean`, which will take modified prefab yml and check against original values, to export a new cleaned version with all fields cleaned, that is, fields that match original, will be removed.
+
 ## 0.3.1
 - newton missing file error hotfix
 

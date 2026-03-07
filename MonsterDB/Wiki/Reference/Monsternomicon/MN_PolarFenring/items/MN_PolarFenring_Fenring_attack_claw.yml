@@ -1,0 +1,15 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarFenring_Fenring_attack_claw
+ClonedFrom: Fenring_attack_claw
+IsCloned: true
+
+ItemData:
+  damages:
+    slash: 140
+  aiAttackInterval: 4
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_BloodHit
+    - prefab: sfx_fenring_claw_hit

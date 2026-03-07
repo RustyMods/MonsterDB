@@ -7,9 +7,9 @@ namespace MonsterDB;
 [Serializable]
 public class ParticleSystemRef : Reference
 {
-    public string m_prefab = "";
-    public string? m_parent;
-    public int? m_index;
+    [Persistent] public string m_prefab = "";
+    [Persistent] public string? m_parent;
+    [Persistent] public int? m_index;
     public MinMaxGradientRef? m_startColor;
     public CustomDataModuleRef? m_customData;
     public MinMaxGradientRef? m_colorOverLifetime;

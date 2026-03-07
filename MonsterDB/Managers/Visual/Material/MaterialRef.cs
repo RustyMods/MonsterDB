@@ -8,7 +8,7 @@ namespace MonsterDB;
 [Serializable]
 public class MaterialRef : Reference
 {
-    public string m_name = "";
+    [Persistent] public string m_name = "";
     public string m_shader = "";
     public string? m_color = "";
     public float? m_hue;
@@ -255,6 +255,21 @@ public class MaterialRef : Reference
                 MonsterDBPlugin.LogDebug($"[{targetName}][{material.name}] m_emissiveColor: {color}");
             }
         }
+    }
+
+    public override bool Equals<T>(T other)
+    {
+        if (other is not MaterialRef otherRef) return false;
+        var fields = GetType().GetFields(FieldBindingFlags);
+        for (int i = 0; i < fields.Length; ++i)
+        {
+            var field = fields[i];
+            var my_value = field.GetValue(this);
+            var o_value = field.GetValue(otherRef);
+            if (my_value != o_value) return false;
+        }
+
+        return true;
     }
 }
 

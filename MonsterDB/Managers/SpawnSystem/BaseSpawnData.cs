@@ -30,9 +30,9 @@ public class BaseSpawnData : Header
             SpawnManager.QueueUpdate(this);
             MonsterDBPlugin.LogInfo($"Queued Update SpawnData: {Prefab}");
         }
-        
-        if (LoadManager.loadList.Exists(x => x.Prefab == Prefab)) return;
-        LoadManager.loadList.Add(this);
+
+        if (LoadManager.modified.ContainsKey(Prefab)) return;
+        LoadManager.modified.Add(this);
     }
 
     public void UpdateData(SpawnSystem.SpawnData data)

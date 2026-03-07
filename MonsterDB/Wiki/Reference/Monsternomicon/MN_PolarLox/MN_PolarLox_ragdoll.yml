@@ -1,0 +1,24 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Ragdoll
+Prefab: MN_PolarLox_ragdoll
+ClonedFrom: lox_ragdoll
+IsCloned: true
+
+Visuals:
+  scale: 1.2
+  renderers:
+  - prefab: Body
+    parent: Visual
+    index: 1
+    materials:
+    - name: lox
+      mainTexture: rrrtex.MN_PolarLox
+    - name: lox
+      mainTexture: rrrtex.MN_PolarLox
+  - prefab: Furr1
+    parent: Visual
+    index: 2
+    materials:
+    - name: lox
+      mainTexture: rrrtex.MN_PolarLox

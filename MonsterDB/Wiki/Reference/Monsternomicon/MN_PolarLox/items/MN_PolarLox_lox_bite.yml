@@ -1,0 +1,17 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarLox_lox_bite
+ClonedFrom: lox_bite
+IsCloned: true
+
+ItemData:
+  damages:
+    slash: 120
+    frost: 20
+  attack: {}
+  aiAttackInterval: 6
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_ColdBall_Hit
+    - prefab: sfx_wolf_attack_hit

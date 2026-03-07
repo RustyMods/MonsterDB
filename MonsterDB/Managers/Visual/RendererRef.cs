@@ -6,11 +6,11 @@ using UnityEngine;
 namespace MonsterDB;
 
 [Serializable]
-public class RendererRef : Reference
+public class RendererRef : Reference 
 {
-    public string m_prefab = "";
-    public string? m_parent;
-    public int? m_index;
+    [Persistent] public string m_prefab = "";
+    [Persistent] public string? m_parent;
+    [Persistent] public int? m_index;
     public bool? m_active;
     public bool? m_enabled;
     public MaterialRef[]? m_materials;
@@ -56,9 +56,7 @@ public class RendererRef : Reference
             UpdateMaterials(renderer, m_materials, $"{targetName}.{renderer.name}", log);
         }
     }
-    
     private static Dictionary<string, Material> _cachedMaterials = new Dictionary<string, Material>();
-    
     private static void UpdateMaterials(Renderer renderer, MaterialRef[] materialRefs, string targetName, bool log)
     {
         Dictionary<string, MaterialRef> dict = materialRefs
@@ -102,7 +100,6 @@ public class RendererRef : Reference
         renderer.materials = materials;
         renderer.sharedMaterials = materials;
     }
-
     private static void CacheMaterials()
     {
         Material[]? mats = Resources.FindObjectsOfTypeAll<Material>();
@@ -112,6 +109,28 @@ public class RendererRef : Reference
             if (mat == null || mat.GetInstanceID() <= 0 || _cachedMaterials.ContainsKey(mat.name)) continue;
             _cachedMaterials[mat.name] = mat;
         }
+    }
+
+    public override bool Equals<T>(T other)
+    {
+        if (other is not RendererRef otherRef) return false;
+        if (m_prefab != otherRef.m_prefab) return false;
+        if (m_parent != otherRef.m_parent) return false;
+        if (m_index != otherRef.m_index) return false;
+        if (m_enabled != otherRef.m_enabled) return false;
+        if (m_enabled != otherRef.m_enabled) return false;
+        if (m_materials != otherRef.m_materials) return false;
+        if (m_materials != null && otherRef.m_materials != null)
+        {
+            if (m_materials.Length != otherRef.m_materials.Length) return false;
+            for (int i = 0; i < m_materials.Length; ++i)
+            {
+                MaterialRef m_mat = m_materials[i];
+                MaterialRef o_mat = otherRef.m_materials[i];
+                if (!m_mat.Equals(o_mat)) return false;
+            }
+        }
+        return true;
     }
 }
 

@@ -7,7 +7,7 @@ public static class VisualUtils
 {
     public static void CloneMaterials(Renderer r, ref Dictionary<string, Material> mats)
     {
-        List<Material> newMats = new();
+        List<Material> newMats = [];
         for (int i = 0; i < r.sharedMaterials.Length; ++i)
         {
             Material mat = r.sharedMaterials[i];

@@ -1,0 +1,21 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarFenring_troll_groundslam
+ClonedFrom: troll_groundslam
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 140
+    slash: 60
+  attack:
+    attackAnimation: attack_jump
+  aiAttackInterval: 16
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_ice_destroyed
+    - prefab: sfx_fenring_jump_trigger
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_fenring_jump_trailstart

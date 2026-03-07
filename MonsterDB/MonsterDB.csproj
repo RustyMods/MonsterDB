@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+      <LangVersion>12</LangVersion>
+    </PropertyGroup>
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <Import Project="environment.props" />
     <Import Project="framework.props" />
@@ -131,6 +134,7 @@
         <Compile Include="Managers\Command\CommandManager.cs" />
         <Compile Include="Managers\Command\Command.cs" />
         <Compile Include="Managers\Command\Commands.cs" />
+        <Compile Include="Managers\Command\Commands\Clean.cs" />
         <Compile Include="Managers\Command\Commands\Clone.cs" />
         <Compile Include="Managers\Command\Commands\Convert.cs" />
         <Compile Include="Managers\Command\Commands\Export.cs" />
@@ -173,6 +177,7 @@
         <Compile Include="Managers\Creature\Creature\BaseHuman.cs" />
         <Compile Include="Managers\Creature\EffectListRef.cs" />
         <Compile Include="Managers\File\BaseAggregate.cs" />
+        <Compile Include="Managers\File\BaseType.cs" />
         <Compile Include="Managers\File\FileManager.cs" />
         <Compile Include="Managers\Egg\BaseEgg.cs" />
         <Compile Include="Managers\Egg\EggGrowRef.cs" />
@@ -194,7 +199,7 @@
         <Compile Include="Managers\Item\Components\AttackRef.cs" />
         <Compile Include="Managers\Item\Components\ItemDataSharedRef.cs" />
         <Compile Include="Managers\LocalizationManager.cs" />
-        <Compile Include="Managers\Misc\MiscComponent.cs" />
+        <Compile Include="Managers\Persistent.cs" />
         <Compile Include="Managers\PrefabManager.cs" />
         <Compile Include="Managers\Projectile\BaseProjectile.cs" />
         <Compile Include="Managers\Projectile\ProjectileManager.cs" />
@@ -231,6 +236,7 @@
         <Compile Include="Managers\Visual\BaseVisual.cs" />
         <Compile Include="Managers\Visual\LevelSetupRef.cs" />
         <Compile Include="Managers\Visual\LightRef.cs" />
+        <Compile Include="Managers\Visual\Material\MaterialManager.cs" />
         <Compile Include="Managers\Visual\Material\MaterialRef.cs" />
         <Compile Include="Managers\Visual\Material\ShaderRef.cs" />
         <Compile Include="Managers\Visual\ParticleSystem\GradientRef.cs" />
@@ -301,12 +307,55 @@
         <Content Include="Wiki\Reference\Import\TameableVolture\VoltureEgg.yml" />
         <Content Include="Wiki\Reference\Import\TameableVolture\Volture_Chick.yml" />
         <Content Include="Wiki\Reference\Import\TameableVolture\Volture_Chick_ragdoll.yml" />
-        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_dragon_bite.yml" />
-        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_dragon_spit_shotgun.yml" />
-        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_Fenring_attack_flames.yml" />
-        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\items\MN_AshDragon_troll_groundslam.yml" />
-        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\MN_AshDragon.yml" />
-        <Content Include="Wiki\Reference\Monsternomicon\AshDragon\textures\rrrtex.MN_AshDragon.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\items\MN_AshDragon_dragon_bite.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\items\MN_AshDragon_dragon_spit_shotgun.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\items\MN_AshDragon_dragon_taunt.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\items\MN_AshDragon_Fenring_attack_flames.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\items\MN_AshDragon_troll_groundslam.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\MN_AshDragon.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshDragon\textures\rrrtex.MN_AshDragon.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshSurtling\items\MN_AshSurtling_DvergerStaffFire_clusterbomb.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshSurtling\items\MN_AshSurtling_imp_fireball_attack.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshSurtling\MN_AshSurtling.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlvFire\items\MN_AshUlvFire_Ulv_attack1_bite.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlvFire\items\MN_AshUlvFire_Ulv_attack2_slash.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlvFire\MN_AshUlvFire.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlvFire\MN_AshUlvFire_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlvFire\textures\rrrtex.MN_AshUlvFire.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlv\items\MN_AshUlv_Ulv_attack1_bite.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlv\items\MN_AshUlv_Ulv_attack2_slash.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlv\MN_AshUlv.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlv\MN_AshUlv_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_AshUlv\textures\rrrtex.MN_AshUlv.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarFenring\items\MN_PolarFenring_Fenring_attack_claw.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarFenring\items\MN_PolarFenring_Fenring_taunt.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarFenring\items\MN_PolarFenring_troll_groundslam.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarFenring\MN_PolarFenring.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarFenring\MN_PolarFenring_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarFenring\textures\rrrtex.MN_PolarFenring.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarGolem\items\MN_PolarGolem_gd_king_shoot.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarGolem\items\MN_PolarGolem_stonegolem_attack2_left_groundslam.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarGolem\items\MN_PolarGolem_stonegolem_attack_doublesmash.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarGolem\MN_PolarGolem.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarLox\items\MN_PolarLox_dragon_bite.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarLox\items\MN_PolarLox_lox_bite.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarLox\items\MN_PolarLox_lox_stomp.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarLox\MN_PolarLox.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarLox\MN_PolarLox_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarLox\textures\rrrtex.MN_PolarLox.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarWolf\items\MN_PolarWolf_Wolf_Attack1.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarWolf\items\MN_PolarWolf_Wolf_Attack2.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarWolf\items\MN_PolarWolf_Wolf_Attack3.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarWolf\MN_PolarWolf.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarWolf\MN_PolarWolf_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_PolarWolf\textures\rrrtex.MN_PolarWolf.png" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\items\MN_StormFenring_Eikthyr_charge.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\items\MN_StormFenring_Eikthyr_stomp.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\items\MN_StormFenring_Fenring_attack_claw.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\items\MN_StormFenring_troll_groundslam.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\MN_StormFenring.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\MN_StormFenring_ragdoll.yml" />
+        <Content Include="Wiki\Reference\Monsternomicon\MN_StormFenring\textures\rrrtex.MN_StormFenring.png" />
         <Content Include="Wiki\Snapshot.md" />
         <EmbeddedResource Include="assets\volture_fix" />
         <Content Include="assets\volture_fix.manifest" />
@@ -990,6 +1039,11 @@
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
         <PackageReference Include="YamlDotNet" Version="13.1.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Wiki\Reference\Monsternomicon\MN_AshSurtling\textures\" />
+      <Folder Include="Wiki\Reference\Monsternomicon\MN_PolarGolem\textures\" />
     </ItemGroup>
     
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

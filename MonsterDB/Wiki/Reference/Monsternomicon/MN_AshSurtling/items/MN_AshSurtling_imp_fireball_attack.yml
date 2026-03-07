@@ -1,0 +1,15 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_AshSurtling_imp_fireball_attack
+ClonedFrom: imp_fireball_attack
+IsCloned: true
+
+ItemData:
+  damages:
+    blunt: 60
+    fire: 80
+  attack:
+    attackProjectile: staff_fireball_projectile
+  aiAttackInterval: 4
+  aiPrioritized: true

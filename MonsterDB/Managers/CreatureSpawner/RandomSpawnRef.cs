@@ -22,7 +22,11 @@ public class RandomSpawnRef : Reference
     public RandomSpawnRef(){}
     public RandomSpawnRef(RandomSpawn component) => Setup(component);
     
-    protected override void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName,
+    protected override void UpdateGameObject<T>(
+        T target, 
+        FieldInfo targetField, 
+        string targetName, 
+        string goName,
         bool log)
     {
         if (target is not RandomSpawn component) return;

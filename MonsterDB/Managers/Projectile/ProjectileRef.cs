@@ -78,13 +78,9 @@ public class ProjectileRef : Reference
 
     public override bool ShouldSetupField<V>(FieldInfo targetField, V source)
     {
-        if (source is Projectile projectile)
-        {
-            var conditions = targetField.GetCustomAttribute<Condition>();
-            if (conditions == null) return true;
-            return conditions.ShouldSetupField(projectile);
-        }
+        if (source is not Projectile projectile) return true;
+        Condition? conditions = targetField.GetCustomAttribute<Condition>();
+        return conditions == null || conditions.ShouldSetupField(projectile);
 
-        return true;
     }
 }

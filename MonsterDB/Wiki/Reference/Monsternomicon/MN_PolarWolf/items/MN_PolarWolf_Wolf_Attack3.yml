@@ -1,0 +1,14 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_PolarWolf_Wolf_Attack3
+ClonedFrom: Wolf_Attack3
+IsCloned: true
+
+ItemData:
+  damages:
+    slash: 100
+  aiAttackInterval: 8
+  hitEffect:
+    effectPrefabs:
+    - prefab: sfx_wolf_attack_hit

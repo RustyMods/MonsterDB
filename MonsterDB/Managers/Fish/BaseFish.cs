@@ -7,7 +7,8 @@ namespace MonsterDB;
 [Serializable]
 public class BaseFish : BaseItem
 {
-    [YamlMember(Order = 8, Description = "If field removed, will remove component")] public FishRef? Fish;
+    [YamlMember(Order = 8, Description = "If field removed, will remove component")] 
+    public FishRef? Fish;
 
     public override void Setup(GameObject prefab, bool isClone = false, string source = "")
     {
@@ -41,7 +42,10 @@ public class BaseFish : BaseItem
 
     protected override void SaveDefault(GameObject prefab)
     {
-        FishManager.Save(prefab, IsCloned, ClonedFrom);
+        if (FishManager.TrySave(prefab, out BaseFish og, IsCloned, ClonedFrom))
+        {
+            LoadManager.originalToModifiedList.Add(og, this);
+        }
     }
 
     protected override void UpdatePrefab(GameObject prefab)

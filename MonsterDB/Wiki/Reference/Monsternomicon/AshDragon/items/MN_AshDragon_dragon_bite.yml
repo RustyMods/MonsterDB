@@ -1,9 +1,0 @@
-GameVersion: 0.221.12
-ModVersion: 0.3.0
-Type: Item
-Prefab: MN_AshDragon_dragon_bite
-ClonedFrom: dragon_bite
-IsCloned: true
-ItemData:
-  damages:
-    slash: 160

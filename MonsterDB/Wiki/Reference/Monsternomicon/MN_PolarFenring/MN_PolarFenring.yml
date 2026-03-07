@@ -1,0 +1,38 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_PolarFenring
+ClonedFrom: Fenring
+IsCloned: true
+
+Character:
+  name: Pale-coat Fenring
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_fenring_death
+    - prefab: MN_PolarFenring_ragdoll
+    - prefab: sfx_fenring_death
+  health: 900
+  defaultItems:
+  - MN_PolarFenring_Fenring_attack_claw
+  - MN_PolarFenring_troll_groundslam
+  - MN_PolarFenring_Fenring_taunt
+
+Visuals:
+  scale: 1.2
+  renderers:
+  - prefab: Fenring.001
+    parent: Visual
+    index: 1
+    materials:
+    - name: fenring
+      mainTexture: rrrtex.MN_PolarFenring
+
+Drops:
+  drops:
+  - prefab: WolfFang
+    amountMin: 1
+    amountMax: 2
+    chance: 1
+    onePerPlayer: false
+    dontScale: true

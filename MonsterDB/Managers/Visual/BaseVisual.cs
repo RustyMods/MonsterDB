@@ -40,8 +40,10 @@ public class BaseVisual : Header
     
     private void SetupVisuals(GameObject prefab)
     {
-        Visuals = new  VisualRef();
-        Visuals.m_scale = prefab.transform.localScale;
+        Visuals = new  VisualRef
+        {
+            m_scale = prefab.transform.localScale
+        };
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
         if (renderers.Length > 0)
         {
@@ -61,9 +63,6 @@ public class BaseVisual : Header
 
     private void UpdatePrefab(GameObject prefab)
     {
-        if (Visuals != null)
-        {
-            Visuals.Update(prefab, false, prefab.GetComponent<ItemDrop>());
-        }
+        Visuals?.Update(prefab, false, prefab.GetComponent<ItemDrop>());
     }
 }

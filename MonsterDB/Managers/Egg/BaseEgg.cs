@@ -42,7 +42,10 @@ public class BaseEgg : BaseItem
 
     protected override void SaveDefault(GameObject prefab)
     {
-        EggManager.Save(prefab, IsCloned, ClonedFrom);
+        if (EggManager.TrySave(prefab, out BaseEgg og, IsCloned, ClonedFrom))
+        {
+            LoadManager.originalToModifiedList.Add(og, this);
+        }
     }
 
     protected override void UpdatePrefab(GameObject prefab)

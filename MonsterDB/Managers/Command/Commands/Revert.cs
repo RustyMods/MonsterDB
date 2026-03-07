@@ -62,7 +62,7 @@ public static partial class Commands
         3 => Enum.TryParse(word, true, out BaseType type)
             ? GetCloneOptionByBase(type)
             : PrefabManager.GetAllPrefabNames(),
-        _ => new List<string>()
+        _ => []
     };
 
 }

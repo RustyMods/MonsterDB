@@ -62,70 +62,70 @@ public static class FileManager
                 {
                     case BaseType.Character:
                         BaseCharacter character = ConfigManager.Deserialize<BaseCharacter>(text);
-                        LoadManager.loadList.Add(character);
+                        LoadManager.modified.Add(character);
                         RegisterSpawnList(character.SpawnData);
                         LoadManager.files.Add(character);
                         break;
                     case BaseType.Humanoid:
                         BaseHumanoid humanoid = ConfigManager.Deserialize<BaseHumanoid>(text);
-                        LoadManager.loadList.Add(humanoid);
+                        LoadManager.modified.Add(humanoid);
                         RegisterSpawnList(humanoid.SpawnData);
                         LoadManager.files.Add(humanoid);
                         break;
                     case BaseType.Human:
                         BaseHuman player = ConfigManager.Deserialize<BaseHuman>(text);
-                        LoadManager.loadList.Add(player);
+                        LoadManager.modified.Add(player);
                         RegisterSpawnList(player.SpawnData);
                         LoadManager.files.Add(player);
                         break;
                     case BaseType.Egg:
                         BaseEgg data = ConfigManager.Deserialize<BaseEgg>(text);
-                        LoadManager.loadList.Add(data);
+                        LoadManager.modified.Add(data);
                         LoadManager.files.Add(data);
                         break;
                     case BaseType.Item:
                         BaseItem item = ConfigManager.Deserialize<BaseItem>(text);
-                        LoadManager.loadList.Add(item);
+                        LoadManager.modified.Add(item);
                         LoadManager.files.Add(item);
                         break;
                     case BaseType.Fish:
                         BaseFish fish = ConfigManager.Deserialize<BaseFish>(text);
-                        LoadManager.loadList.Add(fish);
+                        LoadManager.modified.Add(fish);
                         LoadManager.files.Add(fish);
                         break;
                     case BaseType.Projectile:
                         BaseProjectile projectile = ConfigManager.Deserialize<BaseProjectile>(text);
-                        LoadManager.loadList.Add(projectile);
+                        LoadManager.modified.Add(projectile);
                         LoadManager.files.Add(projectile);
                         break;
                     case BaseType.Ragdoll:
                         BaseRagdoll ragdoll = ConfigManager.Deserialize<BaseRagdoll>(text);
-                        LoadManager.loadList.Add(ragdoll);
+                        LoadManager.modified.Add(ragdoll);
                         LoadManager.files.Add(ragdoll);
                         break;
                     case BaseType.SpawnAbility:
                         BaseSpawnAbility spawnAbility = ConfigManager.Deserialize<BaseSpawnAbility>(text);
-                        LoadManager.loadList.Add(spawnAbility);
+                        LoadManager.modified.Add(spawnAbility);
                         LoadManager.files.Add(spawnAbility);
                         break;
                     case BaseType.Visual:
                         BaseVisual visual = ConfigManager.Deserialize<BaseVisual>(text);
-                        LoadManager.loadList.Add(visual);
+                        LoadManager.modified.Add(visual);
                         LoadManager.files.Add(visual);
                         break;
                     case BaseType.SpawnArea:
                         BaseSpawnArea area = ConfigManager.Deserialize<BaseSpawnArea>(text);
-                        LoadManager.loadList.Add(area);
+                        LoadManager.modified.Add(area);
                         LoadManager.files.Add(area);
                         break;
                     case BaseType.All:
                         BaseAggregate all = ConfigManager.Deserialize<BaseAggregate>(text);
-                        LoadManager.loadList.AddRange(all.Load());
+                        LoadManager.modified.AddRange(all.Load());
                         LoadManager.files.Add(all);
                         break;
                     case BaseType.SpawnData:
                         BaseSpawnData spawnData = ConfigManager.Deserialize<BaseSpawnData>(text);
-                        LoadManager.loadList.Add(spawnData);
+                        LoadManager.modified.Add(spawnData);
                         LoadManager.files.Add(spawnData);
                         break;
                 }

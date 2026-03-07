@@ -201,12 +201,13 @@ public static class LegacyManager
             ItemManager.TryClone(itemPrefab, item.m_attackData.Name, out _, false);
         }
 
-        CreatureManager.TrySave(prefab, out Base? original, isClone, cloneFrom);
+        CreatureManager.TrySave(prefab, out Base original, isClone, cloneFrom);
         LoadManager.originals.Remove(prefab.name);
         
         Update(prefab, data);
         CreatureManager.Write(prefab, isClone, cloneFrom);
         
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (original != null)
         {
             LoadManager.originals[prefab.name] = original;

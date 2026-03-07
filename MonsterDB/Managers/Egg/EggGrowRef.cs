@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using JetBrains.Annotations;
 using UnityEngine;
+using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable] 
 public class EggGrowRef : Reference
 {
     public float? m_growTime;
@@ -14,7 +14,7 @@ public class EggGrowRef : Reference
     public float? m_updateInterval;
     public bool? m_requireNearbyFire;
     public bool? m_requireUnderRoof;
-    public float? m_requireCoverPercentige;
+    [YamlMember(Alias = "m_requireCoverPercentage")] public float? m_requireCoverPercentige;
     public EffectListRef? m_hatchEffect;
     public string? m_growingObject;
     public string? m_notGrowingObject;

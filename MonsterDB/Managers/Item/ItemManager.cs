@@ -354,11 +354,11 @@ public static class ItemManager
                 rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
             }
             
-            var colliders = p.GetComponentsInChildren<Collider>();
-            var itemLayer = LayerMask.NameToLayer("item");
+            Collider[]? colliders = p.GetComponentsInChildren<Collider>();
+            int itemLayer = LayerMask.NameToLayer("item");
             for (int i = 0; i < colliders.Length; ++i)
             {
-                var collider = colliders[i];
+                Collider collider = colliders[i];
                 collider.gameObject.layer = itemLayer;
             }
             

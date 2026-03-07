@@ -64,8 +64,11 @@ public class BaseProjectile : Header
     {
         GameObject? prefab = PrefabManager.GetPrefab(Prefab);
         if (prefab == null) return;
-        
-        ProjectileManager.TrySave(prefab, out _, IsCloned, ClonedFrom);
+
+        if (ProjectileManager.TrySave(prefab, out BaseProjectile og, IsCloned, ClonedFrom))
+        {
+            LoadManager.originalToModifiedList.Add(og, this);
+        }
         
         UpdatePrefab(prefab);
         base.Update();

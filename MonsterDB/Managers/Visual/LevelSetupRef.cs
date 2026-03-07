@@ -44,11 +44,23 @@ public class LevelSetupRef : Reference
             setup.m_enableObject = renderer.gameObject;
         }
     }
+
+    public override bool Equals<T>(T other)
+    {
+        if (other is not LevelSetupRef otherRef) return false;
+        return m_scale.Equals(otherRef.m_scale) && 
+               m_hue.Equals(otherRef.m_hue) &&
+               m_saturation.Equals(otherRef.m_saturation) &&
+               m_value.Equals(otherRef.m_value) &&
+               m_setEmissiveColor.Equals(otherRef.m_setEmissiveColor) &&
+               m_emissiveColor.Equals(otherRef.m_emissiveColor) &&
+               m_enableObject.Equals(otherRef.m_enableObject);
+    }
 }
 
 public static partial class Extensions
 {
-    public static List<LevelSetupRef> ToRef(this List<LevelEffects.LevelSetup> ls)
+    public static List<LevelSetupRef> ToLevelSetupRefList(this List<LevelEffects.LevelSetup> ls)
     {
         List<LevelSetupRef> levelSetups = ls
             .Select(x => new LevelSetupRef(x))

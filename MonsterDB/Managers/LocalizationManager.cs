@@ -207,7 +207,7 @@ public static class LocalizationManager
             }
         }
 
-        foreach (var kvp in translations)
+        foreach (KeyValuePair<string, string> kvp in translations)
         {
             lines[kvp.Key] = kvp.Value;
         }

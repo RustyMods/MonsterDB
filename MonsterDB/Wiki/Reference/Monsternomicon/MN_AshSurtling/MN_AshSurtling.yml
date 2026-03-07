@@ -1,0 +1,37 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Humanoid
+Prefab: MN_AshSurtling
+ClonedFrom: Surtling
+IsCloned: true
+
+Character:
+  name: Elder Surtling
+  deathEffects:
+    effectPrefabs:
+    - prefab: DvergerStaffFire_clusterbomb_aoe
+    - prefab: fx_DvergerMage_Mistile_die
+    - prefab: vfx_ImpDeath
+    - prefab: sfx_imp_death
+  health: 120
+  defaultItems:
+  - MN_AshSurtling_imp_fireball_attack
+  - MN_AshSurtling_DvergerStaffFire_clusterbomb
+
+Visuals:
+  scale: 2
+
+Drops:
+  drops:
+  - prefab: Coal
+    amountMin: 4
+    amountMax: 8
+    chance: 1
+    onePerPlayer: false
+    dontScale: true
+  - prefab: SurtlingCore
+    amountMin: 1
+    amountMax: 1
+    chance: 0.75
+    onePerPlayer: false
+    dontScale: true

@@ -1,0 +1,22 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Ragdoll
+Prefab: MN_AshUlvFire_ragdoll
+ClonedFrom: Ulv_Ragdoll
+IsCloned: true
+
+Visuals:
+  scale: 1.5
+  renderers:
+  - prefab: Fenring.001
+    parent: Ulv
+    index: 1
+    materials:
+    - name: Ulv_mat
+      mainTexture: rrrtex.MN_AshUlvFire
+  - prefab: Fenring.001
+    parent: Ulv_Ragdoll
+    index: 1
+    materials:
+    - name: Ulv_mat
+      mainTexture: rrrtex.MN_AshUlvFire

@@ -1,0 +1,12 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.1
+Type: Item
+Prefab: MN_AshDragon_dragon_taunt
+ClonedFrom: dragon_taunt
+IsCloned: true
+
+ItemData:
+  aiAttackInterval: 28
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_dragon_scream
