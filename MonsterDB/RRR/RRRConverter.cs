@@ -93,7 +93,7 @@ public static class RRRConverter
                 ++failures;
             }
         }
-        args.Context.Log("#FFCCCB", $"> Converted {success} RRR files ( failures: {failures} )");
+        args.Context.LogInfo($"Converted {success} RRR files ( failures: {failures} )");
     }
 
     private static bool Convert(string filepath, RRR_Main main)

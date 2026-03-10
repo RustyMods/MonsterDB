@@ -26,7 +26,7 @@ public static class LegacyManager
             return;
         }
         Load();
-        args.Context.AddString($"Converted {creaturesToConvert.Count} legacy file into v.0.2.x format");
+        args.Context.LogInfo($"Converted {creaturesToConvert.Count} legacy file into v.0.2.x format");
     }
 
     public static void Convert(Terminal context, string input)
@@ -39,7 +39,7 @@ public static class LegacyManager
 
         if (!creaturesToConvert.TryGetValue(input, out CreatureData data))
         {
-            context.AddString($"No legacy creature data found for {input}");
+            context.LogInfo($"No legacy creature data found for {input}");
             return;
         }
 
@@ -62,7 +62,7 @@ public static class LegacyManager
         }
 
         Convert(data);
-        args.Context.AddString($"Converted {prefabName} legacy file into v.0.2.x format");
+        args.Context.LogInfo($"Converted {prefabName} legacy file into v.0.2.x format");
     }
 
     public static List<string> GetConversionOptions(int i, string word) => i switch

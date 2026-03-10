@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -31,6 +32,12 @@ public static partial class Commands
             return;
         }
 
+        if (prefabName.Equals("all", StringComparison.InvariantCultureIgnoreCase))
+        {
+            CleanAll(args);
+            return;
+        }
+
         if (!LoadManager.modified.TryGetValue(prefabName, out Header? modified))
         {
             args.Context.LogWarning($"> Failed to find modified prefab: {prefabName}");
@@ -44,18 +51,19 @@ public static partial class Commands
             string filepath = Path.Combine(FileManager.ExportFolder, filename);
             File.WriteAllText(filepath, content);
         
-            args.Context.Log(HEX_Gray, $"Cleaned up {prefabName}, exported to {filepath}");
+            args.Context.LogInfo($"Cleaned up {prefabName}");
+            args.Context.LogInfo($"{filepath}");
         }
         else
         {
-            args.Context.Log(HEX_Gray, $"> [{prefabName}] Nothing to clean up");
+            args.Context.LogDebug($"[{prefabName}] Nothing to clean up");
         }
 
     }
 
     private static List<string> GetModifiedPrefabNames(int i, string word) => i switch
     {
-        2 => LoadManager.modified.Keys.ToList(),
+        2 => LoadManager.modified.Keys.Union(["all"]).ToList(),
         _ => []
     };
 }

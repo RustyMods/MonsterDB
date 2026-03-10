@@ -57,7 +57,7 @@ public static partial class Commands
                 for (int i = 0; i < items.Count; ++i)
                 {
                     string name = items[i];
-                    args.Context.AddString("- " + name);
+                    args.Context.LogDebug("- " + name);
                     MonsterDBPlugin.LogInfo(name);
                 }
                 break;
@@ -68,7 +68,7 @@ public static partial class Commands
                     string name = textures[i];
                     if (name.ToLower().Contains(query.ToLower()))
                     {
-                        args.Context.AddString("- " + name);
+                        args.Context.LogDebug("- " + name);
                         MonsterDBPlugin.LogInfo(name);
                     }
                 }
@@ -80,7 +80,7 @@ public static partial class Commands
                     string name = shaders[i];
                     if (name.ToLower().Contains(query.ToLower()))
                     {
-                        args.Context.AddString("- " + name);
+                        args.Context.LogDebug("- " + name);
                         MonsterDBPlugin.LogInfo(name);
                     }
                 }
@@ -92,7 +92,7 @@ public static partial class Commands
                     string? name = sprites[i];
                     if (name.ToLower().Contains(query.ToLower()))
                     {
-                        args.Context.AddString("- " + name);
+                        args.Context.LogDebug("- " + name);
                         MonsterDBPlugin.LogInfo(name);
                     }
                 }

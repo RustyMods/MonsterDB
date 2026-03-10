@@ -52,14 +52,13 @@ public static class CommandManager
             foreach (KeyValuePair<string, Command> command in commands)
             {
                 if (command.Value.IsSecret()) continue;
-
                 if (command.Key == "help") continue;
                 
                 sb.Clear();
-                sb.AppendFormat("<color=yellow>{0}</color> - {1}", command.Key, command.Value.m_description);
+                sb.AppendFormat("<color=#FBBF24>{0}</color> - {1}", command.Key, command.Value.m_description);
                 if (command.Value.m_adminOnly)
                 {
-                    sb.Append(" <color=red>(admin only)</color>");
+                    sb.Append(" <color=#F87171>(admin only)</color>");
                 }
                 args.Context.AddString(sb.ToString());
             }
@@ -176,21 +175,6 @@ public static partial class Extensions
     {
         if (args.Length < index + 1) return defaultValue;
         return string.Join(" ", args.Args.Skip(index));
-    }
-
-    public static void LogWarning(this Terminal terminal, string msg)
-    {
-        terminal.Log("yellow", msg);
-    }
-
-    public static void LogError(this Terminal terminal, string msg)
-    {
-        terminal.Log("red", msg);
-    }
-
-    public static void Log(this Terminal terminal, string hex, string msg)
-    {
-        terminal.AddString($"<color={hex}>{msg}</color>");
     }
 }
 

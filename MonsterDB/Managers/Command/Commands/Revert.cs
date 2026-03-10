@@ -47,11 +47,11 @@ public static partial class Commands
             case BaseType.None: break;
             case BaseType.All:
                 LoadManager.ResetAll<Header>();
-                args.Context.AddString($"Reverted All");
+                args.Context.LogInfo($"Reverted All");
                 break;
             default:
                 LoadManager.Reset<Header>(prefabName);
-                args.Context.AddString($"Reverted {prefabName}");
+                args.Context.LogInfo($"Reverted {prefabName}");
                 break;
         }
     }

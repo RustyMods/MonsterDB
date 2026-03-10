@@ -7,6 +7,16 @@ namespace MonsterDB;
 public static partial class Commands
 {
     private const string HEX_Gray = "#B2BEB5";
+    private const string HEX_SoftBlue = "#60A5FA";
+    private const string HEX_Green = "#34D399";
+    private const string HEX_Amber = "#FBBF24";
+    private const string HEX_Red = "#F87171";
+
+    public static void LogInfo(this Terminal terminal, string msg) => terminal.Log(HEX_Green, msg);
+    public static void LogWarning(this Terminal terminal, string msg) => terminal.Log(HEX_Amber, msg);
+    public static void LogError(this Terminal terminal, string msg) => terminal.Log(HEX_Red, msg);
+    public static void LogDebug(this Terminal terminal, string msg) => terminal.Log(HEX_SoftBlue, msg);
+    public static void Log(this Terminal terminal, string hex, string msg) => terminal.AddString($"<color={hex}>{msg}</color>");
     
     public static void Init()
     {
@@ -68,10 +78,6 @@ public static partial class Commands
             ShaderRef.PrintShaderProperties,
             ShaderRef.GetShaderOptions,
             isSecret: true);
-
-        _ = new Command("cleanall", "cleans all modified prefabs against original values to output smallest files",
-            CleanAll, 
-            adminOnly: true);
 
         _ = new Command("clean", 
             "cleans modified prefab against original values to output smallest file necessary",

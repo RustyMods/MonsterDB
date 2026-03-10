@@ -123,7 +123,7 @@ public static partial class Commands
         {
             prefabName = args.GetStringFrom(3);
             SpawnManager.Export(prefabName);
-            args.Context.AddString($"Exported {prefabName} Spawn Data");
+            args.Context.LogInfo($"Exported {prefabName} Spawn Data");
             return;
         }
                 
@@ -141,39 +141,39 @@ public static partial class Commands
         {
             case BaseType.Character or BaseType.Human or BaseType.Humanoid:
                 CreatureManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.Egg:
                 EggManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.Item:
                 ItemManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.Fish:
                 FishManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.Projectile:
                 ProjectileManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.SpawnAbility:
                 SpawnAbilityManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.Visual:
                 VisualManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.CreatureSpawner:
                 CreatureSpawnerManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.SpawnArea:
                 SpawnAreaManager.Write(prefab, isClone, source);
-                args.Context.AddString($"Exported {baseType} {prefab.name}");
+                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
                 break;
             case BaseType.All:
                 FileManager.Export(FileManager.ImportFolder);

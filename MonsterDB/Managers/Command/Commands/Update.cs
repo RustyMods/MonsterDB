@@ -23,20 +23,20 @@ public static partial class Commands
             {
                 string filePath = Path.Combine(FileManager.ImportFolder, files[i] + ".yml");
                 FileManager.Read(filePath);
-                args.Context.AddString($"Updated {files[i]}");
+                args.Context.LogInfo($"Updated {files[i]}");
             }
         }
         else if (fileName.Equals("raids", StringComparison.CurrentCultureIgnoreCase))
         {
             RaidManager.Read();
             RaidManager.Update();
-            args.Context.AddString("Updated all raids");
+            args.Context.LogInfo("Updated all raids");
         }
         else
         {
             string filePath = Path.Combine(FileManager.ImportFolder, fileName + ".yml");
             FileManager.Read(filePath);
-            args.Context.AddString($"Updated {fileName}");
+            args.Context.LogInfo($"Updated {fileName}");
         }
     }
     
