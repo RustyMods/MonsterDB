@@ -110,7 +110,7 @@ public static partial class Commands
         }
     }
 
-    private static void ExportAllBase(Terminal? context = null)
+    private static void ExportAllCharacters(Terminal? context = null)
     {
         List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
         for (int i = 0; i < prefabs.Count; ++i)
@@ -119,7 +119,49 @@ public static partial class Commands
             bool isClone = CloneManager.IsClone(prefab.name, out string source);
             if (!CreatureManager.Write(prefab, isClone, source, context))
             {
-                context?.LogError($"Failed to export {prefab.name}");
+                context?.LogError($"Failed to export character {prefab.name}");
+            }
+        }
+    }
+
+    private static void ExportAllEggs(Terminal? context = null)
+    {
+        var prefabs = PrefabManager.GetAllPrefabs<EggGrow>();
+        for (int i = 0; i < prefabs.Count; ++i)
+        {
+            var prefab = prefabs[i];
+            bool isClone = CloneManager.IsClone(prefab.name, out string source);
+            if (!EggManager.Write(prefab, isClone, source, context))
+            {
+                context?.LogWarning($"Failed to export egg {prefab.name}");
+            }
+        }
+    }
+
+    private static void ExportAllItems(Terminal? context = null)
+    {
+        var prefabs = PrefabManager.GetAllPrefabs<ItemDrop>();
+        for (int i = 0; i < prefabs.Count; ++i)
+        {
+            var prefab = prefabs[i];
+            bool isClone = CloneManager.IsClone(prefab.name, out string source);
+            if (!ItemManager.Write(prefab, isClone, source, context: context))
+            {
+                context?.LogWarning($"Failed to export item {prefab.name}");
+            }
+        }
+    }
+
+    private static void ExportAllFish(Terminal? context = null)
+    {
+        var prefabs = PrefabManager.GetAllPrefabs<Fish>();
+        for (int i = 0; i < prefabs.Count; ++i)
+        {
+            var prefab = prefabs[i];
+            bool isClone = CloneManager.IsClone(prefab.name, out string source);
+            if (!FishManager.Write(prefab, isClone, source, context))
+            {
+                context?.LogWarning($"Failed to export fish {prefab.name}");
             }
         }
     }
@@ -157,8 +199,24 @@ public static partial class Commands
 
         if (prefabName == "all")
         {
-            ExportAllBase(args.Context);
-            return;
+            switch (baseType)
+            {
+                case BaseType.Character or BaseType.Human or BaseType.Humanoid:
+                    ExportAllCharacters(args.Context);
+                    return;
+                case BaseType.Egg:
+                    ExportAllEggs(args.Context);
+                    return;
+                case BaseType.Item:
+                    ExportAllItems(args.Context);
+                    return;
+                case BaseType.Fish:
+                    ExportAllFish(args.Context);
+                    return;
+                default:
+                    args.Context.LogWarning($"Export {baseType} all not supported");
+                    return;
+            }
         }
                 
         GameObject? prefab = PrefabManager.GetPrefab(prefabName);
