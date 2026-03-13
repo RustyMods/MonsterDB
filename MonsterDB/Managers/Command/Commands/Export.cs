@@ -72,7 +72,7 @@ public static partial class Commands
             "raid" => $"<color={HEX_Gray}>[EventName]</color>: Export raid YML file",
             "bones" => $"<color={HEX_Gray}>[PrefabID]</color>: Export prefab hierarchy",
             _ => Enum.TryParse(type, true, out BaseType baseType)
-                ? $"<color={HEX_Gray}>[PrefabID]</color>: Export {baseType} YML file"
+                ? baseType == BaseType.All ? $"<color={HEX_Gray}>Export Aggregate YML file of all imported YML files</color>" : $"<color={HEX_Gray}>[PrefabID]</color>: Export {baseType} YML file"
                 : defaultValue
         };
     }
@@ -110,8 +110,29 @@ public static partial class Commands
         }
     }
 
+    private static void ExportAllBase(Terminal? context = null)
+    {
+        List<GameObject> prefabs = PrefabManager.GetAllPrefabs<Character>();
+        for (int i = 0; i < prefabs.Count; ++i)
+        {
+            GameObject prefab = prefabs[i];
+            bool isClone = CloneManager.IsClone(prefab.name, out string source);
+            if (!CreatureManager.Write(prefab, isClone, source, context))
+            {
+                context?.LogError($"Failed to export {prefab.name}");
+            }
+        }
+    }
+
     private static void ExportBase(BaseType baseType, Terminal.ConsoleEventArgs args)
     {
+        if (baseType == BaseType.All)
+        {
+            FileManager.Export(FileManager.ImportFolder);
+            args.Context.LogInfo("Exported all MonsterDB imported files into a single aggregated file.");
+            return;
+        }
+        
         string prefabName = args.GetString(3);
         if (string.IsNullOrEmpty(prefabName))
         {
@@ -131,6 +152,12 @@ public static partial class Commands
             {
                 args.Context.LogError($"Failed to export {prefabName} spawn data");
             }
+            return;
+        }
+
+        if (prefabName == "all")
+        {
+            ExportAllBase(args.Context);
             return;
         }
                 
@@ -199,10 +226,6 @@ public static partial class Commands
                 {
                     args.Context.LogError($"Failed to export {baseType} {prefab.name}");
                 }
-                break;
-            case BaseType.All:
-                FileManager.Export(FileManager.ImportFolder);
-                args.Context.LogInfo("Exported all MonsterDB imported files into a single aggregated file.");
                 break;
         }
     }
