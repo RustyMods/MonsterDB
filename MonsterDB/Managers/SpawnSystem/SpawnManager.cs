@@ -41,14 +41,16 @@ public static class SpawnManager
     
     public static bool TryGetSpawnData(string id, out SpawnSystem.SpawnData data) => CachedSpawnData.TryGetValue(id, out data);
 
-    public static void Export(string spawnerId)
+    public static bool Export(string spawnerId, out string filepath)
     {
-        if (!CachedSpawnData.TryGetValue(spawnerId, out SpawnSystem.SpawnData data)) return;
+        filepath = "";
+        if (!CachedSpawnData.TryGetValue(spawnerId, out SpawnSystem.SpawnData data)) return false;
         BaseSpawnData info = new BaseSpawnData();
         info.SetupData(data);
         string text = ConfigManager.Serialize(info);
-        string filePath = Path.Combine(FileManager.ExportFolder, info.Prefab + ".yml");
-        File.WriteAllText(filePath, text);
+        filepath = Path.Combine(FileManager.ExportFolder, info.Prefab + ".yml");
+        File.WriteAllText(filepath, text);
+        return true;
     }
 
     public static void Start()

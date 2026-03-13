@@ -52,19 +52,8 @@ public class MinMaxGradientRef : Reference
             gradient.colorMax = m_colorMax.FromHexOrRGBA(gradient.colorMax);
         }
 
-        if (m_gradient != null)
-        {
-            m_gradient.Update(gradient.gradient);
-        }
-
-        if (m_gradientMin != null)
-        {
-            m_gradientMin.Update(gradient.gradientMin);
-        }
-
-        if (m_gradientMax != null)
-        {
-            m_gradientMax.Update(gradient.gradientMax);
-        }
+        m_gradient?.Update(gradient.gradient);
+        m_gradientMin?.Update(gradient.gradientMin);
+        m_gradientMax?.Update(gradient.gradientMax);
     }
 }

@@ -36,7 +36,7 @@ public static class FishManager
     public static List<string> GetFishOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<Fish>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -83,29 +83,11 @@ public static class FishManager
         LoadManager.UpdateSync();
     }
 
-    public static void ResetFish(Terminal context, string prefabName)
-    {
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            context.LogWarning("Invalid prefab");
-            return;
-        }
-
-        if (LoadManager.GetOriginal<BaseFish>(prefabName) is not {} fish)
-        {
-            context.LogWarning("Original data not found");
-            return;
-        }
-            
-        fish.Update();
-        LoadManager.UpdateSync();
-    }
-
     [Obsolete]
     public static List<string> GetResetFishOptions(int i, string word) => i switch
     {
         2 => LoadManager.GetOriginalKeys<BaseFish>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -131,7 +113,7 @@ public static class FishManager
             return;
         }
             
-        Clone(prefab, newName);
+        TryClone(prefab, newName);
     }
 
     public static bool TrySave(GameObject prefab, out BaseFish fish, bool isClone = false, string source = "")
@@ -160,13 +142,20 @@ public static class FishManager
         return ConfigManager.Serialize(reference);
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string clonedFrom = "", 
+        Terminal? context = null)
     {
-        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
-        string? text = Save(prefab, isClone, clonedFrom);
-        if (string.IsNullOrEmpty(text)) return;
-        File.WriteAllText(filePath, text);
-        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+        string filepath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
+        string? content = Save(prefab, isClone, clonedFrom);
+        if (string.IsNullOrEmpty(content)) return false;
+        File.WriteAllText(filepath, content);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+        context?.LogInfo($"Exported Fish {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
+        return true;
     }
     
     private static void Read(string filePath)
@@ -187,10 +176,14 @@ public static class FishManager
         }
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        bool write = true, 
+        Terminal? context = null)
     {
-        if (CloneManager.prefabs.ContainsKey(cloneName)) return;
-        if  (!source.GetComponent<ItemDrop>()) return;
+        if (CloneManager.prefabs.ContainsKey(cloneName)) return false;
+        if  (!source.GetComponent<ItemDrop>()) return false;
         
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
@@ -203,9 +196,11 @@ public static class FishManager
             
             if (write)
             {
-                Write(p, true, source.name);
+                Write(p, true, source.name, context: context);
             }
         };
         c.Create();
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
+        return true;
     }
 }

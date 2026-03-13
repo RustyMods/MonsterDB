@@ -31,14 +31,14 @@ public static class ProjectileManager
             return;
         }
 
-        Write(prefab);
+        Write(prefab, context: args.Context);
     }
 
     [Obsolete]
     public static List<string> GetProjectileOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<Projectile>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -60,7 +60,7 @@ public static class ProjectileManager
             return;
         }
 
-        TryClone(prefab, newName, out _);
+        TryClone(prefab, newName, out _, context: args.Context);
     }
     public static bool TrySave(GameObject prefab, out BaseProjectile data, bool isClone = false, string source = "")
     {
@@ -73,15 +73,21 @@ public static class ProjectileManager
         return true;
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string source = "", 
+        string dirPath = "", 
+        Terminal? context = null)
     {
-        if (!TrySave(prefab, out BaseProjectile data, isClone, source)) return;
+        if (!TrySave(prefab, out BaseProjectile data, isClone, source)) return false;
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string filepath = Path.Combine(dirPath, prefab.name + ".yml");
         string text = ConfigManager.Serialize(data);
-        File.WriteAllText(filePath, text);
-        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
-
+        File.WriteAllText(filepath, text);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+        context?.LogInfo($"Exported Projectile {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
         if (prefab.TryGetComponent(out Projectile component) && component.m_spawnOnHit != null &&
             component.m_spawnOnHit.GetComponent<SpawnAbility>())
         {
@@ -93,11 +99,19 @@ public static class ProjectileManager
                 spawnSource = c.SourceName;
             }
             
-            SpawnAbilityManager.Write(component.m_spawnOnHit, isSpawnClone, spawnSource, dirPath);
+            SpawnAbilityManager.Write(component.m_spawnOnHit, isSpawnClone, spawnSource, dirPath, context);
         }
+
+        return true;
     }
 
-    public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        out GameObject clone, 
+        bool write = true, 
+        string dirPath = "",
+        Terminal? context = null)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         Clone c = new Clone(source, cloneName);
@@ -116,12 +130,13 @@ public static class ProjectileManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name, dirPath);
+                Write(p, true, source.name, dirPath, context);
             }
         };
 #pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
 #pragma warning restore CS8601 // Possible null reference assignment.
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
         return clone != null;
     }
 }

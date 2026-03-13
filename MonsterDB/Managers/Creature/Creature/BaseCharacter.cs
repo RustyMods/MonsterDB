@@ -50,15 +50,8 @@ public class BaseCharacter : Base
         Character? character = prefab.GetComponent<Character>();
         AnimalAI? ai = character.GetComponent<AnimalAI>();
         if (character == null || ai == null) return;
-        if (Character != null)
-        {
-            Character.UpdateFields(character, prefab.name, !isInstance);
-        }
-
-        if (AI != null)
-        {
-            AI.UpdateFields(ai, prefab.name, !isInstance);
-        }
+        Character?.UpdateFields(character, prefab.name, !isInstance);
+        AI?.UpdateFields(ai, prefab.name, !isInstance);
     }
     
     private void UpdateAnimalTameable(GameObject prefab, bool isInstance = false)

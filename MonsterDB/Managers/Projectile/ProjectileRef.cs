@@ -7,7 +7,6 @@ using YamlDotNet.Serialization;
 namespace MonsterDB;
 
 [Serializable]
-[UsedImplicitly]
 public class ProjectileRef : Reference
 {
     public string m_prefab = "";

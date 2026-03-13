@@ -47,7 +47,10 @@ public class VisEquipmentRef : Reference
         return null;
     }
 
-    public override void UpdateFields<T>(T target, string targetName, bool log)
+    public override void UpdateFields<T>(
+        T target, 
+        string targetName, 
+        bool log)
     {
         if (target is not VisEquipment visEq) return;
 

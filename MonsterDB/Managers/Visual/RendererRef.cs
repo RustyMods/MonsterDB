@@ -31,14 +31,9 @@ public class RendererRef : Reference
     {
         if (log && !string.IsNullOrEmpty(targetName))
         {
-            if (LoadManager.resetting)
-            {
-                MonsterDBPlugin.LogDebug($"[{targetName}].[{renderer.name}] Resetting Renderer");
-            }
-            else
-            {
-                MonsterDBPlugin.LogDebug($"[{targetName}].[{renderer.name}] Updating Renderer");
-            }
+            MonsterDBPlugin.LogDebug(LoadManager.resetting
+                ? $"[{targetName}].[{renderer.name}] Resetting Renderer"
+                : $"[{targetName}].[{renderer.name}] Updating Renderer");
         }
         
         if (m_active.HasValue)
@@ -60,7 +55,7 @@ public class RendererRef : Reference
     private static void UpdateMaterials(Renderer renderer, MaterialRef[] materialRefs, string targetName, bool log)
     {
         Dictionary<string, MaterialRef> dict = materialRefs
-                .ToDict(f => f.m_name);
+                .ToSafeDictionary(f => f.m_name);
             
         Material[]? materials = renderer.sharedMaterials;
         for (int i = 0; i < materials.Length; ++i)
@@ -90,8 +85,10 @@ public class RendererRef : Reference
                 }
             }
 
-            Material newMat = new Material(mat);
-            newMat.name = matName;
+            Material newMat = new Material(mat)
+            {
+                name = matName
+            };
 
             matRef.Update(newMat, targetName, log);
             

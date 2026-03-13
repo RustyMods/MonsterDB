@@ -82,7 +82,7 @@ public static partial class Commands
         string type = args.GetString(2);
         if (string.IsNullOrEmpty(type))
         {
-            args.Context.LogWarning("Invalid parameters");
+            args.Context.LogWarning("Specify type");
             return;
         }
 
@@ -115,15 +115,22 @@ public static partial class Commands
         string prefabName = args.GetString(3);
         if (string.IsNullOrEmpty(prefabName))
         {
-            args.Context.LogWarning("Invalid parameters");
+            args.Context.LogWarning("Specify prefab");
             return;
         }
 
         if (baseType == BaseType.SpawnData)
         {
             prefabName = args.GetStringFrom(3);
-            SpawnManager.Export(prefabName);
-            args.Context.LogInfo($"Exported {prefabName} Spawn Data");
+            if (SpawnManager.Export(prefabName, out string filepath))
+            {
+                args.Context.LogInfo($"Exported {prefabName} Spawn Data");
+                args.Context.LogInfo(filepath.RemoveRootPath());
+            }
+            else
+            {
+                args.Context.LogError($"Failed to export {prefabName} spawn data");
+            }
             return;
         }
                 
@@ -140,44 +147,62 @@ public static partial class Commands
         switch (baseType)
         {
             case BaseType.Character or BaseType.Human or BaseType.Humanoid:
-                CreatureManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!CreatureManager.Write(prefab, isClone, source, args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.Egg:
-                EggManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!EggManager.Write(prefab, isClone, source, args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.Item:
-                ItemManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!ItemManager.Write(prefab, isClone, source, context: args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.Fish:
-                FishManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!FishManager.Write(prefab, isClone, source, args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.Projectile:
-                ProjectileManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!ProjectileManager.Write(prefab, isClone, source))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.SpawnAbility:
-                SpawnAbilityManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!SpawnAbilityManager.Write(prefab, isClone, source, context: args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.Visual:
-                VisualManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!VisualManager.Write(prefab, isClone, source, context: args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.CreatureSpawner:
-                CreatureSpawnerManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!CreatureSpawnerManager.Write(prefab, isClone, source, args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.SpawnArea:
-                SpawnAreaManager.Write(prefab, isClone, source);
-                args.Context.LogInfo($"Exported {baseType} {prefab.name}");
+                if (!SpawnAreaManager.Write(prefab, isClone, source, context: args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
                 break;
             case BaseType.All:
                 FileManager.Export(FileManager.ImportFolder);
-                args.Context.AddString("Exported all MonsterDB imported files into a single aggregated file.");
+                args.Context.LogInfo("Exported all MonsterDB imported files into a single aggregated file.");
                 break;
         }
     }

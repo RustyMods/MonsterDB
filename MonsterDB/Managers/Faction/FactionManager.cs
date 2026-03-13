@@ -52,11 +52,9 @@ public static class FactionManager
 
     public static void Init(ZNet net)
     {
-        if (net.IsServer())
-        {
-            UpdateSync();
-            SetupFileWatcher();
-        }
+        if (!net.IsServer()) return;
+        UpdateSync();
+        SetupFileWatcher();
     }
 
     private static void UpdateSync()
@@ -74,8 +72,9 @@ public static class FactionManager
             List<Faction> data = ConfigManager.Deserialize<List<Faction>>(sync.Value);
             customFactions.Clear();
             factions.Clear();
-            foreach (Faction? faction in data)
+            for (int i = 0; i < data.Count; ++i)
             {
+                Faction? faction = data[i];
                 faction.Setup();
             }
         }

@@ -8,7 +8,7 @@
 
 <br/>
 
-<table align="center">
+<table>
   <tr>
     <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/frostling.png?raw=true" alt="Frostling" width="380" height="380" style="object-fit:cover"/></td>
     <td><img src="https://github.com/RustyMods/MonsterDB/blob/main/MonsterDB/Screenshots/volture.png?raw=true" alt="Volture" width="380" height="380" style="object-fit:cover"/></td>
@@ -41,7 +41,7 @@ MonsterDB is a Valheim plugin that gives you full control over creatures and ite
 
 <h1 align="center">Features</h1>
 
-<table><tr><td width="900">
+<table align="center" width="100%"><tr><td width="1800">
 <br/>
 
 ### Modify & Clone

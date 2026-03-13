@@ -48,7 +48,7 @@ public class BaseAIRef : Reference
     public bool? m_avoidLavaFlee;
 
     public bool? m_aggravatable;
-    public bool? m_passiveAggresive;
+    [YamlMember(Alias = "m_passiveAggressive")] public bool? m_passiveAggresive;
 
     public string? m_spawnMessage;
     public string? m_deathMessage;

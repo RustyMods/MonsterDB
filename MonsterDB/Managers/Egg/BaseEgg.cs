@@ -1,11 +1,10 @@
 ﻿using System;
-using JetBrains.Annotations;
 using UnityEngine;
 using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class BaseEgg : BaseItem
 {
     [YamlMember(Order = 8, Description = "If field removed, will remove component")] public EggGrowRef? EggGrow;

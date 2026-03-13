@@ -2,7 +2,4 @@
 
 namespace MonsterDB;
 
-public class Persistent : Attribute
-{
-    
-}
+public class Persistent : Attribute;

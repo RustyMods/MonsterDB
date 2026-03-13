@@ -13,7 +13,7 @@ public class BaitSettingRef : Reference
 
 public static partial class Extensions
 {
-    public static List<BaitSettingRef> ToRef(this List<Fish.BaitSetting> baitSettings)
+    public static List<BaitSettingRef> ToBaitSettingsRefList(this List<Fish.BaitSetting> baitSettings)
     {
         return baitSettings
             .Where(x => x.m_bait != null)
@@ -25,7 +25,7 @@ public static partial class Extensions
             .ToList();
     }
 
-    public static List<Fish.BaitSetting> FromRef(this List<BaitSettingRef> reference)
+    public static List<Fish.BaitSetting> ToBaitSettingsList(this List<BaitSettingRef> reference)
     {
         return reference
             .Where(x => !string.IsNullOrEmpty(x.m_bait))

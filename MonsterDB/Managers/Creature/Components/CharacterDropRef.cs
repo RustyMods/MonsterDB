@@ -57,9 +57,10 @@ public static partial class Extensions
 
     public static List<CharacterDrop.Drop> FromRef(this List<DropRef> dr)
     {
-        List<CharacterDrop.Drop> drops = new();
-        foreach (DropRef? dropRef in dr)
+        List<CharacterDrop.Drop> drops = [];
+        for (int i = 0; i < dr.Count; ++i)
         {
+            DropRef? dropRef = dr[i];
             CharacterDrop.Drop drop = new CharacterDrop.Drop();
             dropRef.UpdateFields(drop, dropRef.m_prefab ?? "Null", log: false);
             drops.Add(drop);

@@ -106,12 +106,12 @@ public static class RaidManager
     public static List<string> GetRaidOptions(int i, string word) => i switch
     {
         2 => GetRaidNames(),
-        _ => new List<string>()
+        _ => []
     };
 
     public static List<string> GetRaidNames() => RandEventSystem.instance
         ? RandEventSystem.instance.m_events.Select(x => x.m_name).ToList()
-        : new List<string>();
+        : [];
 
     [Obsolete]
     public static void UpdateRaid(Terminal.ConsoleEventArgs args)

@@ -109,7 +109,7 @@ public static class TexturePackage
     
     private static void RPC_ReceiveTextureNames(ZRpc rpc, ZPackage pkg)
     {
-        List<string> names = new();
+        List<string> names = [];
         int count = pkg.ReadInt();
         for (int i = 0; i < count; ++i)
         {

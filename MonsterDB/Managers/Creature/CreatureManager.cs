@@ -26,7 +26,7 @@ public static class CreatureManager
             return;
         }
                 
-        Write(prefab);
+        Write(prefab, context: args.Context);
     }
     
     [Obsolete]
@@ -43,7 +43,7 @@ public static class CreatureManager
         for (int i = 0; i < prefabs.Count; ++i)
         {
             GameObject? prefab = prefabs[i];
-            Write(prefab);
+            Write(prefab, context: args.Context);
         }
         args.Context.AddString($"Exported {prefabs.Count} creature YML files");
     }
@@ -81,25 +81,6 @@ public static class CreatureManager
         creature.Update();
         LoadManager.UpdateSync();
         args.Context.AddString($"Reverted {prefabName}");
-    }
-
-    public static void ResetCreature(Terminal context, string prefabName)
-    {
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            context.LogWarning("Invalid parameters");
-            return;
-        }
-
-        if (LoadManager.GetOriginal<Base>(prefabName) is not { } creature)
-        {
-            context.LogWarning("Original data not found");
-            return;
-        }
-        
-        creature.Update();
-        LoadManager.UpdateSync();
-        context.AddString("Reverted " + prefabName);
     }
 
     [Obsolete]
@@ -166,9 +147,10 @@ public static class CreatureManager
 
         string folderPath = Path.Combine(FileManager.ExportFolder, input);
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-        string filePath = Path.Combine(folderPath, $"{input}.bones.yml");
-        ExportHierarchy(prefab, filePath);
-        context.AddString($"Exported {prefab.name} bones");
+        string filepath = Path.Combine(folderPath, $"{input}.bones.yml");
+        ExportHierarchy(prefab, filepath);
+        context.LogInfo($"Exported {prefab.name} bones");
+        context.LogInfo(filepath.RemoveRootPath());
     }
     
     public static bool TrySave(GameObject prefab, out Base data, bool isClone = false, string source = "")
@@ -212,18 +194,23 @@ public static class CreatureManager
         return true;
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string source = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string source = "",
+        Terminal? context = null)
     {
         string folder = Path.Combine(FileManager.ExportFolder, prefab.name);
         if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-        string filePath = Path.Combine(folder, prefab.name + ".yml");
+        string filepath = Path.Combine(folder, prefab.name + ".yml");
 
-        if (!TrySave(prefab, out Base data, isClone, source)) return;
+        if (!TrySave(prefab, out Base data, isClone, source)) return false;
         
-        string text = ConfigManager.Serialize(data);
-        File.WriteAllText(filePath, text);
-        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
-        
+        string content = ConfigManager.Serialize(data);
+        File.WriteAllText(filepath, content);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+        context?.LogInfo($"Exported Creature {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
         Character? character = prefab.GetComponent<Character>();
         if (character != null)
         {
@@ -251,11 +238,13 @@ public static class CreatureManager
                     {
                         bool isItemClone = CloneManager.IsClone(item.name, out string itemSource);
 
-                        ItemManager.Write(item, isItemClone, itemSource, itemFolder);
+                        ItemManager.Write(item, isItemClone, itemSource, itemFolder, context);
                     }
                 }
             }
         }
+
+        return true;
     }
 
     private static void CloneRagdoll(Character character, string cloneName)
@@ -276,7 +265,12 @@ public static class CreatureManager
         }
     }
 
-    private static GameObject? ClonePlayer(GameObject source, Player player, string cloneName, bool write = true)
+    private static GameObject? ClonePlayer(
+        GameObject source, 
+        Player player, 
+        string cloneName, 
+        bool write = true, 
+        Terminal? context = null)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out var clone)) return clone;
         Clone c = new Clone(source, cloneName);
@@ -302,7 +296,7 @@ public static class CreatureManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(prefab, true, source.name);
+                Write(prefab, true, source.name, context: context);
             }
         };
 
@@ -333,15 +327,18 @@ public static class CreatureManager
 
         if (humanoid.m_randomItems != null)
         {
-            List<Humanoid.RandomItem> newRandomItems = new();
-            foreach (Humanoid.RandomItem? item in humanoid.m_randomItems)
+            List<Humanoid.RandomItem> newRandomItems = [];
+            for (int i = 0; i < humanoid.m_randomItems.Length; ++i)
             {
+                Humanoid.RandomItem? item = humanoid.m_randomItems[i];
                 string newItemName = $"MDB_{cloneName}_{item.m_prefab.name}";
                 if (ItemManager.TryClone(item.m_prefab, newItemName, out GameObject newItem, false))
                 {
-                    Humanoid.RandomItem newRandomItem = new Humanoid.RandomItem();
-                    newRandomItem.m_chance = item.m_chance;
-                    newRandomItem.m_prefab = newItem;
+                    Humanoid.RandomItem newRandomItem = new Humanoid.RandomItem
+                    {
+                        m_chance = item.m_chance,
+                        m_prefab = newItem
+                    };
                     newRandomItems.Add(newRandomItem);
                 }
             }
@@ -351,19 +348,27 @@ public static class CreatureManager
 
         if (humanoid.m_randomSets != null)
         {
-            List<Humanoid.ItemSet> newRandomSets = new List<Humanoid.ItemSet>();
-            foreach (Humanoid.ItemSet? set in humanoid.m_randomSets)
+            List<Humanoid.ItemSet> newRandomSets = [];
+            for (int i = 0; i < humanoid.m_randomSets.Length; ++i)
             {
-                Humanoid.ItemSet newSet = new Humanoid.ItemSet();
-                newSet.m_name = set.m_name;
-                newSet.m_items = CreateItems(set.m_items, cloneName);
+                Humanoid.ItemSet? set = humanoid.m_randomSets[i];
+                Humanoid.ItemSet newSet = new Humanoid.ItemSet
+                {
+                    m_name = set.m_name,
+                    m_items = CreateItems(set.m_items, cloneName)
+                };
                 newRandomSets.Add(newSet);
             }
+
             humanoid.m_randomSets = newRandomSets.ToArray();
         }
     }
 
-    public static GameObject? Clone(GameObject source, string cloneName, bool write = true)
+    public static GameObject? Clone(
+        GameObject source, 
+        string cloneName, 
+        bool write = true, 
+        Terminal? context = null)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out var clone)) return clone;
         if (source.TryGetComponent(out Player player))
@@ -388,7 +393,7 @@ public static class CreatureManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(prefab, true, source.name);
+                Write(prefab, true, source.name, context: context);
             }
         };
 
@@ -417,7 +422,9 @@ public static class CreatureManager
         if (root == null) return;
 
         if (string.IsNullOrEmpty(filePath))
+        {
             filePath = Path.Combine(FileManager.ExportFolder, $"{root.name}.bones.yml");
+        }
 
         StringBuilder sb = new();
         sb.AppendLine(root.name);
@@ -428,19 +435,17 @@ public static class CreatureManager
 
         File.WriteAllText(filePath, sb.ToString());
         MonsterDBPlugin.LogInfo($"Saved {root.name} hierarchy to {filePath}");
+    }
+    
+    private static void WriteTransform(StringBuilder builder, Transform t, int depth)
+    {
+        builder.Append(new string(' ', depth * 2)); // 2 spaces per depth
+        builder.Append("- ");
+        builder.AppendLine(t.name);
 
-        return;
-        
-        void WriteTransform(StringBuilder builder, Transform t, int depth)
+        for (int i = 0; i < t.childCount; i++)
         {
-            builder.Append(new string(' ', depth * 2)); // 2 spaces per depth
-            builder.Append("- ");
-            builder.AppendLine(t.name);
-
-            for (int i = 0; i < t.childCount; i++)
-            {
-                WriteTransform(builder, t.GetChild(i), depth + 1);
-            }
+            WriteTransform(builder, t.GetChild(i), depth + 1);
         }
     }
 }

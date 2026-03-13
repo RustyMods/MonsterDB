@@ -224,7 +224,7 @@ public static class LoadManager
                         }
                         else
                         {
-                            EggManager.Clone(prefab, data.Prefab, false);
+                            EggManager.TryClone(prefab, data.Prefab, false);
                         }
                         break;
                     case BaseType.Item:
@@ -238,7 +238,7 @@ public static class LoadManager
                         }
                         break;
                     case BaseType.Fish:
-                        FishManager.Clone(prefab, data.Prefab, false);
+                        FishManager.TryClone(prefab, data.Prefab, false);
                         break;
                     case BaseType.Projectile:
                         ProjectileManager.TryClone(prefab, data.Prefab, out _, false);
@@ -253,10 +253,10 @@ public static class LoadManager
                         VisualManager.TryClone(prefab, data.Prefab, out _, false);
                         break;
                     case BaseType.CreatureSpawner:
-                        CreatureSpawnerManager.Clone(prefab, data.Prefab, false);
+                        CreatureSpawnerManager.TryClone(prefab, data.Prefab, false);
                         break;
                     case BaseType.SpawnArea:
-                        SpawnAreaManager.Clone(prefab, data.Prefab, false);
+                        SpawnAreaManager.TryClone(prefab, data.Prefab, false);
                         break;
                 }
             }

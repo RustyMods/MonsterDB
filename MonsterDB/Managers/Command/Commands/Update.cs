@@ -52,6 +52,6 @@ public static partial class Commands
             "all",
             "raids"
         ]).ToList(),
-        _ => new List<string>()
+        _ => []
     };
 }

@@ -95,7 +95,7 @@ public class LightRef : Reference
 
 public static partial class Extensions
 {
-    public static LightRef[] ToRef(this Light[] lights)
+    public static LightRef[] ToLightRefList(this Light[] lights)
     {
         return lights
             .Select(x => new LightRef(x))

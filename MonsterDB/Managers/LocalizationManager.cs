@@ -220,7 +220,7 @@ public static class LocalizationManager
     {
         if (!localizations.TryGetValue(language, out string[] translations))
         {
-            localizations[language] = new[] { string.Join(":", key, value) };
+            localizations[language] = [string.Join(":", key, value)];
         }
         else
         {

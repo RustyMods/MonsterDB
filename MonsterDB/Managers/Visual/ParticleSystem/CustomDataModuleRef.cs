@@ -23,16 +23,9 @@ public class CustomDataModuleRef : Reference
         ParticleSystem.MinMaxGradient custom1 = cm.GetColor(ParticleSystemCustomData.Custom1);
         ParticleSystem.MinMaxGradient custom2 = cm.GetColor(ParticleSystemCustomData.Custom2);
 
-        if (m_custom1 != null)
-        {
-            m_custom1.Update(custom1);
-        }
+        m_custom1?.Update(custom1);
+        m_custom2?.Update(custom2);
 
-        if (m_custom2 != null)
-        {
-            m_custom2.Update(custom2);
-        }
-        
         cm.SetColor(ParticleSystemCustomData.Custom1, custom1);
         cm.SetColor(ParticleSystemCustomData.Custom2, custom2);
     }

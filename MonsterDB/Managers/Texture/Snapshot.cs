@@ -13,7 +13,7 @@ public static class Snapshot
         string prefabName = args.GetString(2);
         if (string.IsNullOrEmpty(prefabName))
         {
-            args.Context.LogWarning("Invalid parameters");
+            args.Context.LogWarning("Specify prefab");
             return;
         }
 
@@ -38,8 +38,13 @@ public static class Snapshot
             byte[]? bytes = icon.texture.EncodeToPNG();
             string filePath = Path.Combine(FileManager.ExportFolder, icon.name + ".png");
             File.WriteAllBytes(filePath, bytes);
-            args.Context.AddString($"Exported texture: {filePath}");
+            args.Context.LogInfo($"Exported PNG for {prefab.name}");
+            args.Context.LogInfo(filePath.RemoveRootPath());
             TextureManager.RegisterNewIcon(icon);
+        }
+        else
+        {
+            args.Context.LogWarning($"Failed to export PNG for {prefab.name}");
         }
     }
 

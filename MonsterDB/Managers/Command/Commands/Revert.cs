@@ -7,8 +7,6 @@ namespace MonsterDB;
 
 public static partial class Commands
 {
-    private static readonly List<string> RevertOptions = GetBaseTypes();
-    
     private static void Revert(Terminal.ConsoleEventArgs args)
     {
         string type = args.GetString(2);

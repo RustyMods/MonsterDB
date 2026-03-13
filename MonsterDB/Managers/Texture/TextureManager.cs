@@ -105,7 +105,7 @@ public static class TextureManager
     public static List<string> GetTextureOptions(int i, string word) => i switch
     {
         2 => m_cachedTextures.Keys.ToList(),
-        _ => new List<string>()
+        _ => []
     };
     
     [Obsolete]
@@ -144,7 +144,7 @@ public static class TextureManager
     public static List<string> GetSpriteOptions(int i, string word) => i switch
     {
         2 => GetSpriteNames(),
-        _ => new List<string>()
+        _ => []
     };
 
     public static List<string> GetSpriteNames() => m_cachedSprites.Keys.ToList();
@@ -207,7 +207,7 @@ public static class TextureManager
     public static HashSet<Material> GetAllMaterials(this GameObject prefab)
     {
         Renderer[]? renderers = prefab.GetComponentsInChildren<Renderer>(true);
-        HashSet<Material> materials = new HashSet<Material>();
+        HashSet<Material> materials = [];
         for (int i = 0; i < renderers.Length; ++i)
         {
             Renderer renderer = renderers[i];

@@ -277,7 +277,7 @@ public static partial class Extensions
 {
     public static MaterialRef[] ToMaterialRefArray(this Material[] mats)
     {
-        List<MaterialRef> refs = new();
+        List<MaterialRef> refs = [];
         foreach (Material? mat in mats)
         {
             if (mat == null) continue;

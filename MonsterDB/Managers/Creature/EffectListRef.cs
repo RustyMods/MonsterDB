@@ -74,7 +74,7 @@ public class EffectListRef
             if (PrefabManager.GetPrefab(m_prefab) is not { } prefab)
             {
                 MonsterDBPlugin.LogError("Effect Data Reference invalid: " + m_prefab);
-                return new();
+                return new EffectList.EffectData();
             }
             _data = new EffectList.EffectData()
             {

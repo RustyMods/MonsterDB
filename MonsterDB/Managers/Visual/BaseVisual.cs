@@ -57,7 +57,7 @@ public class BaseVisual : Header
         Light[] lights = prefab.GetComponentsInChildren<Light>(true);
         if (lights.Length > 0)
         {
-            Visuals.m_lights = lights.ToRef();
+            Visuals.m_lights = lights.ToLightRefList();
         }
     }
 

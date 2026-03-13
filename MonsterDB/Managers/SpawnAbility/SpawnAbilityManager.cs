@@ -39,7 +39,7 @@ public static class SpawnAbilityManager
     public static List<string> GetSpawnAbilityOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<SpawnAbility>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -73,20 +73,33 @@ public static class SpawnAbilityManager
             return;
         }
 
-        TryClone(prefab, newName, out _, true);
+        TryClone(prefab, newName, out _, context: args.Context);
     }
-    public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string source = "", 
+        string dirPath = "", 
+        Terminal? context = null)
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string filepath = Path.Combine(dirPath, prefab.name + ".yml");
         BaseSpawnAbility spawnAbility = new();
         spawnAbility.Setup(prefab, isClone, source);
         string text = ConfigManager.Serialize(spawnAbility);
-        File.WriteAllText(filePath, text);
+        File.WriteAllText(filepath, text);
+        context?.LogInfo($"Exported Spawn Ability {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
+        return true;
     }
 
-    public static bool TryClone(GameObject prefab, string cloneName, out GameObject clone, bool write = true,
-        string dirPath = "")
+    public static bool TryClone(
+        GameObject prefab, 
+        string cloneName, 
+        out GameObject clone, 
+        bool write = true,
+        string dirPath = "",
+        Terminal? context = null)
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
         if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
@@ -96,7 +109,7 @@ public static class SpawnAbilityManager
         {
             if (write)
             {
-                Write(p, true, prefab.name, dirPath);
+                Write(p, true, prefab.name, dirPath, context);
             }
             
             MonsterDBPlugin.LogDebug($"Cloned {prefab.name} as {cloneName}");
@@ -104,6 +117,7 @@ public static class SpawnAbilityManager
 #pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
 #pragma warning restore CS8601 // Possible null reference assignment.
+        context?.LogInfo($"Cloned {prefab.name} as {cloneName}");
         return clone != null;
     }
 }

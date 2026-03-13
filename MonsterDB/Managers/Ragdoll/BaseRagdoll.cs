@@ -58,9 +58,6 @@ public class BaseRagdoll : Header
 
     private void UpdateVisuals(GameObject prefab)
     {
-        if (Visuals != null)
-        {
-            Visuals.Update(prefab, false, false);
-        }
+        Visuals?.Update(prefab, false, false);
     }
 }

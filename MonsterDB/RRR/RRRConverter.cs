@@ -99,9 +99,9 @@ public static class RRRConverter
     private static bool Convert(string filepath, RRR_Main main)
     {
         string filename = Path.GetFileName(filepath);
-        string foldername = Path.GetFileNameWithoutExtension(filename);
-        List<BaseItem> items = new();
-        List<string> textureNames = new();
+        string folderName = Path.GetFileNameWithoutExtension(filename);
+        List<BaseItem> items = [];
+        List<string> textureNames = [];
         if (main.sOriginalPrefabName == null || string.IsNullOrEmpty(main.sOriginalPrefabName))
         {
             MonsterDBPlugin.LogWarning($"Failed RRR Conversion: {filename}");
@@ -283,7 +283,7 @@ public static class RRRConverter
         string exportFolderPath = Path.Combine(FolderPath, "Export");
         if (!Directory.Exists(exportFolderPath)) Directory.CreateDirectory(exportFolderPath);
         
-        string folderPath = Path.Combine(exportFolderPath, foldername);
+        string folderPath = Path.Combine(exportFolderPath, folderName);
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
         string itemFolderPath = Path.Combine(folderPath, "items");

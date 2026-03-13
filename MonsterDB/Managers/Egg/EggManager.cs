@@ -60,14 +60,14 @@ public static class EggManager
         }
 
         bool isClone = CloneManager.IsClone(prefab.name, out string source);
-        Write(prefab, isClone, source);
+        Write(prefab, isClone, source, args.Context);
     }
 
     [Obsolete]
     public static List<string> GetEggOptions(int i, string word) => i switch
     {
         2 => PrefabManager.GetAllPrefabNames<ItemDrop>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -77,7 +77,7 @@ public static class EggManager
         for (int i = 0; i < prefabs.Count; ++i)
         {
             GameObject? prefab = prefabs[i];
-            Write(prefab);
+            Write(prefab, context: args.Context);
         }
         args.Context.AddString($"Exported {prefabs.Count} egg files");
     }
@@ -116,35 +116,11 @@ public static class EggManager
         LoadManager.UpdateSync();
     }
 
-    public static void ResetEgg(Terminal context, string prefabName)
-    {
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            context.LogWarning("Invalid parameters");
-            return;
-        }
-
-        if (prefabName.Equals("all", StringComparison.InvariantCultureIgnoreCase))
-        {
-            LoadManager.ResetAll<BaseEgg>();
-            LoadManager.UpdateSync();
-            return;
-        }
-
-        if (!LoadManager.Reset<BaseEgg>(prefabName))
-        {
-            context.LogWarning("Original data not found");
-            return;
-        }
-        
-        LoadManager.UpdateSync();
-    }
-
     [Obsolete]
     public static List<string> GetResetOptions(int i, string word) => i switch
     {
         2 => LoadManager.GetOriginalKeys<BaseEgg>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -171,7 +147,7 @@ public static class EggManager
             return;
         }
 
-        Clone(prefab, newName);
+        TryClone(prefab, newName);
     }
 
     public static bool TrySave(GameObject prefab, out BaseEgg egg, bool isClone = false, string source = "")
@@ -205,13 +181,20 @@ public static class EggManager
         return ConfigManager.Serialize(reference);
     }
 
-    public static void Write(GameObject prefab,  bool isClone = false, string clonedFrom = "")
+    public static bool Write(
+        GameObject prefab,  
+        bool isClone = false, 
+        string clonedFrom = "", 
+        Terminal? context = null)
     {
-        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
+        string filepath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
         string? text = Save(prefab, isClone, clonedFrom);
-        if (string.IsNullOrEmpty(text)) return;
-        File.WriteAllText(filePath, text);
-        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+        if (string.IsNullOrEmpty(text)) return false;
+        File.WriteAllText(filepath, text);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+        context?.LogInfo($"Exported Egg {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
+        return true;
     }
 
     private static void Read(string filePath)
@@ -232,10 +215,23 @@ public static class EggManager
         }
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        bool write = true, 
+        Terminal? context = null)
     {
-        if (CloneManager.prefabs.ContainsKey(cloneName)) return;
-        if (!source.GetComponent<ItemDrop>()) return;
+        if (CloneManager.prefabs.ContainsKey(cloneName))
+        {
+            context?.LogWarning("Clone prefab already exists");
+            return false;
+        }
+
+        if (!source.GetComponent<ItemDrop>())
+        {
+            context?.LogWarning("Prefab missing ItemDrop component");
+            return false;
+        }
         
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
@@ -249,10 +245,12 @@ public static class EggManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name);
+                Write(p, true, source.name, context: context);
             }
         };
         c.Create();
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
+        return true;
     }
 
     private static bool IsNewEgg(ItemDrop item)

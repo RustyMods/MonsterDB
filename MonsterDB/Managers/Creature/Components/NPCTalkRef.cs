@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class NPCTalkRef : Reference
 {
     public string? m_name;

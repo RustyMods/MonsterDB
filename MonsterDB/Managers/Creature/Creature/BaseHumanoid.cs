@@ -66,15 +66,8 @@ public class BaseHumanoid : Base
         Humanoid? humanoid = prefab.GetComponent<Humanoid>();
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
         if (humanoid == null || ai == null) return;
-        if (Character != null)
-        {
-            Character.UpdateFields(humanoid, prefab.name, true);
-        }
-
-        if (AI != null)
-        {
-            AI.UpdateFields(ai, prefab.name, true);
-        }
+        Character?.UpdateFields(humanoid, prefab.name, true);
+        AI?.UpdateFields(ai, prefab.name, true);
     }
 
     private void UpdateIHumanoid(GameObject prefab)
@@ -83,15 +76,8 @@ public class BaseHumanoid : Base
         MonsterAI? ai = prefab.GetComponent<MonsterAI>();
         
         if (IHumanoid == null || ai == null) return;
-        if (Character != null)
-        {
-            Character.UpdateFields(IHumanoid, prefab.name, false);
-        }
-
-        if (AI != null)
-        {
-            AI.UpdateFields(ai, prefab.name, false);
-        }
+        Character?.UpdateFields(IHumanoid, prefab.name, false);
+        AI?.UpdateFields(ai, prefab.name, false);
 
         GameObject? source = PrefabManager.GetPrefab(Prefab);
         if (source == null) return;

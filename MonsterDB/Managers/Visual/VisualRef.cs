@@ -35,7 +35,7 @@ public class VisualRef : Reference
         Light[] lights = prefab.GetComponentsInChildren<Light>(true);
         if (lights.Length > 0)
         {
-            m_lights = lights.ToRef();
+            m_lights = lights.ToLightRefList();
         }
         LevelEffects levelEffects = prefab.GetComponentInChildren<LevelEffects>();
         if (levelEffects != null)

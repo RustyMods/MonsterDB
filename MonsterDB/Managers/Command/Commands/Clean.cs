@@ -9,6 +9,7 @@ public static partial class Commands
 {
     private static void CleanAll(Terminal.ConsoleEventArgs args)
     {
+        int count = 0;
         foreach (KeyValuePair<string, Header> kvp in LoadManager.modified)
         {
             if (kvp.Value.Clean())
@@ -17,10 +18,10 @@ public static partial class Commands
                 string filename = kvp.Value.Prefab + ".CLEANED.yml";
                 string filepath = Path.Combine(FileManager.ExportFolder, filename);
                 File.WriteAllText(filepath, content);
-        
-                args.Context.Log(HEX_Gray, $"Cleaned up {kvp.Value}, exported to {filepath}");
+                ++count;
             }
         }
+        args.Context.LogInfo($"Cleaned up {count} files");
     }
     
     private static void Clean(Terminal.ConsoleEventArgs args)
@@ -40,7 +41,7 @@ public static partial class Commands
 
         if (!LoadManager.modified.TryGetValue(prefabName, out Header? modified))
         {
-            args.Context.LogWarning($"> Failed to find modified prefab: {prefabName}");
+            args.Context.LogWarning($"Failed to find modified prefab: {prefabName}");
             return;
         }
 
@@ -52,7 +53,7 @@ public static partial class Commands
             File.WriteAllText(filepath, content);
         
             args.Context.LogInfo($"Cleaned up {prefabName}");
-            args.Context.LogInfo($"{filepath}");
+            args.Context.LogInfo($"{filepath.RemoveRootPath()}");
         }
         else
         {

@@ -27,7 +27,7 @@ public class HumanoidRef : CharacterRef
     public class ItemSet
     {
         public string m_name = "";
-        public string[] m_items = Array.Empty<string>();
+        public string[] m_items = [];
     }
 
     [Serializable]
@@ -42,7 +42,7 @@ public static partial class Extensions
 {
     public static HashSet<GameObject> GetAttacks(this Humanoid humanoid)
     {
-        HashSet<GameObject> attacks = new();
+        HashSet<GameObject> attacks = [];
         if (humanoid.m_defaultItems != null) attacks.AddRange(humanoid.m_defaultItems);
         if (humanoid.m_randomWeapon != null) attacks.AddRange(humanoid.m_randomWeapon);
         if (humanoid.m_randomSets != null)
@@ -59,7 +59,7 @@ public static partial class Extensions
 
     public static HashSet<GameObject> GetItems(this Humanoid humanoid)
     {
-        HashSet<GameObject> items = new();
+        HashSet<GameObject> items = [];
         if (humanoid.m_defaultItems != null) items.AddRange(humanoid.m_defaultItems);
         if (humanoid.m_randomWeapon != null) items.AddRange(humanoid.m_randomWeapon);
         if (humanoid.m_randomShield != null) items.AddRange(humanoid.m_randomShield);

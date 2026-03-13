@@ -69,30 +69,12 @@ public static class ItemManager
         LoadManager.files.Add(item);
         LoadManager.UpdateSync();
     }
-
-    public static void ResetItem(Terminal context, string prefabName)
-    {
-        if (string.IsNullOrEmpty(prefabName))
-        {
-            context.LogWarning("Invalid prefab");
-            return;
-        }
-
-        if (LoadManager.GetOriginal<BaseItem>(prefabName) is not {} item)
-        {
-            context.LogWarning("Original data not found");
-            return;
-        }
-            
-        item.Update();
-        LoadManager.files.Add(item);
-        LoadManager.UpdateSync();    
-    }
+    
     [Obsolete]
     public static List<string> GetResetItemOptions(int i, string word) => i switch
     {
         2 => LoadManager.GetOriginalKeys<BaseItem>(),
-        _ => new List<string>()
+        _ => []
     };
 
     [Obsolete]
@@ -118,7 +100,7 @@ public static class ItemManager
             return ;
         }
             
-        TryClone(prefab, newName, out _);
+        TryClone(prefab, newName, out _, context: args.Context);
     }
 
     [Obsolete]
@@ -136,18 +118,26 @@ public static class ItemManager
     public static List<string> GetSearchItemOptions(int i, string word) => i switch
     {
         2 => PrefabManager.SearchCache<ItemDrop>(""),
-        _ => new List<string>()
+        _ => []
     };
 
     public static void CreateItem(Terminal.ConsoleEventArgs args)
     {
         string prefabName = args.GetString(2);
         string newName = args.GetString(3);
-        if (string.IsNullOrEmpty(prefabName) || string.IsNullOrEmpty(newName))
+
+        if (string.IsNullOrEmpty(prefabName))
         {
-            args.Context.LogWarning("Invalid parameters");
+            args.Context.LogWarning("Specify prefab");
             return;
         }
+
+        if (string.IsNullOrEmpty(newName))
+        {
+            args.Context.LogWarning("Specify new prefab name");
+            return;
+        }
+        
         GameObject? prefab = PrefabManager.GetPrefab(prefabName);
         if (prefab == null)
         {
@@ -163,7 +153,10 @@ public static class ItemManager
 
         if (prefab.GetComponent<ItemDrop>())
         {
-            TryClone(prefab, newName, out _);
+            if (!TryClone(prefab, newName, out _, context: args.Context))
+            {
+                args.Context.LogWarning($"Failed to clone item: {prefab.name}");
+            }
             return;
         }
 
@@ -180,7 +173,10 @@ public static class ItemManager
             return;
         }
 
-        TryCreateItem(prefab, newName, out _);
+        if (!TryCreateItem(prefab, newName, out _, context: args.Context))
+        {
+            args.Context.LogWarning($"Failed to create item for {prefab.name}");
+        }
     }
     public static bool TrySave(GameObject prefab, out BaseItem item, bool isClone = false, string source = "")
     {
@@ -199,17 +195,26 @@ public static class ItemManager
         return true;
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "", string dirPath = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string clonedFrom = "", 
+        string dirPath = "", 
+        Terminal? context = null)
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string filepath = Path.Combine(dirPath, prefab.name + ".yml");
 
-        if (TrySave(prefab, out BaseItem item, isClone, clonedFrom))
+        if (!TrySave(prefab, out BaseItem item, isClone, clonedFrom))
         {
-            string text = ConfigManager.Serialize(item);
-            File.WriteAllText(filePath, text);
-            MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+            return false;
         }
+        
+        string content = ConfigManager.Serialize(item);
+        File.WriteAllText(filepath, content);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+        context?.LogInfo($"Exported Item {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
 
         if (prefab.TryGetComponent(out ItemDrop itemDrop))
         {
@@ -224,7 +229,7 @@ public static class ItemManager
                     projectileSource = c.SourceName;
                 }
 
-                ProjectileManager.Write(sharedData.m_attack.m_attackProjectile, isProjectileClone, projectileSource, dirPath);
+                ProjectileManager.Write(sharedData.m_attack.m_attackProjectile, isProjectileClone, projectileSource, dirPath, context);
             }
 
             if (sharedData.m_secondaryAttack.m_attackProjectile != null)
@@ -237,9 +242,11 @@ public static class ItemManager
                     projectileSource = c.SourceName;
                 }
 
-                ProjectileManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone, projectileSource, dirPath);
+                ProjectileManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone, projectileSource, dirPath, context);
             }
         }
+
+        return true;
     }
     
     private static void Read(string filePath)
@@ -261,7 +268,13 @@ public static class ItemManager
         }
     }
 
-    public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        out GameObject clone, 
+        bool write = true, 
+        string dirPath = "",
+        Terminal? context = null)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         if (!source.GetComponent<ItemDrop>()) return false;
@@ -277,7 +290,13 @@ public static class ItemManager
                 if (projectile != null)
                 {
                     string newProjName = $"MDB_{cloneName}_{projectile.name}";
-                    if (ProjectileManager.TryClone(projectile, newProjName, out GameObject newProjectile, false, dirPath))
+                    if (ProjectileManager.TryClone(
+                            projectile, 
+                            newProjName, 
+                            out GameObject newProjectile, 
+                            false, 
+                            dirPath, 
+                            context))
                     {
                         sharedData.m_attack.m_attackProjectile = newProjectile;
                     }
@@ -287,17 +306,23 @@ public static class ItemManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name, dirPath);
+                Write(p, true, source.name, dirPath, context: context);
             }
         };
 #pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
 #pragma warning restore CS8601 // Possible null reference assignment.
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
         return clone != null;
     }
 
-    public static bool TryCreateItem(GameObject source, string cloneName, out GameObject clone, bool write = true,
-        string dirPath = "")
+    public static bool TryCreateItem(
+        GameObject source, 
+        string cloneName, 
+        out GameObject clone, 
+        bool write = true,
+        string dirPath = "",
+        Terminal? context = null)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         if (source.GetComponent<ItemDrop>() || !source.GetComponent<ZNetView>()) return false;
@@ -365,7 +390,7 @@ public static class ItemManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name, dirPath);
+                Write(p, true, source.name, dirPath, context: context);
             }
         };
 

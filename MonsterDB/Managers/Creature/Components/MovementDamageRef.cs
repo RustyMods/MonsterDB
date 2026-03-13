@@ -14,21 +14,20 @@ public class MovementDamageRef : Reference
 
     public MovementDamageRef(MovementDamage md)
     {
-        if (md.m_runDamageObject != null)
+        if (md.m_runDamageObject == null) return;
+        m_runDamageObject = md.m_runDamageObject.name;
+        if (!md.m_runDamageObject.TryGetComponent(out Aoe aoe)) return;
+        m_areaOfEffect = new AoeRef
         {
-            m_runDamageObject = md.m_runDamageObject.name;
-            Aoe? aoe = md.m_runDamageObject.GetComponent<Aoe>();
-            if (aoe != null)
-            {
-                m_areaOfEffect = new AoeRef
-                {
-                    m_damage = aoe.m_damage
-                };
-            }
-        }
+            m_damage = aoe.m_damage
+        };
     }
 
-    protected override void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName,
+    protected override void UpdateGameObject<T>(
+        T target, 
+        FieldInfo targetField, 
+        string targetName, 
+        string goName,
         bool log)
     {
         if (target is not MovementDamage component) return;

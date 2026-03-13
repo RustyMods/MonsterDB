@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using BepInEx;
 using BepInEx.Bootstrap;
 
 namespace MonsterDB;
@@ -17,6 +19,9 @@ public static partial class Commands
     public static void LogError(this Terminal terminal, string msg) => terminal.Log(HEX_Red, msg);
     public static void LogDebug(this Terminal terminal, string msg) => terminal.Log(HEX_SoftBlue, msg);
     public static void Log(this Terminal terminal, string hex, string msg) => terminal.AddString($"<color={hex}>{msg}</color>");
+
+    public static string RemoveRootPath(this string filepath) =>
+        filepath.Replace(Paths.ConfigPath, @"...\BepInEx\config\");
     
     public static void Init()
     {

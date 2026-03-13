@@ -44,7 +44,7 @@ public class GradientRef : Reference
 
     public static implicit operator GradientRef(Gradient grad)
     {
-        return new GradientRef()
+        return new GradientRef
         {
             m_mode = grad.mode,
             m_alphaKeys = grad.alphaKeys.ToRef(),
@@ -68,7 +68,7 @@ public class GradientAlphaKeyRef : Reference
         m_alpha = key.alpha;
     }
 
-    public GradientAlphaKey ToGradientAlphaKey() => new GradientAlphaKey() { time = m_time, alpha = m_alpha };
+    public GradientAlphaKey ToGradientAlphaKey() => new() { time = m_time, alpha = m_alpha };
 }
 
 [Serializable]
@@ -85,6 +85,6 @@ public class GradientColorKeyRef : Reference
         m_time = key.time;
     }
 
-    public GradientColorKey ToGradientColorKey() => new GradientColorKey()
+    public GradientColorKey ToGradientColorKey() => new()
         { color = m_color.FromHexOrRGBA(Color.white), time = m_time };
 }

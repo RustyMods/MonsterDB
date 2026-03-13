@@ -13,26 +13,26 @@ public class CreatureData
     public Dictionary<string, VisualMethods.MaterialData> m_materials = new();
     public CharacterData m_characterData = new();
     public CharacterEffects m_effects = new();
-    public List<ItemAttackData> m_defaultItems = new();
-    public List<ItemAttackData> m_randomWeapons = new();
-    public List<ItemAttackData> m_randomArmors = new();
-    public List<ItemAttackData> m_randomShields = new();
-    public List<RandomItemData> m_randomItems = new();
-    public List<RandomItemSetsData> m_randomSets = new();
+    public List<ItemAttackData> m_defaultItems = [];
+    public List<ItemAttackData> m_randomWeapons = [];
+    public List<ItemAttackData> m_randomArmors = [];
+    public List<ItemAttackData> m_randomShields = [];
+    public List<RandomItemData> m_randomItems = [];
+    public List<RandomItemSetsData> m_randomSets = [];
     public MonsterAIData m_monsterAIData = new();
     public AnimalAIData m_animalAIData = new();
-    public List<CharacterDropData> m_characterDrops = new();
+    public List<CharacterDropData> m_characterDrops = [];
     public TameableData m_tameable = new();
     public ProcreationData m_procreation = new();
     public NPCTalkData m_npcTalk = new();
     public GrowUpData m_growUp = new();
-    public List<LevelEffectData> m_levelEffects = new();
+    public List<LevelEffectData> m_levelEffects = [];
     public Dictionary<string, bool> m_particles = new();
     public VisualMethods.HumanData m_humanData = new();
 
     public List<ItemAttackData> GetAllItems()
     {
-        var list = new List<ItemAttackData>();
+        List<ItemAttackData> list = [];
         list.AddRange(m_defaultItems);
         list.AddRange(m_randomWeapons);
         list.AddRange(m_randomArmors);
@@ -63,9 +63,11 @@ public class RandomItemSetsData
 
     public HumanoidRef.ItemSet ToRef()
     {
-        var r = new HumanoidRef.ItemSet();
-        r.m_name = m_name;
-        r.m_items = m_items.Select(x => x.m_attackData.Name).ToArray();
+        HumanoidRef.ItemSet r = new HumanoidRef.ItemSet
+        {
+            m_name = m_name,
+            m_items = m_items.Select(x => x.m_attackData.Name).ToArray()
+        };
         return r;
     }
 }
@@ -73,32 +75,32 @@ public class RandomItemSetsData
 [Serializable]
 public class CharacterEffects
 {
-    public List<EffectInfo> m_hitEffects = new();
-    public List<EffectInfo> m_critHitEffects = new();
-    public List<EffectInfo> m_backstabHitEffects = new();
-    public List<EffectInfo> m_deathEffects = new();
-    public List<EffectInfo> m_waterEffects = new();
-    public List<EffectInfo> m_tarEffects = new();
-    public List<EffectInfo> m_slideEffects = new();
-    public List<EffectInfo> m_jumpEffects = new();
-    public List<EffectInfo> m_flyingContinuousEffects = new();
-    public List<EffectInfo> m_pickupEffects = new();
-    public List<EffectInfo> m_dropEffects = new();
-    public List<EffectInfo> m_consumeItemEffects = new();
-    public List<EffectInfo> m_equipEffects = new();
-    public List<EffectInfo> m_perfectBlockEffects = new();
-    public List<EffectInfo> m_alertedEffects = new();
-    public List<EffectInfo> m_idleSounds = new();
-    public List<EffectInfo> m_wakeupEffects = new();
-    public List<EffectInfo> m_birthEffects = new();
-    public List<EffectInfo> m_loveEffects = new();
-    public List<EffectInfo> m_tamedEffects = new();
-    public List<EffectInfo> m_soothEffects = new();
-    public List<EffectInfo> m_petEffects = new();
-    public List<EffectInfo> m_unSummonEffects = new();
-    public List<EffectInfo> m_randomTalkFX = new();
-    public List<EffectInfo> m_randomGreetFX = new();
-    public List<EffectInfo> m_randomGoodbyeFX = new();
+    public List<EffectInfo> m_hitEffects = [];
+    public List<EffectInfo> m_critHitEffects = [];
+    public List<EffectInfo> m_backstabHitEffects = [];
+    public List<EffectInfo> m_deathEffects = [];
+    public List<EffectInfo> m_waterEffects = [];
+    public List<EffectInfo> m_tarEffects = [];
+    public List<EffectInfo> m_slideEffects = [];
+    public List<EffectInfo> m_jumpEffects = [];
+    public List<EffectInfo> m_flyingContinuousEffects = [];
+    public List<EffectInfo> m_pickupEffects = [];
+    public List<EffectInfo> m_dropEffects = [];
+    public List<EffectInfo> m_consumeItemEffects = [];
+    public List<EffectInfo> m_equipEffects = [];
+    public List<EffectInfo> m_perfectBlockEffects = [];
+    public List<EffectInfo> m_alertedEffects = [];
+    public List<EffectInfo> m_idleSounds = [];
+    public List<EffectInfo> m_wakeupEffects = [];
+    public List<EffectInfo> m_birthEffects = [];
+    public List<EffectInfo> m_loveEffects = [];
+    public List<EffectInfo> m_tamedEffects = [];
+    public List<EffectInfo> m_soothEffects = [];
+    public List<EffectInfo> m_petEffects = [];
+    public List<EffectInfo> m_unSummonEffects = [];
+    public List<EffectInfo> m_randomTalkFX = [];
+    public List<EffectInfo> m_randomGreetFX = [];
+    public List<EffectInfo> m_randomGoodbyeFX = [];
 
     public void Set(ref TameableRef? r)
     {
@@ -176,15 +178,15 @@ public class CharacterEffects
 [Serializable]
 public class ItemEffects
 {
-    public List<EffectInfo> m_hitEffects = new();
-    public List<EffectInfo> m_hitTerrainEffects = new();
-    public List<EffectInfo> m_blockEffects = new();
-    public List<EffectInfo> m_startEffects = new();
-    public List<EffectInfo> m_holdStartEffects = new();
-    public List<EffectInfo> m_equipEffects = new();
-    public List<EffectInfo> m_unEquipEffects = new();
-    public List<EffectInfo> m_triggerEffects = new();
-    public List<EffectInfo> m_trailStartEffects = new();
+    public List<EffectInfo> m_hitEffects = [];
+    public List<EffectInfo> m_hitTerrainEffects = [];
+    public List<EffectInfo> m_blockEffects = [];
+    public List<EffectInfo> m_startEffects = [];
+    public List<EffectInfo> m_holdStartEffects = [];
+    public List<EffectInfo> m_equipEffects = [];
+    public List<EffectInfo> m_unEquipEffects = [];
+    public List<EffectInfo> m_triggerEffects = [];
+    public List<EffectInfo> m_trailStartEffects = [];
 
     public void Set(ref ItemDataSharedRef r)
     {
@@ -200,8 +202,10 @@ public class ItemEffects
     public EffectListRef? ToEffectListRef(List<EffectInfo> infos)
     {
         if (infos.Count == 0) return null;
-        var data = new EffectListRef();
-        data.m_effectPrefabs = infos.Select(x => x.ToRef()).ToList();
+        EffectListRef data = new EffectListRef
+        {
+            m_effectPrefabs = infos.Select(x => x.ToRef()).ToList()
+        };
         return data;
     }
 }

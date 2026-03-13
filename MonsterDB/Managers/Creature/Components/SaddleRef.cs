@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 
 namespace MonsterDB;
 
-[Serializable][UsedImplicitly]
+[Serializable]
 public class SaddleRef : Reference
 {
     public string? m_hoverText;
@@ -27,7 +27,11 @@ public class SaddleRef : Reference
     public SaddleRef(){}
     public SaddleRef(Sadle component) => Setup(component);
     
-    protected override void UpdateGameObject<T>(T target, FieldInfo targetField, string targetName, string goName,
+    protected override void UpdateGameObject<T>(
+        T target, 
+        FieldInfo targetField, 
+        string targetName, 
+        string goName,
         bool log)
     {
         if (target is not Saddle component) return;

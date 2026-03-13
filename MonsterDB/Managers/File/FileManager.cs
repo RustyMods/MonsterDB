@@ -28,12 +28,7 @@ public static class FileManager
     }
 
     private static bool IsFileWatcherEnabled() => _fileWatcherEnabled.Value is Toggle.On;
-
-    public static void ExportAggregate(Terminal.ConsoleEventArgs args)
-    {
-        Export(ImportFolder);
-        args.Context.AddString("Exported all MonsterDB imported files into a single aggregated file.");
-    }
+    
     public static List<string> GetModFileNames() => Directory
             .GetFiles(ImportFolder, "*.yml", SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)

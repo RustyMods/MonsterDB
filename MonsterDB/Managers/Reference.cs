@@ -346,7 +346,7 @@ public abstract class Reference
         
         Dictionary<string, FieldInfo> targetFields = GetType()
             .GetFields(FieldBindingFlags)
-            .ToDictionary(f => f.Name);
+            .ToSafeDictionary(f => f.Name);
         
         FieldInfo[] sourceFields = source.GetType().GetFields(FieldBindingFlags);
 
@@ -446,7 +446,7 @@ public abstract class Reference
                     break;
                 case List<Fish.BaitSetting> bs when 
                     targetType == typeof(List<BaitSettingRef>):
-                    target.SetValue(this, bs.ToRef());
+                    target.SetValue(this, bs.ToBaitSettingsRefList());
                     break;
                 case List<RandomAnimation.RandomValue> rv when 
                     targetType == typeof(List<RandomAnimationRef.RandomValueRef>):
@@ -502,7 +502,7 @@ public abstract class Reference
         
         Dictionary<string, FieldInfo> targetFields = targetType
             .GetFields(FieldBindingFlags)
-            .ToDictionary(f => f.Name);
+            .ToSafeDictionary(f => f.Name);
         
         FieldInfo[] sourceFields = sourceType.GetFields(FieldBindingFlags);
         
@@ -931,7 +931,7 @@ public abstract class Reference
 
     private void UpdateFishBaits<T>(T target, FieldInfo targetField, List<BaitSettingRef> baitSettings, string targetName, bool log)
     {
-        List<Fish.BaitSetting> baits = baitSettings.FromRef();
+        List<Fish.BaitSetting> baits = baitSettings.ToBaitSettingsList();
         targetField.SetValue(target, baits);
         if (log) MonsterDBPlugin.LogDebug($"[{targetName}] {targetField.Name}: BaitSetting[{baits.Count}]");
     }

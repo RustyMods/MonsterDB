@@ -32,19 +32,35 @@ public static class SpawnAreaManager
         }
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string source = "", 
+        string dirPath = "", 
+        Terminal? context = null)
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string filepath = Path.Combine(dirPath, prefab.name + ".yml");
         BaseSpawnArea spawnArea = new();
         spawnArea.Setup(prefab, isClone, source);
         string text = ConfigManager.Serialize(spawnArea);
-        File.WriteAllText(filePath, text);
+        File.WriteAllText(filepath, text);
+        context?.LogInfo($"Exported Spawn Area {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
+        return true;
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        bool write = true, 
+        Terminal? context = null)
     {
-        if (CloneManager.prefabs.ContainsKey(cloneName)) return;
+        if (CloneManager.prefabs.ContainsKey(cloneName))
+        {
+            context?.LogWarning($"Clone {cloneName} already exists");
+            return false;
+        }
         
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
@@ -57,9 +73,11 @@ public static class SpawnAreaManager
             
             if (write)
             {
-                Write(p, true, source.name);
+                Write(p, true, source.name, context: context);
             }
         };
         c.Create();
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
+        return true;
     }
 }

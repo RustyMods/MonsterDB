@@ -38,8 +38,7 @@ public class Base : Header
     [YamlMember(Order = 17)] public CinderSpawnerRef? CinderSpawner;
     [YamlMember(Order = 18)] public CharacterTimedDestructionRef? TimedDestruction;
 
-    [YamlMember(Order = 19,
-        Description = "If entries removed, will still be registered, set enabled too false to disable")]
+    [YamlMember(Order = 19, Description = "If entries removed, will still be registered, set enabled too false to disable")]
     public SpawnDataRef[]? SpawnData;
 
     [YamlMember(Order = 20)] public FootStepRef? FootStep;
@@ -236,7 +235,7 @@ public class Base : Header
         {
             Dictionary<string, Renderer> renderers = prefab
                 .GetComponentsInChildren<Renderer>(true)
-                .ToDict(f => f.name);
+                .ToSafeDictionary(f => f.name);
             List<LevelEffects.LevelSetup> setups = new();
             foreach (LevelSetupRef levelRef in Visuals.m_levelSetups)
             {

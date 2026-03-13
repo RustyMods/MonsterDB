@@ -5,7 +5,11 @@ namespace MonsterDB;
 
 public static class RagdollManager
 {
-    private static bool TrySave(GameObject prefab, out BaseRagdoll ragdoll, bool isClone = false, string source = "")
+    private static bool TrySave(
+        GameObject prefab, 
+        out BaseRagdoll ragdoll, 
+        bool isClone = false, 
+        string source = "")
     {
 #pragma warning disable CS8601 // Possible null reference assignment.
         ragdoll = LoadManager.GetOriginal<BaseRagdoll>(prefab.name);
@@ -21,15 +25,22 @@ public static class RagdollManager
         return true;
     }
 
-    public static void Write(GameObject prefab, bool isClone = false, string clonedFrom = "", string dirPath = "")
+    public static void Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string clonedFrom = "", 
+        string dirPath = "", 
+        Terminal? context = null)
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        string filePath = Path.Combine(dirPath, prefab.name + ".yml");
+        string filepath = Path.Combine(dirPath, prefab.name + ".yml");
         if (TrySave(prefab, out BaseRagdoll ragdoll, isClone, clonedFrom))
         {
             string text = ConfigManager.Serialize(ragdoll);
-            File.WriteAllText(filePath, text);
-            MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+            File.WriteAllText(filepath, text);
+            MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+            context?.LogInfo($"Exported {prefab.name}");
+            context?.LogInfo(filepath.RemoveRootPath());
         }
     }
 
@@ -51,21 +62,32 @@ public static class RagdollManager
         }
     }
 
-    public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        out GameObject clone, 
+        bool write = true, 
+        string dirPath = "",
+        Terminal? context = null)
     {
-        if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
+        if (CloneManager.prefabs.TryGetValue(cloneName, out clone))
+        {
+            context?.LogWarning($"{cloneName} already exists");
+            return true;
+        }
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name, dirPath);
+                Write(p, true, source.name, dirPath, context);
             }
         };
 #pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
 #pragma warning restore CS8601 // Possible null reference assignment.
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
         return clone != null;
     }
 

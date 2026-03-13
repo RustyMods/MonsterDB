@@ -12,7 +12,7 @@ public static class VersionHandshake
     static VersionHandshake()
     {
         ConnectionError = "";
-        ValidatedPeers = new List<ZRpc>();
+        ValidatedPeers = [];
         RequestAdminSyncMethodName = $"{MonsterDBPlugin.ModName}RequestAdminSync";
     }
 

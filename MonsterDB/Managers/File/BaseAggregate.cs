@@ -196,7 +196,7 @@ public class BaseAggregate : Header
 
     public List<Header> Load()
     {
-        List<Header> list = new();
+        List<Header> list = [];
         if (humanoids != null)
         {
             foreach (BaseHumanoid? humanoid in humanoids.Values)

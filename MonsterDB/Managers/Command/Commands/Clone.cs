@@ -57,7 +57,7 @@ public static partial class Commands
         BaseType.Projectile => PrefabManager.GetAllPrefabNames<Projectile>(),
         BaseType.SpawnAbility => PrefabManager.GetAllPrefabNames<SpawnAbility>(),
         BaseType.CreatureSpawner => PrefabManager.GetAllPrefabNames<CreatureSpawner>(),
-        BaseType.Human => new List<string> { "Player" },
+        BaseType.Human => ["Player"],
         BaseType.SpawnArea => PrefabManager.GetAllPrefabNames<SpawnArea>(),
         _ => PrefabManager.GetAllPrefabNames()
     };
@@ -84,53 +84,71 @@ public static partial class Commands
             return;
         }
 
-        bool isClone = CloneManager.IsClone(prefab.name, out _);
+        bool isClone = CloneManager.IsClone(prefab.name, out string source);
         if (isClone)
         {
-            args.Context.LogWarning("Already a clone");
+            args.Context.LogWarning($"Already a clone of {source}");
             return;
         }
 
         switch (baseType)
         {
             case BaseType.Character or BaseType.Humanoid or BaseType.Human:
-                CreatureManager.Clone(prefab, newName);
+                CreatureManager.Clone(prefab, newName, context: args.Context);
                 break;
             case BaseType.Egg:
-                EggManager.Clone(prefab, newName);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!EggManager.TryClone(prefab, newName))
+                {
+                    args.Context.LogWarning($"Failed to clone egg {prefabName}");   
+                }
                 break;
             case BaseType.Item:
-                ItemManager.TryClone(prefab, newName, out _);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!ItemManager.TryClone(prefab, newName, out _, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone item {prefabName}");
+                }
                 break;
             case BaseType.Fish:
-                FishManager.Clone(prefab, newName);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!FishManager.TryClone(prefab, newName, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone fish {prefabName}");   
+                }
                 break;
             case BaseType.Projectile:
-                ProjectileManager.TryClone(prefab, newName, out _);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!ProjectileManager.TryClone(prefab, newName, out _, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone projectile {prefabName}");
+                }
                 break;
             case BaseType.SpawnAbility:
-                SpawnAbilityManager.TryClone(prefab, newName, out _);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!SpawnAbilityManager.TryClone(prefab, newName, out _, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone spawn ability {prefabName}");
+                }
                 break;
             case BaseType.Visual:
-                VisualManager.TryClone(prefab, newName, out _);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!VisualManager.TryClone(prefab, newName, out _, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone prefab {prefabName}");
+                }
                 break;
             case BaseType.CreatureSpawner:
-                CreatureSpawnerManager.Clone(prefab, newName);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!CreatureSpawnerManager.TryClone(prefab, newName, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone creature spawner {prefabName}");
+                }
                 break;
             case BaseType.Ragdoll:
-                RagdollManager.TryClone(prefab, newName, out _);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!RagdollManager.TryClone(prefab, newName, out _, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone ragdoll {prefabName}");
+                }
                 break;
             case BaseType.SpawnArea:
-                SpawnAreaManager.Clone(prefab, newName);
-                args.Context.LogInfo($"Cloned {baseType} {prefab.name} as {newName}");
+                if (!SpawnAreaManager.TryClone(prefab, newName, context: args.Context))
+                {
+                    args.Context.LogWarning($"Failed to clone spawn area {prefab.name}");
+                }
                 break;
             default:
                 args.Context.LogWarning("Invalid type");

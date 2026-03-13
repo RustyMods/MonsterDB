@@ -67,9 +67,6 @@ public class BaseSpawnAbility : Header
     
     protected virtual void UpdateVisuals(GameObject prefab)
     {
-        if (Visuals != null)
-        {
-            Visuals.Update(prefab, false, false);
-        }
+        Visuals?.Update(prefab, false, false);
     }
 }

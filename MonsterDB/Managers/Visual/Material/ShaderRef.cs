@@ -40,8 +40,9 @@ public static class ShaderRef
     public static void CacheShaders()
     {
         AssetBundle[]? assetBundles = Resources.FindObjectsOfTypeAll<AssetBundle>();
-        foreach (AssetBundle? bundle in assetBundles)
+        for (int i = 0; i < assetBundles.Length; ++i)
         {
+            var bundle = assetBundles[i];
             IEnumerable<Shader>? bundleShaders;
             try
             {
@@ -64,10 +65,11 @@ public static class ShaderRef
                 m_shaders[shader.name] = shader;
             }
         }
-        
-        var shaders = Resources.FindObjectsOfTypeAll<Shader>();
-        foreach (Shader? shader in shaders)
+
+        Shader[]? shaders = Resources.FindObjectsOfTypeAll<Shader>();
+        for (int i = 0; i < shaders.Length; ++i)
         {
+            Shader? shader = shaders[i];
             if (shader == null) continue;
             if (!m_shaders.ContainsKey(shader.name))
             {
@@ -97,7 +99,7 @@ public static class ShaderRef
     public static List<string> GetShaderOptions(int i, string word) => i switch
     {
         2 => GetShaderNames(),
-        _ => new List<string>()
+        _ => []
     };
 
     public static List<string> GetShaderNames() => m_shaders.Keys.ToList();
@@ -115,7 +117,7 @@ public static class ShaderRef
         
         if (string.IsNullOrEmpty(query))
         {
-            args.Context.LogWarning("Invalid parameters");
+            args.Context.LogWarning("Specify query");
             return;
         }
 
@@ -126,7 +128,7 @@ public static class ShaderRef
         }
         
         MonsterDBPlugin.LogInfo($"Shader: {shader.name}");
-        args.Context.AddString($"Shader: {shader.name}");
+        args.Context.LogDebug($"Shader: {shader.name}");
 
         int count = shader.GetPropertyCount();
         for (int i = 0; i < count; ++i)
@@ -135,7 +137,7 @@ public static class ShaderRef
             ShaderPropertyType type = shader.GetPropertyType(i);
             if (prop != null)
             {
-                args.Context.AddString($"{prop}: {type}");
+                args.Context.LogDebug($"{prop}: {type}");
                 MonsterDBPlugin.LogInfo($"{prop}: {type}");
             }
         }

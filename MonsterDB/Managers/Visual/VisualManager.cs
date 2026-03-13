@@ -49,16 +49,26 @@ public static class VisualManager
 
         TryClone(prefab, newName, out _);
     }
-    public static void Write(GameObject prefab, bool isClone = false, string source = "", string dirPath = "")
+    public static bool Write(
+        GameObject prefab, 
+        bool isClone = false, 
+        string source = "", 
+        string dirPath = "", 
+        Terminal? context = null)
     {
         if (string.IsNullOrEmpty(dirPath)) dirPath = FileManager.ExportFolder;
-        string filePath = Path.Combine(dirPath, $"{prefab.name}.yml");
-        if (TrySave(prefab, out BaseVisual visual, isClone, source))
+        string filepath = Path.Combine(dirPath, $"{prefab.name}.yml");
+        if (!TrySave(prefab, out BaseVisual visual, isClone, source))
         {
-            string text = ConfigManager.Serialize(visual);
-            File.WriteAllText(filePath, text);
-            MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filePath}");
+            return false;
         }
+        string text = ConfigManager.Serialize(visual);
+        File.WriteAllText(filepath, text);
+        MonsterDBPlugin.LogInfo($"Saved {prefab.name} to: {filepath}");
+        context?.LogInfo($"Exported Visuals {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
+
+        return true;
     }
 
     public static bool TrySave(GameObject prefab, out BaseVisual visual, bool isClone = false, string source = "")
@@ -74,7 +84,13 @@ public static class VisualManager
         return true;
     }
     
-    public static bool TryClone(GameObject source, string cloneName, out GameObject clone, bool write = true, string dirPath = "")
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        out GameObject clone, 
+        bool write = true, 
+        string dirPath = "",
+        Terminal? context = null)
     {
         if (CloneManager.prefabs.TryGetValue(cloneName, out clone)) return true;
         Clone c = new Clone(source, cloneName);
@@ -83,12 +99,13 @@ public static class VisualManager
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name, dirPath);
+                Write(p, true, source.name, dirPath, context);
             }
         };
 #pragma warning disable CS8601 // Possible null reference assignment.
         clone = c.Create();
 #pragma warning restore CS8601 // Possible null reference assignment.
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
         return clone != null;
     }
 }

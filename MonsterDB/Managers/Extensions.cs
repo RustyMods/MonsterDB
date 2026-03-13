@@ -17,7 +17,7 @@ public static partial class Extensions
     {
         Dictionary<string, FieldInfo> targetFields = typeof(T)
             .GetFields(Reference.FieldBindingFlags)
-            .ToDictionary(f => f.Name);
+            .ToSafeDictionary(f => f.Name);
 
         FieldInfo[] sourceFields = typeof(V).GetFields(Reference.FieldBindingFlags);
         foreach (FieldInfo sourceField in sourceFields)
@@ -47,12 +47,13 @@ public static partial class Extensions
         }
     }
     
-    public static Dictionary<TKey,SValue> ToDict<TKey, SValue>(this IEnumerable<SValue> enumerable, Func<SValue, TKey> func)
+    public static Dictionary<K,V> ToSafeDictionary<K, V>(this IEnumerable<V> enumerable, Func<V, K> func)
     {
-        Dictionary<TKey, SValue> dict = new Dictionary<TKey, SValue>();
-        foreach (SValue e in enumerable)
+        Dictionary<K, V> dict = new Dictionary<K, V>();
+        foreach (V e in enumerable)
         {
-            TKey? k = func(e);
+            K? k = func(e);
+            if (dict.ContainsKey(k)) continue;
             dict[k] = e;
         }
 

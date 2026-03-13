@@ -228,17 +228,19 @@ public class EffectInfo
 
     public EffectListRef.EffectDataRef ToRef()
     {
-        var data = new EffectListRef.EffectDataRef();
-        data.m_prefab = PrefabName;
-        data.m_variant = Variant;
-        data.m_attach = Attach;
-        data.m_follow = Follow;
-        data.m_inheritParentRotation = InheritParentRotation;
-        data.m_inheritParentScale = InheritParentScale;
-        data.m_multiplyParentVisualScale = MultiplyParentVisualScale;
-        data.m_randomRotation = RandomRotation;
-        data.m_scale = Scale;
-        data.m_childTransform = ChildTransform;
+        EffectListRef.EffectDataRef data = new EffectListRef.EffectDataRef
+        {
+            m_prefab = PrefabName,
+            m_variant = Variant,
+            m_attach = Attach,
+            m_follow = Follow,
+            m_inheritParentRotation = InheritParentRotation,
+            m_inheritParentScale = InheritParentScale,
+            m_multiplyParentVisualScale = MultiplyParentVisualScale,
+            m_randomRotation = RandomRotation,
+            m_scale = Scale,
+            m_childTransform = ChildTransform
+        };
         return data;
     }
 }
@@ -376,9 +378,11 @@ public class RandomItemData
 
     public HumanoidRef.RandomItem ToRef()
     {
-        var r = new HumanoidRef.RandomItem();
-        r.m_prefab = PrefabName;
-        r.m_chance = Chance;
+        HumanoidRef.RandomItem r = new HumanoidRef.RandomItem
+        {
+            m_prefab = PrefabName,
+            m_chance = Chance
+        };
         return r;
     }
 }
@@ -538,7 +542,7 @@ public class MonsterAIData
     public float WakeupDelayMin;
     public float WakeupDelayMax;
     public bool AvoidLand;
-    public List<string> ConsumeItems = new();
+    public List<string> ConsumeItems = [];
     public float ConsumeRange;
     public float ConsumeSearchRange;
     public float ConsumeSearchInterval;
@@ -862,7 +866,7 @@ public class GrowUpData
     public float GrowTime;
     public bool InheritTame;
     public string GrownPrefab = "";
-    public List<AltGrownData> AltGrownPrefabs = new();
+    public List<AltGrownData> AltGrownPrefabs = [];
 
     public void Set(ref GrowUpRef? r)
     {
@@ -885,9 +889,11 @@ public class AltGrownData
 
     public GrowUpRef.GrownEntry ToRef()
     {
-        var r = new  GrowUpRef.GrownEntry();
-        r.m_prefab =  GrownPrefab;
-        r.m_weight = Weight;
+        GrowUpRef.GrownEntry r = new  GrowUpRef.GrownEntry
+        {
+            m_prefab = GrownPrefab,
+            m_weight = Weight
+        };
         return r;
     }
 }
@@ -905,14 +911,16 @@ public class LevelEffectData
 
     public LevelSetupRef ToRef()
     {
-        var r = new LevelSetupRef();
-        r.m_scale = Scale;
-        r.m_hue = Hue;
-        r.m_saturation = Saturation;
-        r.m_value = Value;
-        r.m_setEmissiveColor = SetEmissiveColor;
-        r.m_enableObject =  EnableObject;
-        r.m_emissiveColor = EmissiveColor.ToHex();
+        LevelSetupRef r = new LevelSetupRef
+        {
+            m_scale = Scale,
+            m_hue = Hue,
+            m_saturation = Saturation,
+            m_value = Value,
+            m_setEmissiveColor = SetEmissiveColor,
+            m_enableObject = EnableObject,
+            m_emissiveColor = EmissiveColor.ToHex()
+        };
         return r;
     }
 }

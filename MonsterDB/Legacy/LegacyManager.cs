@@ -29,23 +29,6 @@ public static class LegacyManager
         args.Context.LogInfo($"Converted {creaturesToConvert.Count} legacy file into v.0.2.x format");
     }
 
-    public static void Convert(Terminal context, string input)
-    {
-        if (string.IsNullOrEmpty(input))
-        {
-            context.LogWarning("Invalid parameters");
-            return;
-        }
-
-        if (!creaturesToConvert.TryGetValue(input, out CreatureData data))
-        {
-            context.LogInfo($"No legacy creature data found for {input}");
-            return;
-        }
-
-        Convert(data);
-    }
-
     public static void Convert(Terminal.ConsoleEventArgs args)
     {
         string prefabName = args.GetString(2);
@@ -64,12 +47,6 @@ public static class LegacyManager
         Convert(data);
         args.Context.LogInfo($"Converted {prefabName} legacy file into v.0.2.x format");
     }
-
-    public static List<string> GetConversionOptions(int i, string word) => i switch
-    {
-        2 => creaturesToConvert.Keys.ToList(),
-        _ => new List<string>()
-    };
     
     public static void Start()
     {
@@ -112,14 +89,15 @@ public static class LegacyManager
 
     private static void ImportDirs()
     {
-        List<string> paths = new();
+        List<string> paths = [];
         string creaturePath = Path.Combine(ConfigManager.DirectoryPath, "Creatures");
         string clonePath = Path.Combine(ConfigManager.DirectoryPath, "Clones");
         if (Directory.Exists(LegacyFolderPath)) paths.AddRange(Directory.GetDirectories(LegacyFolderPath));
         if (Directory.Exists(clonePath)) paths.AddRange(Directory.GetDirectories(clonePath));
         if (Directory.Exists(creaturePath)) paths.AddRange(Directory.GetDirectories(creaturePath));
-        foreach (string dir in paths)
+        for (int i = 0; i < paths.Count; ++i)
         {
+            string dir = paths[i];
             Read(dir);
         }
     }
@@ -131,8 +109,9 @@ public static class LegacyManager
         if (files.Length <= 0) return;
         IDeserializer deserializer = new DeserializerBuilder().Build();
         int count = 0;
-        foreach (string filePath in files)
+        for (var i = 0; i < files.Length; ++i)
         {
+            string filePath = files[i];
             try
             {
                 string text = File.ReadAllText(filePath);
@@ -145,6 +124,7 @@ public static class LegacyManager
                 MonsterDBPlugin.LogWarning($"Failed to deserialize file: {Path.GetFileName(filePath)}");
             }
         }
+
         MonsterDBPlugin.LogDebug($"Imported {count} creature data files");
     }
     

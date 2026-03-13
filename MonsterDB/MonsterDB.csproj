@@ -191,9 +191,6 @@
         <Compile Include="Managers\Fish\DropTableRef.cs" />
         <Compile Include="Managers\Fish\FishManager.cs" />
         <Compile Include="Managers\Fish\FishRef.cs" />
-        <Compile Include="Managers\GlobalModifiers\Global.cs" />
-        <Compile Include="Managers\GlobalModifiers\GlobalManager.cs" />
-        <Compile Include="Managers\GlobalModifiers\SE_GlobalModifiers.cs" />
         <Compile Include="Managers\Item\BaseItem.cs" />
         <Compile Include="Managers\Item\ItemManager.cs" />
         <Compile Include="Managers\Item\Components\AttackRef.cs" />
@@ -247,7 +244,6 @@
         <Compile Include="Managers\Visual\Vector3Ref.cs" />
         <Compile Include="Managers\Visual\VisualManager.cs" />
         <Compile Include="Managers\Visual\VisualRef.cs" />
-        <Compile Include="Managers\Visual\VisualUtils.cs" />
         <Compile Include="Managers\VultureOverride.cs" />
         <Compile Include="Managers\YamlConditional.cs" />
         <Compile Include="Plugin.cs" />

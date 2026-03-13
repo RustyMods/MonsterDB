@@ -56,11 +56,14 @@ public static class CreatureSpawnerManager
         _ => []
     };
 
-    public static void Write(GameObject prefab, bool isClone, string source)
+    public static bool Write(GameObject prefab, bool isClone, string source, Terminal? context = null)
     {
         string text = Save(prefab, isClone, source);
-        string filePath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
-        File.WriteAllText(filePath, text);
+        string filepath = Path.Combine(FileManager.ExportFolder, prefab.name + ".yml");
+        File.WriteAllText(filepath, text);
+        context?.LogInfo($"Exported Creature Spawner {prefab.name}");
+        context?.LogInfo(filepath.RemoveRootPath());
+        return true;
     }
 
     private static string Save(GameObject prefab, bool isClone, string clonedFrom)
@@ -75,19 +78,34 @@ public static class CreatureSpawnerManager
         return ConfigManager.Serialize(reference);
     }
 
-    public static void Clone(GameObject source, string cloneName, bool write = true)
+    public static bool TryClone(
+        GameObject source, 
+        string cloneName, 
+        bool write = true, 
+        Terminal? context = null)
     {
-        if (CloneManager.prefabs.ContainsKey(cloneName)) return;
-        if (!source.GetComponent<CreatureSpawner>()) return;
+        if (CloneManager.prefabs.ContainsKey(cloneName))
+        {
+            context?.LogWarning($"Clone {cloneName} already exists");
+            return false;
+        }
+
+        if (!source.GetComponent<CreatureSpawner>())
+        {
+            context?.LogWarning($"{source.name} missing Creature Spawner component");
+            return false;
+        }
         Clone c = new Clone(source, cloneName);
         c.OnCreated += p =>
         {
             MonsterDBPlugin.LogDebug($"Cloned {source.name} as {cloneName}");
             if (write)
             {
-                Write(p, true, source.name);
+                Write(p, true, source.name, context: context);
             }
         };
         c.Create();
+        context?.LogInfo($"Cloned {source.name} as {cloneName}");
+        return true;
     }
 }
