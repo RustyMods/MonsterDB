@@ -17,6 +17,14 @@ public class AttackRef : Reference
     public bool? m_loopingAttack;
     public bool? m_consumeItem;
     public bool? m_hitTerrain;
+    public bool? m_isHomeItem;
+    public float? m_attackStamina;
+    public float? m_attackAdrenaline;
+    public float? m_attackUseAdrenaline;
+    public float? m_attackEitr;
+    public float? m_attackHealth;
+    public float? m_attackHealthPercentage;
+    public bool? m_attackHealthLowBlockUse;
     public float? m_attackHealthReturnHit;
     public bool? m_attackKillsSelf;
     public float? m_speedFactor;
