@@ -1,0 +1,565 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: StoneGolem
+Character:
+  name: $enemy_stonegolem
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 2
+  turnSpeed: 100
+  runSpeed: 4
+  runTurnSpeed: 150
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 5
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: true
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_stonegolem_hurt
+      variant: -1
+    - prefab: sfx_stonegolem_hurt
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_stonegolem_death
+      variant: -1
+    - prefab: Stonegolem_ragdoll
+      variant: -1
+    - prefab: vfx_stonegolem_death
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  # Base Health
+  health: 800
+  regenAllHPTime: 3600
+  damageModifiers:
+    slash: Resistant
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: VeryWeak
+    fire: Immune
+    frost: Immune
+    poison: Immune
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.33
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  randomArmor:
+  - StoneGolem_hat
+  randomSets:
+  - name: Spike
+    items:
+    - stonegolem_attack1_spike
+    - stonegolem_attack3_spikesweep
+    - StoneGolem_spikes
+  - name: Sledge
+    items:
+    - stonegolem_attack2_left_groundslam
+    - stonegolem_attack_doublesmash
+    - StoneGolem_clubs
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: true
+  wakeupRange: 2
+  noiseWakeup: true
+  maxNoiseWakeupRange: 50
+  wakeupEffects:
+    effectPrefabs:
+    - prefab: vfx_stonegolem_wakeup
+      variant: -1
+    - prefab: sfx_stonegolem_wakeup
+      variant: -1
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_stonegolem_alerted
+      variant: -1
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_stonegolem_idle
+      variant: -1
+  idleSoundInterval: 3
+  idleSoundChance: 0.25
+  pathAgentType: TrollSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 10
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+VisEquipment:
+  leftHand:
+    name: Wrist.l
+    parent: Underarm.l
+    index: 0
+    position:
+      x: -1.063617E-10
+      y: 0.00711611
+      z: -3.916502E-10
+    rotation:
+      x: -4.862353E-13
+      y: 6.758628E-15
+      z: 4.802477E-06
+    scale: 1
+  rightHand:
+    name: Wrist.r
+    parent: Underarm.r
+    index: 0
+    position:
+      x: 1.063625E-10
+      y: 0.007116106
+      z: -4.467203E-10
+    rotation:
+      x: -5.342332E-13
+      y: 7.964136E-20
+      z: -4.802479E-06
+    scale: 1
+  helmet:
+    name: Head
+    parent: Spine2
+    index: 0
+    position:
+      x: -2.453149E-14
+      y: 0.008050441
+      z: 7.841505E-15
+    rotation:
+      x: 11.05096
+      y: 4.3668E-07
+      z: 8.250792E-07
+    scale: 1
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Particle System
+    parent: Upperarm.l
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.630, 2.386, 3.428, 1.000)
+      emissionColor: RGBA(4.000, 2.435, 0.088, 1.000)
+      bumpScale: 1
+  - prefab: Particle System
+    parent: Upperarm.r
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.630, 2.386, 3.428, 1.000)
+      emissionColor: RGBA(4.000, 2.435, 0.088, 1.000)
+      bumpScale: 1
+  - prefab: Cube.001
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: MountainGolem_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Golem_d
+      glossiness: 0.18
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Golem_n
+  - prefab: Particle System
+    parent: Wrist.l
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.630, 2.386, 3.428, 1.000)
+      emissionColor: RGBA(4.000, 2.435, 0.088, 1.000)
+      bumpScale: 1
+  - prefab: Particle System
+    parent: Wrist.r
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: magic
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.630, 2.386, 3.428, 1.000)
+      emissionColor: RGBA(4.000, 2.435, 0.088, 1.000)
+      bumpScale: 1
+  particleSystems:
+  - prefab: Particle System
+    parent: Upperarm.l
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7838382000000.000, 0.000, -11179200000000.000, 0.000)
+      colorMin: RGBA(-7838450000000.000, 0.000, -7838433000000.000, 0.000)
+      colorMax: RGBA(-7838382000000.000, 0.000, -11179200000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Particle System
+    parent: Wrist.l
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7921279000000.000, 0.000, -11196780000000.000, 0.000)
+      colorMin: RGBA(-7921312000000.000, 0.000, -7921295000000.000, 0.000)
+      colorMax: RGBA(-7921279000000.000, 0.000, -11196780000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Particle System
+    parent: Wrist.r
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7920540000000.000, 0.000, -11195910000000.000, 0.000)
+      colorMin: RGBA(-7920574000000.000, 0.000, -7920557000000.000, 0.000)
+      colorMax: RGBA(-7920540000000.000, 0.000, -11195910000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Particle System
+    parent: Upperarm.r
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7945589000000.000, 0.000, -11195170000000.000, 0.000)
+      colorMin: RGBA(-7945622000000.000, 0.000, -7945606000000.000, 0.000)
+      colorMax: RGBA(-7945589000000.000, 0.000, -11195170000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophySGolem
+    amountMin: 1
+    amountMax: 1
+    chance: 0.05
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: Stone
+    amountMin: 5
+    amountMax: 10
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: Crystal
+    amountMin: 8
+    amountMax: 12
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 50
+  effects:
+  - motionType: Jog, Run, Sneak, Climbing
+    material: Default
+    effectPrefabs:
+    - sfx_stonegolem_footstep
+    - vfx_stonegolem_footstep
+  - motionType: Jog, Run, Sneak, Climbing
+    material: Water
+    effectPrefabs:
+    - sfx_troll_footstep_water
+    - vfx_troll_footstep_water
+  - name: snow
+    motionType: Jog, Run, Sneak, Climbing
+    material: Snow
+    effectPrefabs:
+    - sfx_stonegolem_footstep
+    - vfx_stonegolem_footstep_snow
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- footstep
+- random
+- idle
+- attack
+- attack2
+- attack3
+- doublesmash
+- sonicboom
+- stagger
+- sleeping

@@ -1,0 +1,228 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: charred_bow_Fader
+ItemData:
+  # Weapon
+  animationState: Bow
+  toolTier: 0
+  damages:
+    pierce: 60
+  attackForce: 15
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  attack:
+    attackType: Projectile
+    attackAnimation: attack_bow
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    isHomeItem: false
+    attackStamina: 0
+    attackAdrenaline: 1
+    attackUseAdrenaline: 0
+    attackEitr: 0
+    attackHealth: 0
+    attackHealthPercentage: 0
+    attackHealthLowBlockUse: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0
+    speedFactorRotation: 0.5
+    attackStartNoise: 20
+    attackHitNoise: 30
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 1
+    attackHeight: 2
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 1
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    drawAnimationState: bow_idle
+    # Melee/AOE
+    attackAngle: 90
+    attackRayWidth: 0
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: true
+    hitPointType: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    raiseSkillAmount: 1
+    skillHitType: Character
+    specialHitSkill: None
+    # Projectile
+    attackProjectile: charred_bow_Fader_projectile
+    projectileVel: 40
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 2
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    skillAccuracy: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+    harvest: false
+    harvestRadius: 0
+    harvestRadiusMaxLevel: 0
+  # AI behaviour
+  aiAttackRange: 20
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 10
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  blockEffect:
+    effectPrefabs:
+    - prefab: sfx_wood_blocked
+      variant: -1
+    - prefab: vfx_blocked
+      variant: -1
+    - prefab: fx_block_camshake
+      variant: -1
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_charred_archer_bow_draw
+      variant: -1
+  triggerEffect:
+    effectPrefabs:
+    - prefab: sfx_charred_archer_bow_release
+      variant: -1
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: charred_bow_Fader
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: TheCharred_Bow
+    parent: attach
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: CharredWeapons_mat
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(2.119, 2.119, 2.119, 1.000)
+      mainTexture: CharredWeapons_d
+      glossiness: 0.539
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: CharredWeapons_n
+  - prefab: Cube
+    parent: TheCharred_Bow
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: bow
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Planks5c_low
+      glossiness: 0.09
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Planks5_Normal
+  particleSystems:
+  - prefab: charred_bow_Fader
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 0.397, 0.397, 1.000)
+      colorMin: RGBA(1.000, 0.886, 0.250, 1.000)
+      colorMax: RGBA(1.000, 0.397, 0.397, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-14653150000000.000, 0.000, -7701145000000.000, 0.000)
+      colorMin: RGBA(-14653220000000.000, 0.000, -14653190000000.000, 0.000)
+      colorMax: RGBA(-14653150000000.000, 0.000, -7701145000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

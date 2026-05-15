@@ -1,0 +1,6 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: skeleton_firenova_aoe
+Visuals:
+  scale: 1

@@ -1,0 +1,51 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Goblin_Dragdoll
+Ragdoll:
+  velMultiplier: 2
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.2
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: goblin
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: goblin
+      shader: Custom/Creature
+      color: RGBA(0.831, 0.831, 0.831, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: goblin_e
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: goblin_d
+      glossiness: 0.13
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: goblin_n
+  - prefab: goblin (1)
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: goblin_armor
+      shader: Standard
+      color: RGBA(0.978, 0.978, 0.978, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: goblin_armor_d
+      glossiness: 0.255
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: goblin_armor_n

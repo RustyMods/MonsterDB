@@ -1,0 +1,196 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: BonemawSerpent_projectile
+ProjectileData:
+  prefab: BonemawSerpent_projectile
+  type: Magic
+  damage: {}
+  aoe: 0
+  dodgeable: true
+  blockable: true
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_BonemawSerpent_Spit_Hit
+      variant: -1
+    - prefab: sfx_bonemaw_serpent_spit_hit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Sphere
+    parent: BonemawSerpent_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: lavalump
+      shader: Standard
+      color: RGBA(0.878, 0.559, 0.000, 1.000)
+      emissionColor: RGBA(1.000, 0.603, 0.203, 1.000)
+      glossiness: 0.187
+      metallic: 0
+      bumpScale: 0.34
+      bumpTexture: cloud_normal
+  - prefab: Smoke
+    parent: BonemawSerpent_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: slowwispysmokeloop
+  - prefab: sparcs_world
+    parent: BonemawSerpent_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: slowwispysmoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: slowwispysmokeloop
+  lights:
+  - prefab: Point light
+    parent: BonemawSerpent_projectile
+    index: 3
+    active: true
+    color: RGBA(0.858, 0.739, 0.142, 1.000)
+    type: Point
+    intensity: 2
+    range: 3
+  particleSystems:
+  - prefab: Smoke
+    parent: BonemawSerpent_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.632, 0.553, 0.051, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.632, 0.553, 0.051, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-162077300000000000000000000000000.000, 0.000, -12232200000000.000, 0.000)
+      colorMin: RGBA(-162077900000000000000000000000000.000, 0.000, -162077600000000000000000000000000.000, 0.000)
+      colorMax: RGBA(-162077300000000000000000000000000.000, 0.000, -12232200000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.07647822
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.07647822
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+  - prefab: sparcs_world
+    parent: BonemawSerpent_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.632, 0.553, 0.051, 0.467)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.632, 0.553, 0.051, 0.467)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, -7835832000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, -7835832000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.07647822
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.07647822
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma

@@ -1,0 +1,329 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: Troll
+Character:
+  name: $enemy_troll
+  faction: ForestMonsters
+  boss: false
+  dontHideBossHud: false
+  defeatSetGlobalKey: KilledTroll
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 3
+  turnSpeed: 100
+  runSpeed: 6
+  runTurnSpeed: 250
+  acceleration: 0.2
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 5
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_foresttroll_hit
+      variant: -1
+    - prefab: sfx_troll_hit
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_death
+      variant: -1
+    - prefab: Troll_ragdoll
+      variant: -1
+    - prefab: vfx_troll_death
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  pheromoneLoveEffect:
+    effectPrefabs:
+    - prefab: fx_troll_love
+  # Base Health
+  health: 600
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Resistant
+    pierce: Weak
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  randomSets:
+  - name: Unarmed
+    items:
+    - troll_punch
+    - troll_groundslam
+    - troll_throw
+  - name: Unarmed
+    items:
+    - troll_punch
+    - troll_groundslam
+    - troll_throw
+  - name: Log
+    items:
+    - troll_log_swing_v
+    - troll_log_swing_h
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 1
+  maxChaseDistance: 200
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_alerted
+      variant: -1
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_troll_idle
+      variant: -1
+  idleSoundInterval: 5
+  idleSoundChance: 0.25
+  pathAgentType: TrollSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 30
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+VisEquipment:
+  leftHand:
+    name: LeftHand
+    parent: LeftForeArm
+    index: 0
+    position:
+      x: 1.396984E-10
+      y: 0.01231375
+      z: -5.569309E-09
+    rotation:
+      x: 351.3318
+      y: 1.402448
+      z: 2.595804
+    scale: 1
+  rightHand:
+    name: RightHand
+    parent: RightForeArm
+    index: 0
+    position:
+      x: -1.396984E-10
+      y: 0.01231375
+      z: -5.569309E-09
+    rotation:
+      x: 351.3318
+      y: 358.5976
+      z: 357.4042
+    scale: 1
+Visuals:
+  scale: 1
+  levelSetups:
+  - scale: 1
+    hue: -0.14
+    saturation: 0.1
+    emissiveColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - scale: 1
+    hue: 0.44
+    saturation: 0.2
+    emissiveColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  renderers:
+  - prefab: Body
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: troll
+      shader: Custom/Creature
+      color: RGBA(0.882, 0.882, 0.882, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: troll_diffuse
+      glossiness: 0.24
+      metallic: 0
+      bumpScale: 0.5
+      bumpTexture: troll_n
+  - prefab: Hair
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: troll
+      shader: Custom/Creature
+      color: RGBA(0.882, 0.882, 0.882, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: troll_diffuse
+      glossiness: 0.24
+      metallic: 0
+      bumpScale: 0.5
+      bumpTexture: troll_n
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: Coins
+    amountMin: 20
+    amountMax: 30
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: TrophyFrostTroll
+    amountMin: 1
+    amountMax: 1
+    chance: 0.5
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: TrollHide
+    amountMin: 5
+    amountMax: 5
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 50
+  effects:
+  - motionType: Jog, Run, Sneak, Climbing
+    material: Default
+    effectPrefabs:
+    - sfx_troll_footstep
+    - vfx_troll_footstep
+  - motionType: Jog, Run, Sneak, Climbing
+    material: Water
+    effectPrefabs:
+    - sfx_troll_footstep_water
+    - vfx_troll_footstep_water
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- idle
+- jump
+- inWater
+- dead
+- footstep
+- random
+- attack
+- punch
+- throw
+- swing_logv
+- swing_logh
+- stagger
+- wakeup

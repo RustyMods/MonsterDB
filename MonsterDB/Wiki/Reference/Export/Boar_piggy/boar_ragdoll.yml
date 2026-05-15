@@ -1,0 +1,119 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: boar_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.2
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Fangs 001
+    parent: boar_ragdoll
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar Brown
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Fangs 002
+    parent: boar_ragdoll
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar Brown
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Fangs 003
+    parent: boar_ragdoll
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar Brown
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Fangs 004
+    parent: boar_ragdoll
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar Brown
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Fangs 005
+    parent: boar_ragdoll
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar Brown
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Fangs 006
+    parent: boar_ragdoll
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: 'Material #879'
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar Brown
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Poly Art Boar
+    parent: boar_ragdoll
+    index: 7
+    active: true
+    enabled: true
+    materials:
+    - name: Boar Skin Valheim
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Boar_valheim_d
+      glossiness: 0.1
+      metallic: 0
+      bumpScale: 2.79
+      bumpTexture: Boar_valheim_n

@@ -1,0 +1,111 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: DvergerSuitSupport
+ItemData:
+  # Weapon
+  animationState: OneHanded
+  toolTier: 0
+  damages: {}
+  attackForce: 10
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  # AI behaviour
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: DvergerSuitSupport
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: SupportMageDress
+    parent: attach_skin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: DvergerMageSupport_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: DvergerMageSupport_d
+      glossiness: 0.318
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: DvergerMageSupport_n
+  particleSystems:
+  - prefab: DvergerSuitSupport
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 0.397, 0.397, 1.000)
+      colorMin: RGBA(1.000, 0.886, 0.250, 1.000)
+      colorMax: RGBA(1.000, 0.397, 0.397, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-8751499000000.000, 0.000, -4093741000000.000, 0.000)
+      colorMin: RGBA(-8751533000000.000, 0.000, -8751516000000.000, 0.000)
+      colorMax: RGBA(-8751499000000.000, 0.000, -4093741000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

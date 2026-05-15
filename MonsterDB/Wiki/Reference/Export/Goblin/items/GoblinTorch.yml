@@ -1,0 +1,499 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: GoblinTorch
+ItemData:
+  # Weapon
+  animationState: Torch
+  toolTier: 0
+  damages:
+    blunt: 45
+    fire: 45
+  attackForce: 30
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  attack:
+    attackType: Horizontal
+    attackAnimation: swing_longsword
+    attackRandomAnimations: 0
+    attackChainLevels: 1
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    isHomeItem: false
+    attackStamina: 15
+    attackAdrenaline: 1
+    attackUseAdrenaline: 0
+    attackEitr: 0
+    attackHealth: 0
+    attackHealthPercentage: 0
+    attackHealthLowBlockUse: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0.2
+    speedFactorRotation: 0.2
+    attackStartNoise: 10
+    attackHitNoise: 40
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 2.4
+    attackHeight: 0.8
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 90
+    attackRayWidth: 0.3
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: false
+    hitPointType: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    raiseSkillAmount: 1
+    skillHitType: Character
+    specialHitSkill: None
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 10
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    skillAccuracy: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+    harvest: false
+    harvestRadius: 0
+    harvestRadiusMaxLevel: 0
+  # AI behaviour
+  aiAttackRange: 1.6
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 20
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  # Item Effects
+  hitEffect:
+    effectPrefabs:
+    - prefab: sfx_club_hit
+      variant: -1
+    - prefab: vfx_torch_hit
+      variant: -1
+    - prefab: fx_hit_camshake
+      variant: -1
+  blockEffect:
+    effectPrefabs:
+    - prefab: sfx_wood_blocked
+      variant: -1
+    - prefab: vfx_blocked
+      variant: -1
+    - prefab: fx_block_camshake
+      variant: -1
+  triggerEffect:
+    effectPrefabs:
+    - prefab: sfx_torch_swing
+      variant: -1
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: GoblinTorch
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: model
+    parent: attach
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: torchmat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: handtorch_diffuse
+      glossiness: 0.1
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: handtorch_n
+  - prefab: flames
+    parent: flame
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: smoke (1)
+    parent: flame
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: fog
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dirt
+  - prefab: flames_local
+    parent: flame
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: embers
+    parent: flame
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: gnista
+      shader: Particles/Standard Unlit2
+      color: RGBA(2.000, 2.000, 2.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: crystal
+      bumpScale: 1
+  lights:
+  - prefab: Point light
+    parent: equiped
+    index: 2
+    active: true
+    color: RGBA(1.000, 0.621, 0.482, 1.000)
+    type: Point
+    intensity: 2
+    range: 10
+  particleSystems:
+  - prefab: GoblinTorch
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 0.397, 0.397, 1.000)
+      colorMin: RGBA(1.000, 0.886, 0.250, 1.000)
+      colorMax: RGBA(1.000, 0.397, 0.397, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-16337750000000.000, 0.000, -10749100000000.000, 0.000)
+      colorMin: RGBA(-16337820000000.000, 0.000, -16337790000000.000, 0.000)
+      colorMax: RGBA(-16337750000000.000, 0.000, -10749100000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames
+    parent: flame
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.625, 0.625, 0.625, 1.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-16335870000000.000, 0.000, -10747080000000.000, 0.000)
+      colorMin: RGBA(-16336480000000.000, 0.000, -16336440000000.000, 0.000)
+      colorMax: RGBA(-16335870000000.000, 0.000, -10747080000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2441138
+        - alpha: 1
+          time: 0.5147021
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.935, 0.662, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.865, 0.110, 1.000)
+          time: 0.1353018
+        - color: RGBA(1.000, 0.207, 0.000, 1.000)
+          time: 0.3235371
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2441138
+        - alpha: 1
+          time: 0.5147021
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.935, 0.662, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.865, 0.110, 1.000)
+          time: 0.1353018
+        - color: RGBA(1.000, 0.207, 0.000, 1.000)
+          time: 0.3235371
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: smoke (1)
+    parent: flame
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.353, 0.353, 0.353, 0.503)
+      colorMin: RGBA(0.647, 0.647, 0.647, 0.672)
+      colorMax: RGBA(0.353, 0.353, 0.353, 0.503)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-16496570000000.000, 0.000, -11179400000000.000, 0.000)
+      colorMin: RGBA(-16496630000000.000, 0.000, -16496600000000.000, 0.000)
+      colorMax: RGBA(-16496570000000.000, 0.000, -11179400000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4794079
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.848, 0.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0.4705882
+        - color: RGBA(0.515, 0.515, 0.515, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4794079
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.848, 0.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0.4705882
+        - color: RGBA(0.515, 0.515, 0.515, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_local
+    parent: flame
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.831, 0.831, 0.831, 1.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-16494890000000.000, 0.000, -11178060000000.000, 0.000)
+      colorMin: RGBA(-16494960000000.000, 0.000, -16494920000000.000, 0.000)
+      colorMax: RGBA(-16494890000000.000, 0.000, -11178060000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.946, 0.221, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.007, 0.007, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.946, 0.221, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.007, 0.007, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: embers
+    parent: flame
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-16493450000000.000, 0.000, -11177120000000.000, 0.000)
+      colorMin: RGBA(-16493510000000.000, 0.000, -16493480000000.000, 0.000)
+      colorMax: RGBA(-16493450000000.000, 0.000, -11177120000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.946, 0.221, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.513, 0.197, 1.000)
+          time: 0.1117723
+        - color: RGBA(1.000, 0.007, 0.007, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 0.946, 0.221, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.513, 0.197, 1.000)
+          time: 0.1117723
+        - color: RGBA(1.000, 0.007, 0.007, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

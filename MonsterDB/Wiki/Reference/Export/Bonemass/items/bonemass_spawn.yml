@@ -1,0 +1,49 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: SpawnAbility
+Prefab: bonemass_spawn
+SpawnAbility:
+  spawnPrefab:
+  - Skeleton
+  - Blob
+  maxSummonReached: $hud_maxsummonsreached
+  spawnOnAwake: false
+  alertSpawnedCreature: true
+  passiveAggressive: true
+  spawnAtTarget: true
+  minToSpawn: 4
+  maxToSpawn: 4
+  maxSpawned: 8
+  spawnRadius: 2
+  circleSpawn: false
+  snapToTerrain: true
+  # Used to give random Y rotations to things like AOEs that aren't circular
+  randomYRotation: false
+  spawnGroundOffset: 0.2
+  getSolidHeightMargin: 1000
+  initialSpawnDelay: 0
+  spawnDelay: 0
+  preSpawnDelay: 0
+  commandOnSpawn: false
+  wakeUpAnimation: false
+  copySkill: None
+  copySkillToRandomFactor: 0
+  setMaxInstancesFromWeaponLevel: false
+  targetType: Position
+  targetWhenPathfindingType: Humanoid
+  maxTargetRange: 40
+  spawnEffects:
+    effectPrefabs:
+    - prefab: sfx_DraugrSpawn
+      variant: -1
+    - prefab: vfx_DraugrSpawn
+      variant: -1
+  # Projectile
+  projectileVelocity: 10
+  projectileVelocityMax: 0
+  projectileAccuracy: 10
+  randomDirection: false
+  randomAngleMin: 0
+  randomAngleMax: 0
+Visuals:
+  scale: 1

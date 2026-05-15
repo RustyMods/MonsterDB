@@ -1,0 +1,48 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Dverger_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 4
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.2
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: dvergr
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: DvergerBody
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: DvergrBody_e
+      emissionColor: RGBA(0.000, 0.384, 2.620, 1.000)
+      mainTexture: DvergrBody
+      glossiness: 0.22
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: DvergrBody_n
+    - name: dvergermage_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dvergrmage_d
+      glossiness: 0.14
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: dvergerArbalest_n

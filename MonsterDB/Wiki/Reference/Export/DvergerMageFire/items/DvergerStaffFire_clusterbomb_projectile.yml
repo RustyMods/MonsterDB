@@ -1,0 +1,202 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: DvergerStaffFire_clusterbomb_projectile
+ProjectileData:
+  prefab: DvergerStaffFire_clusterbomb_projectile
+  type: Magic, Fire
+  damage: {}
+  aoe: 3
+  dodgeable: true
+  blockable: true
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_DvergerMage_Fire_hit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: DvergerStaffFire_clusterbomb_aoe
+  # 0.0 - 1.0
+  spawnOnHitChance: 1
+  spawnCount: 1
+  staticHitOnly: false
+  groundHitOnly: true
+  spawnRandomRotation: true
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Sphere
+    parent: DvergerStaffFire_clusterbomb_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: dverger_fireball
+      shader: Standard
+      color: RGBA(1.000, 0.897, 0.897, 1.000)
+      emissionTexture: flint
+      emissionColor: RGBA(3.690, 0.181, 0.000, 1.000)
+      mainTexture: iron
+      glossiness: 0.812
+      metallic: 1
+      bumpScale: 2.88
+      bumpTexture: iron_n
+  - prefab: flames
+    parent: DvergerStaffFire_clusterbomb_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook
+      shader: Particles/Standard Unlit2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: flameball_flipbook
+      bumpScale: 1
+  - prefab: flames_world
+    parent: DvergerStaffFire_clusterbomb_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flame_large
+      shader: Particles/Standard Unlit2
+      color: RGBA(1.059, 0.488, 0.216, 1.000)
+      emissionColor: RGBA(7.377, 0.000, 1.159, 1.000)
+      mainTexture: wildfire06
+      bumpScale: 1
+  lights:
+  - prefab: Point light
+    parent: DvergerStaffFire_clusterbomb_projectile
+    index: 3
+    active: true
+    color: RGBA(1.000, 0.437, 0.302, 1.000)
+    type: Point
+    intensity: 3
+    range: 4
+  particleSystems:
+  - prefab: flames
+    parent: DvergerStaffFire_clusterbomb_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 0.309, 0.063, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 0.309, 0.063, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, -161811100000000000000000000000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, -161811100000000000000000000000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_world
+    parent: DvergerStaffFire_clusterbomb_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 0.327, 0.008, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 0.327, 0.008, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, -161803700000000000000000000000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, -161803700000000000000000000000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

@@ -1,0 +1,68 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: loxcalf_ragdoll
+Ragdoll:
+  velMultiplier: 2
+  ttl: 3
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: 0.1
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Body
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: RGBA(1.015, 1.869, 0.000, 1.000)
+      mainTexture: Lox_calf_d
+      glossiness: 0.26
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Lox_calf_n
+    - name: lox_calf
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: RGBA(1.015, 1.869, 0.000, 1.000)
+      mainTexture: Lox_calf_d
+      glossiness: 0.26
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Lox_calf_n
+  - prefab: Furr1
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: lox_calf
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Halstein_e
+      emissionColor: RGBA(1.015, 1.869, 0.000, 1.000)
+      mainTexture: Lox_calf_d
+      glossiness: 0.26
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Lox_calf_n

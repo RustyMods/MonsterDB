@@ -1,0 +1,48 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Fenring_cultist_ragdoll_hildir
+Ragdoll:
+  velMultiplier: 2
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.1
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Fenring.001
+    parent: Fenring_cultist_ragdoll_hildir
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: fenring_Leader_Hildir
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0.218
+      emissionTexture: Fenring_e
+      emissionColor: RGBA(2.000, 0.372, 0.000, 1.000)
+      mainTexture: Fenring_d
+      glossiness: 0.122
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Fenring_n
+    - name: fenringcape_Hildir
+      shader: Custom/Creature
+      color: RGBA(0.670, 0.670, 0.670, 1.000)
+      hue: 0.004
+      saturation: -0.075
+      value: -0.065
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: WolfLeaderCloth_d
+      glossiness: 0.09
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: WolfLeaderCloth_n

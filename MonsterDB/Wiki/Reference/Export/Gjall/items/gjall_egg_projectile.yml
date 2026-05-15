@@ -1,0 +1,129 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: gjall_egg_projectile
+ProjectileData:
+  prefab: gjall_egg_projectile
+  type: Physical
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_gjall_egg_splat
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: gjall_egg_spawn
+  # 0.0 - 1.0
+  spawnOnHitChance: 1
+  spawnCount: 1
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: default
+    parent: gjall_egg_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: gjall_egg
+      shader: Standard
+      color: RGBA(1.000, 0.406, 0.000, 1.000)
+      emissionColor: RGBA(0.631, 0.369, 0.204, 1.000)
+      glossiness: 0.764
+      metallic: 0
+      bumpScale: 0.49
+      bumpTexture: amber_n
+  - prefab: wetsplsh
+    parent: gjall_egg_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: slime_green
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.557, 0.702, 0.384, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  particleSystems:
+  - prefab: wetsplsh
+    parent: gjall_egg_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.434, 0.373, 0.121, 1.000)
+      colorMin: RGBA(0.340, 0.426, 0.141, 1.000)
+      colorMax: RGBA(0.434, 0.373, 0.121, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, -4093305000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, -4093305000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

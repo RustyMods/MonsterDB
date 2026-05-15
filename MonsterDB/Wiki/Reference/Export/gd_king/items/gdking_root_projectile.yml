@@ -1,0 +1,95 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: gdking_root_projectile
+ProjectileData:
+  prefab: gdking_root_projectile
+  type: Magic, Nature
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 6
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_gdking_projectile_hit
+      variant: -1
+    - prefab: sfx_gdking_projectile_hit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Particle System
+    parent: gdking_root_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: root_trail
+      shader: Custom/AlphaParticle
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      mainTexture: root_particle
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: root_particle_n
+    - name: root_trail
+      shader: Custom/AlphaParticle
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      mainTexture: root_particle
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: root_particle_n
+  - prefab: spores
+    parent: Particle System
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_lit
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+  particleSystems:
+  - prefab: Particle System
+    parent: gdking_root_projectile
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.581, 0.581, 0.581, 1.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: spores
+    parent: Particle System
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.347, 0.787, 0.174, 1.000)
+      colorMin: RGBA(0.466, 0.669, 0.000, 1.000)
+      colorMax: RGBA(0.347, 0.787, 0.174, 1.000)

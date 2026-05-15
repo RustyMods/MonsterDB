@@ -1,0 +1,418 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: Morgen
+Character:
+  name: $enemy_morgen
+  faction: Demon
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 3
+  speed: 3
+  turnSpeed: 80
+  runSpeed: 8.6
+  runTurnSpeed: 150
+  acceleration: 1
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 12
+  flyFastSpeed: 12
+  flyTurnSpeed: 250
+  canSwim: false
+  swimDepth: 1.57
+  swimSpeed: 4
+  swimTurnSpeed: 60
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 100
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: true
+  tolerateSmoke: false
+  tolerateTar: false
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_morgen_death
+    - prefab: sfx_morgen_death
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  jumpEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_rock_destroyed
+      variant: -1
+    - prefab: vfx_troll_rock_destroyed
+      variant: -1
+  # Base Health
+  health: 1600
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Resistant
+    slash: Resistant
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Resistant
+    lightning: Weak
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Morgen_bite
+  - Morgen_roll_right
+  - Morgen_roll_left
+  - Morgen_swipe_1
+  - Morgen_swipe_2
+  - Morgen_swipe_3
+  - Morgen_swipe_4
+  - Morgen_bodyslam
+AI:
+  alertRange: 30
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 6
+  sleeping: true
+  wakeupRange: 20
+  noiseWakeup: true
+  maxNoiseWakeupRange: 50
+  wakeupEffects:
+    effectPrefabs:
+    - prefab: fx_Abomination_arise_end
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 1
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_morgen_alert
+      variant: -1
+      follow: true
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_morgen_idle
+      variant: -1
+      follow: true
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidBigNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 5
+  randomMoveInterval: 10
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 4
+  takeoffTime: 1
+  flyAltitudeMin: 3
+  flyAltitudeMax: 6
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: fx_morgen_drool
+    parent: Chest
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: blood_splat
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: leaf_low
+      glossiness: 0.23
+      metallic: 0
+      bumpScale: 1
+    - name: water_drop_noemissive
+      shader: Custom/LitParticles
+      color: RGBA(0.745, 0.745, 0.745, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: drop_pixel
+      bumpScale: 1
+  - prefab: Splat
+    parent: fx_morgen_drool
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: BloodDripSplash
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: brains
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Morgen
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Morgen_Mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Morgen_d
+      glossiness: 0.661
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Morgen_n
+  - prefab: Skeleton.009
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Morgen_Mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Morgen_d
+      glossiness: 0.661
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Morgen_n
+  - prefab: skull
+    parent: Visual
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: Morgen_Mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Morgen_d
+      glossiness: 0.661
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Morgen_n
+  particleSystems:
+  - prefab: fx_morgen_drool
+    parent: Chest
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.670, 0.123, 0.123, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.670, 0.123, 0.123, 1.000)
+  - prefab: Splat
+    parent: fx_morgen_drool
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 0.325)
+      colorMin: RGBA(1.000, 1.000, 1.000, 0.569)
+      colorMax: RGBA(1.000, 1.000, 1.000, 0.325)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0.3088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: MorgenSinew
+    amountMin: 1
+    amountMax: 2
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: MorgenHeart
+    amountMin: 1
+    amountMax: 1
+    chance: 0.8
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: TrophyMorgen
+    amountMin: 1
+    amountMax: 1
+    chance: 0.05
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 50
+  effects:
+  - name: walk
+    motionType: Jog, Sneak, Walk
+    material: Default
+    effectPrefabs:
+    - fx_morgen_footstep_default
+  - name: run
+    motionType: Run, Climbing
+    material: Default
+    effectPrefabs:
+    - fx_morgen_footstep_run
+  - name: water
+    motionType: Jog, Run, Sneak, Climbing
+    material: Water
+    effectPrefabs:
+    - sfx_troll_footstep_water
+    - vfx_troll_footstep_water
+    - fx_morgen_footstep_default
+  - name: lava
+    motionType: Jog, Run, Sneak, Climbing
+    material: Lava
+    effectPrefabs:
+    - fx_lavasplash_medium
+    - fx_morgen_footstep_default
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- wakeup
+- stagger
+- footstep
+- random
+- attack_bite
+- attack_slam
+- attack_swipe_1
+- attack_swipe_2
+- attack_swipe_3
+- attack_swipe_4
+- attack_swipe_5
+- attack_swipe_6
+- attack_taunt
+- sleeping
+- alerted
+- idle
+- roll_left
+- roll_right

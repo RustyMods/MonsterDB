@@ -1,0 +1,131 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Bjorn_ragdoll
+Ragdoll:
+  velMultiplier: 1
+  ttl: 4
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+      variant: -1
+  float: true
+  floatOffset: 0.2
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: arrow
+    parent: Bjorn_ragdoll
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: RGBA(0.252, 0.252, 0.252, 1.000)
+      mainTexture: Bjorn_d
+      glossiness: 0.186
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Bjorn_n
+  - prefab: Asora
+    parent: Bjorn_ragdoll
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: RGBA(0.252, 0.252, 0.252, 1.000)
+      mainTexture: Bjorn_d
+      glossiness: 0.186
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Bjorn_n
+  - prefab: Cube.001
+    parent: Bjorn_ragdoll
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: RGBA(0.252, 0.252, 0.252, 1.000)
+      mainTexture: Bjorn_d
+      glossiness: 0.186
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Bjorn_n
+  - prefab: Cube.002
+    parent: Bjorn_ragdoll
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: RGBA(0.252, 0.252, 0.252, 1.000)
+      mainTexture: Bjorn_d
+      glossiness: 0.186
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Bjorn_n
+  - prefab: Plane
+    parent: Bjorn_ragdoll
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: RGBA(0.252, 0.252, 0.252, 1.000)
+      mainTexture: Bjorn_d
+      glossiness: 0.186
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Bjorn_n
+  - prefab: Sphere
+    parent: Bjorn_ragdoll
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: Bjorn_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Bjorn_e
+      emissionColor: RGBA(0.252, 0.252, 0.252, 1.000)
+      mainTexture: Bjorn_d
+      glossiness: 0.186
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: Bjorn_n

@@ -1,0 +1,460 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: GoblinKing
+Character:
+  name: $enemy_goblinking
+  faction: Boss
+  boss: true
+  dontHideBossHud: false
+  bossEvent: boss_goblinking
+  defeatSetGlobalKey: defeated_goblinking
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 2
+  turnSpeed: 50
+  runSpeed: 4
+  runTurnSpeed: 50
+  acceleration: 0.2
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 7.79
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_goblinking_hit
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: fx_goblinking_death
+      variant: -1
+    - prefab: GoblinKing_ragdoll
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  # Base Health
+  health: 10000
+  regenAllHPTime: 3600
+  damageModifiers:
+    pierce: VeryResistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Resistant
+    poison: Immune
+  staggerWhenBlocked: false
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - GoblinKing_Beam
+  - GoblinKing_Meteors
+  - GoblinKing_Nova
+  - GoblinKing_Taunt
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: true
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 10
+  circleTargetDistance: 10
+  sleeping: true
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  idleSoundInterval: 5
+  idleSoundChance: 0.25
+  pathAgentType: HugeSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 15
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  spawnMessage: $enemy_boss_goblinking_spawnmessage
+  deathMessage: $enemy_boss_goblinking_deathmessage
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Particle System
+    parent: Bone.007
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Default-Particle
+      shader: Legacy Shaders/Particles/Alpha Blended Premultiply
+      mainTexture: Default-Particle
+  - prefab: Particle System (1)
+    parent: Bone.007
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Default-Particle
+      shader: Legacy Shaders/Particles/Alpha Blended Premultiply
+      mainTexture: Default-Particle
+  - prefab: Particle System (2)
+    parent: Spine3
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: Default-Particle
+      shader: Legacy Shaders/Particles/Alpha Blended Premultiply
+      mainTexture: Default-Particle
+  - prefab: smoke
+    parent: Spine3
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dust01_bw
+  - prefab: Yagluth
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: GoblinKing_d
+      glossiness: 0.07
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: GoblinKing_n
+    - name: GoblinKing_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: GoblinKing_d
+      glossiness: 0.07
+      metallic: 1
+      bumpScale: 1
+      bumpTexture: GoblinKing_n
+  - prefab: Yagluth_Hair
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinKingHair_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: GoblinKing_d
+      glossiness: 0.224
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: GoblinKing_n
+  lights:
+  - prefab: Point light (2)
+    parent: Bone.007
+    index: 6
+    active: true
+    color: RGBA(1.000, 0.066, 0.433, 1.000)
+    type: Point
+    intensity: 7
+    range: 2.5
+  - prefab: Point light
+    parent: Spine3
+    index: 3
+    active: true
+    color: RGBA(1.000, 0.066, 0.433, 1.000)
+    type: Point
+    intensity: 6.54
+    range: 10.42
+  particleSystems:
+  - prefab: Particle System
+    parent: Bone.007
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 0.184, 0.471, 0.528)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 0.184, 0.471, 0.528)
+  - prefab: Particle System (1)
+    parent: Bone.007
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 0.184, 0.471, 0.528)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 0.184, 0.471, 0.528)
+  - prefab: Particle System (2)
+    parent: Spine3
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 0.184, 0.471, 0.297)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 0.184, 0.471, 0.297)
+  - prefab: smoke
+    parent: Spine3
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.074, 0.074, 0.074, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.074, 0.074, 0.074, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-19992070000000.000, 0.000, -20022870000000.000, 0.000)
+      colorMin: RGBA(-19992200000000.000, 0.000, -19992130000000.000, 0.000)
+      colorMax: RGBA(-19992070000000.000, 0.000, -20022870000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0.005889982
+        - alpha: 0.95267
+          time: 0.2470588
+        - alpha: 0.9154564
+          time: 0.6764782
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0.005889982
+        - alpha: 0.95267
+          time: 0.2470588
+        - alpha: 0.9154564
+          time: 0.6764782
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyGoblinKing
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  - prefab: YagluthDrop
+    amountMin: 3
+    amountMax: 3
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 20
+  effects:
+  - name: walk
+    motionType: Jog
+    material: Default
+    effectPrefabs:
+    - fx_footstep_jog
+  - name: run
+    motionType: Run
+    material: Default
+    effectPrefabs:
+    - fx_footstep_run
+  - name: shallow water
+    motionType: Jog, Run, Sneak
+    material: Water
+    effectPrefabs:
+    - fx_footstep_water
+  - name: mud walk
+    motionType: Jog, Sneak
+    material: Mud
+    effectPrefabs:
+    - fx_footstep_mud_jog
+  - name: mud run
+    motionType: Run
+    material: Mud
+    effectPrefabs:
+    - fx_footstep_mud_run
+  - name: swim
+    motionType: Swimming
+    material: Water
+    effectPrefabs:
+    - sfx_footstep_swim
+  - name: sneak
+    motionType: Sneak
+    material: Default
+    effectPrefabs:
+    - sfx_footstep_sneak
+  - name: climb
+    motionType: Climbing
+    material: Default
+    effectPrefabs:
+    - fx_footstep_climb
+  - name: snow walk
+    motionType: Jog, Sneak
+    material: Snow
+    effectPrefabs:
+    - fx_footstep_snow_jog
+  - name: snow run
+    motionType: Run
+    material: Snow
+    effectPrefabs:
+    - fx_footstep_snow_run
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- idle
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- punch
+- throw
+- swing_logv
+- swing_logh
+- stagger
+- taunt
+- cast1
+- nova
+- beam
+- sleeping

@@ -1,0 +1,202 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: dragon_ice_projectile
+ProjectileData:
+  prefab: dragon_ice_projectile
+  type: Magic, Frost
+  damage: {}
+  aoe: 0
+  dodgeable: true
+  blockable: true
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_dragon_ice_hit
+      variant: -1
+    - prefab: sfx_dragon_coldball_explode
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: IceBlocker
+  # 0.0 - 1.0
+  spawnOnHitChance: 1
+  spawnCount: 1
+  staticHitOnly: true
+  groundHitOnly: false
+  spawnRandomRotation: true
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: default
+    parent: dragon_ice_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: coldball
+      shader: Standard
+      color: RGBA(0.897, 0.949, 1.000, 1.000)
+      emissionTexture: flint
+      emissionColor: RGBA(0.000, 1.777, 2.832, 1.000)
+      mainTexture: iron
+      glossiness: 0.812
+      metallic: 1
+      bumpScale: 2.88
+      bumpTexture: iron_n
+  - prefab: flames
+    parent: dragon_ice_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.961, 1.877, 2.420, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      bumpScale: 1
+  - prefab: sparcs_world
+    parent: dragon_ice_projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: cold_sparcs
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.961, 1.877, 2.420, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      bumpScale: 1
+  lights:
+  - prefab: Point light
+    parent: dragon_ice_projectile
+    index: 3
+    active: true
+    color: RGBA(0.455, 0.842, 1.000, 1.000)
+    type: Point
+    intensity: 2
+    range: 3
+  particleSystems:
+  - prefab: flames
+    parent: dragon_ice_projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-13194480000000.000, 0.000, -20021800000000.000, 0.000)
+      colorMin: RGBA(-13194740000000.000, 0.000, -13194710000000.000, 0.000)
+      colorMax: RGBA(-13194480000000.000, 0.000, -20021800000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: sparcs_world
+    parent: dragon_ice_projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-13403320000000.000, 0.000, -20018840000000.000, 0.000)
+      colorMin: RGBA(-13403380000000.000, 0.000, -13403350000000.000, 0.000)
+      colorMax: RGBA(-13403320000000.000, 0.000, -20018840000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

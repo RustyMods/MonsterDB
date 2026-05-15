@@ -1,0 +1,42 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: SpawnAbility
+Prefab: SeekerQueen_SpitSpawnAbility
+SpawnAbility:
+  spawnPrefab:
+  - SeekerBrood
+  maxSummonReached: $hud_maxsummonsreached
+  spawnOnAwake: false
+  alertSpawnedCreature: false
+  passiveAggressive: true
+  spawnAtTarget: false
+  minToSpawn: 1
+  maxToSpawn: 1
+  maxSpawned: 30
+  spawnRadius: 1
+  circleSpawn: false
+  snapToTerrain: false
+  # Used to give random Y rotations to things like AOEs that aren't circular
+  randomYRotation: false
+  spawnGroundOffset: 0.2
+  getSolidHeightMargin: 1000
+  initialSpawnDelay: 0
+  spawnDelay: 0
+  preSpawnDelay: 0
+  commandOnSpawn: false
+  wakeUpAnimation: false
+  copySkill: None
+  copySkillToRandomFactor: 0
+  setMaxInstancesFromWeaponLevel: false
+  targetType: Position
+  targetWhenPathfindingType: Humanoid
+  maxTargetRange: 40
+  # Projectile
+  projectileVelocity: 10
+  projectileVelocityMax: 0
+  projectileAccuracy: 10
+  randomDirection: false
+  randomAngleMin: 0
+  randomAngleMax: 0
+Visuals:
+  scale: 1

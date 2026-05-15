@@ -1,0 +1,43 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Ragdoll_Asksvin
+Ragdoll:
+  velMultiplier: 1
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.1
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: LavaNeck.001
+    parent: Ragdoll_Asksvin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: asksvin_Mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: asksvin_d
+      glossiness: 0.452
+      metallic: 0.281
+      bumpScale: 1
+      bumpTexture: asksvin_n
+    - name: Material.003
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: asksvin_d
+      glossiness: 0.09545457
+      metallic: 0
+      bumpScale: 1

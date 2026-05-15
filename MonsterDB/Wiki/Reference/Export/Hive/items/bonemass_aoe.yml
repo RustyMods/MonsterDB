@@ -1,0 +1,227 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: bonemass_aoe
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: splash spawner
+    parent: particles
+    index: 0
+    active: true
+    enabled: false
+  - prefab: splash_overtime
+    parent: splash spawner
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: slime_green
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.557, 0.702, 0.384, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  - prefab: ooz (1)
+    parent: splash spawner
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: aoe_smoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.779, 0.779, 0.779, 0.703)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dirt
+  - prefab: wetsplsh
+    parent: splash spawner
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: slime_green
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.557, 0.702, 0.384, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  lights:
+  - prefab: Point light
+    parent: bonemass_aoe
+    index: 1
+    active: true
+    color: RGBA(0.797, 1.000, 0.632, 1.000)
+    type: Point
+    intensity: 1.5
+    range: 15
+  particleSystems:
+  - prefab: splash spawner
+    parent: particles
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.277, 0.522, 0.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.277, 0.522, 0.000, 1.000)
+  - prefab: splash_overtime
+    parent: splash spawner
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.176, 0.147, 0.095, 1.000)
+      colorMin: RGBA(0.206, 0.159, 0.074, 1.000)
+      colorMax: RGBA(0.176, 0.147, 0.095, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-26332310000000.000, 0.000, -29309260000000.000, 0.000)
+      colorMin: RGBA(-26332440000000.000, 0.000, -26332380000000.000, 0.000)
+      colorMax: RGBA(-26332310000000.000, 0.000, -29309260000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: ooz (1)
+    parent: splash spawner
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.611, 0.926, 0.354, 0.703)
+      colorMin: RGBA(0.816, 0.882, 0.195, 0.759)
+      colorMax: RGBA(0.611, 0.926, 0.354, 0.703)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-13198230000000.000, 0.000, -20021530000000.000, 0.000)
+      colorMin: RGBA(-13198300000000.000, 0.000, -13198270000000.000, 0.000)
+      colorMax: RGBA(-13198230000000.000, 0.000, -20021530000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh
+    parent: splash spawner
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.434, 0.373, 0.121, 1.000)
+      colorMin: RGBA(0.340, 0.426, 0.141, 1.000)
+      colorMax: RGBA(0.434, 0.373, 0.121, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-13196590000000.000, 0.000, -20018980000000.000, 0.000)
+      colorMin: RGBA(-13196690000000.000, 0.000, -13196660000000.000, 0.000)
+      colorMax: RGBA(-13196590000000.000, 0.000, -20018980000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1353018
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

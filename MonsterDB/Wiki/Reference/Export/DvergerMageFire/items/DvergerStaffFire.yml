@@ -1,0 +1,320 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: DvergerStaffFire
+ItemData:
+  # Weapon
+  animationState: OneHanded
+  toolTier: 0
+  damages:
+    fire: 120
+  attackForce: 50
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  attack:
+    attackType: None
+    attackAnimation: attack_cast
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    isHomeItem: false
+    attackStamina: 15
+    attackAdrenaline: 1
+    attackUseAdrenaline: 0
+    attackEitr: 0
+    attackHealth: 0
+    attackHealthPercentage: 0
+    attackHealthLowBlockUse: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0.2
+    speedFactorRotation: 0.2
+    attackStartNoise: 10
+    attackHitNoise: 40
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 2.4
+    attackHeight: 0.8
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 90
+    attackRayWidth: 0.3
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: true
+    hitPointType: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    raiseSkillAmount: 1
+    skillHitType: Character
+    specialHitSkill: None
+    # Projectile
+    attackProjectile: DvergerStaffFire_fireball_projectile
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 10
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    skillAccuracy: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+    harvest: false
+    harvestRadius: 0
+    harvestRadiusMaxLevel: 0
+  # AI behaviour
+  aiAttackRange: 15
+  aiAttackRangeMin: 1
+  aiAttackInterval: 6
+  aiAttackMaxAngle: 15
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  # Item Effects
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_clubhit
+      variant: -1
+    - prefab: sfx_club_hit
+      variant: -1
+    - prefab: fx_hit_camshake
+      variant: -1
+  blockEffect:
+    effectPrefabs:
+    - prefab: sfx_wood_blocked
+      variant: -1
+    - prefab: vfx_blocked
+      variant: -1
+    - prefab: fx_block_camshake
+      variant: -1
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_club_swing
+      variant: -1
+  triggerEffect:
+    effectPrefabs:
+    - prefab: fx_swing_camshake
+      variant: -1
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: DvergerStaffFire
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: flare
+    parent: attach_r.hand
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: light_glow
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: point
+      tintColor: RGBA(1.000, 1.000, 1.000, 0.500)
+  - prefab: sparcs (1)
+    parent: attach_r.hand
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: ashrain_cinder
+      shader: Custom/Particle (Unlit)
+      mainTexture: spark 1
+  - prefab: default
+    parent: attach_r.hand
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: Dvergr_FireStaff_Mat
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionTexture: DvergrStaffs_e
+      emissionColor: RGBA(2.000, 2.000, 2.000, 1.000)
+      mainTexture: DvergrStaffs_d
+      glossiness: 0.5
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: DvergrStaffs_n
+  lights:
+  - prefab: Point light
+    parent: attach_r.hand
+    index: 2
+    active: true
+    color: RGBA(0.972, 0.314, 0.280, 1.000)
+    type: Point
+    intensity: 3
+    range: 5
+  particleSystems:
+  - prefab: DvergerStaffFire
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 0.397, 0.397, 1.000)
+      colorMin: RGBA(1.000, 0.886, 0.250, 1.000)
+      colorMax: RGBA(1.000, 0.397, 0.397, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, -7834423000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, -7834423000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flare
+    parent: attach_r.hand
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 0.315, 0.212, 0.118)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 0.315, 0.212, 0.118)
+  - prefab: sparcs (1)
+    parent: attach_r.hand
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(1.000, 0.287, 0.000, 1.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(0.000, 0.000, -6250721000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, -6250721000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03234913
+        - alpha: 0.9735294
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.803, 0.000, 1.000)
+          time: 0.5000076
+        - color: RGBA(1.000, 0.186, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03234913
+        - alpha: 0.9735294
+          time: 0.4705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 0.803, 0.000, 1.000)
+          time: 0.5000076
+        - color: RGBA(1.000, 0.186, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

@@ -1,0 +1,501 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: Skeleton_NoArcher
+Character:
+  name: $enemy_skeleton
+  faction: Undead
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 0.5
+  speed: 1
+  turnSpeed: 300
+  runSpeed: 4
+  runTurnSpeed: 300
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: false
+  swimDepth: 1.3
+  swimSpeed: 1
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_skeleton_hit
+      variant: -1
+    - prefab: sfx_skeleton_hit
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: vfx_skeleton_death
+      variant: -1
+    - prefab: sfx_skeleton_death
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  # Base Health
+  health: 40
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Weak
+    pierce: Resistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Resistant
+    poison: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.5
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  randomWeapon:
+  - skeleton_sword
+  randomShield:
+  - ShieldWood
+  - ShieldBronzeBuckler
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 2
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 2
+  circleTargetDistance: 4
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_skeleton_alerted
+      variant: -1
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_skeleton_idle
+      variant: -1
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: HumanoidNoSwim
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+VisEquipment:
+  leftHand:
+    name: LeftHand_Attach
+    parent: LeftHand
+    index: 5
+    position:
+      x: 0
+      y: 0.00063
+      z: 0
+    rotation:
+      x: 0
+      y: 90
+      z: 90.00001
+    scale: 1
+  rightHand:
+    name: RightHand_Attach
+    parent: RightHand
+    index: 5
+    position:
+      x: 0
+      y: 0.000669
+      z: 0
+    rotation:
+      x: 1.024528E-05
+      y: 269.9999
+      z: 89.99997
+    scale: 1
+  helmet:
+    name: Helmet_attach
+    parent: Head
+    index: 1
+    position:
+      x: 0.00072
+      y: 0.00178
+      z: 0
+    rotation: 0
+    scale: 1
+Visuals:
+  scale: 1
+  levelSetups:
+  - scale: 1.1
+    hue: -0.03
+    saturation: 0.3
+    emissiveColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - scale: 1.2
+    hue: -0.1
+    saturation: 0.3
+    value: -0.1
+    emissiveColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  renderers:
+  - prefab: Skeleton
+    parent: _skeleton_base
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Skeleton
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 0.000)
+      mainTexture: Skeleton_d
+      glossiness: 0.24
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Skeleton_n
+  - prefab: evil_smoke
+    parent: eye_l
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: green_smoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dirt
+  - prefab: evil_smoke
+    parent: eye_r
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: green_smoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dirt
+  - prefab: eye_l
+    parent: Head
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: skeleton_eye
+      shader: Standard
+      color: RGBA(0.765, 0.116, 0.006, 1.000)
+      emissionColor: RGBA(1.535, 0.782, 0.293, 1.000)
+      glossiness: 1
+      metallic: 0
+      bumpScale: 1
+  - prefab: eye_r
+    parent: Head
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: skeleton_eye
+      shader: Standard
+      color: RGBA(0.765, 0.116, 0.006, 1.000)
+      emissionColor: RGBA(1.535, 0.782, 0.293, 1.000)
+      glossiness: 1
+      metallic: 0
+      bumpScale: 1
+  particleSystems:
+  - prefab: evil_smoke
+    parent: eye_l
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.846, 0.629, 0.062, 0.522)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.846, 0.629, 0.062, 0.522)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-6325849000000.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(-6325883000000.000, 0.000, -6325866000000.000, 0.000)
+      colorMax: RGBA(-6325849000000.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2117647
+        - alpha: 1
+          time: 0.6529488
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2117647
+        - alpha: 1
+          time: 0.6529488
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke
+    parent: eye_r
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.846, 0.629, 0.062, 0.522)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.846, 0.629, 0.062, 0.522)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-6324826000000.000, 0.000, -11166240000000.000, 0.000)
+      colorMin: RGBA(-6324859000000.000, 0.000, -6324843000000.000, 0.000)
+      colorMax: RGBA(-6324826000000.000, 0.000, -11166240000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2117647
+        - alpha: 1
+          time: 0.6529488
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2117647
+        - alpha: 1
+          time: 0.6529488
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophySkeleton
+    amountMin: 1
+    amountMax: 1
+    chance: 0.1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: BoneFragments
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 15
+  effects:
+  - name: walk
+    motionType: Jog
+    material: Default
+    effectPrefabs:
+    - fx_footstep_jog
+  - name: run
+    motionType: Run
+    material: Default
+    effectPrefabs:
+    - fx_footstep_run
+  - name: shallow water
+    motionType: Jog, Run, Sneak
+    material: Water
+    effectPrefabs:
+    - fx_footstep_water
+  - name: mud walk
+    motionType: Jog, Sneak
+    material: Mud
+    effectPrefabs:
+    - fx_footstep_mud_jog
+  - name: mud run
+    motionType: Run
+    material: Mud
+    effectPrefabs:
+    - fx_footstep_mud_run
+  - name: swim
+    motionType: Swimming
+    material: Water
+    effectPrefabs:
+    - sfx_footstep_swim
+  - name: sneak
+    motionType: Sneak
+    material: Default
+    effectPrefabs:
+    - sfx_footstep_sneak
+  - name: climb
+    motionType: Climbing
+    material: Default
+    effectPrefabs:
+    - fx_footstep_climb
+  - name: snow walk
+    motionType: Jog, Sneak
+    material: Snow
+    effectPrefabs:
+    - fx_footstep_snow_jog
+  - name: snow run
+    motionType: Run
+    material: Snow
+    effectPrefabs:
+    - fx_footstep_snow_run
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- footstep
+- inWater
+- dead
+- wakeup
+- jump
+- attack
+- attack_bow
+- stagger
+- attack_mace
+- attack_fire

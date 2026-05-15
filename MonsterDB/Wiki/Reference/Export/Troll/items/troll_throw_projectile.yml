@@ -1,0 +1,61 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: troll_throw_projectile
+ProjectileData:
+  prefab: troll_throw_projectile
+  type: Physical
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_troll_rock_destroyed
+      variant: -1
+    - prefab: vfx_troll_rock_destroyed
+      variant: -1
+    - prefab: sfx_troll_attack_hit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: default
+    parent: troll_throw_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: stone
+      shader: Custom/StaticRock
+      color: RGBA(0.779, 0.779, 0.779, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: rock_low
+      glossiness: 0.23
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: rock_normal_low

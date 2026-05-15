@@ -1,0 +1,504 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: Fader_Roar_Projectile
+ProjectileData:
+  prefab: Fader_Roar_Projectile
+  type: Magic
+  damage: {}
+  aoe: 3
+  dodgeable: true
+  blockable: true
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 20
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: fx_Fader_Roar_Projectile_Hit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: Fader_Roar_Spawn
+  # 0.0 - 1.0
+  spawnOnHitChance: 1
+  spawnCount: 1
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Sphere
+    parent: Fader_Roar_Projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: slime_green
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.557, 0.702, 0.384, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  - prefab: flames
+    parent: Fader_Roar_Projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+  - prefab: flames_world
+    parent: Fader_Roar_Projectile
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: flameball_flipbook_gradient
+      shader: Custom/Gradient Mapped Particle (Unlit)
+      mainTexture: flameball_flipbook
+    - name: fireworks_trail_strong
+      shader: Particles/Standard Unlit2
+      color: RGBA(3.563, 3.563, 3.563, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Firework_Trail
+      bumpScale: 1
+  - prefab: Spores_World
+    parent: Fader_Roar_Projectile
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_additive
+      shader: Particles/Standard Unlit2
+      color: RGBA(2.000, 2.000, 2.000, 1.000)
+      emissionColor: RGBA(3.831, 3.831, 3.831, 1.000)
+      bumpScale: 1
+  lights:
+  - prefab: Point light
+    parent: Fader_Roar_Projectile
+    index: 3
+    active: true
+    color: RGBA(0.491, 1.000, 0.302, 1.000)
+    type: Point
+    intensity: 3
+    range: 4
+  particleSystems:
+  - prefab: flames
+    parent: Fader_Roar_Projectile
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        color: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.333, 2.000, 0.000, 1.000)
+            time: 0
+          - color: RGBA(0.250, 0.164, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.333, 2.000, 0.000, 1.000)
+            time: 0
+          - color: RGBA(0.250, 0.164, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        color: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMin: RGBA(0.000, 1.000, 1.000, 0.000)
+        colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.027, 0.504, 0.000, 1.000)
+            time: 0
+          - color: RGBA(0.491, 0.073, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.027, 0.504, 0.000, 1.000)
+            time: 0
+          - color: RGBA(0.491, 0.073, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7702588000000.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(51597550000.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(-7702588000000.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_world
+    parent: Fader_Roar_Projectile
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.000, 1.000, 0.098, 0.184)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 1.000, 0.098, 0.184)
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        color: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.338, 2.000, 0.000, 1.000)
+            time: 0
+          - color: RGBA(0.250, 0.164, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.338, 2.000, 0.000, 1.000)
+            time: 0
+          - color: RGBA(0.250, 0.164, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        color: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMin: RGBA(0.000, 1.000, 1.000, 0.000)
+        colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.445, 1.184, 0.363, 1.000)
+            time: 0
+          - color: RGBA(0.000, 0.000, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.445, 1.184, 0.363, 1.000)
+            time: 0
+          - color: RGBA(0.000, 0.000, 0.000, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7835463000000.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(51597550000.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(-7835463000000.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: Spores_World
+    parent: Fader_Roar_Projectile
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.071, 1.000, 0.098, 0.569)
+      colorMin: RGBA(0.000, 1.000, 0.356, 1.000)
+      colorMax: RGBA(0.071, 1.000, 0.098, 0.569)
+    customData:
+      custom1:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        color: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.000, 8.574, 1.501, 1.000)
+            time: 0
+          - color: RGBA(0.000, 1.398, 1.668, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.000, 8.574, 1.501, 1.000)
+            time: 0
+          - color: RGBA(0.000, 1.398, 1.668, 1.000)
+            time: 1
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+      custom2:
+        # Color, Gradient, TwoColors, TwoGradients, RandomColor
+        mode: Gradient
+        color: RGBA(0.000, 0.000, 0.000, 0.000)
+        colorMin: RGBA(1.668, 1.000, 1.000, 0.000)
+        colorMax: RGBA(0.000, 0.000, 0.000, 0.000)
+        gradient:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.000, 2.829, 4.000, 1.000)
+            time: 0
+          - color: RGBA(0.000, 0.000, 0.000, 1.000)
+            time: 0.602945
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+        gradientMax:
+          # Blend, Fixed, PerceptualBlend
+          mode: Blend
+          # Set opacity over time
+          alphaKeys:
+          - alpha: 1
+            time: 0
+          - alpha: 1
+            time: 1
+          # Set color over time
+          colorKeys:
+          - color: RGBA(0.000, 2.829, 4.000, 1.000)
+            time: 0
+          - color: RGBA(0.000, 0.000, 0.000, 1.000)
+            time: 0.602945
+          # Uninitialized, Gamma, Linear
+          colorSpace: Gamma
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-6250587000000.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(51597550000.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(-6250587000000.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.04705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.04705882
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Gamma

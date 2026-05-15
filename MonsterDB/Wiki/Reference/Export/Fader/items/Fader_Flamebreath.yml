@@ -1,0 +1,135 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: Fader_Flamebreath
+ItemData:
+  # Weapon
+  animationState: OneHanded
+  toolTier: 0
+  damages:
+    chop: 40
+    pickaxe: 40
+    fire: 60
+    spirit: 60
+  attackForce: 0
+  backstabBonus: 4
+  dodgeable: true
+  blockable: false
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  attack:
+    attackType: Projectile
+    attackAnimation: attack_flamebreath
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    isHomeItem: false
+    attackStamina: 20
+    attackAdrenaline: 1
+    attackUseAdrenaline: 0
+    attackEitr: 0
+    attackHealth: 0
+    attackHealthPercentage: 0
+    attackHealthLowBlockUse: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0
+    speedFactorRotation: 0.1
+    attackStartNoise: 10
+    attackHitNoise: 30
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 17
+    attackHeight: -1
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 35
+    attackRayWidth: 1
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: false
+    hitPointType: Closest
+    hitThroughWalls: true
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    raiseSkillAmount: 1
+    skillHitType: Character
+    specialHitSkill: None
+    # Projectile
+    attackProjectile: Fader_Flamebreath_AOE
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 10
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    skillAccuracy: false
+    useCharacterFacing: true
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+    harvest: false
+    harvestRadius: 0
+    harvestRadiusMaxLevel: 0
+  # AI behaviour
+  aiAttackRange: 20
+  aiAttackRangeMin: 2
+  aiAttackInterval: 25
+  aiAttackMaxAngle: 15
+  aiInvertAngleCheck: false
+  aiWhenFlying: false
+  aiWhenFlyingAltitudeMin: 0.5
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 0.85
+  aiMinHealthPercentage: 0.05
+  aiTargetType: Enemy
+  # Item Effects
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_HitSparks
+      variant: -1
+    - prefab: sfx_greydwarf_attack_hit
+      variant: -1
+  triggerEffect:
+    effectPrefabs:
+    - prefab: fx_fallenvalkyrie_poisonbreath
+Visuals:
+  scale: 1

@@ -1,0 +1,548 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: Eikthyr
+Character:
+  name: $enemy_eikthyr
+  faction: Boss
+  boss: true
+  dontHideBossHud: false
+  bossEvent: boss_eikthyr
+  defeatSetGlobalKey: defeated_eikthyr
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 2
+  turnSpeed: 100
+  runSpeed: 8
+  runTurnSpeed: 100
+  acceleration: 0.3
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 2.5
+  swimSpeed: 4
+  swimTurnSpeed: 50
+  swimAcceleration: 0.05
+  groundTilt: PitchRaycast
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_deer_hit
+      variant: -1
+    - prefab: sfx_eikthyr_hit
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: eikthyr_ragdoll
+      variant: -1
+    - prefab: vfx_eikthyr_death
+      variant: -1
+    - prefab: sfx_eikthyr_death
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  # Base Health
+  health: 500
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Eikthyr_antler
+  - Eikthyr_charge
+  - Eikthyr_stomp
+AI:
+  alertRange: 9999
+  fleeIfHurtWhenTargetCantBeReached: false
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: true
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 2
+  circleTargetInterval: 0
+  circleTargetDuration: 15
+  circleTargetDistance: 15
+  sleeping: true
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 40
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_eikthyr_alert
+      variant: -1
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_eikthyr_idle
+      variant: -1
+  idleSoundInterval: 10
+  idleSoundChance: 0.5
+  pathAgentType: TrollSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 4
+  randomMoveInterval: 10
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: BloodDrops
+    parent: Head
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: BloodDrops
+    parent: Head
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Sparcs
+    parent: Head
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: lightning_sparcs
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.000, 0.000, 0.000, 1.000)
+      emissionColor: RGBA(0.000, 4.865, 6.883, 1.000)
+      mainTexture: spark
+      bumpScale: 1
+  - prefab: BloodDrops (1)
+    parent: Head
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: Sparcs
+    parent: Head
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: lightning_sparcs
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.000, 0.000, 0.000, 1.000)
+      emissionColor: RGBA(0.000, 4.865, 6.883, 1.000)
+      mainTexture: spark
+      bumpScale: 1
+  - prefab: Sparcs (1)
+    parent: Head
+    index: 9
+    active: true
+    enabled: true
+    materials:
+    - name: lightning_sparcs
+      shader: Particles/Standard Unlit2
+      color: RGBA(0.000, 0.000, 0.000, 1.000)
+      emissionColor: RGBA(0.000, 4.865, 6.883, 1.000)
+      mainTexture: spark
+      bumpScale: 1
+  - prefab: Capsule
+    parent: Neck1
+    index: 1
+    active: true
+    enabled: false
+    materials:
+    - name: Default-Material
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0.5
+      metallic: 0
+      bumpScale: 1
+  - prefab: Capsule
+    parent: Neck1
+    index: 1
+    active: true
+    enabled: false
+    materials:
+    - name: Default-Material
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0.5
+      metallic: 0
+      bumpScale: 1
+  - prefab: Deer
+    parent: OLD
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: eikthyrnir_body
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: eikthyrnir_d
+      glossiness: 0.14
+      metallic: 0
+      bumpScale: 0.46
+      bumpTexture: eikthyrnir_n
+    - name: eikthyrnir_eye
+      shader: Standard
+      color: RGBA(1.000, 0.000, 0.000, 1.000)
+      emissionColor: RGBA(6.068, 0.000, 0.000, 1.000)
+      glossiness: 0.5
+      metallic: 0
+      bumpScale: 1
+  - prefab: Shedding
+    parent: OLD
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: eikthyrnir_shedding
+      shader: Custom/Vegetation
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: eikthyrnir_shedding_d
+      glossiness: 0.25
+      metallic: 0
+      bumpScale: 1.13
+      bumpTexture: eikthyrnir_shedding_n
+  - prefab: chains
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: Deer
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: extrafur
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: mane
+    parent: Visual
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: Shedding
+    parent: Visual
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_shedding
+      shader: Custom/Vegetation
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.25
+      metallic: 0
+      bumpScale: 1.13
+      bumpTexture: NewEikthyr_n
+  lights:
+  - prefab: Point light (1)
+    parent: Head
+    index: 7
+    active: true
+    color: RGBA(0.141, 0.810, 1.000, 1.000)
+    type: Point
+    intensity: 2
+    range: 8
+  - prefab: Point light
+    parent: Head
+    index: 7
+    active: false
+    color: RGBA(1.000, 0.140, 0.140, 1.000)
+    type: Point
+    intensity: 1
+    range: 4
+  - prefab: Point light (1)
+    parent: Head
+    index: 10
+    active: true
+    color: RGBA(0.141, 0.810, 1.000, 1.000)
+    type: Point
+    intensity: 2
+    range: 8
+  particleSystems:
+  - prefab: BloodDrops
+    parent: Head
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.816, 0.114, 0.114, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.816, 0.114, 0.114, 1.000)
+  - prefab: Sparcs
+    parent: Head
+    index: 6
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.382, 0.924, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.382, 0.924, 1.000, 1.000)
+  - prefab: BloodDrops
+    parent: Head
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.816, 0.114, 0.114, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.816, 0.114, 0.114, 1.000)
+  - prefab: BloodDrops (1)
+    parent: Head
+    index: 6
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.816, 0.114, 0.114, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.816, 0.114, 0.114, 1.000)
+  - prefab: Sparcs
+    parent: Head
+    index: 8
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.382, 0.924, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.382, 0.924, 1.000, 1.000)
+  - prefab: Sparcs (1)
+    parent: Head
+    index: 9
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.382, 0.924, 1.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.382, 0.924, 1.000, 1.000)
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyEikthyr
+    amountMin: 1
+    amountMax: 1
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  - prefab: HardAntler
+    amountMin: 3
+    amountMax: 3
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: true
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 40
+  effects:
+  - motionType: Jog, Run, Sneak, Climbing
+    material: Water
+    effectPrefabs:
+    - fx_footstep_water
+  - motionType: Swimming
+    material: Water
+    effectPrefabs:
+    - sfx_footstep_swim
+  - motionType: Run, Sneak, Climbing
+    material: Default
+    effectPrefabs:
+    - sfx_eikthyr_footstep
+    - vfx_eikthyr_footstep
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- forward_speed
+- sideway_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- sleeping
+- footstep
+- random
+- idle
+- attack1
+- attack2
+- attack_flegs
+- stagger
+- attack_stomp

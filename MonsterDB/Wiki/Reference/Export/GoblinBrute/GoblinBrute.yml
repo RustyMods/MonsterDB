@@ -1,0 +1,372 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: GoblinBrute
+Character:
+  name: $enemy_goblinbrute
+  faction: PlainsMonsters
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 5
+  speed: 2
+  turnSpeed: 150
+  runSpeed: 5
+  runTurnSpeed: 300
+  acceleration: 0.2
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 2.67
+  swimSpeed: 1.5
+  swimTurnSpeed: 100
+  swimAcceleration: 0.05
+  groundTilt: None
+  groundTiltSpeed: 50
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: false
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: vfx_goblinbrute_hit
+      variant: -1
+    - prefab: sfx_goblinbrute_hit
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_goblinbrute_death
+      variant: -1
+    - prefab: GoblinBrute_ragdoll
+      variant: -1
+    - prefab: vfx_goblinbrute_death
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  # Base Health
+  health: 800
+  regenAllHPTime: 3600
+  damageModifiers:
+    chop: Ignore
+    pickaxe: Ignore
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.3
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - GoblinBrute_Attack
+  - GoblinBrute_RageAttack
+  - GoblinBrute_Taunt
+  randomSets:
+  - items:
+    - GoblinBrute_ArmGuard
+    - GoblinBrute_Backbones
+    - GoblinBrute_HipCloth
+    - GoblinBrute_ShoulderGuard
+    - GoblinBrute_LegBones
+  - items:
+    - GoblinBrute_ExecutionerCap
+    - GoblinBrute_ArmGuard
+    - GoblinBrute_HipCloth
+    - GoblinBrute_ShoulderGuard
+    - GoblinBrute_LegBones
+  - items:
+    - GoblinBrute_HipCloth
+  - items:
+    - GoblinBrute_HipCloth
+    - GoblinBrute_ArmGuard
+    - GoblinBrute_ShoulderGuard
+    - GoblinBrute_LegBones
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: false
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 1
+  interceptTimeMin: 0
+  maxChaseDistance: 300
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 10
+  circleTargetDistance: 10
+  sleeping: false
+  wakeupRange: 5
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 0
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_goblinbrute_alerted
+      variant: -1
+  idleSoundInterval: 5
+  idleSoundChance: 0.25
+  pathAgentType: GoblinBruteSize
+  moveMinAngle: 90
+  smoothMovement: true
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 40
+  randomMoveRange: 10
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: true
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+VisEquipment:
+  leftHand:
+    name: Weapon.l
+    parent: Hand.l
+    index: 5
+    position:
+      x: -0.0002291978
+      y: 0.004125132
+      z: -0.0009946192
+    rotation:
+      x: 4.972887
+      y: 269.6675
+      z: 89.97002
+    scale: 1
+  rightHand:
+    name: Weapon.r
+    parent: Hand.r
+    index: 5
+    position:
+      x: 2.872544E-05
+      y: 0.003272583
+      z: -0.001259012
+    rotation:
+      x: 5.969408
+      y: 89.98885
+      z: 89.20163
+    scale: 1
+  helmet:
+    name: Head
+    parent: Neck2
+    index: 0
+    position:
+      x: -3.552713E-16
+      y: 0.003178581
+      z: 8.195641E-10
+    rotation:
+      x: 278.2974
+      y: 5.076803E-05
+      z: -4.616943E-05
+    scale: 1
+Visuals:
+  scale: 1
+  levelSetups:
+  - scale: 0.75
+    hue: -0.1
+    saturation: -0.1
+    emissiveColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - scale: 0.8
+    hue: -0.18
+    emissiveColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  renderers:
+  - prefab: GoblinBrute
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: GoblinBrute_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: -0.1
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: GoblinBrute_d
+      glossiness: 0.13
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: GoblinBrute_n
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: Coins
+    amountMin: 5
+    amountMax: 20
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: BlackMetalScrap
+    amountMin: 3
+    amountMax: 5
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: true
+    dontScale: false
+  - prefab: GoblinTotem
+    amountMin: 1
+    amountMax: 1
+    chance: 0.1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: TrophyGoblinBrute
+    amountMin: 1
+    amountMax: 1
+    chance: 0.05
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 20
+  effects:
+  - name: walk
+    motionType: Jog
+    material: Default
+    effectPrefabs:
+    - fx_footstep_jog
+  - name: run
+    motionType: Run
+    material: Default
+    effectPrefabs:
+    - fx_footstep_run
+  - name: shallow water
+    motionType: Jog, Run, Sneak
+    material: Water
+    effectPrefabs:
+    - fx_footstep_water
+  - name: mud walk
+    motionType: Jog, Sneak
+    material: Mud
+    effectPrefabs:
+    - fx_footstep_mud_jog
+  - name: mud run
+    motionType: Run
+    material: Mud
+    effectPrefabs:
+    - fx_footstep_mud_run
+  - name: swim
+    motionType: Swimming
+    material: Water
+    effectPrefabs:
+    - sfx_footstep_swim
+  - name: sneak
+    motionType: Sneak
+    material: Default
+    effectPrefabs:
+    - sfx_footstep_sneak
+  - name: climb
+    motionType: Climbing
+    material: Default
+    effectPrefabs:
+    - fx_footstep_climb
+  - name: snow walk
+    motionType: Jog, Sneak
+    material: Snow
+    effectPrefabs:
+    - fx_footstep_snow_jog
+  - name: snow run
+    motionType: Run
+    material: Snow
+    effectPrefabs:
+    - fx_footstep_snow_run
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- idle
+- jump
+- inWater
+- dead
+- wakeup
+- footstep
+- random
+- punch
+- throw
+- swing_logv
+- swing_logh
+- stagger
+- attack0
+- attack1
+- rageattack
+- taunt

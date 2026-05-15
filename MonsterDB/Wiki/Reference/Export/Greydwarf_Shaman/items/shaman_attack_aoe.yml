@@ -1,0 +1,149 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: shaman_attack_aoe
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: flames
+    parent: shaman_attack_aoe
+    index: 0
+    active: false
+    enabled: true
+    materials:
+    - name: flame
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: flames_world
+    parent: shaman_attack_aoe
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_shaman_spray
+      shader: Particles/Standard Unlit2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: wildfire01
+      bumpScale: 1
+  lights:
+  - prefab: Point light
+    parent: shaman_attack_aoe
+    index: 1
+    active: true
+    color: RGBA(0.738, 1.000, 0.000, 1.000)
+    type: Point
+    intensity: 2
+    range: 4
+  particleSystems:
+  - prefab: flames
+    parent: shaman_attack_aoe
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.625, 0.625, 0.625, 1.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-6618326000000.000, 0.000, -16709170000000.000, 0.000)
+      colorMin: RGBA(-6618360000000.000, 0.000, -6618343000000.000, 0.000)
+      colorMax: RGBA(-6618326000000.000, 0.000, -16709170000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(0.840, 1.000, 0.110, 1.000)
+          time: 0
+        - color: RGBA(0.147, 1.000, 0.153, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(0.840, 1.000, 0.110, 1.000)
+          time: 0
+        - color: RGBA(0.147, 1.000, 0.153, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_world
+    parent: shaman_attack_aoe
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(0.625, 0.625, 0.625, 1.000)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-6617303000000.000, 0.000, -16707960000000.000, 0.000)
+      colorMin: RGBA(-6617337000000.000, 0.000, -6617320000000.000, 0.000)
+      colorMax: RGBA(-6617303000000.000, 0.000, -16707960000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2647135
+        - alpha: 1
+          time: 0.6500038
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(0.840, 1.000, 0.110, 1.000)
+          time: 0
+        - color: RGBA(0.117, 1.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2647135
+        - alpha: 1
+          time: 0.6500038
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(0.840, 1.000, 0.110, 1.000)
+          time: 0
+        - color: RGBA(0.117, 1.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

@@ -1,0 +1,50 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: Charred_HipCloth
+ItemData:
+  # Weapon
+  animationState: OneHanded
+  toolTier: 0
+  damages: {}
+  attackForce: 10
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  # AI behaviour
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: LowerCloth
+    parent: attach_skin
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: CharredMelee
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(2.119, 2.119, 2.119, 1.000)
+      mainTexture: Charred_melee_D
+      glossiness: 0.098
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Charred_melee_n

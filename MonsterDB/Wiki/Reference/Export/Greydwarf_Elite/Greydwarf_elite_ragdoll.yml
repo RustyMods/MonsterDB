@@ -1,0 +1,180 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Greydwarf_elite_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.2
+  dropItems: true
+Visuals:
+  scale: 0.7550797
+  renderers:
+  - prefab: Cube
+    parent: Greydwarf_elite_ragdoll
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_elite
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: greydrawrf_diffuse
+      glossiness: 0.12
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: greydrawrf_diffuse_nrm
+  - prefab: Cube.001
+    parent: Greydwarf_elite_ragdoll
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_elite
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: greydrawrf_diffuse
+      glossiness: 0.12
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: greydrawrf_diffuse_nrm
+  - prefab: evil_smoke (1)
+    parent: mixamorig:Spine2
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: evileyes_particles
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: dirt
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: evil_smoke (2)
+    parent: mixamorig:Spine2
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: evileyes_particles
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: dirt
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  particleSystems:
+  - prefab: evil_smoke (1)
+    parent: mixamorig:Spine2
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.193, 0.289, 0.750, 0.109)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.193, 0.289, 0.750, 0.109)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-15209690000000.000, 0.000, -24872830000000.000, 0.000)
+      colorMin: RGBA(-15209750000000.000, 0.000, -15209720000000.000, 0.000)
+      colorMax: RGBA(-15209690000000.000, 0.000, -24872830000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: evil_smoke (2)
+    parent: mixamorig:Spine2
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.193, 0.289, 0.750, 0.109)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.193, 0.289, 0.750, 0.109)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-16019660000000.000, 0.000, -24871220000000.000, 0.000)
+      colorMin: RGBA(-16019720000000.000, 0.000, -16019690000000.000, 0.000)
+      colorMax: RGBA(-16019660000000.000, 0.000, -24871220000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.4911726
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

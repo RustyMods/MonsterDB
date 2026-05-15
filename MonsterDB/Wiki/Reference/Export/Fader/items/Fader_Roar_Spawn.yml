@@ -1,0 +1,43 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: SpawnAbility
+Prefab: Fader_Roar_Spawn
+SpawnAbility:
+  spawnPrefab:
+  - Charred_Melee_Fader
+  - Charred_Archer_Fader
+  maxSummonReached: $hud_maxsummonsreached
+  spawnOnAwake: false
+  alertSpawnedCreature: true
+  passiveAggressive: false
+  spawnAtTarget: true
+  minToSpawn: 1
+  maxToSpawn: 1
+  maxSpawned: 7
+  spawnRadius: 0
+  circleSpawn: false
+  snapToTerrain: true
+  # Used to give random Y rotations to things like AOEs that aren't circular
+  randomYRotation: false
+  spawnGroundOffset: 0.2
+  getSolidHeightMargin: 3
+  initialSpawnDelay: 0
+  spawnDelay: 0
+  preSpawnDelay: 0
+  commandOnSpawn: true
+  wakeUpAnimation: true
+  copySkill: ElementalMagic
+  copySkillToRandomFactor: 0.02
+  setMaxInstancesFromWeaponLevel: false
+  targetType: Position
+  targetWhenPathfindingType: Humanoid
+  maxTargetRange: 40
+  # Projectile
+  projectileVelocity: 10
+  projectileVelocityMax: 0
+  projectileAccuracy: 10
+  randomDirection: false
+  randomAngleMin: 0
+  randomAngleMax: 0
+Visuals:
+  scale: 1

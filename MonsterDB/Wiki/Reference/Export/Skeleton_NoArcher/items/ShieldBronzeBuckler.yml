@@ -1,0 +1,198 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: ShieldBronzeBuckler
+ItemData:
+  name: $item_shield_bronzebuckler
+  itemType: Shield
+  icons:
+  - shield_bronzebuckler
+  attachOverride: None
+  description: $item_shield_bronzebuckler_description
+  maxStackSize: 1
+  autoStack: true
+  maxQuality: 3
+  scaleByQuality: 0
+  weight: 3
+  scaleWeightByQuality: 0
+  value: 0
+  teleportable: true
+  questItem: false
+  equipDuration: 0.2
+  variants: 0
+  # Set Settings
+  setSize: 0
+  # Modifiers
+  eitrRegenModifier: 0
+  movementModifier: -0.05
+  homeItemsStaminaModifier: 0
+  heatResistanceModifier: 0
+  jumpStaminaModifier: 0
+  attackStaminaModifier: 0
+  blockStaminaModifier: 0
+  dodgeStaminaModifier: 0
+  swimStaminaModifier: 0
+  sneakStaminaModifier: 0
+  runStaminaModifier: 0
+  # Food Settings
+  food: 0
+  foodStamina: 0
+  foodEitr: 0
+  foodRegen: 0
+  isDrink: false
+  helmetHideHair: Hidden
+  helmetHideBeard: Default
+  armor: 100
+  armorPerLevel: 1
+  # Shield Settings
+  blockPower: 16
+  blockPowerPerLevel: 6
+  deflectionForce: 30
+  deflectionForcePerLevel: 0
+  timedBlockBonus: 2.5
+  buildBlockCharges: false
+  maxBlockCharges: 3
+  blockChargeDecayTime: 1
+  blockChargeBlockingDecayMult: 0.25
+  maxAdrenaline: 0
+  blockAdrenaline: 1
+  perfectBlockAdrenaline: 5
+  # Weapon
+  animationState: Shield
+  skillType: Blocking
+  toolTier: 1
+  damages: {}
+  attackForce: 40
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  destroyBroken: false
+  maxDurability: 200
+  durabilityPerLevel: 50
+  useDurabilityDrain: 1
+  # AI behaviour
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+  blockEffect:
+    effectPrefabs:
+    - prefab: sfx_metal_shield_blocked
+      variant: -1
+    - prefab: vfx_blocked
+      variant: -1
+    - prefab: fx_block_camshake
+      variant: -1
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: ShieldBronzeBuckler
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: item_particle
+      shader: Legacy Shaders/Particles/Alpha Blended
+      mainTexture: starspark
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: model (1)
+    parent: attach
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: bronzebuckler
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: bronzebuckler_d
+      glossiness: 0.1
+      metallic: 1
+      bumpScale: 0.37
+      bumpTexture: bronzebuckler_n
+  particleSystems:
+  - prefab: ShieldBronzeBuckler
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 0.397, 0.397, 1.000)
+      colorMin: RGBA(1.000, 0.886, 0.250, 1.000)
+      colorMax: RGBA(1.000, 0.397, 0.397, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-4344687000000.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(-4344703000000.000, 0.000, -4344695000000.000, 0.000)
+      colorMax: RGBA(-4344687000000.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+Recipe:
+  item: ShieldBronzeBuckler
+  amount: 1
+  enabled: true
+  qualityResultAmountMultiplier: 1
+  listSortWeight: 100
+  craftingStation: forge
+  minStationLevel: 1
+  requireOnlyOneIngredient: false
+  resources:
+  - resItem: Bronze
+    amount: 10
+    extraAmountOnlyOneIngredient: 0
+    amountPerLevel: 5
+    recover: true
+  - resItem: Wood
+    amount: 4
+    extraAmountOnlyOneIngredient: 0
+    amountPerLevel: 1
+    recover: true

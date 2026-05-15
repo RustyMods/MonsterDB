@@ -1,0 +1,79 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Greydwarf_Shaman_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: true
+  floatOffset: -0.2
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Cube
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_shaman
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: greydwarf_shaman_diffuse
+      glossiness: 0.29
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: greydwarf_shaman_n
+  - prefab: Cube.001
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: greydwarf_shaman
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: greydwarf_shaman_diffuse
+      glossiness: 0.29
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: greydwarf_shaman_n
+  - prefab: Plane
+    parent: Visual
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: eye_shaman
+      shader: Standard
+      color: RGBA(0.433, 0.860, 0.297, 1.000)
+      emissionColor: RGBA(0.282, 2.677, 0.197, 1.000)
+      glossiness: 1
+      metallic: 0
+      bumpScale: 1
+  - prefab: Plane.001
+    parent: Visual
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: eye_shaman
+      shader: Standard
+      color: RGBA(0.433, 0.860, 0.297, 1.000)
+      emissionColor: RGBA(0.282, 2.677, 0.197, 1.000)
+      glossiness: 1
+      metallic: 0
+      bumpScale: 1

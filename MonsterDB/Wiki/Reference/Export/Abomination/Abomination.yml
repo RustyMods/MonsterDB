@@ -1,0 +1,620 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Humanoid
+Prefab: Abomination
+Character:
+  name: $enemy_abomination
+  faction: Undead
+  boss: false
+  dontHideBossHud: false
+  aiSkipTarget: false
+  # Speed
+  crouchSpeed: 2
+  walkSpeed: 4
+  speed: 2
+  turnSpeed: 20
+  runSpeed: 5
+  runTurnSpeed: 60
+  acceleration: 0.5
+  # Jumping
+  jumpForce: 10
+  jumpForceForward: 0
+  jumpForceTiredFactor: 0.7
+  airControl: 0.1
+  jumpStaminaUsage: 10
+  # Flying
+  flying: false
+  flySlowSpeed: 5
+  flyFastSpeed: 12
+  flyTurnSpeed: 12
+  canSwim: true
+  swimDepth: 5
+  swimSpeed: 3
+  swimTurnSpeed: 45
+  swimAcceleration: 0.05
+  groundTilt: FullRaycast
+  groundTiltSpeed: 20
+  # Gravity disabled while sleeping
+  disableWhileSleeping: false
+  useAltStatusEffectScaling: false
+  tolerateWater: true
+  tolerateFire: false
+  tolerateSmoke: true
+  tolerateTar: false
+  # Effects
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_tree_hit_abomination
+      variant: -1
+    - prefab: vfx_SawDust
+      variant: -1
+  critHitEffects:
+    effectPrefabs:
+    - prefab: fx_crit
+      variant: -1
+  backstabHitEffects:
+    effectPrefabs:
+    - prefab: fx_backstab
+      variant: -1
+  deathEffects:
+    effectPrefabs:
+    - prefab: sfx_tree_fall_abomination
+      variant: -1
+    - prefab: Abomination_ragdoll
+      variant: -1
+    - prefab: vfx_firetreecut_dead_abomination
+      variant: -1
+  waterEffects:
+    effectPrefabs:
+    - prefab: vfx_water_surface
+      variant: -1
+      attach: true
+  # Base Health
+  health: 800
+  regenAllHPTime: 3600
+  damageModifiers:
+    blunt: Resistant
+    pierce: VeryResistant
+    chop: Ignore
+    pickaxe: Ignore
+    fire: Weak
+    frost: Immune
+    poison: Immune
+    spirit: Immune
+  staggerWhenBlocked: true
+  staggerDamageFactor: 0.33
+  enemyAdrenalineMultiplier: 1
+  heatBuildupBase: 1.5
+  heatCooldownBase: 1
+  heatBuildupWater: 2
+  heatWaterTouchMultiplier: 0.2
+  lavaDamageTickInterval: 0.2
+  heatLevelFirstDamageThreshold: 0.7
+  lavaFirstDamage: 10
+  lavaFullDamage: 100
+  lavaAirDamageHeight: 3
+  dayHeatGainRunning: 0.2
+  dayHeatGainStill: -0.05
+  dayHeatEquipmentStop: 0.5
+  lavaSlowMax: 0.5
+  lavaSlowHeight: 0.8
+  defaultItems:
+  - Abomination_attack1
+  - Abomination_attack2
+  - Abomination_attack3
+AI:
+  alertRange: 20
+  fleeIfHurtWhenTargetCantBeReached: true
+  fleeUnreachableSinceAttacking: 30
+  fleeUnreachableSinceHurt: 20
+  fleeIfNotAlerted: false
+  fleeIfLowHealth: 0
+  fleeTimeSinceHurt: 20
+  fleeInLava: true
+  fleePheromoneMin: 3
+  fleePheromoneMax: 8
+  circulateWhileCharging: true
+  circulateWhileChargingFlying: false
+  enableHuntPlayer: false
+  attackPlayerObjects: true
+  privateAreaTriggerThreshold: 4
+  interceptTimeMax: 0
+  interceptTimeMin: 0
+  maxChaseDistance: 0
+  minAttackInterval: 0
+  circleTargetInterval: 0
+  circleTargetDuration: 5
+  circleTargetDistance: 10
+  sleeping: true
+  wakeupRange: 20
+  noiseWakeup: false
+  maxNoiseWakeupRange: 50
+  wakeupEffects:
+    effectPrefabs:
+    - prefab: fx_Abomination_arise
+      variant: -1
+  wakeUpDelayMin: 0
+  wakeUpDelayMax: 8
+  fallAsleepDistance: 0
+  avoidLand: false
+  consumeRange: 2
+  consumeSearchRange: 5
+  consumeSearchInterval: 10
+  viewRange: 30
+  viewAngle: 90
+  hearRange: 9999
+  mistVision: false
+  alertedEffects:
+    effectPrefabs:
+    - prefab: sfx_Abomination_alerted
+      variant: -1
+  idleSound:
+    effectPrefabs:
+    - prefab: sfx_Abomination_idle
+      variant: -1
+  idleSoundInterval: 15
+  idleSoundChance: 0.25
+  pathAgentType: Abomination
+  moveMinAngle: 30
+  smoothMovement: false
+  serpentMovement: false
+  serpentTurnRadius: 20
+  jumpInterval: 0
+  randomCircleInterval: 2
+  randomMoveInterval: 20
+  randomMoveRange: 20
+  randomFly: false
+  chanceToTakeoff: 1
+  chanceToLand: 1
+  # Flying
+  groundDuration: 10
+  airDuration: 10
+  maxLandAltitude: 5
+  takeoffTime: 5
+  flyAltitudeMin: 3
+  flyAltitudeMax: 10
+  flyAbsMinAltitude: 32
+  avoidFire: false
+  afraidOfFire: false
+  avoidWater: false
+  avoidLava: true
+  skipLavaTargets: false
+  avoidLavaFlee: true
+  aggravatable: false
+  passiveAggressive: false
+  fleeRange: 25
+  fleeAngle: 45
+  fleeInterval: 2
+VisEquipment:
+  leftHand:
+    name: l.hand
+    parent: l.lowerarm
+    index: 0
+    position:
+      x: -2.011657E-09
+      y: 0.02559527
+      z: -3.874302E-09
+    rotation:
+      x: 12.02963
+      y: 340.3998
+      z: 357.321
+    scale:
+      x: 1.000005
+      y: 1.000002
+      z: 1.000003
+  rightHand:
+    name: r.hand
+    parent: r.lowerarm
+    index: 0
+    position:
+      x: -1.788139E-09
+      y: 0.01303081
+      z: 0
+    rotation:
+      x: 27.94614
+      y: 319.8186
+      z: 15.08411
+    scale:
+      x: 0.9999989
+      y: 1
+      z: 1.000001
+  helmet:
+    name: head
+    parent: spine1
+    index: 0
+    position:
+      x: 1.043081E-09
+      y: 0.006999999
+      z: -4.117605E-18
+    rotation:
+      x: 1.337494E-07
+      y: 11.15266
+      z: -2.303564E-07
+    scale:
+      x: 0.9999984
+      y: 1
+      z: 0.9999984
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: flies
+    parent: particles
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: pixel_lit_opaque
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: ooz
+    parent: particles
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dust01_bw
+  - prefab: wetsplsh
+    parent: particles
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: dirt
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: wetsplsh (1)
+    parent: particles
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: smoke
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: dust01_bw
+  - prefab: mud particle (1)
+    parent: spine1
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: footstep_mud
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: slime_splash
+  - prefab: Abomination
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Abomination_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Rotvalta_d
+      glossiness: 0.1
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Rotvalta_n
+  particleSystems:
+  - prefab: flies
+    parent: particles
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.000, 0.000, 0.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, 0.000, 1.000)
+  - prefab: ooz
+    parent: particles
+    index: 1
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.724, 1.000, 0.500, 0.141)
+      colorMin: RGBA(0.957, 1.000, 0.559, 0.157)
+      colorMax: RGBA(0.724, 1.000, 0.500, 0.141)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-143935300000000000000000000000000.000, 0.000, -205188600000000000000000000000000.000, 0.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(-143935300000000000000000000000000.000, 0.000, -205188600000000000000000000000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.520592
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh
+    parent: particles
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.226, 0.138, 0.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.226, 0.138, 0.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7999360000000.000, 0.000, -147415100000000000000000000000000.000, 0.000)
+      colorMin: RGBA(-7995098000000.000, 0.000, -7995082000000.000, 0.000)
+      colorMax: RGBA(-7999360000000.000, 0.000, -147415100000000000000000000000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0
+          time: 0.1852903
+        - alpha: 1
+          time: 0.2735332
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0
+          time: 0.1852903
+        - alpha: 1
+          time: 0.2735332
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh (1)
+    parent: particles
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.434, 0.373, 0.121, 0.298)
+      colorMin: RGBA(0.374, 0.443, 0.213, 0.603)
+      colorMax: RGBA(0.434, 0.373, 0.121, 0.298)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7998605000000.000, 0.000, -147408900000000000000000000000000.000, 0.000)
+      colorMin: RGBA(-7998638000000.000, 0.000, -7998622000000.000, 0.000)
+      colorMax: RGBA(-7998605000000.000, 0.000, -147408900000000000000000000000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2294194
+        - alpha: 0.9735294
+          time: 0.6294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2294194
+        - alpha: 0.9735294
+          time: 0.6294194
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: mud particle (1)
+    parent: spine1
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.301, 0.202, 0.126, 1.000)
+      colorMin: RGBA(0.368, 0.337, 0.165, 1.000)
+      colorMax: RGBA(0.301, 0.202, 0.126, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-7997883000000.000, 0.000, 0.000, 0.000)
+      colorMin: RGBA(-7997917000000.000, 0.000, -7997900000000.000, 0.000)
+      colorMax: RGBA(-7997883000000.000, 0.000, 0.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.202945
+        - alpha: 1
+          time: 0.5470665
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.202945
+        - alpha: 1
+          time: 0.5470665
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+# If field removed, will remove component
+Drops:
+  drops:
+  - prefab: TrophyAbomination
+    amountMin: 1
+    amountMax: 1
+    chance: 0.5
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: Root
+    amountMin: 5
+    amountMax: 5
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  - prefab: Guck
+    amountMin: 3
+    amountMax: 5
+    chance: 1
+    onePerPlayer: false
+    levelMultiplier: false
+    dontScale: false
+  # Only works if Character Death Effects do not have a ragdoll
+  dropsEnabled: true
+FootStep:
+  footlessFootsteps: false
+  footlessTriggerDistance: 1
+  footstepCullDistance: 50
+  effects:
+  - name: walk
+    motionType: Jog, Sneak, Walk
+    material: Default
+    effectPrefabs:
+    - fx_Abomination_footstep_walk
+  - name: run
+    motionType: Run, Climbing
+    material: Default
+    effectPrefabs:
+    - fx_Abomination_footstep_run
+  - name: water
+    motionType: Jog, Run, Sneak, Climbing
+    material: Water
+    effectPrefabs:
+    - sfx_troll_footstep_water
+    - vfx_troll_footstep_water
+    - fx_Abomination_footstep_walk
+# Reference only, these are attack animation triggers
+AnimationTriggers:
+- sideway_speed
+- forward_speed
+- turn_speed
+- jump
+- inWater
+- dead
+- footstep
+- random
+- idle
+- attack
+- attack2
+- attack3
+- doublesmash
+- stagger
+- sleeping

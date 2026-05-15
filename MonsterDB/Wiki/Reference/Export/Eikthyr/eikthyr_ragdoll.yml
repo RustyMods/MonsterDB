@@ -1,0 +1,108 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: eikthyr_ragdoll
+Ragdoll:
+  velMultiplier: 1
+  ttl: 8
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_medium
+      variant: -1
+  float: true
+  floatOffset: -0.2
+  dropItems: true
+Visuals:
+  scale: 2
+  renderers:
+  - prefab: chains
+    parent: Visual
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: Deer
+    parent: Visual
+    index: 2
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: extrafur
+    parent: Visual
+    index: 3
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: mane
+    parent: Visual
+    index: 4
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: NewEikthyr_e
+      emissionColor: RGBA(51.984, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.1
+      metallic: 0.755
+      bumpScale: 1
+      bumpTexture: NewEikthyr_n
+  - prefab: Shedding
+    parent: Visual
+    index: 5
+    active: true
+    enabled: true
+    materials:
+    - name: NewEikthyr_shedding
+      shader: Custom/Vegetation
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: NewEikthyr_d
+      glossiness: 0.25
+      metallic: 0
+      bumpScale: 1.13
+      bumpTexture: NewEikthyr_n

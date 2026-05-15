@@ -1,0 +1,53 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: GoblinBrute_LegBones
+ItemData:
+  # Weapon
+  animationState: OneHanded
+  toolTier: 0
+  damages: {}
+  attackForce: 10
+  backstabBonus: 4
+  dodgeable: false
+  blockable: false
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  # AI behaviour
+  aiAttackRange: 2
+  aiAttackRangeMin: 0
+  aiAttackInterval: 2
+  aiAttackMaxAngle: 5
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: false
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Enemy
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: attach_skin
+    parent: GoblinBrute_LegBones
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: BruteArmor_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Gear_d
+      glossiness: 0.39
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Gear_n

@@ -1,0 +1,682 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: SeekerQueen_projectile_spit
+ProjectileData:
+  prefab: SeekerQueen_projectile_spit
+  type: Physical
+  damage: {}
+  aoe: 1.5
+  dodgeable: true
+  blockable: true
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 4
+  hitNoise: 50
+  hitEffects:
+    effectPrefabs:
+    - prefab: SeekerQueen_spithit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  spawnOnHit: SeekerQueen_SpitSpawnAbility
+  # 0.0 - 1.0
+  spawnOnHitChance: 0.3
+  spawnCount: 1
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: true
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: blood_decal
+    parent: drops-withdecals
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: seeker_blood_splat
+      shader: Custom/Decal
+      color: RGBA(0.557, 0.557, 0.557, 1.000)
+      mainTexture: brains
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: blob_splat
+    parent: flow
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: puke
+      shader: Custom/AlphaParticle
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      mainTexture: water_foam
+      glossiness: 0.7
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: soft_cloud_normal
+  - prefab: Sphere
+    parent: SeekerQueen_projectile_spit
+    index: 1
+    active: false
+    enabled: true
+    materials:
+    - name: spit_blob
+      shader: Custom/Blob
+      color: RGBA(0.783, 0.783, 0.783, 1.000)
+      glossiness: 0.925
+      metallic: 0
+      bumpScale: 0.5
+      bumpTexture: blob_n
+      flowSpeedAll: -4
+      flowMaskTexture: blob_flowmask
+      flowSpeedY: -7
+      flowTexture: blob_flow_d
+      flowColor: RGBA(1.000, 0.890, 0.000, 1.000)
+      edgeColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      emissiveColor: RGBA(0.000, 0.000, 0.000, 1.000)
+  - prefab: wetsplsh
+    parent: SeekerQueen_projectile_spit
+    index: 2
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.699, 0.699, 0.699, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  - prefab: flames
+    parent: SeekerQueen_projectile_spit
+    index: 3
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.699, 0.699, 0.699, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  - prefab: flow
+    parent: SeekerQueen_projectile_spit
+    index: 4
+    active: false
+    enabled: true
+    materials:
+    - name: barnacle_piece
+      shader: Custom/AlphaParticle
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      mainTexture: water_foam
+      glossiness: 0.37
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: wave-normal
+  - prefab: flames_world
+    parent: SeekerQueen_projectile_spit
+    index: 5
+    active: false
+    enabled: true
+    materials:
+    - name: slime
+      shader: Lux Lit Particles/ Bumped
+      color: RGBA(0.699, 0.699, 0.699, 1.000)
+      emissionColor: RGBA(0.129, 0.169, 0.083, 1.000)
+      mainTexture: slime_splash
+  - prefab: wetsplsh (1)
+    parent: SeekerQueen_projectile_spit
+    index: 6
+    active: true
+    enabled: true
+    materials:
+    - name: queenslime
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.717, 0.701, 0.443, 1.000)
+      mainTexture: slime_splash_2
+      glossiness: 0.512
+      metallic: 0
+      bumpScale: 1
+  - prefab: drops-withdecals
+    parent: SeekerQueen_projectile_spit
+    index: 7
+    active: false
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  - prefab: drops
+    parent: SeekerQueen_projectile_spit
+    index: 8
+    active: true
+    enabled: true
+    materials:
+    - name: blood_drop
+      shader: Particles/Standard Surface2
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      glossiness: 0
+      metallic: 0
+      bumpScale: 1
+  particleSystems:
+  - prefab: wetsplsh
+    parent: SeekerQueen_projectile_spit
+    index: 2
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.526, 1.000, 0.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.526, 1.000, 0.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-22503750000000.000, 0.000, -20017370000000.000, 0.000)
+      colorMin: RGBA(-22503880000000.000, 0.000, -22503820000000.000, 0.000)
+      colorMax: RGBA(-22503750000000.000, 0.000, -20017370000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames
+    parent: SeekerQueen_projectile_spit
+    index: 3
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.000, 0.000, 0.000, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.000, 0.000, 0.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-22500060000000.000, 0.000, -24873630000000.000, 0.000)
+      colorMin: RGBA(-22500190000000.000, 0.000, -22500130000000.000, 0.000)
+      colorMax: RGBA(-22500060000000.000, 0.000, -24873630000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flow
+    parent: SeekerQueen_projectile_spit
+    index: 4
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.312, 0.500, 0.000, 1.000)
+      colorMin: RGBA(0.545, 0.585, 0.000, 1.000)
+      colorMax: RGBA(0.312, 0.500, 0.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-22607630000000.000, 0.000, -24868670000000.000, 0.000)
+      colorMin: RGBA(-22607970000000.000, 0.000, -22607900000000.000, 0.000)
+      colorMax: RGBA(-22607630000000.000, 0.000, -24868670000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0.9967049
+          time: 0.2323491
+        - alpha: 0.9735294
+          time: 0.7088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 0.9967049
+          time: 0.2323491
+        - alpha: 0.9735294
+          time: 0.7088273
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: blob_splat
+    parent: flow
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Color
+      color: RGBA(0.057, 0.057, 0.057, 1.000)
+      colorMin: RGBA(0.000, 0.000, 0.000, 0.000)
+      colorMax: RGBA(0.057, 0.057, 0.057, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-22604410000000.000, 0.000, -13860260000000.000, 0.000)
+      colorMin: RGBA(-22604550000000.000, 0.000, -22604480000000.000, 0.000)
+      colorMax: RGBA(-22604410000000.000, 0.000, -13860260000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.4352941
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 0
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.4352941
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 0
+        - color: RGBA(0.000, 0.000, 0.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: flames_world
+    parent: SeekerQueen_projectile_spit
+    index: 5
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.418, 0.585, 0.000, 1.000)
+      colorMin: RGBA(1.000, 0.968, 0.024, 1.000)
+      colorMax: RGBA(0.418, 0.585, 0.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-22601530000000.000, 0.000, -16709030000000.000, 0.000)
+      colorMin: RGBA(-22601660000000.000, 0.000, -22601590000000.000, 0.000)
+      colorMax: RGBA(-22601530000000.000, 0.000, -16709030000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1029374
+        - alpha: 0.9508156
+          time: 0.6676432
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.1029374
+        - alpha: 0.9508156
+          time: 0.6676432
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: wetsplsh (1)
+    parent: SeekerQueen_projectile_spit
+    index: 6
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.906, 0.863, 0.551, 1.000)
+      colorMin: RGBA(1.000, 0.793, 0.354, 1.000)
+      colorMax: RGBA(0.906, 0.863, 0.551, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-23689500000000.000, 0.000, -11179530000000.000, 0.000)
+      colorMin: RGBA(-23689630000000.000, 0.000, -23689560000000.000, 0.000)
+      colorMax: RGBA(-23689500000000.000, 0.000, -11179530000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 1
+          time: 0
+        - alpha: 0.9735294
+          time: 0.7941253
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: drops-withdecals
+    parent: SeekerQueen_projectile_spit
+    index: 7
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(1.000, 0.956, 0.505, 0.491)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-23686740000000.000, 0.000, -12523390000000.000, 0.000)
+      colorMin: RGBA(-23686880000000.000, 0.000, -23686810000000.000, 0.000)
+      colorMax: RGBA(-23686740000000.000, 0.000, -12523390000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: blood_decal
+    parent: drops-withdecals
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.849, 0.810, 0.589, 1.000)
+      colorMin: RGBA(1.000, 0.953, 0.439, 1.000)
+      colorMax: RGBA(0.849, 0.810, 0.589, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-23683720000000.000, 0.000, -7702588000000.000, 0.000)
+      colorMin: RGBA(-23683860000000.000, 0.000, -23683790000000.000, 0.000)
+      colorMax: RGBA(-23683720000000.000, 0.000, -7702588000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.8147097
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.03529412
+        - alpha: 0.9735294
+          time: 0.8147097
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+  - prefab: drops
+    parent: SeekerQueen_projectile_spit
+    index: 8
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      colorMin: RGBA(1.000, 0.956, 0.505, 0.491)
+      colorMax: RGBA(1.000, 1.000, 1.000, 1.000)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-24917120000000.000, 0.000, -7701078000000.000, 0.000)
+      colorMin: RGBA(-24917250000000.000, 0.000, -24917190000000.000, 0.000)
+      colorMax: RGBA(-24917120000000.000, 0.000, -7701078000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.06176852
+        - alpha: 0.9735294
+          time: 0.6264744
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

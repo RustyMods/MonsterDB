@@ -1,0 +1,133 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Projectile
+Prefab: GoblinSpear_projectile
+ProjectileData:
+  prefab: GoblinSpear_projectile
+  type: Spear
+  damage: {}
+  aoe: 0
+  dodgeable: false
+  blockable: false
+  adrenaline: 2
+  attackForce: 0
+  backstabBonus: 4
+  healthReturn: 0
+  ttl: 10
+  hitNoise: 40
+  hitEffects:
+    effectPrefabs:
+    - prefab: sfx_arrow_hit
+      variant: -1
+    - prefab: vfx_arrowhit
+      variant: -1
+  # Bounce
+  bounce: false
+  # Spawn on Hit
+  respawnItemOnHit: false
+  spawnOnTtl: false
+  staticHitOnly: false
+  groundHitOnly: false
+  spawnRandomRotation: false
+  spawnFacingRotation: false
+  # Projectile Spawning
+  spawnProjectileNewVelocity: false
+  spawnProjectileMinVel: 1
+  spawnProjectileMaxVel: 5
+  spawnProjectileRandomDir: 0
+  spawnProjectileHemisphereDir: false
+  projectilesInheritHitData: false
+  onlySpawnedProjectilesDealDamage: false
+  divideDamageBetweenProjectiles: false
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: trail
+    parent: GoblinSpear_projectile
+    index: 0
+    active: true
+    enabled: true
+    materials:
+    - name: trail
+      shader: Legacy Shaders/Particles/Additive
+      mainTexture: leaf_low
+      tintColor: RGBA(1.000, 1.000, 1.000, 1.000)
+  - prefab: spear
+    parent: GoblinSpear_projectile
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: flint
+      shader: Standard
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: flint
+      glossiness: 0.702
+      metallic: 0
+      bumpScale: 1
+    - name: spear
+      shader: Custom/Creature
+      color: RGBA(0.757, 0.757, 0.757, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionColor: RGBA(0.000, 0.000, 0.000, 1.000)
+      mainTexture: Planks1c
+      glossiness: 0.18
+      metallic: 0
+      bumpScale: 1
+  particleSystems:
+  - prefab: trail
+    parent: GoblinSpear_projectile
+    index: 0
+    startColor:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: TwoColors
+      color: RGBA(0.765, 0.765, 0.765, 0.497)
+      colorMin: RGBA(0.456, 0.456, 0.456, 0.491)
+      colorMax: RGBA(0.765, 0.765, 0.765, 0.497)
+    colorOverLifetime:
+      # Color, Gradient, TwoColors, TwoGradients, RandomColor
+      mode: Gradient
+      color: RGBA(-6323568000000.000, 0.000, -4093171000000.000, 0.000)
+      colorMin: RGBA(-6323601000000.000, 0.000, -6323584000000.000, 0.000)
+      colorMax: RGBA(-6323568000000.000, 0.000, -4093171000000.000, 0.000)
+      gradient:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized
+      gradientMax:
+        # Blend, Fixed, PerceptualBlend
+        mode: Blend
+        # Set opacity over time
+        alphaKeys:
+        - alpha: 0
+          time: 0
+        - alpha: 1
+          time: 0.2235294
+        - alpha: 0
+          time: 1
+        # Set color over time
+        colorKeys:
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 0
+        - color: RGBA(1.000, 1.000, 1.000, 1.000)
+          time: 1
+        # Uninitialized, Gamma, Linear
+        colorSpace: Uninitialized

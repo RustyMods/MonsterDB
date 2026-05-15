@@ -1,0 +1,36 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Ragdoll
+Prefab: Draugr_ragdoll
+Ragdoll:
+  velMultiplier: 1.5
+  ttl: 2
+  removeEffect:
+    effectPrefabs:
+    - prefab: vfx_corpse_destruction_small
+      variant: -1
+  float: false
+  floatOffset: -0.1
+  dropItems: true
+Visuals:
+  scale: 1
+  renderers:
+  - prefab: Cube.001
+    parent: _playertest_serk_base (2)
+    index: 1
+    active: true
+    enabled: true
+    materials:
+    - name: Draugr_mat
+      shader: Custom/Creature
+      color: RGBA(1.000, 1.000, 1.000, 1.000)
+      hue: 0
+      saturation: 0
+      value: 0
+      emissionTexture: Draugr_e
+      emissionColor: RGBA(2.101, 9.477, 7.392, 1.000)
+      mainTexture: Draugr_d
+      glossiness: 0.1
+      metallic: 0
+      bumpScale: 1
+      bumpTexture: Draugr_n

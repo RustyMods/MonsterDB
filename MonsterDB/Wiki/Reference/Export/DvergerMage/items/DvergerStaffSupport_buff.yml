@@ -1,0 +1,146 @@
+GameVersion: 0.221.12
+ModVersion: 0.3.4
+Type: Item
+Prefab: DvergerStaffSupport_buff
+ItemData:
+  # Weapon
+  animationState: OneHanded
+  toolTier: 0
+  damages: {}
+  attackForce: 0
+  backstabBonus: 4
+  dodgeable: true
+  blockable: true
+  tamedOnly: false
+  attackStatusEffectChance: 1
+  attack:
+    attackType: Projectile
+    attackAnimation: attack_protect
+    attackRandomAnimations: 0
+    attackChainLevels: 0
+    loopingAttack: false
+    consumeItem: false
+    hitTerrain: true
+    isHomeItem: false
+    attackStamina: 15
+    attackAdrenaline: 1
+    attackUseAdrenaline: 0
+    attackEitr: 0
+    attackHealth: 0
+    attackHealthPercentage: 0
+    attackHealthLowBlockUse: true
+    attackHealthReturnHit: 0
+    attackKillsSelf: false
+    speedFactor: 0
+    speedFactorRotation: 0
+    attackStartNoise: 10
+    attackHitNoise: 40
+    damageMultiplier: 1
+    # For each missing health point, increase damage this much.
+    damageMultiplierPerMissingHP: 0
+    # At 100% missing HP the damage will increase by this much, and gradually inbetween.
+    damageMultiplierByTotalHealthMissing: 0
+    # For each missing health point, return one stamina point.
+    staminaReturnPerMissingHP: 0
+    forceMultiplier: 1
+    staggerMultiplier: 1
+    recoilPushback: 0
+    selfDamage: 0
+    attackRange: 0.9
+    attackHeight: 1.8
+    attackHeightChar1: 0
+    attackHeightChar2: 0
+    attackOffset: 0.3
+    toggleFlying: false
+    attach: false
+    cantUseInDungeon: false
+    # Loading
+    requiresReload: false
+    reloadTime: 2
+    # Draw
+    bowDraw: false
+    drawDurationMin: 0
+    drawStaminaDrain: 0
+    drawEitrDrain: 0
+    # Melee/AOE
+    attackAngle: 90
+    attackRayWidth: 0.3
+    attackRayWidthCharExtra: 0
+    maxYAngle: 0
+    lowerDamagePerHit: true
+    hitPointType: Closest
+    hitThroughWalls: false
+    multiHit: true
+    pickaxeSpecial: false
+    lastChainDamageMultiplier: 2
+    resetChainIfHit: None
+    spawnOnHitChance: 0
+    raiseSkillAmount: 1
+    skillHitType: Character
+    specialHitSkill: None
+    # Projectile
+    attackProjectile: DvergerStaffSupport_aoe
+    projectileVel: 10
+    projectileVelMin: 2
+    # When not using Draw, randomize velocity between Velocity and Velocity Min
+    randomVelocity: false
+    projectileAccuracy: 2
+    projectileAccuracyMin: 20
+    circularProjectileLaunch: false
+    distributeProjectilesAroundCircle: false
+    skillAccuracy: false
+    useCharacterFacing: false
+    useCharacterFacingYAim: false
+    launchAngle: 0
+    projectiles: 1
+    projectileBursts: 1
+    burstInterval: 0
+    destroyPreviousProjectile: false
+    perBurstResourceUsage: false
+    harvest: false
+    harvestRadius: 0
+    harvestRadiusMaxLevel: 0
+  # AI behaviour
+  aiAttackRange: 15
+  aiAttackRangeMin: 1
+  aiAttackInterval: 45
+  aiAttackMaxAngle: 15
+  aiInvertAngleCheck: false
+  aiWhenFlying: true
+  aiWhenFlyingAltitudeMin: 0
+  aiWhenFlyingAltitudeMax: 999999
+  aiWhenWalking: true
+  aiWhenSwiming: true
+  aiPrioritized: true
+  aiInDungeonOnly: false
+  aiInMistOnly: false
+  aiMaxHealthPercentage: 1
+  aiMinHealthPercentage: 0
+  aiTargetType: Friend
+  # Item Effects
+  hitEffect:
+    effectPrefabs:
+    - prefab: vfx_clubhit
+      variant: -1
+    - prefab: sfx_club_hit
+      variant: -1
+    - prefab: fx_hit_camshake
+      variant: -1
+  blockEffect:
+    effectPrefabs:
+    - prefab: sfx_wood_blocked
+      variant: -1
+    - prefab: vfx_blocked
+      variant: -1
+    - prefab: fx_block_camshake
+      variant: -1
+  startEffect:
+    effectPrefabs:
+    - prefab: sfx_club_swing
+      variant: -1
+  triggerEffect:
+    effectPrefabs:
+    - prefab: fx_swing_camshake
+      variant: -1
+Visuals:
+  scale: 1
