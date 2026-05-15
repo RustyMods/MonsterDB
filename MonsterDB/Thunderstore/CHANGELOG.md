@@ -1,3 +1,10 @@
+## 0.3.4
+- compatibility with `Valharvest`, removing hover text patch if installed
+
+## 0.3.3
+- added config to ignore tamed check for growing creatures
+- added missing fields in item data attack: `isHomeItem` `attackStamina` `attackAdrenaline` `attackUseAdrenaline` `attackEitr` `attackHealth`...
+
 ## 0.3.2
 - added new command: `clean`, which will take modified prefab yml and check against original values, to export a new cleaned version with all fields cleaned, that is, fields that match original, will be removed.
 - fixed footsteps error when trying to map out keys
