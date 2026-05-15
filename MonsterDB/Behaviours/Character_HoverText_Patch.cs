@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using HarmonyLib;
 
@@ -63,8 +64,12 @@ public static class ProcreateText
 [HarmonyPatch(typeof(Character), nameof(Character.GetHoverText))]
 public static class Character_GetHoverText_Patch
 {
+    private static bool _valharvestInstalled => Chainloader.PluginInfos.ContainsKey("com.frenvius.Valharvest");
+    
     private static bool Prefix(Character __instance, ref string __result)
     {
+        if (_valharvestInstalled) return true;
+        
         if (!__instance.m_nview.IsValid()) return true;
         
         StringBuilder sb = new();

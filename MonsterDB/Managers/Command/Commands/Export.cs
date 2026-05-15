@@ -19,7 +19,8 @@ public static partial class Commands
             "texture", 
             "sprite", 
             "raid",
-            "bones"
+            "bones",
+            "uv"
         }).ToList();
     
     private static List<string> GetExportOptions(int i, string word) => i switch
@@ -35,6 +36,7 @@ public static partial class Commands
             "texture" => TextureManager.GetAllTextures().Keys.Union(PrefabManager.GetAllPrefabNames()).ToList(),
             "sprite" => TextureManager.GetAllSprites().Keys.ToList(),
             "raid" => RaidManager.GetRaidNames().Append("all").ToList(),
+            "uv" => PrefabManager.GetAllPrefabNames().ToList(),
             _ => Enum.TryParse(word, true, out BaseType type)
                 ? GetOptionsByBase(type)
                 : PrefabManager.GetAllPrefabNames()
@@ -71,6 +73,7 @@ public static partial class Commands
             "sprite" => $"<color={HEX_Gray}>[SpriteID]</color>: Export sprite png",
             "raid" => $"<color={HEX_Gray}>[EventName]</color>: Export raid YML file",
             "bones" => $"<color={HEX_Gray}>[PrefabID]</color>: Export prefab hierarchy",
+            "uv" => $"<color={HEX_Gray}>[PrefabID][BkgColor?][LineColor?]</color>: Export prefab UVs",
             _ => Enum.TryParse(type, true, out BaseType baseType)
                 ? baseType == BaseType.All ? $"<color={HEX_Gray}>Export Aggregate YML file of all imported YML files</color>" : $"<color={HEX_Gray}>[PrefabID]</color>: Export {baseType} YML file"
                 : defaultValue
@@ -101,6 +104,9 @@ public static partial class Commands
                     break;
                 case "bones":
                     CreatureManager.WriteHierarchy(args.Context, args.GetString(3));
+                    break;
+                case "uv":
+                    UVMapExporter.ExportUVMaps(args.Context, args.GetString(3), args.GetString(4), args.GetString(5));
                     break;
             }
         }
