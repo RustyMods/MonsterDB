@@ -125,32 +125,34 @@ all commands begin with: `monsterdb`
 
 use `help` to see this list in-game
 
-- `monsterdb export_main_tex [prefabName]`: export creature main texture
-- `monsterdb search_tex [query]`: search cached textures
-- `monsterdb export_tex [textureName]`: export texture as png
-- `monsterdb write [prefabName]`: write creature YML file to `Save` Folder
-- `monsterdb write_all`: write all creature YML to `Save` Folder
-- `monsterdb mod [prefabName]`: read creature YML file and update from `Modified` folder
-- `monsterdb revert [prefabName]`: revert creature to factory settings
-- `monsterdb clone [prefabName][newName]`: clone creature, must be a character
-- `monsterdb write_egg [prefabName]`: write egg YML file to `Save` Folder
+- `monsterdb clone_egg <prefabName> <newName>`: clone egg item, must be an item
+- `monsterdb clone_fish <prefabName> <newName>`: clone fish and export YML file
+- `monsterdb clone_item <prefabName> <newName>`: clone item and export YML file
+- `monsterdb clone <prefabName> <newName>`: clone creature, must be a character
+- `monsterdb clone_visual <prefabName> <newName>`: clone prefab and export visual YML
+- `monsterdb create_item <prefabName> <newName>`: advanced command to try to convert any prefab into an item, does not work with creatures
+- `monsterdb export_bones <prefabName>`: export bone structure as YML
+- `monsterdb export_main_tex <prefabName>`: export main texture
+- `monsterdb export_sprite <spriteName>`: export sprite texture as PNG
+- `monsterdb export_tex <textureName>`: export texture as png
+- `monsterdb export uv <prefabName> [background color] [line color]`: export UVmap texture
+  - optional background and line color can be defined with RGBA or Hex. eg: `RGBA(128,128,128,255)` or `#888888FF`
+- `monsterdb mod_egg <prefabName>`: read egg YML from `Modified` Folder and update
+- `monsterdb mod_fish <fileName>`: read fish YML file and update
+- `monsterdb mod_item <fileName>`: read item YML file and update
+- `monsterdb mod <prefabName>`: read creature YML file and update from `Modified` folder
+- `monsterdb revert_egg <prefabName>`: revert egg item to factory settings
+- `monsterdb revert <prefabName>`: revert creature to factory settings
+- `monsterdb search_sprite <query>`: search cached sprites
+- `monsterdb search_tex <query>`: search cached textures
+- `monsterdb snapshot <prefabName>`: snapshots a prefab into an icon and exports as PNG
 - `monsterdb write_all_egg`: write all egg YML to `Save` Folder
-- `monsterdb mod_egg [prefabName]`: read egg YML from `Modified` Folder and update
-- `monsterdb revert_egg [prefabName]`: revert egg item to factory settings
-- `monsterdb clone_egg [prefabName][newName]`: clone egg item, must be an item
-- `monsterdb write_item [prefabName]`: export item YML
-- `mosnterdb mod_item [fileName]`: read item YML file and update
-- `monsterdb clone_item [prefabName][newName]`: clone item and export YML file
-- `monsterdb write_fish [prefabName]`: export fish YML file
-- `monsterdb mod_fish [fileName]`: read fish YML file and update
-- `monsterdb clone_fish [prefabName][newName]`: clone fish and export YML file
-- `monsterdb export_sprite [spriteName]`: export sprite texture as PNG
-- `monsterdb search_sprite [query]`: search cached sprites
-- `monsterdb write_visual [prefabName]`: export prefab visual YML
-- `monsterdb clone_visual [prefabName][newName]`: clone prefab and export visual YML
-- `monsterdb export_bones [prefabName]`: export bone structure as YML
-- `monsterdb create_item [prefabName][newName]`: advanced command to try to convert any prefab into an item, does not work with creatures
-- `monsterdb snapshot [prefabName]`: snapshots a prefab into an icon and exports as PNG
+- `monsterdb write_all`: write all creature YML to `Save` Folder
+- `monsterdb write_egg <prefabName>`: write egg YML file to `Save` Folder
+- `monsterdb write_fish <prefabName>`: export fish YML file
+- `monsterdb write_item <prefabName>`: export item YML
+- `monsterdb write <prefabName>`: write creature YML file to `Save` Folder
+- `monsterdb write_visual <prefabName>`: export prefab visual YML
 
 ### Examples
 
