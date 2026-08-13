@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
@@ -16,6 +17,8 @@ public static class SpawnManager
     private static readonly CustomSyncedValue<string> sync;
     private static readonly Dictionary<string, SpawnSystem.SpawnData> CachedSpawnData;
     private static readonly Dictionary<string, BaseSpawnData> updateList;
+    private static bool spawnListUpdating;
+    private static readonly Queue<SpawnDataRef> updateQueue = [];
     
     static SpawnManager()
     {
@@ -25,6 +28,15 @@ public static class SpawnManager
         sync = new CustomSyncedValue<string>(ConfigManager.ConfigSync, "MDB.ServerSync.SpawnList");
         SpawnList = MonsterDBPlugin.instance.gameObject.AddComponent<SpawnSystemList>();
         sync.ValueChanged += OnSyncChange;
+    }
+
+    private static bool IsSpawnListUpdating() => spawnListUpdating;
+
+    [HarmonyPatch(typeof(SpawnSystem), nameof(SpawnSystem.UpdateSpawnList))]
+    private static class SpawnSystem_UpdateSpawnList_Patch
+    {
+        private static void Prefix() => spawnListUpdating = true;
+        private static void Postfix() => spawnListUpdating = false;
     }
     
     public static void Add(SpawnDataRef data)
@@ -105,6 +117,11 @@ public static class SpawnManager
     
     public static void Update(SpawnDataRef info)
     {
+        if (IsSpawnListUpdating())
+        {
+            updateQueue.Enqueue(info);
+            return;
+        }
         SpawnList.m_spawners.RemoveAll(x => x.m_name == info.m_name);
         spawnRefs[info.m_name] = info;
         SpawnSystem.SpawnData spawnData = new SpawnSystem.SpawnData();
@@ -114,6 +131,15 @@ public static class SpawnManager
         UpdateSync();
             
         MonsterDBPlugin.LogInfo($"Updated Spawn Data: {info.m_name}");
+
+        UpdateQueue();
+    }
+
+    public static void UpdateQueue()
+    {
+        if (updateQueue.Count <= 0) return;
+        var info = updateQueue.Dequeue();
+        Update(info);
     }
 
     public static void Setup()

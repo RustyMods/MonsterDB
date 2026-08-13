@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 using YamlDotNet.Serialization;
 
@@ -28,7 +29,7 @@ public class EffectListRef
             }
             _effects = new EffectList
             {
-                m_effectPrefabs = data.ToArray()
+                m_effectPrefabs = data.Where(e => e.m_prefab != null).ToArray()
             };
             return _effects;
         }

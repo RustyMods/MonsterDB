@@ -16,12 +16,15 @@ public class SaddleRef : Reference
     public float? m_maxStamina;
     public float? m_runStaminaDrain;
     public float? m_swimStaminaDrain;
+    public float? m_flyStaminaDrain;
+    public float? m_flyFastStaminaDrain;
     public float? m_staminaRegen;
     public float? m_staminaRegenHungry;
     public EffectListRef? m_drownEffects;
     public string? m_mountIcon;
     [YamlMember(Description = "If added saddle by MonsterDB, use this to position attach point")] 
     public Vector3Ref? m_attachOffset;
+    public Vector3Ref? m_attachRotation;
     public string? m_attachParent;
     
     public SaddleRef(){}

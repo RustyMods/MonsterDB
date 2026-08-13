@@ -4,6 +4,8 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using ServerSync;
+using UnityEngine;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
 namespace MonsterDB;
@@ -34,8 +36,20 @@ public static class ConfigManager
         .WithTypeConverter(VectorConverter.Instance)
         .WithTypeConverter(InvariantCultureFloatConverter.Instance)
         .Build();
+
+    public static T Deserialize<T>(string data)
+    {
+        try
+        {
+            return deserializer.Deserialize<T>(data);
+        }
+        catch (YamlException ex)
+        {
+            MonsterDBPlugin.LogWarning($"Line {ex.Start.Line}, Col {ex.Start.Column}: {ex.InnerException?.Message ?? ex.Message}");
+            return default;
+        }
+    }
     
-    public static T Deserialize<T>(string data) => deserializer.Deserialize<T>(data);
     public static string Serialize<T>(T obj, bool full = true)
     {
         if (obj == null) return "";
@@ -54,6 +68,9 @@ public static class ConfigManager
     private static readonly ConfigEntry<LogLevel> logLevels;
     private static readonly ConfigEntry<Toggle> detailedDebugLogs;
     private static readonly ConfigEntry<Toggle> fullFile;
+
+    private static readonly ConfigEntry<KeyboardShortcut> rideKey;
+    
     public static bool ShouldLog(LogLevel type)
     {
         return logLevels.Value.HasFlag(type);
@@ -86,7 +103,12 @@ public static class ConfigManager
         logLevels = config("1 - General", "Log Levels", LogLevel.All, "Set log levels", false);
         detailedDebugLogs = config("1 - General", "Detailed Debug Logs", Toggle.Off, "If on, debug logs will be detailed", false);
         fullFile = config("1 - General", "Full File", Toggle.Off, "If on, exported YML will display all fields", false);
+
+        rideKey = config("2 - Saddle", "Ride Key", new KeyboardShortcut(KeyCode.None),
+            "Set keycode for riding custom creatures", false);
     }
+
+    public static KeyboardShortcut GetRideShortcut() => rideKey.Value;
 
     public static void Start()
     {

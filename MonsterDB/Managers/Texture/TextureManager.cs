@@ -181,7 +181,7 @@ public static class TextureManager
             return;
         }
             
-        ExportSprite(sprite, FileManager.ExportFolder);
+        ExportSprite(sprite, FileManager.ExportFolder, context);
     }
     
     [Obsolete]
@@ -200,7 +200,7 @@ public static class TextureManager
             return;
         }
             
-        ExportSprite(sprite, FileManager.ExportFolder);
+        ExportSprite(sprite, FileManager.ExportFolder, args.Context);
     }
 
 
@@ -347,13 +347,17 @@ public static class TextureManager
         }
     }
     
-    public static void ExportSprite(Sprite sprite, string path)
+    public static void ExportSprite(Sprite sprite, string path, Terminal? context = null)
     {
         if (sprite == null || sprite.texture == null) return;
     
         string fileName = sprite.name;
         string filePath = Path.Combine(path, fileName + ".png");
-        if (File.Exists(filePath)) return;
+        if (File.Exists(filePath))
+        {
+            context?.LogWarning($"File already exists: {fileName}.png");
+            return;
+        }
     
         try
         {
@@ -395,11 +399,13 @@ public static class TextureManager
         
             byte[] encoded = newTex.EncodeToPNG();
             File.WriteAllBytes(filePath, encoded);
+            context?.LogInfo($"Exported sprite: {filePath.RemoveRootPath()}");
             MonsterDBPlugin.LogInfo($"Exported sprite: {filePath}");
         }
         catch
         {
             MonsterDBPlugin.LogWarning("Failed to save sprite: " + fileName);
+            context?.LogWarning("Failed to save sprite: " + fileName);
         }
     }
 

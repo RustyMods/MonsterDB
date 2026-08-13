@@ -11,6 +11,9 @@ namespace MonsterDB;
 
 public static class RaidManager
 {
+    // TODO: test if  this stops raids ?
+    
+    
     public const string FolderName = "Raids";
     private static readonly string FolderPath;
     private static Dictionary<string, RandomEventRef> raids;
@@ -64,6 +67,18 @@ public static class RaidManager
             return;
         }
         List<RandomEvent> list = RandEventSystem.instance.m_events;
+
+        if (input.Equals("all", StringComparison.CurrentCultureIgnoreCase))
+        {
+            for (int i = 0; i < list.Count; ++i)
+            {
+                var r = list[i];
+                Write(r);
+            }
+            context.LogInfo($"Exported {list.Count} raids");
+            context.LogInfo(FolderPath.RemoveRootPath());
+            return;
+        }
             
         RandomEvent? raid = list.FirstOrDefault(x => string.Equals(x.m_name, input, StringComparison.CurrentCultureIgnoreCase));
         if (raid == null)
@@ -72,7 +87,7 @@ public static class RaidManager
             return;
         }
 
-        Write(raid);
+        Write(raid, context);
     }
 
     [Obsolete]
@@ -142,7 +157,7 @@ public static class RaidManager
         Read();
     }
 
-    private static void Write(RandomEvent raid)
+    private static void Write(RandomEvent raid, Terminal? context = null)
     {
         RandomEventRef reference = new RandomEventRef(raid);
         string text = ConfigManager.Serialize(reference);
@@ -151,6 +166,11 @@ public static class RaidManager
         string fileName = name + ".yml";
         string filePath = Path.Combine(FolderPath, fileName);
         File.WriteAllText(filePath, text);
+        if (context != null)
+        {
+            context.LogInfo($"Exported raid {raid.m_name}");
+            context.LogInfo(filePath.RemoveRootPath());
+        }
     }
 
     public static void Read()

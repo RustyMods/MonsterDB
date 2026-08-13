@@ -1,3 +1,19 @@
+## 0.3.8
+- fixed trailing comma after Ride on creature hover text
+- added new fields for custom saddle component `flyStaminaDrain` `flyFastStaminaDrain` `attachRotation`
+- added safety to spawn system updating to prevent issues changing information while spawn system is spawning.
+- added line and col warning log output when failing to deserialize
+
+## 0.3.7
+- fixed custom mdb saddle to allow for greater positioning
+- fixed effect list allowing null prefabs
+
+## 0.3.6
+- fixed raid export command: `monsterdb export raid all` to work
+
+## 0.3.5
+- added new export command `uv` to create png file based off meshes, `monsterdb export uv [prefabId]`
+
 ## 0.3.4
 - compatibility with `Valharvest`, removing hover text patch if installed
 

@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.IO;
 using MonsterDB;
+using Unity.Collections;
 
-public static class UVMapExporter
+public static class UV
 {
-    public static void ExportUVMaps(Terminal context, string prefabId, string bkgHex = "", string lineHex = "")
+    private static readonly Color DefaultBackgroundColor = new Color(0.15f, 0.15f, 0.15f, 1f);
+    private static readonly Color DefaultLineColor = new Color(0.4f, 0.8f, 1.0f, 1f);
+    
+    public static void ExportMaps(Terminal context, string prefabId, string bkgHex = "", string lineHex = "")
     {
         if (PrefabManager.GetPrefab(prefabId) is not { } prefab)
         {
@@ -12,47 +16,46 @@ public static class UVMapExporter
             return;
         }
         
-        context.LogInfo("Trying to generate UV maps for " + prefabId);
-
-        Color bkg = string.IsNullOrEmpty(bkgHex) ? default : bkgHex.FromHexOrRGBA(new Color(0.15f, 0.15f, 0.15f, 1f));
-        Color line = string.IsNullOrEmpty(lineHex) ? default : lineHex.FromHexOrRGBA(new Color(0.4f, 0.8f, 1.0f, 1f));
+        Color bkg = string.IsNullOrEmpty(bkgHex) ? default : bkgHex.FromHexOrRGBA(DefaultBackgroundColor);
+        Color line = string.IsNullOrEmpty(lineHex) ? default : lineHex.FromHexOrRGBA(DefaultLineColor);
         
         MeshRenderer[]? renderers = prefab.GetComponentsInChildren<MeshRenderer>();
-        foreach (var renderer in renderers)
+        for (int index = 0; index < renderers.Length; ++index)
         {
-            var filter = renderer.GetComponent<MeshFilter>();
+            MeshRenderer renderer = renderers[index];
+            MeshFilter? filter = renderer.GetComponent<MeshFilter>();
             if (filter == null || filter.sharedMesh == null) continue;
 
-            context.LogWarning("Trying to generate UV maps for " + renderer.name);
-            var width = 256;
-            var height = 256;
+            int width = 256;
+            int height = 256;
             if (renderer.material != null && renderer.material.mainTexture != null)
             {
                 width = renderer.material.mainTexture.width;
                 height = renderer.material.mainTexture.height;
             }
-            
+
             DrawAndExportUVMap(context, prefab, filter.sharedMesh, width, height, line, bkg);
         }
 
-        var skins = prefab.GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (var skin in skins)
+        SkinnedMeshRenderer[]? skins = prefab.GetComponentsInChildren<SkinnedMeshRenderer>();
+        for (var index = 0; index < skins.Length; ++index)
         {
+            SkinnedMeshRenderer skin = skins[index];
             if (skin.sharedMesh == null) continue;
             
-            context.LogWarning("Trying to generate UV maps for " + skin.name);
-            
-            var width = 256;
-            var height = 256;
+            int width = 256;
+            int height = 256;
             if (skin.material != null && skin.material.mainTexture != null)
             {
                 width = skin.material.mainTexture.width;
                 height = skin.material.mainTexture.height;
             }
+
             DrawAndExportUVMap(context, prefab, skin.sharedMesh, width, height, line, bkg);
         }
-
     }
+    
+    
     public static Texture2D? DrawAndExportUVMap(
         Terminal context,
         GameObject prefab,
@@ -63,6 +66,12 @@ public static class UVMapExporter
         Color bgColor = default,
         string? outputPath = null)
     {
+        if (!mesh.isReadable)
+        {
+            context.LogError($"Mesh '{mesh.name}' is not readable.");
+            return null;
+        }
+        
         Vector2[] uvs = mesh.uv;
         int[] triangles = mesh.triangles;
 
@@ -72,8 +81,8 @@ public static class UVMapExporter
             return null;
         }
         
-        if (lineColor == default) lineColor = new Color(0.4f, 0.8f, 1.0f, 1f);   // light blue
-        if (bgColor  == default) bgColor  = new Color(0.15f, 0.15f, 0.15f, 1f); // dark gray
+        if (lineColor == default) lineColor = DefaultLineColor;
+        if (bgColor == default) bgColor = DefaultBackgroundColor;
         
         Texture2D tex = new Texture2D(width, height);
         Color[] pixels = new Color[width * height];

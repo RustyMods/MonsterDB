@@ -88,6 +88,9 @@
         <Reference Include="Unity.TextMeshPro">
             <HintPath>$(CorlibPath)\Unity.TextMeshPro.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule">
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.ParticleSystemModule">
           <HintPath>$(CorlibPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
         </Reference>
@@ -142,8 +145,10 @@
         <Compile Include="Managers\Command\Commands\RRR.cs" />
         <Compile Include="Managers\Command\Commands\Search.cs" />
         <Compile Include="Managers\Command\Commands\Update.cs" />
+        <Compile Include="Managers\Config\AcceptableShortcuts.cs" />
         <Compile Include="Managers\Config\ConfigManager.cs" />
         <Compile Include="Managers\Config\ConfigurationManagerAttributes.cs" />
+        <Compile Include="Managers\Config\KeyboardExtensions.cs" />
         <Compile Include="Managers\Config\YamlSettings.cs" />
         <Compile Include="Managers\Conversion\ItemConversionRef.cs" />
         <Compile Include="Managers\CreatureSpawner\BaseCreatureSpawner.cs" />
@@ -1075,6 +1080,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <Folder Include="Thunderstore\faq\" />
       <Folder Include="Wiki\Reference\Export\Player\" />
       <Folder Include="Wiki\Reference\Monsternomicon\MN_AshSurtling\textures\" />
       <Folder Include="Wiki\Reference\Monsternomicon\MN_PolarGolem\textures\" />

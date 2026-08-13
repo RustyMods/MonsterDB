@@ -669,11 +669,22 @@ public abstract class Reference
         string targetName, 
         bool log)
     {
-        if (target is Character character && character.name.Contains("(Clone)") && targetField.Name == "m_boss")
+        if (target is Character character)
         {
-            MonsterDBPlugin.LogDebug("Skipping m_boss, prefab is an instance");
-            return;
+            // if (EnemyHud.instance.m_huds.ContainsKey(character) && targetField.Name == "m_name")
+            // {
+            //     MonsterDBPlugin.LogDebug("Skipping update, character hud is active");
+            //     return;
+            // }
+
+            if (character.name.Contains("(Clone)") && targetField.Name == "m_boss")
+            {
+                MonsterDBPlugin.LogDebug("Skipping m_boss, prefab is an instance");
+                return;
+            }
         }
+
+        
         
         targetField.SetValue(target, value);
         if (log)

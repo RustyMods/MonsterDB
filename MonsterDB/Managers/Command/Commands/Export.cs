@@ -106,7 +106,7 @@ public static partial class Commands
                     CreatureManager.WriteHierarchy(args.Context, args.GetString(3));
                     break;
                 case "uv":
-                    UVMapExporter.ExportUVMaps(args.Context, args.GetString(3), args.GetString(4), args.GetString(5));
+                    UV.ExportMaps(args.Context, args.GetString(3), args.GetString(4), args.GetString(5));
                     break;
             }
         }

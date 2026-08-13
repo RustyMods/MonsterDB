@@ -2,6 +2,8 @@
 
 Raid files should exist under the `Raids` folder at: `BepInEx/config/MonsterDB/Raids`
 
+Command: `monsterdb export raid ...`
+
 ```yml
 name: string                              # Required identifier
 enabled: boolean                          

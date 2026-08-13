@@ -3,7 +3,7 @@
 namespace MonsterDB;
 
 [HarmonyPatch(typeof(Growup), nameof(Growup.GrowUpdate))]
-public static class GrowUp_ConditioanlGrow_Patch
+public static class GrowUp_ConditionalGrow_Patch
 {
     private static bool Prefix(Growup __instance)
     {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using HarmonyLib;
+using SleepTime;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -68,6 +70,10 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     public float m_maxUseRange = 10f;
     public Transform? m_attachPoint;
     public Vector3 m_attachOffset;
+    public Vector3 m_attachRotation;
+    public float m_flyStaminaDrain = 10f;
+    public float m_flyFastStaminaDrain = 15f;
+    
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public GameObject m_attachParent;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -116,7 +122,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         GameObject attach = new GameObject("attach");
         attach.transform.SetParent(m_attachParent != null ? m_attachParent.transform : transform);
         attach.transform.localPosition = m_attachOffset;
-        attach.transform.rotation = Quaternion.identity;
+        attach.transform.localRotation = Quaternion.Euler(m_attachRotation);
         m_attachPoint = attach.transform;
     }
 
@@ -126,7 +132,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         {
             m_attachPoint.SetParent(m_attachParent != null ? m_attachParent.transform : transform);
             m_attachPoint.localPosition = m_attachOffset;
-            m_attachPoint.rotation = Quaternion.identity;
+            m_attachPoint.localRotation = Quaternion.Euler(m_attachRotation);
         }
     }
 
@@ -263,9 +269,20 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
             }
             m_baseAI.MoveTowards(m_controlDir, m_speed == Sadle.Speed.Run);
             float num = Mathf.Lerp(1f, 0.5f, GetRiderSkill());
-            if (m_character.IsSwimming() || m_character.IsFlying())
+            if (m_character.IsSwimming())
             {
                 UseStamina(m_swimStaminaDrain * num * dt);
+            }
+            else if (m_character.IsFlying())
+            {
+                if (m_speed == Sadle.Speed.Run)
+                {
+                    UseStamina(m_flyFastStaminaDrain * num * dt);
+                }
+                else
+                {
+                    UseStamina(m_flyStaminaDrain * num * dt);
+                }
             }
             else if (m_speed == Sadle.Speed.Run)
             {
@@ -336,8 +353,24 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
 
     public void GetHoverText(StringBuilder sb, bool gamepad)
     {
-        sb.AppendFormat("\n[<color=yellow><b>{0} + $KEY_Use</b></color>] $hud_ride", 
-            gamepad ?  ZInput.instance.GetBoundKeyString(rideKey) : "$button_lalt");
+        var ride = Localization.instance.Localize("$hud_ride");
+        if (ride.EndsWith(","))
+        {
+            ride = ride.Substring(0, ride.Length - 1);
+        }
+
+        if (ConfigManager.GetRideShortcut().MainKey != KeyCode.None)
+        {
+            var shortcut = ConfigManager.GetRideShortcut();
+            
+            sb.AppendFormat("\n[<color=yellow><b>{0} + {1}</b></color>] {2}", string.Join(" + ", shortcut.Modifiers), shortcut.MainKey, ride);
+        }
+        else
+        {
+            sb.AppendFormat("\n[<color=yellow><b>{0} + $KEY_Use</b></color>] {1}", 
+                gamepad ?  ZInput.instance.GetBoundKeyString(rideKey) : "$button_lalt", ride);
+        }
+
         if (HasSaddleItem()) 
         {
             sb.AppendFormat("\n[<color=yellow><b>{0} + $KEY_Use</b></color>] $hud_saddle_remove", 
@@ -358,6 +391,16 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
             if (!__instance.TryGetComponent(out Saddle component)) return true;
 
             if (component.HasSaddleItem() && !component.HaveSaddle()) return true;
+
+            if (ConfigManager.GetRideShortcut().MainKey != KeyCode.None)
+            {
+                if (ConfigManager.GetRideShortcut().IsKeyDown() || ConfigManager.GetRideShortcut().IsDown() ||
+                    ConfigManager.GetRideShortcut().IsKeyHeld())
+                {
+                    __result = component.Interact(user, false, false);
+                    return false;
+                }
+            }
 
             if (alt || hold) return true;
 
@@ -527,7 +570,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     }
 
     public Component GetControlledComponent() => m_character;
-    public Vector3 GetPosition() => transform.position;
+    public Vector3 GetPosition() => (m_attachPoint?.transform.position ?? transform.position) + m_attachOffset;
     public void RPC_RemoveSaddle(long sender, Vector3 userPoint)
     {
         if (!m_nview.IsOwner() || HaveValidUser()) return;

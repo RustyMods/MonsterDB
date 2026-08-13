@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HarmonyLib;
+using UnityEngine;
 
 namespace MonsterDB;
 
@@ -123,7 +124,7 @@ public static class CommandManager
         return false;
     }
 
-    private static void Patch_Terminal_TabCycle(Terminal __instance, ref List<string>? options)
+    private static void Patch_Terminal_TabCycle(Terminal __instance, string word, bool usePrefix, ref List<string>? options)
     {
         if (string.IsNullOrEmpty(__instance.m_input.text))
         {
@@ -140,11 +141,11 @@ public static class CommandManager
             return;
         }
         string type = strArray[1];
-        string word = strArray.Length > 2 ? strArray[2] : "";
+        string w = strArray.Length > 2 ? strArray[2] : "";
         
         if (commands.TryGetValue(type, out Command command))
         {
-            options = command.FetchOptions(strArray.Length - 1, word);
+            options = command.FetchOptions(strArray.Length - 1, w);
         }
     }
 }
