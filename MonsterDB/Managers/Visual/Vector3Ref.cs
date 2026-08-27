@@ -11,6 +11,13 @@ public record struct Vector3Ref(float x, float y, float z)
     public float y = y;
     public float z = z;
 
+    public bool isNull;
+
+    public Vector3Ref() : this(0, 0, 0)
+    {
+        isNull = true;
+    }
+
     public Vector3Ref(Vector3 v) : this(v.x, v.y, v.z)
     {
     }

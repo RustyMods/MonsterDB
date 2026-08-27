@@ -44,14 +44,28 @@ public sealed class VectorConverter : IYamlTypeConverter
     public static readonly VectorConverter Instance = new();
     public bool Accepts(Type type)
     {
+        if (type == null) return true;
         return (Nullable.GetUnderlyingType(type) ?? type) == typeof(Vector3Ref);
     }
     public object ReadYaml(IParser parser, Type type)
     {
+        if (parser.Current == null) return null;
+        
+        
         // Check if it's a scalar value (single number)
         if (parser.Current is Scalar scalar)
         {
+            bool isNull = scalar.Tag == "tag:yaml.org,2002:null"
+                          || string.IsNullOrEmpty(scalar.Value)
+                          || scalar.Value.Equals("~", StringComparison.Ordinal)
+                          || scalar.Value.Equals("null", StringComparison.OrdinalIgnoreCase);
+            
+            
             parser.MoveNext();
+            
+            if (isNull) return null;
+
+            
             float value = float.Parse(scalar.Value.Replace(',', '.'), CultureInfo.InvariantCulture);
             return new Vector3(value, value, value);
         }

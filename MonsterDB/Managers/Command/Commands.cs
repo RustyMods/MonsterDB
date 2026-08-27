@@ -23,6 +23,14 @@ public static partial class Commands
     public static string RemoveRootPath(this string filepath) =>
         filepath.Replace(Paths.ConfigPath, @"...\BepInEx\config\");
     
+    // public static string RemoveRootPath(this string filepath)
+    // {
+    //     var configPath = Paths.ConfigPath.TrimEnd('\\', '/');
+    //     var replacement = $"...{Path.DirectorySeparatorChar}BepInEx{Path.DirectorySeparatorChar}config";
+    //     var result = filepath.Replace(configPath, replacement);
+    //     return result.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+    // }
+    
     public static void Init()
     {
         _ = new Command("export",

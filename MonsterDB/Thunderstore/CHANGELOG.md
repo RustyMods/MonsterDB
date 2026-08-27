@@ -1,3 +1,9 @@
+## 0.3.82
+- clean command can no longer output a full file.
+
+## 0.3.81
+- fixed null Vector3 values trying to be read by deserializer. Will correctly pass on null value instead and skip field.
+
 ## 0.3.8
 - fixed trailing comma after Ride on creature hover text
 - added new fields for custom saddle component `flyStaminaDrain` `flyFastStaminaDrain` `attachRotation`

@@ -47,7 +47,7 @@ public static partial class Commands
 
         if (modified.Clean())
         {
-            string content = ConfigManager.Serialize(modified);
+            string content = ConfigManager.Serialize(modified, false);
             string filename = modified.Prefab + ".CLEANED.yml";
             string filepath = Path.Combine(FileManager.ExportFolder, filename);
             File.WriteAllText(filepath, content);
