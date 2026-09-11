@@ -16,5 +16,6 @@ public enum BaseType
     CreatureSpawner, 
     SpawnArea,
     SpawnData,
+    Aoe,
     All
 }

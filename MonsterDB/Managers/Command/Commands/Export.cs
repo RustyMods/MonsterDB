@@ -57,6 +57,7 @@ public static partial class Commands
         BaseType.Human => ["Player"],
         BaseType.All => [],
         BaseType.SpawnData => SpawnManager.GetCachedSpawnDataIds(),
+        BaseType.Aoe => PrefabManager.GetAllPrefabNames<Aoe>(),
         _ => PrefabManager.GetAllPrefabNames()
     };
 
@@ -287,6 +288,12 @@ public static partial class Commands
                 break;
             case BaseType.SpawnArea:
                 if (!SpawnAreaManager.Write(prefab, isClone, source, context: args.Context))
+                {
+                    args.Context.LogError($"Failed to export {baseType} {prefab.name}");
+                }
+                break;
+            case BaseType.Aoe:
+                if (!AoeManager.Write(prefab, isClone, source, context: args.Context))
                 {
                     args.Context.LogError($"Failed to export {baseType} {prefab.name}");
                 }

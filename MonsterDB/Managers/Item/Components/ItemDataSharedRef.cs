@@ -53,7 +53,7 @@ public sealed class ItemDataSharedRef : Reference
     [Condition(icon = true)] public float? m_food;
     [Condition(icon = true)] public float? m_foodStamina;
     [Condition(icon = true)] public float? m_foodEitr;
-    [Condition(icon = true)] public float m_foodBurnTime;
+    [Condition(icon = true)] public float? m_foodBurnTime;
     [Condition(icon = true)] public float? m_foodRegen;
     [Condition(icon = true)] public bool? m_isDrink;
 

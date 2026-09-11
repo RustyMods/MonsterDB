@@ -14,7 +14,7 @@ public static partial class Commands
         {
             if (kvp.Value.Clean())
             {
-                string content = ConfigManager.Serialize(kvp.Value);
+                string content = ConfigManager.Serialize(kvp.Value, false);
                 string filename = kvp.Value.Prefab + ".CLEANED.yml";
                 string filepath = Path.Combine(FileManager.ExportFolder, filename);
                 File.WriteAllText(filepath, content);

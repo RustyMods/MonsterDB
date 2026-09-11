@@ -53,19 +53,37 @@ public class VisualRef : Reference
     {
         log &= ConfigManager.ShouldLogDetails();
         
-        if (m_scale.HasValue && LoadManager.originals.TryGetValue(prefab.name, out Header header) && header.GetVisualData() is {} originalVisualData && originalVisualData.m_scale.HasValue)
+        if (m_scale.HasValue && 
+            LoadManager.originals.TryGetValue(prefab.name, out Header header) && 
+            header.GetVisualData() is {} originalVisualData)
         {
-            Vector3 originalScale = originalVisualData.m_scale.Value;
+            if (originalVisualData.m_renderers == null) return;
+            Dictionary<(string? m_parent, string m_prefab, int? m_index), RendererRef> dict = originalVisualData.m_renderers.ToSafeDictionary(kvp =>
+                (kvp.m_parent, kvp.m_prefab, kvp.m_index));
+            
             for (int i = 0; i < renderers.Length; ++i)
             {
                 Renderer renderer = renderers[i];
                 GameObject go = renderer.gameObject;
+                
+                var parent = renderer.transform.parent?.name;
+                var name = renderer.name;
+                var index = renderer.transform.GetSiblingIndex();
 
-                go.transform.localScale = Vector3.Scale(originalScale, m_scale.Value);
-                    
-                if (log)
+                if (dict.TryGetValue((parent, name, index), out RendererRef reference))
                 {
-                    MonsterDBPlugin.LogDebug($"[{prefab.name}][{go.name}] m_scale: {go.transform.localScale.ToString()}");
+                    if (reference.m_scale.HasValue)
+                    {
+                        var originalScale = reference.m_scale.Value;
+                    
+                        go.transform.localScale = Vector3.Scale(originalScale, m_scale.Value);
+                    
+                        if (log)
+                        {
+                            MonsterDBPlugin.LogDebug($"[{prefab.name}][{go.name}] m_scale: {go.transform.localScale.ToString()}");
+                        }
+                    }
+
                 }
             }
         }

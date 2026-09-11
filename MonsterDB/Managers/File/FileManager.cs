@@ -123,6 +123,14 @@ public static class FileManager
                         LoadManager.modified.Add(spawnData);
                         LoadManager.files.Add(spawnData);
                         break;
+                    case BaseType.Aoe:
+                        BaseAoe aoeData = ConfigManager.Deserialize<BaseAoe>(text);
+                        LoadManager.modified.Add(aoeData);
+                        LoadManager.files.Add(aoeData);
+                        break;
+                    default:
+                        MonsterDBPlugin.LogWarning("Base Type not recognized: " + Path.GetFileName(filePath));
+                        break;
                 }
 
             }
@@ -240,6 +248,11 @@ public static class FileManager
                 case BaseType.SpawnData:
                     BaseSpawnData spawnData = ConfigManager.Deserialize<BaseSpawnData>(text);
                     spawnData.Update();
+                    LoadManager.UpdateSync();
+                    break;
+                case BaseType.Aoe:
+                    BaseAoe aoeData = ConfigManager.Deserialize<BaseAoe>(text);
+                    aoeData.Update();
                     LoadManager.UpdateSync();
                     break;
             }

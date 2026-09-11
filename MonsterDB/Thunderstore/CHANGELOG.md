@@ -1,3 +1,7 @@
+## 0.3.83
+- added new export type: `Aoe`
+- modified logic on item scaling, should prevent item from having unintended scales.
+
 ## 0.3.82
 - clean command can no longer output a full file.
 

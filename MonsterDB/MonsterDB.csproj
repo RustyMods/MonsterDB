@@ -130,6 +130,9 @@
         <Compile Include="Legacy\Methods\ProcreationMethods.cs" />
         <Compile Include="Legacy\Methods\TameableMethods.cs" />
         <Compile Include="Legacy\Methods\VisualMethods.cs" />
+        <Compile Include="Managers\Aoe\AoeManager.cs" />
+        <Compile Include="Managers\Aoe\AoeRef.cs" />
+        <Compile Include="Managers\Aoe\BaseAoe.cs" />
         <Compile Include="Managers\Audio\AudioManager.cs" />
         <Compile Include="Managers\Audio\AudioRef.cs" />
         <Compile Include="Managers\Clone\Clone.cs" />
@@ -160,7 +163,6 @@
         <Compile Include="Managers\Creature\AI\MonsterAIRef.cs" />
         <Compile Include="Managers\Creature\Character\CharacterRef.cs" />
         <Compile Include="Managers\Creature\Character\HumanoidRef.cs" />
-        <Compile Include="Managers\Creature\Components\AoeRef.cs" />
         <Compile Include="Managers\Creature\Components\CharacterDropRef.cs" />
         <Compile Include="Managers\Creature\Components\CharacterTimedDestructionRef.cs" />
         <Compile Include="Managers\Creature\Components\CinderRef.cs" />

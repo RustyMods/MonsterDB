@@ -14,6 +14,7 @@ public class RendererRef : Reference
     public bool? m_active;
     public bool? m_enabled;
     public MaterialRef[]? m_materials;
+    public Vector3Ref? m_scale;
     
     public RendererRef(){}
 
@@ -25,6 +26,7 @@ public class RendererRef : Reference
         m_active = renderer.gameObject.activeSelf;
         m_enabled = renderer.enabled;
         m_materials = renderer.sharedMaterials.ToMaterialRefArray();
+        m_scale = renderer.transform.localScale;
     }
 
     public void Update(Renderer renderer, string targetName, bool log)

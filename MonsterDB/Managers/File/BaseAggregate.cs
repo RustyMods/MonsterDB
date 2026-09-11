@@ -22,6 +22,7 @@ public class BaseAggregate : Header
     [YamlMember(Order = 17)] public Dictionary<string, Dictionary<string, string>>? translations;
     [YamlMember(Order = 18)] public Dictionary<string, BaseSpawnArea>? SpawnAreas;
     [YamlMember(Order = 19)] public Dictionary<string, BaseSpawnData>? SpawnDatas;
+    [YamlMember(Order = 20)] public Dictionary<string, BaseAoe>? AoeDatas;
 
     public string? PrefabToUpdate;
 
@@ -312,6 +313,13 @@ public class BaseAggregate : Header
         SpawnDatas ??= new Dictionary<string, BaseSpawnData>();
         SpawnDatas[spawnData.Prefab] = spawnData;
     }
+
+    public void Add(BaseAoe aoeData)
+    {
+        AoeDatas ??= new Dictionary<string, BaseAoe>();
+        AoeDatas[aoeData.Prefab] = aoeData;
+    }
+    
     public void Add(BaseSpawnArea area)
     {
         SpawnAreas ??= new Dictionary<string, BaseSpawnArea>();
