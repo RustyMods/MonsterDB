@@ -35,30 +35,37 @@ public class BaseHuman : BaseHumanoid
 
     private void UpdateHuman(GameObject prefab)
     {
+        MonsterDBPlugin.LogDebug($"[{prefab.name}] Updating Human Visuals");
         Human? human = prefab.GetComponent<Human>();
         if (Visuals == null) return;
         if (Visuals.m_beards != null)
         {
             human.m_beards = Visuals.m_beards;
+            MonsterDBPlugin.LogDebug($"[{prefab.name}] m_beards: {string.Join(", ", human.m_beards)}");
         }
 
         if (Visuals.m_hairs != null)
         {
             human.m_hairs = Visuals.m_hairs;
+            MonsterDBPlugin.LogDebug($"[{prefab.name}] m_hairs: {string.Join(", ", human.m_hairs)}");
+
         }
 
         if (Visuals.m_modelIndex != null)
         {
             human.m_models = Visuals.m_modelIndex;
+            MonsterDBPlugin.LogDebug($"[{prefab.name}] m_models: {string.Join(", ", human.m_models)}");
         }
 
         if (Visuals.m_skinColors != null)
         {
             human.m_skinColors = Visuals.m_skinColors;
+            MonsterDBPlugin.LogDebug($"[{prefab.name}] m_skinColors: {string.Join(", ", human.m_skinColors)}");
         }
         if (Visuals.m_hairColors != null)
         {
             human.m_hairColors = Visuals.m_hairColors;
+            MonsterDBPlugin.LogDebug($"[{prefab.name}] m_hairColors: {string.Join(", ", human.m_hairColors)}");
         }
     }
 }

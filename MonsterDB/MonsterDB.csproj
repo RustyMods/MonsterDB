@@ -24,7 +24,7 @@
                 <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">D:\SteamLibrary\steamapps\common\Valheim</GamePath>
-                <BepInExPath Condition="!Exists('$(BepInExPath)')AND Exists('$(GamePath)')">$(GamePath)\BepInEx</BepInExPath>
+                <BepInExPath Condition="!Exists('$(BepInExPath)')AND Exists('$(GamePath)')">..\..\..\AppData\Roaming\com.kesomannen.gale\valheim\profiles\Default\BepInEx</BepInExPath>
                 <CorlibPath Condition="!Exists('$(CorlibPath)') AND Exists('$(GamePath)')">$(GamePath)\valheim_Data\Managed</CorlibPath>
                 <CorlibPath Condition="!Exists('$(CorlibPath)') AND Exists('$(GamePath)')">$(GamePath)\unstripped_corlib</CorlibPath>
                 <PublicizedAssembliesPath Condition="!Exists('$(PublicizedAssembliesPath)') AND Exists('$(GamePath)')">$(GamePath)\valheim_Data\Managed\publicized_assemblies</PublicizedAssembliesPath>
@@ -297,6 +297,7 @@
         <Content Include="Screenshots\polar-lox.png" />
         <Content Include="Screenshots\bear.png" />
         <Content Include="Screenshots\skeleton.png" />
+        <Content Include="Thunderstore\MonsterDB.dll" />
         <Content Include="Wiki\Reference\Export\Abomination\Abomination.yml" />
         <Content Include="Wiki\Reference\Export\Abomination\Abomination_ragdoll.yml" />
         <Content Include="Wiki\Reference\Export\Abomination\items\Abomination_attack1.yml" />

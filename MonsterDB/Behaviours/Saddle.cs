@@ -35,6 +35,20 @@ public static class Hud_UpdateMount
     }
 }
 
+[HarmonyPatch(typeof(EnemyHud), nameof(EnemyHud.UpdateHuds))]
+public static class EnemyHud_UpdateHuds_Patch
+{
+    private static void Postfix(EnemyHud __instance, Player player, Sadle sadle, float dt)
+    {
+        if (player == null) return;
+        if (player.GetDoodadController() is Saddle saddle)
+        {
+            Character character = saddle.GetCharacter();
+            __instance.RemoveCharacterHud(character);
+        }
+    }
+}
+
 [HarmonyPatch(typeof(Player), nameof(Player.IsRiding))]
 public static class Player_IsRiding
 {
@@ -382,7 +396,9 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
     {
         return Localization.instance.Localize(m_hoverText);
     }
-    
+
+    public float GetHoverOffset() => 0f;
+
     [HarmonyPatch(typeof(Tameable), nameof(Tameable.Interact))]
     public static class Tameable_Interact
     {
@@ -436,7 +452,7 @@ public class Saddle : MonoBehaviour, Interactable, Hoverable, IDoodadController
         return false;
     }
 
-    public Character GetCharacter() =>  m_character;
+    public Character GetCharacter() => m_character;
     public Tameable GetTameable() => m_tambable;
     public void ApplyCustomControls(Vector3 moveDir, Vector3 lookDir, bool run, bool autoRun, bool block, bool attack, bool attackSecondary, bool jump)
     {

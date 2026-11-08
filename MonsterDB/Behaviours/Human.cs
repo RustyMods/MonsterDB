@@ -29,19 +29,21 @@ public class Human : Humanoid
         }
         if (m_nview.IsValid() && !m_nview.GetZDO().GetBool(ZDOVars.s_addedDefaultItems))
         {
-            if (m_models != null && m_models.Length > 0)
+            if (m_models is { Length: > 0 })
             {
                 m_modelIndex = m_models[UnityEngine.Random.Range(0, m_models.Length)];
             }
 
-            if (m_beards != null &&  m_beards.Length > 0)
+            if (m_beards is { Length: > 0 })
             {
                 m_beardItem = m_beards[UnityEngine.Random.Range(0, m_beards.Length)];
+                Debug.LogWarning(name + " beard: " + m_beardItem);
             }
 
             if (m_hairs != null && m_hairs.Length > 0)
             {
                 m_hairItem = m_hairs[UnityEngine.Random.Range(0, m_hairs.Length)];
+                Debug.LogWarning(name + " hair: " + m_hairItem);
             }
             if (m_skinColors != null &&  m_skinColors.Length > 0)
             {
@@ -69,20 +71,20 @@ public class Human : Humanoid
     {
         if (!isRagdoll)
         {
-            visEq.SetLeftItem(m_leftItem != null ? m_leftItem.m_dropPrefab.name : "",
-                m_leftItem != null ? m_leftItem.m_variant : 0);
-            visEq.SetRightItem(m_rightItem != null ? m_rightItem.m_dropPrefab.name : "");
+            visEq.SetLeftItem(m_leftItem != null ? m_leftItem.m_dropPrefab.name.GetStableHashCode() : 0 ,
+                m_leftItem?.m_variant ?? 0, 0);
+            visEq.SetRightItem(m_rightItem != null ? m_rightItem.m_dropPrefab.name.GetStableHashCode() : 0, 0);
         }
 
-        visEq.SetChestItem(m_chestItem != null ? m_chestItem.m_dropPrefab.name : "");
-        visEq.SetLegItem(m_legItem != null ? m_legItem.m_dropPrefab.name : "");
-        visEq.SetHelmetItem(m_helmetItem != null ? m_helmetItem.m_dropPrefab.name : "");
-        visEq.SetShoulderItem(m_shoulderItem != null ? m_shoulderItem.m_dropPrefab.name : "",
-            m_shoulderItem != null ? m_shoulderItem.m_variant : 0);
-        visEq.SetUtilityItem(m_utilityItem != null ? m_utilityItem.m_dropPrefab.name : "");
+        visEq.SetChestItem(m_chestItem != null ? m_chestItem.m_dropPrefab.name.GetStableHashCode() : 0);
+        visEq.SetLegItem(m_legItem != null ? m_legItem.m_dropPrefab.name.GetStableHashCode() : 0);
+        visEq.SetHelmetItem(m_helmetItem != null ? m_helmetItem.m_dropPrefab.name.GetStableHashCode() : 0);
+        visEq.SetShoulderItem(m_shoulderItem != null ? m_shoulderItem.m_dropPrefab.name.GetStableHashCode() : 0,
+            m_shoulderItem?.m_variant ?? 0, 0);
+        visEq.SetUtilityItem(m_utilityItem != null ? m_utilityItem.m_dropPrefab.name.GetStableHashCode() : 0);
         visEq.SetTrinketItem(m_trinketItem != null ? m_trinketItem.m_dropPrefab.name : "");
-        visEq.SetBeardItem(m_beardItem);
-        visEq.SetHairItem(m_hairItem);
+        visEq.SetBeardItem(m_beardItem.GetStableHashCode());
+        visEq.SetHairItem(m_hairItem.GetStableHashCode());
         visEq.SetSkinColor(m_skinColor);
         visEq.SetHairColor(m_hairColor);
         visEq.SetModel(m_modelIndex);

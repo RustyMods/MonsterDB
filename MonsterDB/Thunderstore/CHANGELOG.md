@@ -1,3 +1,13 @@
+## 0.4.1
+- export / clone item now looks if projectile is spawn ability or projectile before writing file
+- `monsterdb export uv` now has size option field: `monsterdb export uv [prefabId][size?][bkgColorHex?][lineColorHex?]`
+- fixed mdb terminal descriptions & auto-complete
+- added `monsterdb export help` command
+
+## 0.4.0
+- deep north update
+- updated server sync 1.20
+
 ## 0.3.83
 - added new export type: `Aoe`
 - modified logic on item scaling, should prevent item from having unintended scales.

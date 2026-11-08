@@ -230,7 +230,23 @@ public static class ItemManager
                     projectileSource = c.SourceName;
                 }
 
-                ProjectileManager.Write(sharedData.m_attack.m_attackProjectile, isProjectileClone, projectileSource, dirPath, context);
+                if (sharedData.m_attack.m_attackProjectile.GetComponent<SpawnAbility>())
+                {
+                    SpawnAbilityManager.Write(
+                        sharedData.m_attack.m_attackProjectile, 
+                        isProjectileClone, 
+                        projectileSource, 
+                        dirPath, 
+                        context);
+                }
+                else
+                {
+                    ProjectileManager.Write(
+                        sharedData.m_attack.m_attackProjectile, 
+                        isProjectileClone, 
+                        projectileSource,
+                        dirPath, context);
+                }
             }
 
             if (sharedData.m_secondaryAttack.m_attackProjectile != null)
@@ -243,7 +259,16 @@ public static class ItemManager
                     projectileSource = c.SourceName;
                 }
 
-                ProjectileManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone, projectileSource, dirPath, context);
+                if (sharedData.m_secondaryAttack.m_attackProjectile.GetComponent<SpawnAbility>())
+                {
+                    SpawnAbilityManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone,
+                        projectileSource, dirPath, context);
+                }
+                else
+                {
+                    ProjectileManager.Write(sharedData.m_secondaryAttack.m_attackProjectile, isProjectileClone,
+                        projectileSource, dirPath, context);
+                }
             }
         }
 
@@ -290,8 +315,19 @@ public static class ItemManager
                 GameObject? projectile = sharedData.m_attack.m_attackProjectile;
                 if (projectile != null)
                 {
-                    string newProjName = $"MDB_{cloneName}_{projectile.name}";
-                    if (ProjectileManager.TryClone(
+                    string newProjName = $"{cloneName}_{projectile.name}";
+
+                    if (projectile.GetComponent<SpawnAbility>() && 
+                        SpawnAbilityManager.TryClone(
+                            projectile, 
+                            newProjName, 
+                            out GameObject newProj, 
+                            false,
+                            dirPath, context))
+                    {
+                        sharedData.m_attack.m_attackProjectile = newProj;
+                    }
+                    else if (ProjectileManager.TryClone(
                             projectile, 
                             newProjName, 
                             out GameObject newProjectile, 

@@ -8,7 +8,7 @@ public static class UV
     private static readonly Color DefaultBackgroundColor = new Color(0.15f, 0.15f, 0.15f, 1f);
     private static readonly Color DefaultLineColor = new Color(0.4f, 0.8f, 1.0f, 1f);
     
-    public static void ExportMaps(Terminal context, string prefabId, string bkgHex = "", string lineHex = "")
+    public static void ExportMaps(Terminal context, string prefabId, int size = 0, string bkgHex = "", string lineHex = "")
     {
         if (PrefabManager.GetPrefab(prefabId) is not { } prefab)
         {
@@ -25,13 +25,21 @@ public static class UV
             MeshRenderer renderer = renderers[index];
             MeshFilter? filter = renderer.GetComponent<MeshFilter>();
             if (filter == null || filter.sharedMesh == null) continue;
-
             int width = 256;
             int height = 256;
-            if (renderer.material != null && renderer.material.mainTexture != null)
+
+            if (size <= 0)
             {
-                width = renderer.material.mainTexture.width;
-                height = renderer.material.mainTexture.height;
+                if (renderer.material != null && renderer.material.mainTexture != null)
+                {
+                    width = renderer.material.mainTexture.width;
+                    height = renderer.material.mainTexture.height;
+                }
+            }
+            else
+            {
+                width = size;
+                height = size;
             }
 
             DrawAndExportUVMap(context, prefab, filter.sharedMesh, width, height, line, bkg);
@@ -45,10 +53,19 @@ public static class UV
             
             int width = 256;
             int height = 256;
-            if (skin.material != null && skin.material.mainTexture != null)
+
+            if (size <= 0)
             {
-                width = skin.material.mainTexture.width;
-                height = skin.material.mainTexture.height;
+                if (skin.material != null && skin.material.mainTexture != null)
+                {
+                    width = skin.material.mainTexture.width;
+                    height = skin.material.mainTexture.height;
+                }
+            }
+            else
+            {
+                width = size;
+                height = size;
             }
 
             DrawAndExportUVMap(context, prefab, skin.sharedMesh, width, height, line, bkg);

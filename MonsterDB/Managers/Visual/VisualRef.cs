@@ -58,7 +58,8 @@ public class VisualRef : Reference
             header.GetVisualData() is {} originalVisualData)
         {
             if (originalVisualData.m_renderers == null) return;
-            Dictionary<(string? m_parent, string m_prefab, int? m_index), RendererRef> dict = originalVisualData.m_renderers.ToSafeDictionary(kvp =>
+            Dictionary<(string? m_parent, string m_prefab, int? m_index), RendererRef> dict = 
+                originalVisualData.m_renderers.ToSafeDictionary(kvp =>
                 (kvp.m_parent, kvp.m_prefab, kvp.m_index));
             
             for (int i = 0; i < renderers.Length; ++i)

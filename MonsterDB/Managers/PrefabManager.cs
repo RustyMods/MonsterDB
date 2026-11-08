@@ -41,7 +41,18 @@ public static class PrefabManager
         _prefabs.Add(go.name, go);
     }
 
-    internal static List<string> GetAllPrefabNames() => _prefabs.Keys.ToList();
+    internal static List<string> GetAllPrefabNames()
+    {
+        if (_prefabs.Count <= 0 && _ZNetScene != null)
+        {
+            for (int i = 0; i < _ZNetScene.m_prefabs.Count; ++i)
+            {
+                var prefab = _ZNetScene.m_prefabs[i];
+                _prefabs[prefab.name] = prefab;
+            }
+        }
+        return _prefabs.Keys.ToList();
+    }
     internal static List<string> GetAllPrefabNames<T>() where T : MonoBehaviour
     {
         if (ZNetScene.instance)

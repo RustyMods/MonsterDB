@@ -20,7 +20,8 @@ public static partial class Commands
             "sprite", 
             "raid",
             "bones",
-            "uv"
+            "uv",
+            "help"
         }).ToList();
     
     private static List<string> GetExportOptions(int i, string word) => i switch
@@ -37,6 +38,7 @@ public static partial class Commands
             "sprite" => TextureManager.GetAllSprites().Keys.ToList(),
             "raid" => RaidManager.GetRaidNames().Append("all").ToList(),
             "uv" => PrefabManager.GetAllPrefabNames().ToList(),
+            "help" => [],
             _ => Enum.TryParse(word, true, out BaseType type)
                 ? GetOptionsByBase(type)
                 : PrefabManager.GetAllPrefabNames()
@@ -63,9 +65,7 @@ public static partial class Commands
 
     private static string GetExportDescriptions(string[] args, string defaultValue)
     {
-        if (args.Length < 3) return defaultValue;
-
-        string type = args[2];
+        string type = args.GetString(2);
         if (string.IsNullOrEmpty(type)) return defaultValue;
 
         return type switch
@@ -74,7 +74,7 @@ public static partial class Commands
             "sprite" => $"<color={HEX_Gray}>[SpriteID]</color>: Export sprite png",
             "raid" => $"<color={HEX_Gray}>[EventName]</color>: Export raid YML file",
             "bones" => $"<color={HEX_Gray}>[PrefabID]</color>: Export prefab hierarchy",
-            "uv" => $"<color={HEX_Gray}>[PrefabID][BkgColor?][LineColor?]</color>: Export prefab UVs",
+            "uv" => $"<color={HEX_Gray}>[PrefabID][Size?][BkgColor?][LineColor?]</color>: Export prefab UVs",
             _ => Enum.TryParse(type, true, out BaseType baseType)
                 ? baseType == BaseType.All ? $"<color={HEX_Gray}>Export Aggregate YML file of all imported YML files</color>" : $"<color={HEX_Gray}>[PrefabID]</color>: Export {baseType} YML file"
                 : defaultValue
@@ -107,7 +107,15 @@ public static partial class Commands
                     CreatureManager.WriteHierarchy(args.Context, args.GetString(3));
                     break;
                 case "uv":
-                    UV.ExportMaps(args.Context, args.GetString(3), args.GetString(4), args.GetString(5));
+                    UV.ExportMaps(args.Context, args.GetString(3), args.GetInt(4), args.GetString(4), args.GetString(5));
+                    break;
+                case "help":
+                    args.Context.LogInfo($"<color={HEX_Amber}>texture</color> - " + $"<color={HEX_Gray}>[TextureID]</color>: Export texture png");
+                    args.Context.LogInfo($"<color={HEX_Amber}>sprite</color> - " + $"<color={HEX_Gray}>[SpriteID]</color>: Export sprite png");
+                    args.Context.LogInfo($"<color={HEX_Amber}>raid</color> - " + $"<color={HEX_Gray}>[EventName]</color>: Export raid YML file");
+                    args.Context.LogInfo($"<color={HEX_Amber}>bones</color> - " + $"<color={HEX_Gray}>[PrefabID]</color>: Export prefab hierarchy");
+                    args.Context.LogInfo($"<color={HEX_Amber}>uv</color> - " + $"<color={HEX_Gray}>[PrefabID][Size?][BkgColor?][LineColor?]</color>: Export prefab UVs");
+                    args.Context.LogInfo($"<color={HEX_Amber}>{string.Join(", ", GetBaseTypes(BaseType.None, BaseType.Ragdoll))}</color>: " + $"<color={HEX_Gray}>Export yml file</color>");
                     break;
             }
         }

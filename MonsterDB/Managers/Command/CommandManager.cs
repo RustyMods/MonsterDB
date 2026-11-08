@@ -27,6 +27,8 @@ public static class CommandManager
         harmony.Patch(AccessTools.Method(typeof(Terminal), nameof(Terminal.tabCycle)),
             prefix: new HarmonyMethod(AccessTools.Method(typeof(CommandManager),
                 nameof(Patch_Terminal_TabCycle))));
+        harmony.Patch(AccessTools.Method(typeof(Terminal), nameof(Terminal.UpdateInput)),
+            postfix: new HarmonyMethod(AccessTools.Method(typeof(CommandManager), nameof(Patch_Terminal_UpdateInput))));
     }
 
     private static void Patch_Terminal_Awake()
@@ -66,15 +68,47 @@ public static class CommandManager
         });
     }
 
-    private static bool Patch_Terminal_UpdateSearch(Terminal __instance, string word)
+    private static void Patch_Terminal_UpdateInput(Terminal __instance)
+    {
+        if (__instance.m_lastSearch.Count <= 0) return;
+        if (__instance.m_lastSearch.Count > 1) return;
+
+        var strArray = __instance.m_input.text.Split(' ');
+        if (strArray.GetString(0) != startCommand) return;
+        var word = strArray.GetString(1);
+        if (!commands.TryGetValue(word, out var command)) return;
+
+        var search = __instance.m_lastSearch.First();
+
+        if (search == strArray.GetString(2))
+        {
+            __instance.m_search.text = command.GetDescription(strArray);
+        }
+    }
+
+    private static bool Patch_Terminal_UpdateSearch(Terminal __instance, string word, ref List<string> options)
     {
         if (__instance.m_search == null) return true;
         string[] strArray = __instance.m_input.text.Split(' ');
-        if (strArray.Length < 3) return true;
-        if (strArray[0] != startCommand) return true;
-        return HandleSearch(__instance, word, strArray);
+        if (strArray.GetString(0) != startCommand) return true;
+        if (!commands.TryGetValue(word, out var command)) return true;
+        
+        if (command.HasOptions() && strArray.Length > 2)
+        {
+            var option = strArray.GetString(2);
+            options = command.FetchOptions(strArray.Length - 1, option);
+        }
+        else
+        {
+            __instance.m_lastSearch.Clear();
+            __instance.m_search.text = command.GetDescription(strArray);
+            return false;
+        }
+
+        return true;
     }
     
+    [Obsolete]
     private static bool HandleSearch(Terminal __instance, string word, string[] strArray)   
     {
         if (!commands.TryGetValue(strArray[1], out Command command)) return true;
@@ -119,7 +153,10 @@ public static class CommandManager
                 __instance.m_search.text += $"... {remainder} more.";
             }
         }
-        else __instance.m_search.text = command.GetDescription(strArray);
+        else
+        {
+            __instance.m_search.text = command.GetDescription(strArray);
+        }
                 
         return false;
     }
@@ -140,10 +177,10 @@ public static class CommandManager
         {
             return;
         }
-        string type = strArray[1];
+        
         string w = strArray.Length > 2 ? strArray[2] : "";
         
-        if (commands.TryGetValue(type, out Command command))
+        if (commands.TryGetValue(word, out Command command))
         {
             options = command.FetchOptions(strArray.Length - 1, w);
         }
