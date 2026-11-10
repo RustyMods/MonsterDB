@@ -1,3 +1,7 @@
+## 0.4.2
+- fixed command `monsterdb export uv` not recognizing 5 & 6 argument
+- accepted BETLOG readme updated PR
+
 ## 0.4.1
 - export / clone item now looks if projectile is spawn ability or projectile before writing file
 - `monsterdb export uv` now has size option field: `monsterdb export uv [prefabId][size?][bkgColorHex?][lineColorHex?]`

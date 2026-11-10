@@ -107,7 +107,7 @@ public static partial class Commands
                     CreatureManager.WriteHierarchy(args.Context, args.GetString(3));
                     break;
                 case "uv":
-                    UV.ExportMaps(args.Context, args.GetString(3), args.GetInt(4), args.GetString(4), args.GetString(5));
+                    UV.ExportMaps(args.Context, args.GetString(3), args.GetInt(4), args.GetString(5), args.GetString(6));
                     break;
                 case "help":
                     args.Context.LogInfo($"<color={HEX_Amber}>texture</color> - " + $"<color={HEX_Gray}>[TextureID]</color>: Export texture png");
