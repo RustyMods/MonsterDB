@@ -135,23 +135,24 @@ use `help` to see this list in-game
 - `monsterdb export_main_tex <prefabName>`: export main texture
 - `monsterdb export_sprite <spriteName>`: export sprite texture as PNG
 - `monsterdb export_tex <textureName>`: export texture as png
-- `monsterdb export uv <prefabName> [background color] [line color]`: export UVmap texture
-  - optional background and line color can be defined with RGBA or Hex. eg: `RGBA(128,128,128,255)` or `#888888FF`
-- `monsterdb mod_egg <prefabName>`: read egg YML from `Modified` Folder and update
+- `monsterdb export uv <prefabName> [edge length] [line color] [background color]`: export UVmap texture
+  - optional `[edge length]` is a single integer in pixels. eg: `1080`
+  - optional `[background/line color]` can be defined with RGBA or Hex. eg: `RGBA(128,128,128,255)` or `#888888FF`
+- `monsterdb mod_egg <prefabName>`: read egg YML from `Import` Folder and update
 - `monsterdb mod_fish <fileName>`: read fish YML file and update
 - `monsterdb mod_item <fileName>`: read item YML file and update
-- `monsterdb mod <prefabName>`: read creature YML file and update from `Modified` folder
+- `monsterdb mod <prefabName>`: read creature YML file and update from `Import` folder
 - `monsterdb revert_egg <prefabName>`: revert egg item to factory settings
 - `monsterdb revert <prefabName>`: revert creature to factory settings
 - `monsterdb search_sprite <query>`: search cached sprites
 - `monsterdb search_tex <query>`: search cached textures
 - `monsterdb snapshot <prefabName>`: snapshots a prefab into an icon and exports as PNG
-- `monsterdb write_all_egg`: write all egg YML to `Save` Folder
-- `monsterdb write_all`: write all creature YML to `Save` Folder
-- `monsterdb write_egg <prefabName>`: write egg YML file to `Save` Folder
+- `monsterdb write_all_egg`: write all egg YML to `Export` Folder
+- `monsterdb write_all`: write all creature YML to `Export` Folder
+- `monsterdb write_egg <prefabName>`: write egg YML file to `Export` Folder
 - `monsterdb write_fish <prefabName>`: export fish YML file
 - `monsterdb write_item <prefabName>`: export item YML
-- `monsterdb write <prefabName>`: write creature YML file to `Save` Folder
+- `monsterdb write <prefabName>`: write creature YML file to `Export` Folder
 - `monsterdb write_visual <prefabName>`: export prefab visual YML
 
 ### Examples
