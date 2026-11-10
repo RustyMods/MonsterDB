@@ -135,7 +135,7 @@ use `help` to see this list in-game
 - `monsterdb export_main_tex <prefabName>`: export main texture
 - `monsterdb export_sprite <spriteName>`: export sprite texture as PNG
 - `monsterdb export_tex <textureName>`: export texture as png
-- `monsterdb export uv <prefabName> [edge length] [background color] [line color]`: export UVmap texture
+- `monsterdb export uv <prefabName> [edge length] [line color] [background color]`: export UVmap texture
   - optional `[edge length]` is a single integer in pixels. eg: `1080`
   - optional `[background/line color]` can be defined with RGBA or Hex. eg: `RGBA(128,128,128,255)` or `#888888FF`
 - `monsterdb mod_egg <prefabName>`: read egg YML from `Import` Folder and update
