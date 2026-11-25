@@ -133,6 +133,7 @@ use `help` to see this list in-game
 - `monsterdb create_item <prefabName> <newName>`: advanced command to try to convert any prefab into an item, does not work with creatures
 - `monsterdb export_bones <prefabName>`: export bone structure as YML
 - `monsterdb export_main_tex <prefabName>`: export main texture
+- `monsterdb export raid <all|eventName>`: export raids to `Raids` folder
 - `monsterdb export_sprite <spriteName>`: export sprite texture as PNG
 - `monsterdb export_tex <textureName>`: export texture as png
 - `monsterdb export uv <prefabName> [edge length] [line color] [background color]`: export UVmap texture
